@@ -1,0 +1,282 @@
+---
+/**
+ * CookieConsent.astro
+ *
+ * Banner de consentimento de cookies (LGPD/GDPR) usando vanilla-cookieconsent v3.
+ * Exibe um aviso na primeira visita e armazena a preferência do usuário no localStorage.
+ *
+ * Categorias gerenciadas:
+ *   - necessary   — sempre ativo (cookies de sessão, funcionamento básico)
+ *   - analytics   — Google Analytics (GA4) — só carrega se o usuário aceitar
+ *   - marketing   — Meta Pixel (Facebook) — só carrega se o usuário aceitar
+ *
+ * Como funciona:
+ *   1. O MainLayout passa gaId e fbPixelId como data-attributes neste componente
+ *   2. Os scripts de GA e Meta Pixel NÃO são carregados no <head>
+ *   3. Este componente inicia o cookieconsent e, via callback onConsent/onChange,
+ *      injeta os scripts dinamicamente apenas quando a categoria for aceita
+ *
+ * Props:
+ *   gaId       — ID do Google Analytics (ex: G-XXXXXXXXXX)
+ *   fbPixelId  — ID do Meta Pixel (ex: 1234567890)
+ */
+
+import 'vanilla-cookieconsent/dist/cookieconsent.css';
+
+interface Props {
+    gaId?: string;
+    fbPixelId?: string;
+}
+
+const { gaId = '', fbPixelId = '' } = Astro.props;
+---
+
+<!-- Âncora para dados passados ao script client-side -->
+<div
+    id="cc-server-data"
+    data-ga-id={gaId}
+    data-fb-pixel-id={fbPixelId}
+    style="display:none;"
+></div>
+
+<script>
+    import * as CookieConsent from 'vanilla-cookieconsent';
+
+    // ── Lê IDs dos pixels passados pelo servidor ─────────────────────
+    const serverData  = document.getElementById('cc-server-data');
+    const GA_ID       = serverData?.dataset.gaId       || '';
+    const FB_PIXEL_ID = serverData?.dataset.fbPixelId  || '';
+
+    // ── Injeta Google Analytics dinamicamente ────────────────────────
+    function loadGoogleAnalytics() {
+        if (!GA_ID || document.getElementById('cc-ga-script')) return;
+        const s = document.createElement('script');
+        s.id    = 'cc-ga-script';
+        s.async = true;
+        s.src   = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+        document.head.appendChild(s);
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        function gtag(...args: any[]) { (window as any).dataLayer.push(args); }
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+        (window as any).gtag = gtag;
+    }
+
+    // ── Injeta Meta Pixel dinamicamente ──────────────────────────────
+    function loadMetaPixel() {
+        if (!FB_PIXEL_ID || (window as any).fbq) return;
+        const f = window as any;
+        const b = document;
+        /* eslint-disable */
+        !function(f:any,b:any,e:any,v:any,n?:any,t?:any,s?:any){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        /* eslint-enable */
+        f.fbq('init', FB_PIXEL_ID);
+        f.fbq('track', 'PageView');
+    }
+
+    // ── Remove scripts de rastreamento quando o usuário rejeita ─────
+    function disableGoogleAnalytics() {
+        const s = document.getElementById('cc-ga-script');
+        if (s) s.remove();
+        // Desativa futuros eventos
+        if (GA_ID) (window as any)[`ga-disable-${GA_ID}`] = true;
+    }
+
+    // ── Aplica as preferências atuais ────────────────────────────────
+    function applyConsent() {
+        if (CookieConsent.acceptedCategory('analytics')) {
+            loadGoogleAnalytics();
+        } else {
+            disableGoogleAnalytics();
+        }
+        if (CookieConsent.acceptedCategory('marketing')) {
+            loadMetaPixel();
+        }
+    }
+
+    // ── Inicia o CookieConsent ────────────────────────────────────────
+    CookieConsent.run({
+        // Armazena preferência no localStorage
+        cookie: {
+            name: 'cnx_cookie_consent',
+            expiresAfterDays: 365,
+        },
+
+        // Callbacks
+        onConsent: applyConsent,
+        onChange:  applyConsent,
+
+        // Configuração de categorias
+        categories: {
+            necessary: {
+                enabled: true,
+                readOnly: true,
+            },
+            analytics: {
+                enabled: false,
+                autoClear: {
+                    cookies: [
+                        { name: /^(_ga)/ },
+                        { name: '_gid' },
+                    ],
+                },
+            },
+            marketing: {
+                enabled: false,
+                autoClear: {
+                    cookies: [
+                        { name: /^(_fbp|fr)/ },
+                    ],
+                },
+            },
+        },
+
+        // Textos em português
+        language: {
+            default: 'pt',
+            translations: {
+                pt: {
+                    consentModal: {
+                        title: '🍪 Usamos cookies',
+                        description:
+                            'Utilizamos cookies para melhorar sua experiência, analisar o tráfego do site e personalizar anúncios. ' +
+                            'Você pode aceitar todos, rejeitar os opcionais ou personalizar suas preferências.',
+                        acceptAllBtn: 'Aceitar todos',
+                        acceptNecessaryBtn: 'Apenas necessários',
+                        showPreferencesBtn: 'Personalizar',
+                        footer:
+                            '<a href="/privacidade" target="_blank">Política de Privacidade</a>',
+                    },
+                    preferencesModal: {
+                        title: 'Preferências de Cookies',
+                        acceptAllBtn: 'Aceitar todos',
+                        acceptNecessaryBtn: 'Apenas necessários',
+                        savePreferencesBtn: 'Salvar preferências',
+                        closeIconLabel: 'Fechar',
+                        serviceCounterLabel: 'Serviço|Serviços',
+                        sections: [
+                            {
+                                title: 'Cookies essenciais',
+                                description:
+                                    'Estes cookies são necessários para o funcionamento básico do site e não podem ser desativados.',
+                                linkedCategory: 'necessary',
+                            },
+                            {
+                                title: 'Analytics',
+                                description:
+                                    'Usamos o Google Analytics para entender como os visitantes interagem com o site. As informações são anonimizadas.',
+                                linkedCategory: 'analytics',
+                                cookieTable: {
+                                    headers: { name: 'Cookie', domain: 'Domínio', desc: 'Descrição' },
+                                    body: [
+                                        { name: '_ga', domain: location.hostname, desc: 'Google Analytics — identificador único de sessão (2 anos)' },
+                                        { name: '_gid', domain: location.hostname, desc: 'Google Analytics — sessão do dia (24h)' },
+                                    ],
+                                },
+                            },
+                            {
+                                title: 'Marketing',
+                                description:
+                                    'O Meta Pixel nos ajuda a medir a eficácia de campanhas publicitárias no Facebook e Instagram.',
+                                linkedCategory: 'marketing',
+                                cookieTable: {
+                                    headers: { name: 'Cookie', domain: 'Domínio', desc: 'Descrição' },
+                                    body: [
+                                        { name: '_fbp', domain: location.hostname, desc: 'Meta Pixel — rastreamento de conversões (3 meses)' },
+                                        { name: 'fr',   domain: 'facebook.com',   desc: 'Facebook — publicidade personalizada (3 meses)' },
+                                    ],
+                                },
+                            },
+                            {
+                                title: 'Mais informações',
+                                description:
+                                    'Em caso de dúvidas sobre nossa política de cookies, <a href="/contato">entre em contato</a>.',
+                            },
+                        ],
+                    },
+                },
+            },
+        },
+
+        // Estilo do banner
+        guiOptions: {
+            consentModal: {
+                layout: 'bar',
+                position: 'bottom',
+                equalWeightButtons: false,
+                flipButtons: false,
+            },
+            preferencesModal: {
+                layout: 'box',
+                position: 'right',
+                equalWeightButtons: false,
+                flipButtons: false,
+            },
+        },
+    });
+</script>
+
+<!-- Sobrescreve o tema padrão para combinar com a identidade do CNX -->
+<style is:global>
+    /* ── Variáveis de cor ── */
+    #cc-main {
+        --cc-font-family: 'Inter', 'Outfit', sans-serif;
+        --cc-modal-border-radius: 14px;
+        --cc-btn-border-radius: 8px;
+        --cc-modal-transition-duration: 0.2s;
+
+        /* Cores base — dark mode (padrão dos sites CNX) */
+        --cc-bg: #1a1a1a;
+        --cc-primary-color: #a855f7;
+        --cc-secondary-color: #737373;
+        --cc-text: #e5e5e5;
+        --cc-text-muted: #a3a3a3;
+        --cc-separator-border-color: rgba(255,255,255,0.08);
+
+        /* Botão primário */
+        --cc-btn-primary-bg: rgba(168,85,247,0.2);
+        --cc-btn-primary-color: #c084fc;
+        --cc-btn-primary-border-color: rgba(168,85,247,0.4);
+        --cc-btn-primary-hover-bg: rgba(168,85,247,0.35);
+        --cc-btn-primary-hover-color: #d8b4fe;
+        --cc-btn-primary-hover-border-color: rgba(168,85,247,0.6);
+
+        /* Botão secundário */
+        --cc-btn-secondary-bg: transparent;
+        --cc-btn-secondary-color: #737373;
+        --cc-btn-secondary-border-color: rgba(255,255,255,0.1);
+        --cc-btn-secondary-hover-bg: rgba(255,255,255,0.05);
+        --cc-btn-secondary-hover-color: #a3a3a3;
+        --cc-btn-secondary-hover-border-color: rgba(255,255,255,0.15);
+
+        /* Toggle */
+        --cc-toggle-on-bg: #a855f7;
+        --cc-toggle-off-bg: #404040;
+        --cc-toggle-readonly-bg: #2a2a2a;
+
+        /* Overlay */
+        --cc-overlay-bg: rgba(0,0,0,0.65);
+    }
+
+    /* Banner inferior (bar) */
+    .cc-bar.cc-wide .cm-body {
+        max-width: 860px;
+    }
+
+    /* Sombra no banner */
+    #cc-main .cm {
+        box-shadow: 0 -8px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+        border-top: 1px solid rgba(168,85,247,0.2);
+    }
+
+    /* Título do banner */
+    #cc-main .cm__title {
+        font-family: 'Outfit', sans-serif;
+        font-weight: 700;
+    }
+
+    /* Botão de preferências do painel lateral */
+    #cc-main .pm__section--toggle .pm__section-arrow {
+        color: #a855f7;
+    }
+</style>

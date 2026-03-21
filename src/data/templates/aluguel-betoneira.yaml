@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Betoneira
+id: aluguel-betoneira
+name: Aluguel de Betoneira
+description: "Site pronto para locadoras de betoneiras e equipamentos de construção"
+icon: "🏗️"
+color: "#dc2626"
+
+niche:
+  name: Aluguel de Betoneira
+  slug: aluguel-betoneira
+  icon: "🏗️"
+  description: "Locação de betoneiras, equipamentos e máquinas para construção"
+  color: "#dc2626"
+  active: true
+
+homeCopy:
+  heroBadge: "🏗️ Aluguel de Betoneira"
+  heroTitle: "Aluguel de Betoneira"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Betoneiras e equipamentos para obras. Diária, semanal ou mensal. Entrega na obra. Equipamentos em perfeito estado."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver equipamentos"
+  heroWhatsappMessage: "Olá! Preciso alugar betoneira. Vocês entregam na minha obra?"
+  servicesTitle: "Equipamentos para Obra"
+  servicesSubtitle: "Soluções para sua construção"
+  aboutTitle: "Referência em Aluguel de Betoneira"
+  aboutSubtitle: "Equipamentos para construção"
+  aboutText: "Locamos betoneiras, mixer, vibradores e equipamentos para construção civil. Diária, semanal ou mensal. Entrega e retirada na obra. Manutenção preventiva em todos os equipamentos."
+  aboutStats:
+    - number: "15+"
+      label: Anos de experiência
+    - number: "2000+"
+      label: Obras atendidas
+    - number: "24h"
+      label: Entrega na obra
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Equipamentos para sua obra."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece betoneiras e equipamentos de construção para locação. Entrega em {cidade}. Consulte valores."
+  benefits:
+    - "Entrega em {cidade} e região"
+    - "Orçamento gratuito"
+    - "Diária, semanal ou mensal"
+    - "Equipamentos revisados"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} entrega na sua obra. Ligue!"
+
+services:
+  - title: "Aluguel de Betoneira"
+    slug: aluguel-de-betoneira
+    shortDescription: "Betoneiras 400L e 400L turbo para concretagem"
+    icon: "🏗️"
+    niche: aluguel-betoneira
+  - title: "Aluguel de Betoneira 400L"
+    slug: aluguel-betoneira-400l
+    shortDescription: "Betoneira padrão 400 litros"
+    icon: "⚙️"
+    niche: aluguel-betoneira
+  - title: "Aluguel de Vibrador de Concreto"
+    slug: aluguel-vibrador-concreto
+    shortDescription: "Vibradores de imersão para concreto"
+    icon: "📳"
+    niche: aluguel-betoneira
+  - title: "Aluguel de Betoneira 600L"
+    slug: aluguel-betoneira-600l
+    shortDescription: "Betoneira 600 litros para grandes volumes"
+    icon: "🏗️"
+    niche: aluguel-betoneira
+  - title: "Aluguel de Caminhão Betoneira"
+    slug: aluguel-caminhao-betoneira
+    shortDescription: "Caminhão betoneira para grandes obras"
+    icon: "🚛"
+    niche: aluguel-betoneira
+  - title: "Aluguel de Régua Vibratória"
+    slug: aluguel-regua-vibratoria
+    shortDescription: "Régua para acabamento de concreto"
+    icon: "📏"
+    niche: aluguel-betoneira
+  - title: "Aluguel de Desmoldante"
+    slug: aluguel-desmoldante
+    shortDescription: "Equipamentos auxiliares para concretagem"
+    icon: "🛠️"
+    niche: aluguel-betoneira

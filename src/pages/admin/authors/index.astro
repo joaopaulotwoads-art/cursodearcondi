@@ -1,0 +1,289 @@
+---
+/**
+ * admin/authors/index.astro
+ * 
+ * Página de listagem de autores no painel administrativo.
+ * Não permite excluir o autor que está logado (bloqueio na UI e na API).
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getCollection } from 'astro:content';
+import { verifySession, SESSION_COOKIE } from '../../../utils/auth-utils';
+
+const authors = await getCollection('authors');
+const token = Astro.cookies.get(SESSION_COOKIE)?.value;
+const currentUser = token ? verifySession(token) : null;
+const currentUserSlug = currentUser?.slug ?? null;
+---
+
+<AdminLayout title="Autores - CNX Agency Admin">
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">
+                    Autores
+                </h1>
+                <p class="text-[#a3a3a3]">
+                    Gerencie os autores do seu blog
+                </p>
+            </div>
+            <a 
+                href="/admin/authors/new"
+                class="admin-btn admin-btn-primary"
+            >
+                + Novo Autor
+            </a>
+        </div>
+
+        <!-- Table -->
+        <div class="admin-card overflow-hidden p-0">
+            <table class="w-full">
+                <thead class="bg-[#111111] border-b border-[rgba(255,255,255,0.08)]">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Avatar</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Nome</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Cargo</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Slug</th>
+                        <th class="px-6 py-4 text-right text-sm font-semibold text-[#a3a3a3]">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[rgba(255,255,255,0.08)]">
+                    {authors.length === 0 ? (
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-[#a3a3a3]">
+                                Nenhum autor encontrado. 
+                                <a href="/admin/authors/new" class="text-[#3b82f6] hover:underline ml-1">
+                                    Criar primeiro autor
+                                </a>
+                            </td>
+                        </tr>
+                    ) : (
+                        authors.map((author) => (
+                            <tr class="hover:bg-[#111111] transition-colors">
+                                <td class="px-6 py-4">
+                                    {author.data.avatar ? (
+                                        <img 
+                                            src={author.data.avatar} 
+                                            alt={author.data.name}
+                                            class="w-10 h-10 rounded-full object-cover"
+                                        />
+                                    ) : (
+                                        <div class="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center text-[#737373]">
+                                            {author.data.name.charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-[#e5e5e5]">{author.data.name}</div>
+                                </td>
+                                <td class="px-6 py-4 text-[#a3a3a3] text-sm">
+                                    {author.data.role || '-'}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <code class="text-xs text-[#737373] bg-[#0a0a0a] px-2 py-1 rounded">
+                                        {author.id}
+                                    </code>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a 
+                                            href={`/admin/authors/${author.id}`}
+                                            class="admin-btn admin-btn-ghost text-sm"
+                                        >
+                                            Editar
+                                        </a>
+                                        {currentUserSlug === author.id ? (
+                                            <span
+                                                class="admin-btn admin-btn-ghost text-sm opacity-50 cursor-not-allowed"
+                                                title="Você não pode excluir o próprio usuário"
+                                            >
+                                                🗑️ Excluir (você)
+                                            </span>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                class="admin-btn admin-btn-danger text-sm delete-author-btn"
+                                                data-slug={author.id}
+                                                data-name={author.data.name}
+                                            >
+                                                🗑️ Excluir
+                                            </button>
+                                        )}
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de deleção de autor -->
+    <div id="delete-author-modal-backdrop" class="admin-modal-backdrop" style="display: none;">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <div class="admin-modal-icon">
+                    <span>✖</span>
+                </div>
+                <div>
+                    <div class="admin-modal-title">Excluir autor</div>
+                </div>
+            </div>
+            <div class="admin-modal-body">
+                <p id="delete-author-modal-message">
+                    Tem certeza que deseja excluir este autor?
+                </p>
+                <small>
+                    Esta ação é permanente e não poderá ser desfeita. Certifique-se de que nenhum post dependa deste autor.
+                </small>
+            </div>
+            <div class="admin-modal-footer">
+                <button 
+                    type="button" 
+                    class="admin-modal-btn admin-modal-btn-cancel" 
+                    id="delete-author-modal-cancel"
+                >
+                    Cancelar
+                </button>
+                <button 
+                    type="button" 
+                    class="admin-modal-btn admin-modal-btn-danger" 
+                    id="delete-author-modal-confirm"
+                >
+                    Excluir autor
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de feedback para autores -->
+    <div id="author-toast" class="admin-toast admin-toast--error" style="display: none;">
+        <div class="admin-toast-icon">
+            <span>❌</span>
+        </div>
+        <div class="admin-toast-content">
+            <strong>Erro ao excluir autor</strong>
+            <span id="author-toast-message">Ocorreu um erro inesperado.</span>
+        </div>
+        <button 
+            type="button" 
+            class="admin-toast-close" 
+            aria-label="Fechar notificação"
+        >
+            ×
+        </button>
+    </div>
+</AdminLayout>
+
+<script is:inline>
+    (function() {
+        const backdrop = document.getElementById('delete-author-modal-backdrop');
+        const confirmBtn = document.getElementById('delete-author-modal-confirm');
+        const cancelBtn = document.getElementById('delete-author-modal-cancel');
+        const messageEl = document.getElementById('delete-author-modal-message');
+        const toastEl = document.getElementById('author-toast');
+        const toastMessageEl = document.getElementById('author-toast-message');
+        const toastClose = toastEl ? toastEl.querySelector('.admin-toast-close') : null;
+
+        let currentSlug = null;
+        let currentName = null;
+
+        function openModal(slug, name) {
+            currentSlug = slug;
+            currentName = name;
+            if (messageEl) {
+                messageEl.textContent = `Tem certeza que deseja excluir o autor \"${name}\"?`;
+            }
+            if (backdrop) {
+                backdrop.style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            currentSlug = null;
+            currentName = null;
+            if (backdrop) {
+                backdrop.style.display = 'none';
+            }
+        }
+
+        function showToast(message) {
+            if (!toastEl || !toastMessageEl) return;
+            toastMessageEl.textContent = message;
+            toastEl.style.display = 'flex';
+            setTimeout(() => {
+                toastEl.style.display = 'none';
+            }, 5000);
+        }
+
+        async function handleDeleteAuthor() {
+            if (!currentSlug || !currentName) {
+                showToast('Dados do autor não encontrados. Tente recarregar a página.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/authors/${currentSlug}`, {
+                    method: 'DELETE',
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const row = document.querySelector(`button[data-slug=\"${currentSlug}\"]`)?.closest('tr');
+                    if (row && row.parentElement) {
+                        row.parentElement.removeChild(row);
+                    }
+                    closeModal();
+                } else {
+                    showToast(result.error || 'Erro desconhecido ao deletar autor.');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao deletar autor:', error);
+                showToast('Erro ao deletar autor. Verifique o console para mais detalhes.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-author-btn');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const slug = this.getAttribute('data-slug');
+                    const name = this.getAttribute('data-name');
+
+                    if (slug && name) {
+                        openModal(slug, name);
+                    } else {
+                        console.error('❌ Erro: slug ou name não encontrado');
+                        showToast('Não foi possível identificar o autor selecionado.');
+                    }
+                });
+            });
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', closeModal);
+            }
+
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', handleDeleteAuthor);
+            }
+
+            if (toastClose && toastEl) {
+                toastClose.addEventListener('click', () => {
+                    toastEl.style.display = 'none';
+                });
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', (event) => {
+                    if (event.target === backdrop) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    })();
+</script>

@@ -1,0 +1,91 @@
+---
+/**
+ * /servicos/index.astro — Listagem de Serviços (Modo Local)
+ *
+ * Página pública que lista todos os serviços cadastrados.
+ * Links levam a /{cidadePrincipal}/{servico} com copy completo, breadcrumbs e hero.
+ * Principal = cidade com mais bairros cadastrados.
+ */
+
+import LocalLayout from '../../layouts/LocalLayout.astro';
+import { listServices } from '../../utils/service-utils';
+import { getPrincipalLocationSlug } from '../../utils/location-utils';
+import { readSingleton } from '../../utils/singleton-utils';
+
+const services     = await listServices();
+const localData    = await readSingleton('home', 'local');
+const company      = localData?.companyName || 'Minha Empresa';
+const principalSlug = await getPrincipalLocationSlug();
+---
+
+<LocalLayout
+    title={`Serviços — ${company}`}
+    description={`Conheça todos os serviços oferecidos por ${company}. Qualidade e profissionalismo garantidos.`}
+>
+
+    <!-- Header da página -->
+    <section style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); padding: 4rem 1.5rem; text-align: center;">
+        <div class="container mx-auto">
+            <h1 style="font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 900; color: #fff; font-family: 'Outfit', sans-serif; margin-bottom: 0.75rem;">
+                Nossos Serviços
+            </h1>
+            <p style="color: #94a3b8; font-size: 1.05rem;">
+                Escolha o serviço que você precisa e solicite um orçamento gratuito
+            </p>
+        </div>
+    </section>
+
+    <!-- Grid de serviços -->
+    <section style="padding: 4rem 1.5rem; background: #f8fafc;">
+        <div class="container mx-auto">
+            {services.length > 0 ? (
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto;">
+                    {services.map(({ data: service }) => {
+                        const serviceHref = principalSlug ? `/${principalSlug}/${service.slug}` : `/servicos/${service.slug}`;
+                        const thumb = service.thumbnail || service.image;
+                        return (
+                        <a
+                            href={serviceHref}
+                            style="display: flex; flex-direction: column; gap: 0.75rem; padding: 0; border-radius: 14px; border: 2px solid #e2e8f0; background: #fff; text-decoration: none; transition: all 0.2s; overflow: hidden;"
+                            class="hover:border-blue-500 hover:shadow-lg hover:-translate-y-0.5"
+                        >
+                            {thumb ? (
+                                <div style="aspect-ratio: 16/10; overflow: hidden; background: #e2e8f0;">
+                                    <img
+                                        src={thumb}
+                                        alt={service.title}
+                                        style="width: 100%; height: 100%; object-fit: cover;"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            ) : service.icon ? (
+                                <div style="padding: 1.5rem 1.75rem 0; font-size: 2.25rem;">{service.icon}</div>
+                            ) : (
+                                <div style="padding: 1.5rem 1.75rem 0; font-size: 2.25rem;">🔧</div>
+                            )}
+                            <div style="padding: 0 1.75rem 1.75rem;">
+                            <h2 style="font-size: 1.05rem; font-weight: 700; color: #0f172a; font-family: 'Outfit', sans-serif; line-height: 1.3;">
+                                {service.title}
+                            </h2>
+                            {service.shortDescription && (
+                                <p style="font-size: 0.875rem; color: #64748b; line-height: 1.6; flex: 1;">
+                                    {service.shortDescription}
+                                </p>
+                            )}
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #2563eb; margin-top: auto;">
+                                Ver detalhes →
+                            </span>
+                            </div>
+                        </a>
+                    )})}
+                </div>
+            ) : (
+                <div style="text-align: center; padding: 4rem 1rem; color: #94a3b8;">
+                    <p style="font-size: 1.1rem; margin-bottom: 0.5rem;">Nenhum serviço cadastrado ainda.</p>
+                    <p style="font-size: 0.875rem;">Adicione serviços no painel administrativo.</p>
+                </div>
+            )}
+        </div>
+    </section>
+
+</LocalLayout>

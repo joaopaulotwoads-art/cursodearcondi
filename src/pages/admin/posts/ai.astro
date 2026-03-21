@@ -1,0 +1,30 @@
+---
+/**
+ * admin/posts/ai.astro
+ * 
+ * Página de geração de posts com IA.
+ * Permite criar posts informacionais ou comerciais usando IA.
+ */
+
+import { getCollection } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import AIPostGenerator from '../../../components/admin/AIPostGenerator.tsx';
+
+const authors = await getCollection('authors');
+const categories = await getCollection('categories');
+---
+
+<AdminLayout title="Posts com IA - CNX Agency Admin">
+    <div id="ai-post-generator-wrapper" class="min-h-[400px]">
+        <AIPostGenerator 
+            client:only="react"
+            authors={authors.map(a => ({ slug: a.id, name: a.data.name }))}
+            categories={categories.map(c => ({ slug: c.id, name: c.data.name }))}
+        />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para gerar posts com IA.</p>
+        </div>
+    </noscript>
+</AdminLayout>

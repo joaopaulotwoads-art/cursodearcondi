@@ -1,0 +1,16 @@
+---
+/**
+ * admin/location-pages/index.astro
+ *
+ * Redireciona para o novo gerenciador de Bairros.
+ * Esta rota redireciona para o Page Generator (aba Bairros).
+ */
+
+import { verifySession, SESSION_COOKIE } from '../../../utils/auth-utils';
+
+const token = Astro.cookies.get(SESSION_COOKIE)?.value;
+const sessionUser = token ? verifySession(token) : null;
+if (!sessionUser) return Astro.redirect('/admin/login');
+
+return Astro.redirect('/admin/gerar-paginas?tab=bairros');
+---

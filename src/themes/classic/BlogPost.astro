@@ -1,0 +1,166 @@
+---
+/**
+ * BlogPost.astro - Página Individual de Post
+ *
+ * Página de post individual seguindo o mesmo padrão de design da home.
+ * layoutType: 'local' → usa LocalLayout (modo rank and rent); 'main' → MainLayout (agência).
+ */
+
+import MainLayout from '../../layouts/MainLayout.astro';
+import LocalLayout from '../../layouts/LocalLayout.astro';
+
+interface Props {
+    post: any;
+    author: any;
+    Content?: any;
+    htmlContent?: string | null;
+    themeId: string;
+    layoutType?: 'main' | 'local';
+    readingTimeMinutes?: number;
+}
+
+const { post, author, Content, htmlContent, themeId, layoutType = 'main', readingTimeMinutes } = Astro.props;
+const Layout = layoutType === 'local' ? LocalLayout : MainLayout;
+const pageTitle = post.data.metaTitle || post.data.title;
+---
+
+<Layout title={pageTitle}>
+    
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[50vh] flex items-center justify-center pt-24 md:pt-32 overflow-hidden">
+        <div class="absolute inset-0" style="background: var(--blog-hero-grad);">
+            <div class="absolute inset-0 opacity-30">
+                <div class="absolute inset-0" style="background-image: linear-gradient(to right, var(--blog-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--blog-grid) 1px, transparent 1px); background-size: 60px 60px;"></div>
+            </div>
+            <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto text-center">
+                <a href="/blog" class="inline-flex items-center gap-2 text-sm hover:text-primary mb-8 transition-colors uppercase tracking-widest font-bold" style="color: var(--blog-text-subtle);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m12 19-7-7 7-7"></path>
+                        <path d="M19 12H5"></path>
+                    </svg>
+                    Voltar para o Blog
+                </a>
+                
+                {post.data.category && (
+                    <div class="inline-flex items-center gap-2 px-5 py-2.5 mb-6 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-sm">
+                        <span class="text-sm font-semibold text-primary tracking-wide">{post.data.category}</span>
+                    </div>
+                )}
+                
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-heading font-black leading-[1.1] mb-8" style="color: var(--blog-text);">
+                    {post.data.title}
+                </h1>
+                
+                <div class="flex items-center justify-center gap-4 flex-wrap">
+                    {author && (
+                        <div class="flex items-center gap-4">
+                            {author.data.avatar && (
+                                <img 
+                                    src={author.data.avatar} 
+                                    alt={author.data.name} 
+                                    class="w-12 h-12 rounded-full ring-2 ring-primary/30"
+                                />
+                            )}
+                            <div class="text-left">
+                                <p class="font-bold text-sm" style="color: var(--blog-text);">{author.data.name}</p>
+                                <p class="text-xs uppercase tracking-tighter" style="color: var(--blog-text-subtle);">{author.data.role}</p>
+                            </div>
+                        </div>
+                    )}
+                    {(post.data.publishedDate || readingTimeMinutes) && (
+                        <div class="flex items-center gap-4">
+                            {post.data.publishedDate && (
+                                <span class="text-sm" style="color: var(--blog-text-subtle);">
+                                    {new Date(post.data.publishedDate).toLocaleDateString('pt-BR', {
+                                        day: '2-digit',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    })}
+                                </span>
+                            )}
+                            {readingTimeMinutes && readingTimeMinutes > 0 && (
+                                <span class="text-sm" style="color: var(--blog-text-subtle);">
+                                    ⏱ {readingTimeMinutes} min de leitura
+                                </span>
+                            )}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 right-0 h-40" style="background: var(--blog-fade-bottom);"></div>
+    </section>
+
+    <!-- POST CONTENT -->
+    <section class="py-20 md:py-32 relative overflow-hidden" style="background: var(--blog-section-dark);">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                {(post.data.thumbnail || post.data.metaImage) && (
+                    <div class="mb-12 rounded-2xl overflow-hidden" style="border: 1px solid var(--blog-border);">
+                        <img 
+                            src={post.data.thumbnail || post.data.metaImage} 
+                            alt={post.data.title}
+                            class="w-full h-auto"
+                            loading="lazy"
+                        />
+                    </div>
+                )}
+                
+                <article
+                    class:list={[
+                        'max-w-none prose-img:rounded-2xl prose-img:my-8',
+                        htmlContent
+                            ? 'bemmae-post-html text-[var(--blog-text)] [&_a]:text-primary [&_a:hover]:underline'
+                            : 'prose prose-invert prose-lg prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-a:no-underline hover:prose-a:underline',
+                    ]}
+                >
+                    {htmlContent ? <div class="contents" set:html={htmlContent} /> : Content && <Content />}
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUTHOR BOX -->
+    {author && (
+        <section class="py-20 md:py-32 relative overflow-hidden" style="background: var(--blog-section-alt);">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto">
+                    <div class="p-10 rounded-3xl" style="background: var(--blog-surface); border: 1px solid var(--blog-border);">
+                        <div class="flex flex-col md:flex-row gap-8 items-center md:items-start text-center md:text-left">
+                            {author.data.avatar && (
+                                <img 
+                                    src={author.data.avatar} 
+                                    alt={author.data.name} 
+                                    class="w-24 h-24 rounded-full ring-4 ring-primary/30 shadow-xl"
+                                />
+                            )}
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold mb-2" style="color: var(--blog-text);">Escrito por {author.data.name}</h3>
+                                {author.data.role && (
+                                    <p class="text-primary mb-4 font-semibold">{author.data.role}</p>
+                                )}
+                                <p class="text-lg mb-6 italic leading-relaxed" style="color: var(--blog-text-muted);">"{author.data.bio}"</p>
+                                <a 
+                                    href={`/authors/${author.id}`} 
+                                    class="inline-flex items-center gap-2 px-6 py-3 bg-primary/20 text-primary border border-primary/30 rounded-xl font-bold hover:bg-primary hover:text-white transition-all"
+                                >
+                                    Ver perfil completo
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    )}
+
+</Layout>

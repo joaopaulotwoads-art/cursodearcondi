@@ -1,0 +1,259 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary-rgb: 168 85 247;
+    --secondary-rgb: 236 72 153;
+    --radius: 16px;
+  }
+
+  body {
+    @apply font-sans antialiased min-h-screen flex flex-col;
+    background-color: var(--blog-bg);
+    color: var(--blog-text);
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ── Blog Theme Variables ─────────────────────────────────────────────────── */
+
+html, html.dark {
+    --blog-bg:            #0f172a;
+    --blog-section-alt:   #0a0a0a;
+    --blog-section-dark:  #000000;
+    --blog-surface:       rgba(255, 255, 255, 0.05);
+    --blog-surface-hover: rgba(255, 255, 255, 0.08);
+    --blog-border:        rgba(255, 255, 255, 0.10);
+    --blog-text:          #ffffff;
+    --blog-text-muted:    #94a3b8;
+    --blog-text-subtle:   #64748b;
+    --blog-hero-grad:     linear-gradient(to bottom, #000000, #000000, #0a0a0a);
+    --blog-hero-accent:   #60a5fa;
+    --blog-nav-bg:        rgba(255, 255, 255, 0.05);
+    --blog-nav-border:    rgba(255, 255, 255, 0.05);
+    --blog-mob-bg:        #0a0a0a;
+    --blog-mob-border:    rgba(255, 255, 255, 0.05);
+    --blog-grid:          rgba(168, 85, 247, 0.10);
+    --blog-fade-bottom:   linear-gradient(to top, #000 0%, rgba(0,0,0,0.8) 50%, transparent 100%);
+}
+
+html.light {
+    --blog-bg:            #f8fafc;
+    --blog-section-alt:   #ffffff;
+    --blog-section-dark:  #f1f5f9;
+    --blog-surface:       rgba(0, 0, 0, 0.04);
+    --blog-surface-hover: rgba(0, 0, 0, 0.06);
+    --blog-border:        rgba(0, 0, 0, 0.09);
+    --blog-text:          #0f172a;
+    --blog-text-muted:    #475569;
+    --blog-text-subtle:   #94a3b8;
+    --blog-hero-grad:     linear-gradient(to bottom, #f1f5f9, #f8fafc, #ffffff);
+    --blog-hero-accent:   #2563eb;
+    --blog-nav-bg:        rgba(248, 250, 252, 0.92);
+    --blog-nav-border:    rgba(0, 0, 0, 0.07);
+    --blog-mob-bg:        #f8fafc;
+    --blog-mob-border:    rgba(0, 0, 0, 0.06);
+    --blog-grid:          rgba(168, 85, 247, 0.06);
+    --blog-fade-bottom:   linear-gradient(to top, #f8fafc 0%, rgba(248,250,252,0.8) 50%, transparent 100%);
+}
+
+/* ── Blog reusable components ─────────────────────────────────────────────── */
+
+/* Card reutilizável para posts e serviços */
+.blog-card {
+    background:    var(--blog-surface);
+    border:        1px solid var(--blog-border);
+    border-radius: 1rem;
+    transition:    background 0.2s, border-color 0.2s, transform 0.3s;
+}
+.blog-card:hover {
+    background:    var(--blog-surface-hover);
+    border-color:  rgb(var(--primary-rgb) / 0.5);
+    transform:     translateY(-8px);
+}
+
+/* ── Product Review Block (blog público) ──────────────────────────────────── */
+
+.product-review {
+    border: 1px solid var(--blog-border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    margin: 1.5rem 0;
+    background: var(--blog-surface);
+}
+
+.product-review-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.product-review-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+    margin: 0 !important;
+}
+
+.product-review-info {
+    flex: 1;
+}
+
+.product-review-name {
+    font-size: 1.125rem !important;
+    font-weight: 700 !important;
+    color: var(--blog-text) !important;
+    margin: 0 0 0.5rem 0 !important;
+}
+
+.product-review-description {
+    color: var(--blog-text-muted) !important;
+    margin: 0 0 0.6rem 0 !important;
+    font-size: 0.9rem !important;
+    line-height: 1.7 !important;
+}
+
+.product-review-description:last-of-type {
+    margin-bottom: 0 !important;
+}
+
+.product-review-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 0.5rem !important;
+}
+
+.product-review-pros-header,
+.product-review-cons-header {
+    width: 50% !important;
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    text-align: left !important;
+}
+
+.product-review-pros-header {
+    color: #22c55e !important;
+    background: rgba(34, 197, 94, 0.08) !important;
+    border-bottom: 2px solid rgba(34, 197, 94, 0.3) !important;
+}
+
+.product-review-cons-header {
+    color: #ef4444 !important;
+    background: rgba(239, 68, 68, 0.08) !important;
+    border-bottom: 2px solid rgba(239, 68, 68, 0.3) !important;
+}
+
+.product-review-pros-col,
+.product-review-cons-col {
+    width: 50% !important;
+    padding: 0.75rem !important;
+    vertical-align: top !important;
+}
+
+.product-review-pros-col {
+    border-right: 1px solid var(--blog-border) !important;
+}
+
+.product-review-pros-col ul,
+.product-review-cons-col ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+}
+
+.product-review-pros-col li,
+.product-review-cons-col li {
+    font-size: 0.875rem !important;
+    margin: 0.3rem 0 !important;
+    color: var(--blog-text) !important;
+}
+
+.product-review-pros-col li::marker {
+    color: #22c55e !important;
+}
+
+.product-review-cons-col li::marker {
+    color: #ef4444 !important;
+}
+
+.product-review-cta {
+    margin-top: 1rem !important;
+    text-align: center !important;
+}
+
+.product-review-cta-btn {
+    display: inline-block !important;
+    padding: 0.625rem 1.75rem !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    border-radius: 0.5rem !important;
+    text-decoration: none !important;
+    letter-spacing: 0.02em !important;
+    transition: filter 0.2s !important;
+}
+
+.product-review-cta-btn:hover {
+    filter: brightness(1.1) !important;
+}
+
+@media (max-width: 640px) {
+    .product-review-header {
+        flex-direction: column;
+    }
+    .product-review-image {
+        width: 100%;
+        height: 200px;
+    }
+    .product-review-table,
+    .product-review-table thead,
+    .product-review-table tbody,
+    .product-review-table tr {
+        display: block !important;
+    }
+    .product-review-pros-header,
+    .product-review-cons-header,
+    .product-review-pros-col,
+    .product-review-cons-col {
+        width: 100% !important;
+        display: block !important;
+    }
+    .product-review-pros-col {
+        border-right: none !important;
+        border-bottom: 1px solid var(--blog-border) !important;
+        padding-bottom: 0.75rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+}
+
+/* Prose (conteúdo de posts) em modo claro */
+html.light .prose-invert {
+    --tw-prose-body:        #374151;
+    --tw-prose-headings:    #111827;
+    --tw-prose-lead:        #4b5563;
+    --tw-prose-links:       rgb(var(--primary-rgb));
+    --tw-prose-bold:        #111827;
+    --tw-prose-counters:    #6b7280;
+    --tw-prose-bullets:     #6b7280;
+    --tw-prose-hr:          #e5e7eb;
+    --tw-prose-quotes:      #111827;
+    --tw-prose-quote-borders: rgb(var(--primary-rgb));
+    --tw-prose-captions:    #6b7280;
+    --tw-prose-code:        #111827;
+    --tw-prose-pre-code:    #e5e7eb;
+    --tw-prose-pre-bg:      #1f2937;
+    --tw-prose-th-borders:  #d1d5db;
+    --tw-prose-td-borders:  #e5e7eb;
+}

@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Van
+id: aluguel-van
+name: Aluguel de Van
+description: "Site pronto para locadoras de vans e transporte"
+icon: "🚐"
+color: "#059669"
+
+niche:
+  name: Aluguel de Van
+  slug: aluguel-van
+  icon: "🚐"
+  description: "Locação de vans para transportes, excursões e grupos"
+  color: "#059669"
+  active: true
+
+homeCopy:
+  heroBadge: "Aluguel de Van"
+  heroTitle: "Aluguel de Van"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Vans para excursões, eventos, viagens e transporte de grupos. Motorista ou em self-drive. Reserve com antecedência!"
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver opções"
+  heroWhatsappMessage: "Olá! Preciso alugar uma van. Vocês atendem aqui?"
+  servicesTitle: "Nossas Vans"
+  servicesSubtitle: "Transporte para todos os momentos"
+  aboutTitle: "Referência em Aluguel de Van"
+  aboutSubtitle: "Transporte seguro e confortável"
+  aboutText: "Oferecemos aluguel de vans para eventos, excursões, viagens escolares e transporte corporativo. Frota própria, documentação em dia e motoristas experientes quando necessário."
+  aboutStats:
+    - number: "15+"
+      label: Anos no mercado
+    - number: "1000+"
+      label: Viagens realizadas
+    - number: "24h"
+      label: Reservas online
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Vans para transporte de grupos e excursões."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece vans para aluguel com ou sem motorista. Atuamos em {cidade} e região. Consulte valores e disponibilidade."
+  benefits:
+    - "Frota em {cidade}"
+    - "Orçamento gratuito"
+    - "Documentação regularizada"
+    - "Motorista opcional"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - transporte para grupos. Ligue agora!"
+
+services:
+  - title: "Aluguel de Van"
+    slug: aluguel-de-van
+    shortDescription: "Vans para excursões, eventos e transporte de grupos"
+    icon: "🚐"
+    niche: aluguel-van
+  - title: "Aluguel de Van com Motorista"
+    slug: aluguel-van-com-motorista
+    shortDescription: "Van com motorista para eventos e viagens"
+    icon: "👨‍✈️"
+    niche: aluguel-van
+  - title: "Aluguel de Van para Excursão"
+    slug: aluguel-van-excursao
+    shortDescription: "Vans executivas para excursões escolares e turísticas"
+    icon: "🎒"
+    niche: aluguel-van
+  - title: "Aluguel de Van para Casamento"
+    slug: aluguel-van-casamento
+    shortDescription: "Vans decoradas para transporte dos noivos"
+    icon: "💒"
+    niche: aluguel-van
+  - title: "Aluguel de Van Executiva"
+    slug: aluguel-van-executiva
+    shortDescription: "Vans confortáveis para corporativo"
+    icon: "🚐"
+    niche: aluguel-van
+  - title: "Aluguel de Van 15 Lugares"
+    slug: aluguel-van-15-lugares
+    shortDescription: "Van para grupos médios"
+    icon: "🚐"
+    niche: aluguel-van
+  - title: "Aluguel de Van 22 Lugares"
+    slug: aluguel-van-22-lugares
+    shortDescription: "Van para grupos grandes"
+    icon: "🚌"
+    niche: aluguel-van

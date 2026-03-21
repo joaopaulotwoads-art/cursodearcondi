@@ -1,0 +1,154 @@
+---
+/**
+ * admin/configuracoes/index.astro
+ *
+ * Página de Configurações do painel admin.
+ * Tabs: IA (OpenAI/Gemini), SEO Técnico (sitemap, robots.txt) e Contato.
+ * Changelog fica em Configurações → Changelog (página separada).
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import SettingsAI from '../../../components/admin/SettingsAI';
+import SettingsSEO from '../../../components/admin/SettingsSEO';
+import SettingsContato from '../../../components/admin/SettingsContato';
+---
+
+<AdminLayout title="Configurações — CNX Agency Admin">
+    <div class="space-y-8 max-w-3xl">
+
+        <div>
+            <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">Configurações</h1>
+            <p class="text-[#a3a3a3]">Gerencie integrações e preferências do seu CMS.</p>
+        </div>
+
+        <!-- Tabs -->
+        <div id="config-tabs" style="display: flex; gap: 0.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 0.25rem;">
+            <button
+                data-tab="ai"
+                type="button"
+                class="config-tab active"
+                style="padding: 0.6rem 1.25rem; font-size: 0.875rem; font-weight: 600; border: none; background: none; cursor: pointer; color: var(--primary, #6366f1); border-bottom: 2px solid var(--primary, #6366f1); margin-bottom: -1px;"
+            >
+                🤖 Inteligência Artificial
+            </button>
+            <button
+                data-tab="seo"
+                type="button"
+                class="config-tab"
+                style="padding: 0.6rem 1.25rem; font-size: 0.875rem; font-weight: 600; border: none; background: none; cursor: pointer; color: #71717a; border-bottom: 2px solid transparent; margin-bottom: -1px;"
+            >
+                🔍 SEO & URLs
+            </button>
+            <button
+                data-tab="contato"
+                type="button"
+                class="config-tab"
+                style="padding: 0.6rem 1.25rem; font-size: 0.875rem; font-weight: 600; border: none; background: none; cursor: pointer; color: #71717a; border-bottom: 2px solid transparent; margin-bottom: -1px;"
+            >
+                📞 Contato
+            </button>
+        </div>
+
+        <!-- Painel IA -->
+        <div id="panel-ai">
+            <div class="admin-card p-6">
+                <div style="margin-bottom: 1.5rem;">
+                    <h2 class="text-xl font-bold text-[#e5e5e5] mb-1">Configuração de IA</h2>
+                    <p class="text-sm text-[#a3a3a3]">
+                        Configure o provedor de IA para gerar conteúdo das páginas de serviço.
+                        O Gemini é gratuito e recomendado para iniciar.
+                    </p>
+                </div>
+                <SettingsAI client:load />
+            </div>
+
+            <!-- Card informativo -->
+            <div class="admin-card p-5 mt-4" style="border-color: rgba(99,102,241,0.2);">
+                <h3 class="text-sm font-bold text-indigo-400 mb-3">💡 Como usar a geração de conteúdo</h3>
+                <ol class="text-sm text-[#a3a3a3] space-y-2 list-decimal list-inside">
+                    <li>Configure sua API Key acima e clique em <strong class="text-[#e5e5e5]">Salvar</strong>.</li>
+                    <li>Acesse <a href="/admin/gerar-paginas?tab=keywords" class="text-indigo-400 hover:underline">Page Generator → Keywords</a> e abra uma keyword.</li>
+                    <li>Defina a <strong class="text-[#e5e5e5]">Outline</strong> da página (estrutura de tópicos).</li>
+                    <li>Clique em <strong class="text-[#e5e5e5]">Gerar Conteúdo com IA</strong> — o conteúdo será gerado e salvo automaticamente.</li>
+                    <li>Acesse <a href="/admin/gerar-paginas?tab=paginas" class="text-indigo-400 hover:underline">Page Generator → Páginas</a> para publicar as páginas.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Painel SEO Técnico -->
+        <div id="panel-seo" style="display: none;">
+            <div class="admin-card p-6">
+                <div style="margin-bottom: 1.5rem;">
+                    <h2 class="text-xl font-bold text-[#e5e5e5] mb-1">SEO Técnico & URLs</h2>
+                    <p class="text-sm text-[#a3a3a3]">
+                        Configure sitemap, robots.txt e a estrutura de URLs dos posts. 
+                        Escolha entre URLs tradicionais (/blog/post) ou URLs limpas (/post).
+                    </p>
+                </div>
+                <SettingsSEO client:load />
+            </div>
+        </div>
+
+        <!-- Painel Contato -->
+        <div id="panel-contato" style="display: none;">
+            <div class="admin-card p-6">
+                <div style="margin-bottom: 1.5rem;">
+                    <h2 class="text-xl font-bold text-[#e5e5e5] mb-1">Telefone e WhatsApp</h2>
+                    <p class="text-sm text-[#a3a3a3]">
+                        Configure o número de telefone e WhatsApp em um único lugar.
+                        Esses dados são usados em todo o site (Header, Footer, páginas de contato).
+                    </p>
+                </div>
+                <SettingsContato client:load />
+            </div>
+        </div>
+
+    </div>
+</AdminLayout>
+
+<script is:inline>
+    (function() {
+        function initTabs() {
+            var tabs = document.querySelectorAll('.config-tab');
+            var panels = document.querySelectorAll('[id^="panel-"]');
+            var params = new URLSearchParams(window.location.search);
+            var wantTab = params.get('tab') || 'ai';
+            var wantBtn = document.querySelector('.config-tab[data-tab="' + wantTab + '"]');
+            if (wantBtn) {
+                tabs.forEach(function(b) {
+                    b.style.color = '#71717a';
+                    b.style.borderBottomColor = 'transparent';
+                    b.classList.remove('active');
+                });
+                panels.forEach(function(p) { p.style.display = 'none'; });
+                wantBtn.style.color = 'var(--primary, #6366f1)';
+                wantBtn.style.borderBottomColor = 'var(--primary, #6366f1)';
+                wantBtn.classList.add('active');
+                var panel = document.getElementById('panel-' + wantTab);
+                if (panel) panel.style.display = 'block';
+            }
+            tabs.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var tab = btn.getAttribute('data-tab');
+                    if (!tab) return;
+                    tabs.forEach(function(b) {
+                        b.style.color = '#71717a';
+                        b.style.borderBottomColor = 'transparent';
+                        b.classList.remove('active');
+                    });
+                    panels.forEach(function(p) { p.style.display = 'none'; });
+                    btn.style.color = 'var(--primary, #6366f1)';
+                    btn.style.borderBottomColor = 'var(--primary, #6366f1)';
+                    btn.classList.add('active');
+                    var panel = document.getElementById('panel-' + tab);
+                    if (panel) panel.style.display = 'block';
+                });
+            });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initTabs);
+        } else {
+            initTabs();
+        }
+    })();
+</script>

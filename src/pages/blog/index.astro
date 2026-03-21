@@ -1,0 +1,87 @@
+---
+/**
+ * blog/index.astro
+ *
+ * Listagem do blog - exibe posts publicados.
+ * Usa layout conforme siteMode: local → LocalLayout (header/footer do modo local), blog → MainLayout.
+ * Tema bemmae: layout Bem Mãe (BaseLayout + BlogList).
+ */
+
+import { getCollection, getEntry } from 'astro:content';
+import BlogList from '../../themes/classic/BlogList.astro';
+import BaseLayoutBemmae from '../../themes/bemmae/BaseLayout.astro';
+import BemMaeBlogList from '../../themes/bemmae/BlogList.astro';
+import { readSingleton } from '../../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
+import type { BlogPermalinkStructure, BlogUrlPrefix } from '../../utils/blog-permalink';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+const layoutType = siteMode === 'local' ? 'local' : 'main';
+const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
+const useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
+const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+const blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'blog';
+
+const allPosts = await getCollection('posts');
+const categories = await getCollection('categories');
+const categoriaSlug = Astro.url.searchParams.get('categoria')?.trim() || '';
+const activeCategory = categoriaSlug
+    ? categories.find((c) => c.id === categoriaSlug || c.data.slug === categoriaSlug)
+    : undefined;
+
+let publishedPosts = allPosts
+    .filter((post) => post.data.publishedDate)
+    .sort((a, b) => new Date(b.data.publishedDate!).getTime() - new Date(a.data.publishedDate!).getTime());
+
+if (categoriaSlug) {
+    publishedPosts = publishedPosts.filter((post) => post.data.category === categoriaSlug);
+}
+
+const siteName = settings?.data?.siteName || 'Site';
+const siteUrl = Astro.url.origin;
+const beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
+const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
+const beBlog = useBemmae ? (await readSingleton('blog', 'bemmae')) || {} : {};
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+---
+
+{useBemmae ? (
+<BaseLayoutBemmae
+    title={
+        activeCategory?.data?.name
+            ? `${activeCategory.data.name} - ${siteName}`
+            : `${(beBlog as any).pageTitle || 'Blog'} - ${siteName}`
+    }
+    description={(beBlog as any).heroDescription || ''}
+    siteName={(beMenu as any)?.logoText || siteName}
+    logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
+    siteUrl={siteUrl}
+    nav={beNav}
+    footerNav={beFootNav}
+    contentThemeId="bemmae"
+>
+    <BemMaeBlogList
+        posts={publishedPosts}
+        blogData={beBlog}
+        blogPermalinkStructure={blogPermalinkStructure}
+        blogUrlPrefix={blogUrlPrefix}
+        categoryName={activeCategory?.data?.name}
+        categoryFilterActive={Boolean(categoriaSlug)}
+    />
+</BaseLayoutBemmae>
+) : (
+<BlogList
+    posts={publishedPosts}
+    themeId="classic"
+    layoutType={layoutType}
+    blogPermalinkStructure={blogPermalinkStructure}
+    blogUrlPrefix={blogUrlPrefix}
+    listTitle={
+        activeCategory?.data?.name
+            ? `${activeCategory.data.name} — ${siteName}`
+            : undefined
+    }
+/>
+)}

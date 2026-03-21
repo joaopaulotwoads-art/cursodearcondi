@@ -1,0 +1,216 @@
+---
+/**
+ * Home Bem Mãe — conteúdo principal; layout (head/header/footer) vem da página.
+ */
+import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+interface Props {
+  homeData: Record<string, any>;
+  latestPosts: any[];
+  blogPermalinkStructure: BlogPermalinkStructure;
+  blogUrlPrefix: BlogUrlPrefix;
+}
+
+const {
+  homeData: h,
+  latestPosts,
+  blogPermalinkStructure,
+  blogUrlPrefix,
+} = Astro.props;
+
+const heroBg = h.heroBgImage || 'https://images.unsplash.com/photo-1492725764893-90b379c2b6e7?auto=format&fit=crop&w=1920&q=80';
+const categoryCards = Array.isArray(h.categoryCards) ? h.categoryCards : [];
+const aboutText = String(h.aboutText || '').trim();
+const showAbout = aboutText.length > 0;
+const aboutTitle = String(h.aboutTitle || 'Sobre nós').trim() || 'Sobre nós';
+const aboutImg = String(h.aboutImage || '').trim();
+/** Foto institucional quando o CMS não define URL (evita coluna vazia). */
+const ABOUT_DEFAULT_IMAGE =
+  'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=960&q=80';
+const aboutImgSrc = aboutImg || ABOUT_DEFAULT_IMAGE;
+const aboutParagraphs = aboutText
+  .split(/\n\n+/)
+  .map((p) => p.trim())
+  .filter(Boolean);
+---
+<article>
+  <section
+    class="relative min-h-[70vh] flex items-center justify-center bg-cover bg-center pt-20 pb-24 md:pt-28 md:pb-32"
+    style={`background-image: url('${heroBg}');`}
+    aria-labelledby="hero-title"
+  >
+    <div class="absolute inset-0 bg-[var(--color-text)]/50" aria-hidden="true" />
+    <div class="relative max-w-4xl mx-auto px-4 text-center">
+      {h.heroKicker && (
+        <p class="text-sm font-medium tracking-wide text-white/90 uppercase mb-4">{h.heroKicker}</p>
+      )}
+      <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mb-5 max-w-3xl mx-auto drop-shadow-sm">
+        {h.heroTitle || 'Seu título'}
+      </h1>
+      {h.heroSubtitle && (
+        <p class="text-lg md:text-xl text-white/90 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-sm">
+          {h.heroSubtitle}
+        </p>
+      )}
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a
+          href={h.heroCtaPrimaryHref || '/blog'}
+          class="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-full bg-[var(--color-accent)] text-white font-medium hover:opacity-90 transition-opacity shadow-md"
+        >
+          {h.heroCtaPrimaryText || 'Ver artigos'}
+        </a>
+        <a
+          href={h.heroCtaSecondaryHref || '/sobre'}
+          class="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-full border-2 border-white text-white font-medium hover:bg-white/10 transition-colors"
+        >
+          {h.heroCtaSecondaryText || 'Quem somos'}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-4xl mx-auto px-4 -mt-6">
+    {categoryCards.length > 0 && (
+      <section class="mb-16" aria-labelledby="categorias-title">
+        <h2 id="categorias-title" class="text-xl font-semibold text-[var(--color-text)] mb-6 text-center">
+          {h.categoriesSectionTitle || 'O que você encontra aqui'}
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {categoryCards.map((c: any) => (
+            <a
+              href={c.href || '/blog'}
+              class="block p-6 rounded-lg border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-white transition-colors"
+            >
+              <div class="aspect-square rounded-md bg-[var(--color-rosa)] mb-4 flex items-center justify-center text-[var(--color-accent)] text-3xl">
+                {c.icon || '✨'}
+              </div>
+              <h3 class="font-medium text-[var(--color-accent)]">{c.title}</h3>
+              {c.description && <p class="text-sm text-[var(--color-muted)] mt-1">{c.description}</p>}
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    <section class="mb-16" aria-labelledby="posts-title">
+      <h2 id="posts-title" class="text-xl font-semibold text-[var(--color-text)] mb-6">
+        {h.latestPostsTitle || 'Últimos artigos'}
+      </h2>
+      {latestPosts.length === 0 ? (
+        <p class="text-sm text-[var(--color-muted)]">{h.emptyLatestText || 'Nenhum artigo publicado ainda.'}</p>
+      ) : (
+        <>
+          <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {latestPosts.map((post) => {
+              const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
+              const thumb = post.data.thumbnail || post.data.metaImage;
+              return (
+                <a
+                  href={url}
+                  class="group block rounded-lg border border-[var(--color-border)] overflow-hidden hover:border-[var(--color-accent)] transition-colors"
+                >
+                  {thumb ? (
+                    <div class="aspect-[4/3] overflow-hidden bg-[var(--color-rosa)]">
+                      <img src={thumb} alt="" class="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  ) : (
+                    <div class="aspect-[4/3] bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm">
+                      Blog
+                    </div>
+                  )}
+                  <div class="p-4">
+                    <h3 class="font-medium text-[var(--color-text)] group-hover:text-[var(--color-accent)]">
+                      {post.data.title}
+                    </h3>
+                    {post.data.metaDescription && (
+                      <p class="text-sm text-[var(--color-muted)] mt-1 line-clamp-2">{post.data.metaDescription}</p>
+                    )}
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+          <p class="mt-6 text-center">
+            <a
+              href="/blog"
+              class="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-md bg-[var(--color-accent)] text-white text-sm font-medium hover:opacity-90"
+            >
+              {h.latestPostsCtaText || 'Ver todos os artigos'}
+            </a>
+          </p>
+        </>
+      )}
+    </section>
+  </div>
+
+  {showAbout && (
+    <section
+      class="max-w-6xl mx-auto px-4 sm:px-6 mb-16 scroll-mt-24"
+      aria-labelledby="about-section-title"
+    >
+      <div class="rounded-2xl border border-[var(--color-border)] bg-white p-8 sm:p-10 lg:p-12 shadow-sm">
+        <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-12 xl:gap-14 items-center gap-10">
+          <div class="order-1 min-w-0 space-y-5">
+            <h2
+              id="about-section-title"
+              class="text-2xl md:text-3xl font-semibold text-[var(--color-text)] tracking-tight"
+            >
+              {aboutTitle}
+            </h2>
+            {aboutParagraphs.map((para) => (
+              <p class="text-[var(--color-muted)] leading-[1.8] text-base md:text-[1.0625rem]">{para}</p>
+            ))}
+            {(h.aboutCtaText || h.aboutCtaHref) && (
+              <div class="pt-2">
+                <a
+                  href={String(h.aboutCtaHref || '/sobre').trim() || '/sobre'}
+                  class="inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-[var(--color-accent)] px-6 py-2.5 text-sm font-medium text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors"
+                >
+                  {h.aboutCtaText || 'Conheça mais'}
+                </a>
+              </div>
+            )}
+          </div>
+          <figure class="order-2 w-full max-w-md mx-auto lg:max-w-none lg:mx-0">
+            <div class="aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-rosa)] shadow-md ring-1 ring-[var(--color-text)]/[0.06]">
+              <img
+                src={aboutImgSrc}
+                alt={aboutTitle}
+                class="h-full w-full object-cover object-center"
+                loading="lazy"
+                decoding="async"
+                width="640"
+                height="800"
+              />
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <div class="max-w-4xl mx-auto px-4 pb-14">
+    <section class="rounded-lg border border-[var(--color-border)] bg-[var(--color-rosa)]/40 p-8 text-center" aria-labelledby="newsletter-title">
+      <h2 id="newsletter-title" class="text-lg font-semibold text-[var(--color-text)] mb-2">
+        {h.newsletterTitle || 'Newsletter'}
+      </h2>
+      <p class="text-sm text-[var(--color-muted)] mb-4">{h.newsletterDescription || ''}</p>
+      <form class="flex flex-col sm:flex-row gap-3 justify-center max-w-sm mx-auto" action="#" method="post" aria-label="Newsletter">
+        <label for="newsletter-email" class="sr-only">E-mail</label>
+        <input
+          id="newsletter-email"
+          type="email"
+          name="email"
+          placeholder={h.newsletterPlaceholder || 'seu@email.com'}
+          class="flex-1 min-h-[44px] px-4 rounded-md border border-[var(--color-border)] bg-white text-[var(--color-text)]"
+          required
+        />
+        <button
+          type="submit"
+          class="min-h-[44px] px-5 py-2.5 rounded-md bg-[var(--color-accent)] text-white text-sm font-medium hover:opacity-90"
+        >
+          {h.newsletterButtonText || 'Inscrever'}
+        </button>
+      </form>
+    </section>
+  </div>
+</article>

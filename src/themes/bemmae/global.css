@@ -1,0 +1,149 @@
+/* Tema Bem Mãe — variáveis (Tailwind global já vem do CMS) */
+:root {
+  --color-bg: #fff;
+  --color-text: #5c4d3c;
+  --color-muted: #8a7a6a;
+  --color-accent: #c4a77d;
+  --color-border: #e8dcd3;
+  --color-rosa: #f5e6e8;
+  --color-nude: #e8dcd3;
+  /* Leitura longa (posts) */
+  --bemmae-post-font: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --bemmae-post-line: 1.82;
+  --bemmae-post-p-space: 1.35em;
+}
+
+.bemmae-scope body {
+  font-family: var(--bemmae-post-font);
+}
+
+/**
+ * Conteúdo HTML importado (Ghost) — espaçamento, fonte e mobile.
+ * Parágrafos curtos no HTML são decisão editorial; aqui garantimos
+ * conforto visual (entrelinha, margens, largura ótima ~65–72 caracteres).
+ */
+.bemmae-post-html {
+  font-family: var(--bemmae-post-font);
+  font-size: 1.0625rem; /* 17px — mínimo confortável em mobile */
+  line-height: var(--bemmae-post-line);
+  letter-spacing: 0.012em;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 768px) {
+  .bemmae-post-html {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.78;
+  }
+}
+
+/* Introdução e parágrafos “solto” (fora dos cards .bemmae-container) */
+.bemmae-post-html > p {
+  margin: 0 0 var(--bemmae-post-p-space);
+  max-width: 72ch;
+  line-height: var(--bemmae-post-line);
+}
+
+.bemmae-post-html > p:last-child {
+  margin-bottom: 0;
+}
+
+.bemmae-post-html > h2 {
+  font-size: clamp(1.2rem, 4.2vw, 1.55rem);
+  font-weight: 700;
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+  margin: 2.15em 0 0.95em;
+  color: var(--color-text);
+  scroll-margin-top: 5rem;
+}
+
+.bemmae-post-html > h2:first-child {
+  margin-top: 0;
+}
+
+.bemmae-post-html > h3 {
+  font-size: clamp(1.05rem, 3.5vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.38;
+  margin: 1.75em 0 0.65em;
+  color: var(--color-text);
+}
+
+.bemmae-post-html > h4 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.5em 0 0.5em;
+}
+
+.bemmae-post-html strong,
+.bemmae-post-html b {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.bemmae-post-html > ul,
+.bemmae-post-html > ol {
+  margin: 0.5em 0 1.35em;
+  padding-left: 1.35rem;
+  max-width: 72ch;
+  line-height: 1.75;
+}
+
+.bemmae-post-html > ul > li,
+.bemmae-post-html > ol > li {
+  margin-bottom: 0.55em;
+}
+
+.bemmae-post-html > ul > li:last-child,
+.bemmae-post-html > ol > li:last-child {
+  margin-bottom: 0;
+}
+
+.bemmae-post-html a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+.bemmae-post-html > blockquote {
+  margin: 1.35em 0;
+  padding: 0.85em 1em 0.85em 1.15em;
+  border-left: 4px solid var(--color-border);
+  color: var(--color-muted);
+  font-style: italic;
+  max-width: 72ch;
+  line-height: 1.75;
+}
+
+.bemmae-post-html > img,
+.bemmae-post-html > figure {
+  margin: 1.5em 0;
+  max-width: 100%;
+}
+
+.bemmae-post-html > figure img {
+  border-radius: 0.5rem;
+}
+
+/* Separar bloco editorial do grid de cards */
+.bemmae-post-html > .bemmae-container {
+  margin-top: 2rem;
+}
+
+.bemmae-cta-wrapper {
+  margin: 24px auto;
+  max-width: 480px;
+}
+
+.bemmae-cta-wrapper a,
+.bemmae-cta-wrapper button {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 12px 18px !important;
+  font-size: 14px !important;
+  border-radius: 999px !important;
+}

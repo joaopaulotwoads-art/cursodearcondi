@@ -1,0 +1,60 @@
+/** Campos do SingletonEditor para o tema Bem Mãe (home). */
+
+export const BEMMAE_HOME_FIELDS = [
+    { key: 'heroKicker', type: 'text', label: 'Selo acima do título (hero)' },
+    { key: 'heroTitle', type: 'text', label: 'Título principal' },
+    { key: 'heroSubtitle', type: 'text', label: 'Subtítulo', multiline: true, rows: 3 },
+    { key: 'heroBgImage', type: 'text', label: 'URL da imagem de fundo (hero)' },
+    { key: 'heroCtaPrimaryText', type: 'text', label: 'Texto botão principal' },
+    { key: 'heroCtaPrimaryHref', type: 'text', label: 'Link botão principal' },
+    { key: 'heroCtaSecondaryText', type: 'text', label: 'Texto botão secundário' },
+    { key: 'heroCtaSecondaryHref', type: 'text', label: 'Link botão secundário' },
+    { key: 'aboutTitle', type: 'text', label: 'Sobre nós — título' },
+    { key: 'aboutText', type: 'text', label: 'Sobre nós — texto', multiline: true, rows: 6 },
+    { key: 'aboutImage', type: 'text', label: 'Sobre nós — URL da foto (lado direito). Vazio = imagem padrão' },
+    { key: 'aboutCtaText', type: 'text', label: 'Sobre nós — texto do botão' },
+    { key: 'aboutCtaHref', type: 'text', label: 'Sobre nós — link do botão' },
+    { key: 'categoriesSectionTitle', type: 'text', label: 'Título da seção de categorias' },
+    {
+        key: 'categoryCards',
+        type: 'array',
+        label: 'Cards (categorias / destaques)',
+        itemLabel: () => 'Card',
+        defaultItem: { href: '/blog', icon: '✨', title: '', description: '' },
+        fields: [
+            { key: 'href', type: 'text', label: 'Link' },
+            { key: 'icon', type: 'text', label: 'Ícone (emoji)' },
+            { key: 'title', type: 'text', label: 'Título' },
+            { key: 'description', type: 'text', label: 'Descrição', multiline: true, rows: 2 },
+        ],
+    },
+    { key: 'latestPostsTitle', type: 'text', label: 'Título “Últimos artigos”' },
+    { key: 'latestPostsCtaText', type: 'text', label: 'Texto do botão ver todos' },
+    { key: 'emptyLatestText', type: 'text', label: 'Mensagem sem posts' },
+    { key: 'newsletterTitle', type: 'text', label: 'Newsletter — título' },
+    { key: 'newsletterDescription', type: 'text', label: 'Newsletter — descrição', multiline: true, rows: 2 },
+    { key: 'newsletterPlaceholder', type: 'text', label: 'Newsletter — placeholder do e-mail' },
+    { key: 'newsletterButtonText', type: 'text', label: 'Newsletter — texto do botão' },
+];
+
+export const BEMMAE_ABOUT_FIELDS = [
+    { key: 'heroTitle', type: 'text', label: 'Título' },
+    { key: 'heroSubtitle', type: 'text', label: 'Subtítulo', multiline: true, rows: 2 },
+    { key: 'heroImage', type: 'text', label: 'URL da imagem (opcional)' },
+    { key: 'body', type: 'text', label: 'Texto principal', multiline: true, rows: 8 },
+    { key: 'ctaLinkText', type: 'text', label: 'Texto do link final' },
+    { key: 'ctaLinkHref', type: 'text', label: 'URL do link final' },
+    {
+        key: 'teamMembers',
+        type: 'array',
+        label: 'Equipe',
+        itemLabel: (item: { name?: string }) => item?.name || 'Pessoa',
+        defaultItem: { name: '', role: '', bio: '', emoji: '👤' },
+        fields: [
+            { key: 'name', type: 'text', label: 'Nome' },
+            { key: 'role', type: 'text', label: 'Função' },
+            { key: 'bio', type: 'text', label: 'Bio', multiline: true, rows: 2 },
+            { key: 'emoji', type: 'text', label: 'Emoji / avatar texto' },
+        ],
+    },
+];

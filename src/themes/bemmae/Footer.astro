@@ -1,0 +1,219 @@
+---
+/**
+ * Rodapé Bem Mãe — navegação, links legais, NAP (SEO local) e JSON-LD.
+ */
+import type { NavItem } from './types';
+import { readSingleton } from '../../utils/singleton-utils';
+import { readSiteSettings } from '../../utils/read-site-settings';
+import { getSiteContactInfo, formatPhone } from '../../utils/site-contact';
+
+interface Props {
+  siteName: string;
+  /** Mesmo logo do header (singleton Menu, modo imagem). */
+  logoSrc?: string;
+  footerNav: NavItem[];
+  /** Pasta de singletons (ex.: bemmae) */
+  contentThemeId?: string;
+}
+
+const { siteName, logoSrc, footerNav, contentThemeId = 'bemmae' } = Astro.props;
+
+const footer = (await readSingleton('footer', contentThemeId)) || {};
+const contactData = (await readSingleton('contact', contentThemeId)) || {};
+const settings = await readSiteSettings();
+const { phone: phoneDigits, whatsapp: waDigits } = await getSiteContactInfo();
+
+const tagline = String(footer.tagline || footer.description || '').trim();
+const legalLinks = (Array.isArray(footer.legalLinks) ? footer.legalLinks : []) as NavItem[];
+const socialLinks = (Array.isArray((footer as { socialLinks?: { platform: string; url: string; icon?: string }[] }).socialLinks)
+  ? (footer as { socialLinks: { platform: string; url: string; icon?: string }[] }).socialLinks
+  : []) as { platform: string; url: string; icon?: string }[];
+
+const orgLegalName = String(footer.organizationLegalName || siteName).trim();
+const addressLine = String(footer.addressLine || '').trim();
+const city = String(footer.city || '').trim();
+const state = String(footer.state || '').trim();
+const postalCode = String(footer.postalCode || '').trim();
+const country = String(footer.country || 'Brasil').trim();
+
+const email =
+  String(
+    (contactData as Record<string, string>).email || (footer as Record<string, string>).contactEmail || '',
+  ).trim();
+
+const phoneDisplay = phoneDigits ? formatPhone(phoneDigits) : '';
+const waDisplay = waDigits ? formatPhone(waDigits) : '';
+const telHref = phoneDigits ? `tel:+55${phoneDigits}` : '';
+const waHref = waDigits ? `https://wa.me/55${waDigits}` : '';
+
+const addressLocality = [city, state].filter(Boolean).join(' — ');
+const streetAddress = addressLine;
+const hasPostalAddress = streetAddress || addressLocality || postalCode;
+
+const canonicalBase = String(settings.canonicalUrl || Astro.url.origin || '').replace(/\/+$/, '') || Astro.url.origin;
+
+const orgJsonLd: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: orgLegalName,
+  url: canonicalBase,
+  description: tagline || undefined,
+};
+
+if (email) (orgJsonLd as any).email = email;
+if (phoneDigits) (orgJsonLd as any).telephone = `+55${phoneDigits}`;
+
+if (hasPostalAddress) {
+  (orgJsonLd as any).address = {
+    '@type': 'PostalAddress',
+    streetAddress: streetAddress || undefined,
+    addressLocality: city || undefined,
+    addressRegion: state || undefined,
+    postalCode: postalCode || undefined,
+    addressCountry: country === 'Brasil' ? 'BR' : country,
+  };
+}
+
+const sameAsUrls = socialLinks.map((s) => String(s.url || '').trim()).filter(Boolean);
+if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
+---
+
+<footer class="border-t border-[var(--color-border)] mt-16 bg-[var(--color-nude)]/40">
+  <div class="max-w-5xl mx-auto px-4 py-12">
+    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+      <div class="lg:col-span-1">
+        {logoSrc ? (
+          <a href="/" class="inline-flex items-center mb-2 w-full max-w-2xl" aria-label={siteName}>
+            <img
+              src={logoSrc}
+              alt=""
+              width="480"
+              height="108"
+              class="h-16 w-auto sm:h-[4.5rem] md:h-20 lg:h-[5.5rem] max-w-full object-contain object-left"
+              decoding="async"
+              loading="lazy"
+            />
+          </a>
+        ) : (
+          <p class="text-base font-semibold text-[var(--color-text)]">{siteName}</p>
+        )}
+        {tagline && <p class="mt-2 text-sm text-[var(--color-muted)] leading-relaxed">{tagline}</p>}
+        {socialLinks.length > 0 && (
+          <div class="mt-4 flex flex-wrap gap-3" aria-label="Redes sociais">
+            {socialLinks.map((s) => (
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                aria-label={s.platform}
+                title={s.platform}
+              >
+                {s.icon === 'youtube' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5" aria-hidden="true">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                  </svg>
+                ) : s.icon === 'pinterest' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5" aria-hidden="true">
+                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.401.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.354-.629-2.758-1.379l-.749 2.848c-.269 1.045-1.004 2.352-1.498 3.146 1.123.345 2.306.535 3.55.535 6.607 0 11.985-5.365 11.985-11.987C23.97 5.39 18.592.026 11.985.026L12.017 0z" />
+                  </svg>
+                ) : (
+                  <span class="text-xs font-medium px-1">{s.platform}</span>
+                )}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div>
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Navegação</h2>
+        <nav class="flex flex-col gap-2" aria-label="Links do rodapé">
+          {footerNav.map((item) => (
+            <a
+              href={item.href}
+              class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] py-1 min-h-[44px] flex items-center"
+            >
+              {item.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+
+      <div>
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Legal</h2>
+        <nav class="flex flex-col gap-2" aria-label="Políticas e termos">
+          {legalLinks.length > 0 ? (
+            legalLinks.map((item) => (
+              <a
+                href={item.href}
+                class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] py-1 min-h-[44px] flex items-center"
+              >
+                {item.label}
+              </a>
+            ))
+          ) : (
+            <span class="text-sm text-[var(--color-muted)]">Configure legalLinks em footer.yaml</span>
+          )}
+        </nav>
+      </div>
+
+      <div>
+        <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Contato</h2>
+        <address class="not-italic text-sm text-[var(--color-muted)] space-y-2">
+          {orgLegalName && <p class="text-[var(--color-text)] font-medium">{orgLegalName}</p>}
+          {(streetAddress || addressLocality || postalCode) && (
+            <p class="leading-relaxed">
+              {streetAddress && <>{streetAddress}<br /></>}
+              {(addressLocality || postalCode) && (
+                <>
+                  {addressLocality}
+                  {postalCode && ` — CEP ${postalCode}`}
+                  <br />
+                </>
+              )}
+              {country}
+            </p>
+          )}
+          {phoneDisplay && (
+            <p>
+              <a href={telHref} class="text-[var(--color-accent)] hover:underline">
+                {phoneDisplay}
+              </a>
+            </p>
+          )}
+          {waDisplay && waDigits !== phoneDigits && (
+            <p>
+              WhatsApp:{' '}
+              <a href={waHref} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline">
+                {waDisplay}
+              </a>
+            </p>
+          )}
+          {email && (
+            <p>
+              <a href={`mailto:${email}`} class="text-[var(--color-accent)] hover:underline break-all">
+                {email}
+              </a>
+            </p>
+          )}
+          {!streetAddress && !phoneDisplay && !email && (
+            <p class="text-xs">Preencha endereço e contato no rodapé (footer.yaml) e em Configurações → Contato.</p>
+          )}
+        </address>
+      </div>
+    </div>
+
+    <div class="mt-10 pt-8 border-t border-[var(--color-border)] flex flex-col sm:flex-row justify-between items-center gap-4">
+      <p class="text-sm text-[var(--color-muted)] text-center sm:text-left">
+        © {new Date().getFullYear()} {orgLegalName}
+        {footer.copyrightNote && <span class="block sm:inline sm:ml-1">{footer.copyrightNote}</span>}
+      </p>
+      <p class="text-xs text-[var(--color-muted)] text-center sm:text-right max-w-md">
+        Conteúdo informativo. Não substitui orientação médica ou profissional.
+      </p>
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(orgJsonLd)} />
+</footer>

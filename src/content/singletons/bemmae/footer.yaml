@@ -1,0 +1,38 @@
+siteName: Bem Mãe
+copyright: ""
+copyrightNote: ""
+description: ""
+tagline: Maternidade, saúde e lifestyle, conteúdo informativo para famílias.
+organizationLegalName: Bem Mãe
+contactEmail: contato@bemmae.com.br
+addressLine: ""
+city: ""
+state: ""
+postalCode: ""
+country: Brasil
+columns: []
+socialLinks:
+  - platform: YouTube
+    url: https://www.youtube.com/@bemmaeMV
+    icon: youtube
+  - platform: Pinterest
+    url: https://br.pinterest.com/bemmaeoficial/
+    icon: pinterest
+footerNav:
+  - label: Início
+    href: /
+  - label: Sobre
+    href: /sobre
+  - label: Blog
+    href: /blog
+  - label: Contato
+    href: /contato
+legalLinks:
+  - label: Política de Privacidade
+    href: /blog/politica-de-privacidade
+  - label: Termos de Uso
+    href: /termos
+  - label: Política de Cookies
+    href: /politica-de-cookies
+  - label: Mapa do site
+    href: /sitemap-index.xml

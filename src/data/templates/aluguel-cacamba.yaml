@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Caçamba
+id: aluguel-cacamba
+name: Aluguel de Caçamba
+description: "Site pronto para locadoras de caçambas e transporte de entulho"
+icon: "🚛"
+color: "#ea580c"
+
+niche:
+  name: Aluguel de Caçamba
+  slug: aluguel-cacamba
+  icon: "🚛"
+  description: "Locação de caçambas para obras, reformas e descarte de entulho"
+  color: "#ea580c"
+  active: true
+
+homeCopy:
+  heroBadge: "Caçamba para Obra"
+  heroTitle: "Aluguel de Caçamba"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Caçambas para obras e reformas. Descarte correto de entulho. Entrega e retirada no mesmo dia. Documentação ambiental em dia."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver tamanhos"
+  heroWhatsappMessage: "Olá! Preciso alugar uma caçamba. Vocês entregam no meu endereço?"
+  servicesTitle: "Nossas Caçambas"
+  servicesSubtitle: "Do tamanho certo para sua obra"
+  aboutTitle: "Referência em Aluguel de Caçamba"
+  aboutSubtitle: "Descarte legal de entulho"
+  aboutText: "Oferecemos aluguel de caçambas em diversos tamanhos para obras, reformas e demolições. Descarte ambientalmente correto do entulho. Licenciamento em dia. Entrega rápida."
+  aboutStats:
+    - number: "20+"
+      label: Anos no mercado
+    - number: "5000+"
+      label: Obras atendidas
+    - number: "24h"
+      label: Orçamento online
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Caçambas para sua obra ou reforma."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece caçambas para locação com descarte correto de entulho. Atuamos em {cidade} e região. Peça orçamento!"
+  benefits:
+    - "Entrega em {cidade}"
+    - "Orçamento gratuito"
+    - "Documentação ambiental"
+    - "Retirada inclusa"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - descarte correto de entulho. Ligue!"
+
+services:
+  - title: "Aluguel de Caçamba"
+    slug: aluguel-de-cacamba
+    shortDescription: "Caçambas para obras e descarte de entulho"
+    icon: "🚛"
+    niche: aluguel-cacamba
+  - title: "Aluguel de Caçamba 3m"
+    slug: aluguel-cacamba-3m
+    shortDescription: "Caçamba pequena para reformas"
+    icon: "📦"
+    niche: aluguel-cacamba
+  - title: "Aluguel de Caçamba 6m"
+    slug: aluguel-cacamba-6m
+    shortDescription: "Caçamba média para obras"
+    icon: "📦"
+    niche: aluguel-cacamba
+  - title: "Aluguel de Caçamba 8m"
+    slug: aluguel-cacamba-8m
+    shortDescription: "Caçamba grande para obras extensas"
+    icon: "🚛"
+    niche: aluguel-cacamba
+  - title: "Aluguel de Caçamba para Entulho"
+    slug: aluguel-cacamba-entulho
+    shortDescription: "Caçamba para descarte de entulho de obra"
+    icon: "🏗️"
+    niche: aluguel-cacamba
+  - title: "Aluguel de Caçamba para Demolição"
+    slug: aluguel-cacamba-demolicao
+    shortDescription: "Caçamba para resíduos de demolição"
+    icon: "🏚️"
+    niche: aluguel-cacamba
+  - title: "Locação de Caçamba com Hidrogrua"
+    slug: locacao-cacamba-hidrogrua
+    shortDescription: "Caçamba com guindaste para locais de difícil acesso"
+    icon: "🏗️"
+    niche: aluguel-cacamba

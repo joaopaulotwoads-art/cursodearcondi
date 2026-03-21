@@ -1,0 +1,327 @@
+---
+/**
+ * admin/leads.astro
+ *
+ * Página de listagem de leads no painel administrativo.
+ * Exibe todos os leads gerados pelos formulários do site (contato, local-contato, servico-sidebar).
+ * Inclui filtros (busca, origem) e opção de excluir leads.
+ * Dados carregados via fetch em /api/admin/leads (client-side).
+ */
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Leads - CNX Agency Admin">
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between flex-wrap gap-4">
+            <div>
+                <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">
+                    Leads
+                </h1>
+                <p class="text-[#a3a3a3]">
+                    Todos os leads gerados pelos formulários do site
+                </p>
+            </div>
+        </div>
+
+        <!-- Filtros (visíveis após carregar) -->
+        <div id="leads-filters" class="admin-card p-4 flex flex-wrap gap-3 items-center" style="display: none;">
+            <div class="flex-1 min-w-[200px]">
+                <input
+                    type="text"
+                    id="leads-search"
+                    class="admin-input w-full"
+                    placeholder="Buscar por nome, e-mail, telefone ou mensagem..."
+                />
+            </div>
+            <div>
+                <select id="leads-source" class="admin-input min-w-[180px]">
+                    <option value="">Todas as origens</option>
+                    <option value="contato">Contato (Classic)</option>
+                    <option value="local-contato">Contato (Local)</option>
+                    <option value="servico-sidebar">Sidebar Serviço</option>
+                </select>
+            </div>
+            <div class="text-sm text-[#a3a3a3]" id="leads-count">
+                0 leads
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="leads-loading" class="admin-card p-12 text-center text-[#a3a3a3]">
+            Carregando leads...
+        </div>
+
+        <!-- Empty state -->
+        <div id="leads-empty" class="admin-card p-12 text-center text-[#a3a3a3]" style="display: none;">
+            Nenhum lead encontrado. Os formulários de contato do site aparecerão aqui quando forem preenchidos.
+        </div>
+
+        <!-- Table -->
+        <div id="leads-table-wrap" class="admin-card overflow-hidden p-0" style="display: none;">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-[#111111] border-b border-[rgba(255,255,255,0.08)]">
+                        <tr>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Data</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Nome</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Contato</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Origem</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Mensagem</th>
+                            <th class="px-6 py-4 text-right text-sm font-semibold text-[#a3a3a3] w-24">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leads-tbody" class="divide-y divide-[rgba(255,255,255,0.08)]">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Error state -->
+        <div id="leads-error" class="admin-card p-6 border border-red-500/30 bg-red-500/5" style="display: none;">
+            <p class="text-red-400 font-medium">Erro ao carregar leads</p>
+            <p id="leads-error-msg" class="text-[#a3a3a3] text-sm mt-1"></p>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de exclusão -->
+    <div id="delete-lead-modal-backdrop" class="admin-modal-backdrop" style="display: none;">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <div class="admin-modal-icon">
+                    <span>✖</span>
+                </div>
+                <div>
+                    <div class="admin-modal-title">Excluir lead</div>
+                </div>
+            </div>
+            <div class="admin-modal-body">
+                <p id="delete-lead-modal-message">
+                    Tem certeza que deseja excluir este lead?
+                </p>
+                <small>
+                    Esta ação é permanente e não poderá ser desfeita.
+                </small>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-modal-btn admin-modal-btn-cancel" id="delete-lead-modal-cancel">
+                    Cancelar
+                </button>
+                <button type="button" class="admin-modal-btn admin-modal-btn-danger" id="delete-lead-modal-confirm">
+                    Excluir lead
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de feedback -->
+    <div id="lead-toast" class="admin-toast admin-toast--error" style="display: none;">
+        <div class="admin-toast-icon">
+            <span>❌</span>
+        </div>
+        <div class="admin-toast-content">
+            <strong id="lead-toast-title">Erro</strong>
+            <span id="lead-toast-message">Ocorreu um erro inesperado.</span>
+        </div>
+        <button type="button" class="admin-toast-close" aria-label="Fechar notificação">×</button>
+    </div>
+</AdminLayout>
+
+<script>
+    (function() {
+        const loading = document.getElementById('leads-loading');
+        const empty = document.getElementById('leads-empty');
+        const tableWrap = document.getElementById('leads-table-wrap');
+        const tbody = document.getElementById('leads-tbody');
+        const errorEl = document.getElementById('leads-error');
+        const errorMsg = document.getElementById('leads-error-msg');
+        const filtersEl = document.getElementById('leads-filters');
+        const searchInput = document.getElementById('leads-search');
+        const sourceSelect = document.getElementById('leads-source');
+        const countEl = document.getElementById('leads-count');
+        const backdrop = document.getElementById('delete-lead-modal-backdrop');
+        const confirmBtn = document.getElementById('delete-lead-modal-confirm');
+        const cancelBtn = document.getElementById('delete-lead-modal-cancel');
+        const messageEl = document.getElementById('delete-lead-modal-message');
+        const toastEl = document.getElementById('lead-toast');
+        const toastTitle = document.getElementById('lead-toast-title');
+        const toastMessage = document.getElementById('lead-toast-message');
+        const toastClose = toastEl ? toastEl.querySelector('.admin-toast-close') : null;
+
+        let allLeads = [];
+        let currentDeleteId = null;
+
+        function formatDate(iso) {
+            try {
+                const d = new Date(iso);
+                return d.toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+            } catch {
+                return iso;
+            }
+        }
+
+        function sourceLabel(source) {
+            const labels = {
+                'contato': 'Contato (Classic)',
+                'local-contato': 'Contato (Local)',
+                'servico-sidebar': 'Sidebar Serviço',
+            };
+            return labels[source] || source;
+        }
+
+        function escapeHtml(s) {
+            const div = document.createElement('div');
+            div.textContent = s;
+            return div.innerHTML;
+        }
+
+        function escapeAttr(s) {
+            return s.replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function applyFilters() {
+            const q = (searchInput?.value || '').toLowerCase().trim();
+            const src = (sourceSelect?.value || '').trim();
+
+            const filtered = allLeads.filter(function(l) {
+                if (src && l.source !== src) return false;
+                if (!q) return true;
+                const name = (l.name || '').toLowerCase();
+                const email = (l.email || '').toLowerCase();
+                const phone = (l.phone || '').toLowerCase();
+                const msg = (l.message || '').toLowerCase();
+                return name.includes(q) || email.includes(q) || phone.includes(q) || msg.includes(q);
+            });
+
+            renderLeads(filtered);
+            if (countEl) countEl.textContent = filtered.length + ' lead' + (filtered.length !== 1 ? 's' : '');
+        }
+
+        function renderLeads(leads) {
+            if (!tbody) return;
+            if (leads.length === 0) {
+                if (tableWrap) tableWrap.style.display = 'none';
+                if (empty) {
+                    empty.style.display = 'block';
+                    empty.textContent = filtersEl && (searchInput?.value || sourceSelect?.value) ? 'Nenhum lead encontrado com os filtros aplicados.' : 'Nenhum lead encontrado. Os formulários de contato do site aparecerão aqui quando forem preenchidos.';
+                }
+                return;
+            }
+            if (empty) empty.style.display = 'none';
+            if (tableWrap) tableWrap.style.display = 'block';
+            tbody.innerHTML = leads.map(function(l) {
+                const contact = [l.email, l.phone].filter(Boolean).join(' · ') || '-';
+                const msg = (l.message || '').length > 80 ? (l.message || '').slice(0, 80) + '…' : (l.message || '-');
+                return '<tr class="hover:bg-[#111111] transition-colors" data-id="' + escapeAttr(l.id) + '">' +
+                    '<td class="px-6 py-4 text-sm text-[#a3a3a3] whitespace-nowrap">' + formatDate(l.createdAt || '') + '</td>' +
+                    '<td class="px-6 py-4 font-medium text-[#e5e5e5]">' + escapeHtml(l.name || '-') + '</td>' +
+                    '<td class="px-6 py-4 text-sm text-[#a3a3a3]">' + escapeHtml(contact) + '</td>' +
+                    '<td class="px-6 py-4 text-sm text-[#a3a3a3]">' + sourceLabel(l.source || '') + '</td>' +
+                    '<td class="px-6 py-4 text-sm text-[#a3a3a3] max-w-xs truncate" title="' + escapeAttr(l.message || '') + '">' + escapeHtml(msg) + '</td>' +
+                    '<td class="px-6 py-4 text-right"><button type="button" class="admin-btn admin-btn-danger text-sm delete-lead-btn" data-id="' + escapeAttr(l.id) + '" data-name="' + escapeAttr(l.name || '') + '" title="Excluir">🗑️</button></td>' +
+                    '</tr>';
+            }).join('');
+
+            tbody.querySelectorAll('.delete-lead-btn').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    const id = this.getAttribute('data-id');
+                    const name = this.getAttribute('data-name');
+                    if (id && name) openModal(id, name);
+                });
+            });
+        }
+
+        function openModal(id, name) {
+            currentDeleteId = id;
+            if (messageEl) messageEl.textContent = 'Tem certeza que deseja excluir o lead de "' + name + '"?';
+            if (backdrop) backdrop.style.display = 'flex';
+        }
+
+        function closeModal() {
+            currentDeleteId = null;
+            if (backdrop) backdrop.style.display = 'none';
+        }
+
+        function showToast(title, message, isSuccess) {
+            if (!toastEl || !toastTitle || !toastMessage) return;
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            if (isSuccess) {
+                toastEl.classList.remove('admin-toast--error');
+                toastEl.classList.add('admin-toast--success');
+                toastEl.querySelector('.admin-toast-icon span').textContent = '✅';
+            } else {
+                toastEl.classList.remove('admin-toast--success');
+                toastEl.classList.add('admin-toast--error');
+                toastEl.querySelector('.admin-toast-icon span').textContent = '❌';
+            }
+            toastEl.style.display = 'flex';
+            setTimeout(function() { toastEl.style.display = 'none'; }, 5000);
+        }
+
+        async function deleteLead() {
+            if (!currentDeleteId) return;
+            try {
+                const res = await fetch('/api/admin/leads/' + currentDeleteId, { method: 'DELETE' });
+                const data = await res.json();
+                if (data.success) {
+                    allLeads = allLeads.filter(function(l) { return l.id !== currentDeleteId; });
+                    applyFilters();
+                    closeModal();
+                    showToast('Lead excluído', 'O lead foi removido com sucesso.', true);
+                } else {
+                    showToast('Erro ao excluir', data.error || 'Erro desconhecido.', false);
+                }
+            } catch (e) {
+                showToast('Erro ao excluir', 'Verifique sua conexão e tente novamente.', false);
+            }
+        }
+
+        async function loadLeads() {
+            try {
+                const res = await fetch('/api/admin/leads');
+                const data = await res.json();
+
+                if (loading) loading.style.display = 'none';
+
+                if (!res.ok) {
+                    if (errorEl && errorMsg) {
+                        errorMsg.textContent = data.error || 'Erro desconhecido';
+                        errorEl.style.display = 'block';
+                    }
+                    return;
+                }
+
+                allLeads = data.leads || [];
+
+                if (filtersEl) filtersEl.style.display = allLeads.length > 0 ? 'flex' : 'none';
+
+                applyFilters();
+            } catch (e) {
+                if (loading) loading.style.display = 'none';
+                if (errorEl && errorMsg) {
+                    errorMsg.textContent = String(e);
+                    errorEl.style.display = 'block';
+                }
+                console.error('\x1b[31m✗ Erro ao carregar leads:\x1b[0m', e);
+            }
+        }
+
+        if (searchInput) searchInput.addEventListener('input', applyFilters);
+        if (searchInput) searchInput.addEventListener('keyup', applyFilters);
+        if (sourceSelect) sourceSelect.addEventListener('change', applyFilters);
+        if (confirmBtn) confirmBtn.addEventListener('click', deleteLead);
+        if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+        if (toastClose && toastEl) toastClose.addEventListener('click', function() { toastEl.style.display = 'none'; });
+        if (backdrop) backdrop.addEventListener('click', function(e) { if (e.target === backdrop) closeModal(); });
+
+        document.addEventListener('DOMContentLoaded', loadLeads);
+    })();
+</script>

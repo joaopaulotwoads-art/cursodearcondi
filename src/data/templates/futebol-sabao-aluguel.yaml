@@ -1,0 +1,84 @@
+# Template de nicho: Futebol de Sabão Aluguel
+id: futebol-sabao-aluguel
+name: Futebol de Sabão Aluguel
+description: "Site pronto para locadoras de pista de futebol de sabão"
+icon: "⚽"
+color: "#0284c7"
+
+niche:
+  name: Futebol de Sabão Aluguel
+  slug: futebol-sabao-aluguel
+  icon: "⚽"
+  description: "Locação de pista de futebol de sabão para festas e eventos"
+  color: "#0284c7"
+  active: true
+
+homeCopy:
+  heroBadge: "Futebol de Sabão"
+  heroTitle: "Aluguel de Futebol de Sabão"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Pista de futebol de sabão para sua festa. Diversão garantida para crianças e adultos. Montagem e operador inclusos!"
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver pacotes"
+  heroWhatsappMessage: "Olá! Quero alugar futebol de sabão para minha festa. Vocês atendem aqui?"
+  servicesTitle: "Diversão para Sua Festa"
+  servicesSubtitle: "Futebol de sabão e atrações"
+  aboutTitle: "Especialistas em Futebol de Sabão"
+  aboutSubtitle: "Diversão para toda família"
+  aboutText: "Locamos pista de futebol de sabão para festas infantis, eventos corporativos e confraternizações. Incluímos montagem, operador e sabão. Garantia de diversão!"
+  aboutStats:
+    - number: "8+"
+      label: Anos de experiência
+    - number: "2000+"
+      label: Festas realizadas
+    - number: "100%"
+      label: Diversão garantida
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Diversão para sua festa!"
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece pista de futebol de sabão para locação. Montagem e operador inclusos. Atuamos em {cidade} e região."
+  benefits:
+    - "Montagem em {cidade}"
+    - "Operador incluso"
+    - "Sabão incluído"
+    - "Orçamento gratuito"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - diversão para sua festa. Ligue!"
+
+services:
+  - title: "Futebol de Sabão Aluguel"
+    slug: futebol-sabao-aluguel
+    shortDescription: "Pista de futebol de sabão para festas"
+    icon: "⚽"
+    niche: futebol-sabao-aluguel
+  - title: "Aluguel de Pista de Sabão"
+    slug: aluguel-pista-sabao
+    shortDescription: "Pista inflável com sabão para escorregar"
+    icon: "🛝"
+    niche: futebol-sabao-aluguel
+  - title: "Futebol de Sabão para Festa"
+    slug: futebol-sabao-festa
+    shortDescription: "Combo futebol de sabão com operador"
+    icon: "🎉"
+    niche: futebol-sabao-aluguel
+  - title: "Aluguel de Pista de Sabão Infantil"
+    slug: aluguel-pista-sabao-infantil
+    shortDescription: "Pista de sabão para festas infantis"
+    icon: "👶"
+    niche: futebol-sabao-aluguel
+  - title: "Futebol de Sabão para Evento Corporativo"
+    slug: futebol-sabao-corporativo
+    shortDescription: "Pista para confraternizações de empresas"
+    icon: "🏢"
+    niche: futebol-sabao-aluguel
+  - title: "Aluguel de Escorregador de Sabão"
+    slug: aluguel-escorregador-sabao
+    shortDescription: "Escorregador inflável com sabão"
+    icon: "🛝"
+    niche: futebol-sabao-aluguel
+  - title: "Futebol de Sabão com Operador"
+    slug: futebol-sabao-operador
+    shortDescription: "Pista completa com monitor e sabão"
+    icon: "⚽"
+    niche: futebol-sabao-aluguel

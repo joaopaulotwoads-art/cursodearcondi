@@ -1,0 +1,81 @@
+# Template de nicho: Encanador
+# Usado pelo sistema de templates do Modo Local para aplicar copy e serviços iniciais.
+
+id: encanador
+name: Encanador
+description: "Site pronto para encanadores e prestadores de serviços hidráulicos"
+icon: "🔧"
+color: "#3b82f6"
+
+niche:
+  name: Encanamento
+  slug: encanamento
+  icon: "🔧"
+  description: "Serviços hidráulicos, consertos e instalações residenciais e comerciais"
+  color: "#3b82f6"
+  active: true
+
+homeCopy:
+  heroBadge: "⭐ Melhor encanador da região"
+  heroTitle: "Especialistas em Encanamento"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Consertos, instalações e manutenção hidráulica. Atendimento rápido e preço justo. Ligue agora!"
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver nossos serviços"
+  heroWhatsappMessage: "Olá! Preciso de um encanador. Vocês atendem na minha região?"
+  servicesTitle: "Serviços de Encanamento"
+  servicesSubtitle: "Soluções completas para sua casa ou empresa"
+  aboutTitle: "Encanador de Confiança"
+  aboutSubtitle: "Mais de 10 anos de experiência"
+  aboutText: "Somos especialistas em serviços hidráulicos com equipe treinada e ferramentas adequadas. Atendemos residências e comércios em toda a região. Vazamentos, desentupimentos, instalações e reformas – resolvemos seu problema com agilidade."
+  aboutStats:
+    - number: "10+"
+      label: Anos de experiência
+    - number: "500+"
+      label: Clientes atendidos
+    - number: "24h"
+      label: Atendimento emergencial
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Serviços profissionais de {servico} em {cidade} e região. Encanador qualificado, atendimento rápido e orçamento grátis."
+  pageContent: "Procurando {servico} em {cidade}? Nossa equipe de encanadores está pronta para atender. Atuamos em toda a região de {cidade} - {estado} com consertos, instalações e manutenção hidráulica. Entre em contato e receba seu orçamento gratuito."
+  benefits:
+    - "Atendimento rápido em {cidade} e região"
+    - "Orçamento gratuito e sem compromisso"
+    - "Encanador experiente e certificado"
+    - "Garantia em todos os serviços"
+  metaTitle: "{servico} em {cidade} | Encanador - {empresa}"
+  metaDescription: "Precisa de {servico} em {cidade}? A {empresa} oferece atendimento rápido de encanador. Orçamento grátis. Ligue agora!"
+
+services:
+  - title: "Desentupimento"
+    slug: desentupimento
+    shortDescription: "Desentupimos pias, ralos, vasos e tubulações com equipamentos profissionais"
+    icon: "🚿"
+    niche: encanamento
+  - title: "Conserto de Vazamento"
+    slug: conserto-de-vazamento
+    shortDescription: "Corrigimos vazamentos em torneiras, canos e conexões"
+    icon: "💧"
+    niche: encanamento
+  - title: "Instalação de Chuveiro"
+    slug: instalacao-de-chuveiro
+    shortDescription: "Instalação e troca de chuveiros elétricos e ducha"
+    icon: "🚿"
+    niche: encanamento
+  - title: "Instalação de Torneira"
+    slug: instalacao-de-torneira
+    shortDescription: "Colocamos e trocamos torneiras de cozinha e banheiro"
+    icon: "🚰"
+    niche: encanamento
+  - title: "Manutenção Hidráulica"
+    slug: manutencao-hidraulica
+    shortDescription: "Prevenção e manutenção preventiva na rede hidráulica"
+    icon: "🔧"
+    niche: encanamento
+  - title: "Hidráulica Residencial"
+    slug: hidraulica-residencial
+    shortDescription: "Serviços completos de encanamento para sua residência"
+    icon: "🏠"
+    niche: encanamento

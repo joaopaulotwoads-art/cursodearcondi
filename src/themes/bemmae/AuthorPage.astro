@@ -1,0 +1,107 @@
+---
+import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+
+interface Props {
+  author: { id: string; data: { name: string; role?: string; bio?: string; avatar?: string } };
+  posts: any[];
+  blogPermalinkStructure: BlogPermalinkStructure;
+  blogUrlPrefix: BlogUrlPrefix;
+  categories: { id: string; data: { name: string; slug: string } }[];
+}
+
+const { author, posts, blogPermalinkStructure, blogUrlPrefix, categories } = Astro.props;
+
+function categoryLabel(slug: string | undefined) {
+  if (!slug) return '';
+  const c = categories.find((x) => x.id === slug || x.data.slug === slug);
+  return c?.data?.name || slug;
+}
+
+const a = author.data;
+---
+
+<article class="max-w-4xl mx-auto px-4 sm:px-5 py-10 sm:py-12">
+  <header class="mb-10">
+    <a href="/blog" class="text-sm text-[var(--color-accent)] hover:underline mb-4 inline-block">← Blog</a>
+    <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-2">Autora</p>
+    <h1 class="text-2xl md:text-3xl font-semibold text-[var(--color-text)]">{a.name}</h1>
+  </header>
+
+  <section class="mb-12 rounded-xl border border-[var(--color-border)] bg-[var(--color-rosa)]/40 p-6 md:p-8" aria-labelledby="author-bio-heading">
+    <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+      {a.avatar ? (
+        <img
+          src={a.avatar}
+          alt={a.name}
+          width="120"
+          height="120"
+          class="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover shrink-0 ring-2 ring-[var(--color-accent)]/35 border border-[var(--color-border)]"
+          loading="eager"
+        />
+      ) : (
+        <div
+          class="w-24 h-24 sm:w-28 sm:h-28 rounded-full shrink-0 flex items-center justify-center text-2xl font-semibold text-[var(--color-accent)] bg-white border border-[var(--color-border)] ring-2 ring-[var(--color-accent)]/20"
+          aria-hidden="true"
+        >
+          {String(a.name || '?')
+            .trim()
+            .charAt(0)
+            .toUpperCase()}
+        </div>
+      )}
+      <div class="min-w-0 flex-1">
+        <h2 id="author-bio-heading" class="sr-only">Sobre {a.name}</h2>
+        {a.role && <p class="text-sm font-medium text-[var(--color-accent)] mb-2">{a.role}</p>}
+        {a.bio && <p class="text-[var(--color-text)] leading-relaxed text-[1.02rem]">{a.bio}</p>}
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="author-posts-heading">
+    <h2 id="author-posts-heading" class="text-xl font-semibold text-[var(--color-text)] mb-6">
+      Artigos publicados
+      {posts.length > 0 && <span class="text-[var(--color-muted)] font-normal text-base">({posts.length})</span>}
+    </h2>
+
+    {posts.length === 0 ? (
+      <p class="text-[var(--color-muted)]">Nenhum artigo publicado ainda com esta autora.</p>
+    ) : (
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {posts.map((post) => {
+          const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
+          const thumb = post.data.thumbnail || post.data.metaImage;
+          const date = post.data.publishedDate;
+          const cat = categoryLabel(post.data.category);
+          return (
+            <a
+              href={url}
+              class="group block rounded-lg border border-[var(--color-border)] overflow-hidden hover:border-[var(--color-accent)] transition-colors bg-[var(--color-bg)]"
+            >
+              {thumb ? (
+                <div class="aspect-[4/3] overflow-hidden bg-[var(--color-rosa)]">
+                  <img src={thumb} alt="" class="w-full h-full object-cover" loading="lazy" />
+                </div>
+              ) : (
+                <div class="aspect-[4/3] bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm">—</div>
+              )}
+              <div class="p-4">
+                {cat && (
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-accent)] block mb-1">{cat}</span>
+                )}
+                {date && (
+                  <time class="text-xs text-[var(--color-muted)]" datetime={date}>
+                    {new Date(date).toLocaleDateString('pt-BR')}
+                  </time>
+                )}
+                <h3 class="mt-1 font-medium text-[var(--color-text)] group-hover:text-[var(--color-accent)] leading-snug">{post.data.title}</h3>
+                {post.data.metaDescription && (
+                  <p class="text-sm text-[var(--color-muted)] mt-1 line-clamp-2">{post.data.metaDescription}</p>
+                )}
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    )}
+  </section>
+</article>

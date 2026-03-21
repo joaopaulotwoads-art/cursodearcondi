@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="CNX CMS - Guia completo para criar seu site profissional em 5 minutos. Do zero ao ar, sem complicação!" />
+    <title>CNX CMS — Seu Site Profissional em 5 Minutos</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://fav.farm/💜" />
+    
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:         #0a0a0a;
+            --surface:    #111111;
+            --surface2:   #1a1a1a;
+            --surface3:   #222222;
+            --border:     rgba(255,255,255,0.08);
+            --border2:    rgba(255,255,255,0.15);
+            --text:       #e5e5e5;
+            --text2:      #d1d5db;
+            --muted:      #a3a3a3;
+            --subtle:     #737373;
+            --accent:     #a855f7;
+            --accent-dim: rgba(168,85,247,0.15);
+            --accent-bright: #c084fc;
+            --green:      #4ade80;
+            --green-dim:  rgba(74,222,128,0.1);
+            --green-bright: #86efac;
+            --yellow:     #fbbf24;
+            --yellow-dim: rgba(251,191,36,0.1);
+            --red:        #f87171;
+            --red-dim:    rgba(248,113,113,0.1);
+            --blue:       #60a5fa;
+            --blue-dim:   rgba(96,165,250,0.1);
+            --orange:     #fb923c;
+            --orange-dim: rgba(251,146,60,0.1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 15px;
+            line-height: 1.65;
+            min-height: 100vh;
+        }
+
+        /* Typography */
+        h1, h2, h3 { font-family: 'Outfit', sans-serif; font-weight: 700; }
+        h1 { font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; margin-bottom: 1rem; }
+        h2 { font-size: clamp(1.5rem, 4vw, 2rem); line-height: 1.2; margin-bottom: 1rem; }
+        h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--accent-bright), var(--blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(17,17,17,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(168,85,247,0.1) 0%, transparent 50%);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 32px rgba(168,85,247,0.3);
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 48px rgba(168,85,247,0.4);
+        }
+
+        .time-badge {
+            background: var(--green-dim);
+            color: var(--green-bright);
+            padding: 0.5rem 1rem;
+            border-radius: 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+
+        /* Quick Start Section */
+        .quick-start {
+            padding: 4rem 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(17,17,17,0.5) 100%);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-subtitle {
+            color: var(--muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--blue));
+        }
+
+        .step-card:hover {
+            border-color: var(--border2);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+        }
+
+        .step-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, var(--accent), var(--blue));
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        .step-desc {
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--accent-bright);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .step-action:hover {
+            color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        /* Features */
+        .features {
+            padding: 4rem 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature {
+            text-align: center;
+            padding: 2rem 1rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-desc {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 4rem 0;
+            background: var(--surface);
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            padding: 1.5rem;
+            text-align: left;
+            color: var(--text);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background: var(--surface2);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .faq-item:not(.active) .faq-answer {
+            display: none;
+        }
+
+        .faq-icon {
+            transition: transform 0.2s;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Code snippets */
+        .code {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--green-bright);
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .code:hover .copy-btn {
+            opacity: 1;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: var(--green-dim);
+            color: var(--green-bright);
+        }
+
+        .badge-warning {
+            background: var(--yellow-dim);
+            color: var(--yellow);
+        }
+
+        .badge-info {
+            background: var(--blue-dim);
+            color: var(--blue);
+        }
+
+        /* Alert boxes */
+        .alert {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border-left: 4px solid;
+        }
+
+        .alert-tip {
+            background: var(--green-dim);
+            border-color: var(--green);
+            color: var(--green-bright);
+        }
+
+        .alert-warning {
+            background: var(--yellow-dim);
+            border-color: var(--yellow);
+            color: var(--yellow);
+        }
+
+        .alert-info {
+            background: var(--blue-dim);
+            border-color: var(--blue);
+            color: var(--blue);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--subtle);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--text);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container { padding: 0 1rem; }
+            .nav-links { display: none; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .footer-links { flex-direction: column; gap: 1rem; }
+        }
+
+        /* Smooth animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Progress bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--blue));
+            z-index: 100;
+            transition: width 0.2s;
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progress"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="#inicio" class="logo">CNX CMS</a>
+                <ul class="nav-links">
+                    <li><a href="#inicio-rapido">🚀 Início Rápido</a></li>
+                    <li><a href="#guia-completo">📖 Guia Completo</a></li>
+                    <li><a href="#faq">❓ FAQ</a></li>
+                    <li><a href="#problemas">🔧 Ajuda</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section id="inicio" class="hero">
+        <div class="container">
+            <h1 class="gradient-text fade-in">Seu Site Profissional em 5 Minutos</h1>
+            <p class="hero-subtitle fade-in">
+                Crie um site completo com blog, painel de administração e atualizações automáticas. 
+                <strong>Sem programação, sem complicação!</strong>
+            </p>
+            
+            <a href="#inicio-rapido" class="hero-cta fade-in">
+                🚀 Começar Agora
+            </a>
+            
+            <div class="time-badge fade-in">
+                ⏱️ 100% online • Deploy gratuito • 5 minutos
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Start -->
+    <section id="inicio-rapido" class="quick-start">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="gradient-text">🚀 Início Rápido</h2>
+                <p class="section-subtitle">
+                    Para quem quer o site no ar <strong>agora!</strong> 
+                    Siga estes 3 passos simples e tenha seu site funcionando em 5 minutos.
+                </p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card fade-in">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Criar Contas Grátis</h3>
+                    <p class="step-desc">
+                        Você precisa de 2 contas gratuitas: <strong>GitHub</strong> (para guardar o código) 
+                        e <strong>Vercel</strong> (para publicar o site).
+                    </p>
+                    <div class="alert alert-tip">
+                        💡 <strong>Dica:</strong> Na Vercel, escolha "Continue with GitHub" para conectar as duas contas automaticamente!
+                    </div>
+                    <a href="#passo-1" class="step-action">
+                        📋 Ver instruções detalhadas →
+                    </a>
+                </div>
+
+                <div class="step-card fade-in" style="animation-delay: 0.1s;">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Gerar Token do GitHub</h3>
+                    <p class="step-desc">
+                        Você precisa de uma "chave de acesso" para que o sistema possa salvar as alterações no seu site. 
+                        É como uma senha especial.
+                    </p>
+                    <div class="code">
+                        <button class="copy-btn" onclick="copyToClipboard('https://github.com/settings/tokens/new?description=CNX+CMS&scopes=repo')">Copiar</button>
+                        https://github.com/settings/tokens/new?description=CNX+CMS&scopes=repo
+                    </div>
+                    <div class="alert alert-warning">
+                        ⚠️ <strong>Atenção:</strong> Você só verá o token uma vez! Copie e guarde em um bloco de notas.
+                    </div>
+                    <a href="#passo-2" class="step-action">
+                        🔑 Como gerar o token →
+                    </a>
+                </div>
+
+                <div class="step-card fade-in" style="animation-delay: 0.2s;">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Deploy com 1 Clique</h3>
+                    <p class="step-desc">
+                        Clique no botão mágico, preencha 4 campos simples e pronto! 
+                        Seu site estará no ar em 2 minutos.
+                    </p>
+                    
+                    <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F8linksapp-maker%2Fcnx&env=ADMIN_SECRET,GITHUB_TOKEN,GITHUB_OWNER,GITHUB_REPO&envDescription=ADMIN_SECRET%3A%20sua%20senha%20(login%3A%20admin%40admin.com%20%2B%20este%20valor)%20%7C%20GITHUB_TOKEN%3A%20gere%20em%20github.com%2Fsettings%2Ftokens%20marcando%20%22repo%22%20%7C%20GITHUB_OWNER%3A%20seu%20usu%C3%A1rio%20do%20GitHub%20%7C%20GITHUB_REPO%3A%20nome%20do%20projeto%20escolhido%20acima&envLink=https%3A%2F%2F8linksapp-maker.github.io%2Fcnx&project-name=meu-site-cnx&repository-name=meu-site-cnx" 
+                       class="hero-cta" target="_blank" style="margin-bottom: 1rem; font-size: 1rem;">
+                        🚀 Deploy with Vercel
+                    </a>
+                    
+                    <div class="badge badge-success">
+                        ✅ Site no ar em 2 minutos
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 3rem; text-align: center;">
+                🎉 <strong>Parabéns!</strong> Depois do deploy, acesse <code>SEU-SITE.vercel.app/admin</code> para gerenciar seu site!
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>✨ O Que Você Vai Ter</h2>
+                <p class="section-subtitle">
+                    Um site profissional completo, sem precisar entender de programação
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature fade-in">
+                    <span class="feature-icon">🎨</span>
+                    <h3 class="feature-title">Visual Profissional</h3>
+                    <p class="feature-desc">Design moderno e responsivo que funciona perfeitamente em celular, tablet e desktop</p>
+                </div>
+
+                <div class="feature fade-in" style="animation-delay: 0.1s;">
+                    <span class="feature-icon">📝</span>
+                    <h3 class="feature-title">Blog Integrado</h3>
+                    <p class="feature-desc">Sistema de blog completo com categorias, autores e editor visual amigável</p>
+                </div>
+
+                <div class="feature fade-in" style="animation-delay: 0.2s;">
+                    <span class="feature-icon">⚡</span>
+                    <h3 class="feature-title">Super Rápido</h3>
+                    <p class="feature-desc">Site otimizado que carrega em menos de 1 segundo, melhor que 95% dos sites</p>
+                </div>
+
+                <div class="feature fade-in" style="animation-delay: 0.3s;">
+                    <span class="feature-icon">🛡️</span>
+                    <h3 class="feature-title">100% Seguro</h3>
+                    <p class="feature-desc">Sem banco de dados para hackear. Tudo fica no seu GitHub, você é dono de tudo</p>
+                </div>
+
+                <div class="feature fade-in" style="animation-delay: 0.4s;">
+                    <span class="feature-icon">🔄</span>
+                    <h3 class="feature-title">Atualizações Automáticas</h3>
+                    <p class="feature-desc">Receba melhorias e correções automaticamente, sem perder seu conteúdo</p>
+                </div>
+
+                <div class="feature fade-in" style="animation-delay: 0.5s;">
+                    <span class="feature-icon">💰</span>
+                    <h3 class="feature-title">Grátis Para Sempre</h3>
+                    <p class="feature-desc">Hospedagem gratuita na Vercel, sem limites de tráfego para sites normais</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>❓ Perguntas Frequentes</h2>
+                <p class="section-subtitle">
+                    Respostas simples para as dúvidas mais comuns
+                </p>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🤔 Preciso saber programar?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Não!</strong> O CNX foi feito exatamente para quem não sabe programar. Você vai usar apenas cliques, formulários e um editor visual para escrever posts. É como usar o WordPress, mas mais simples e mais rápido.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        💰 É realmente gratuito?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Sim, 100% gratuito!</strong> O GitHub e a Vercel oferecem planos gratuitos que são mais que suficientes para a maioria dos sites. Você só paga se tiver muito tráfego (centenas de milhares de visitantes por mês).
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🔒 Meus dados ficam seguros?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Mais seguros que no WordPress!</strong> Tudo fica no seu próprio GitHub, você é dono de 100% dos dados. Não há banco de dados para hackear, não há servidor para invadir. É a arquitetura mais segura que existe.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ⏰ Quanto tempo leva para criar?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>5 minutos!</strong> 2 minutos para criar as contas, 1 minuto para gerar o token, 2 minutos para o deploy. Depois disso, você já pode acessar o painel e começar a personalizar.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🎨 Posso personalizar o visual?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Sim!</strong> Você pode mudar cores, logo, textos, imagens e criar páginas personalizadas pelo painel. Para mudanças mais avançadas, um desenvolvedor pode editar o código no GitHub.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🆘 E se eu tiver problemas?
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Suporte completo!</strong> Temos esta documentação detalhada, uma central de ajuda no painel do site e diagnósticos automáticos que explicam exatamente o que fazer quando algo dá errado.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guia Completo -->
+    <section id="guia-completo" class="quick-start" style="background: linear-gradient(180deg, transparent 0%, rgba(17,17,17,0.8) 100%);">
+        <div class="container">
+            <div class="section-header">
+                <h2>📖 Guia Completo Passo-a-Passo</h2>
+                <p class="section-subtitle">
+                    Instruções detalhadas com screenshots para cada etapa. 
+                    Perfeito para quem quer fazer com calma e entender cada passo.
+                </p>
+            </div>
+
+            <!-- Passo 1: Criar Contas -->
+            <div id="passo-1" class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #4ade80, #22c55e);">1</div>
+                <h3 class="step-title">🎯 Criar Contas Gratuitas</h3>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin: 2rem 0;">
+                    <div style="background: var(--surface2); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--green-bright); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            🐙 GitHub Account
+                        </h4>
+                        <p style="color: var(--muted); margin-bottom: 1rem; font-size: 0.95rem;">
+                            O GitHub vai guardar o código do seu site (como um Google Drive para programadores).
+                        </p>
+                        <a href="https://github.com/signup" target="_blank" class="hero-cta" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+                            Criar conta GitHub
+                        </a>
+                    </div>
+
+                    <div style="background: var(--surface2); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--blue); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                            ▲ Vercel Account
+                        </h4>
+                        <p style="color: var(--muted); margin-bottom: 1rem; font-size: 0.95rem;">
+                            A Vercel vai publicar seu site na internet (gratuito para sites normais).
+                        </p>
+                        <a href="https://vercel.com/signup" target="_blank" class="hero-cta" style="font-size: 0.9rem; padding: 0.75rem 1.5rem;">
+                            Criar conta Vercel
+                        </a>
+                    </div>
+                </div>
+
+                <div class="alert alert-tip">
+                    <strong>💡 Super Dica:</strong> Na Vercel, clique em <strong>"Continue with GitHub"</strong> para conectar as duas contas automaticamente. Assim você só precisa fazer um login!
+                </div>
+            </div>
+
+            <!-- Passo 2: Token -->
+            <div id="passo-2" class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">2</div>
+                <h3 class="step-title">🔑 Gerar Token do GitHub</h3>
+                
+                <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 1.05rem;">
+                    O token é como uma "chave especial" que permite ao CNX salvar alterações no seu site. 
+                    Você só precisa fazer isso uma vez.
+                </p>
+
+                <div style="background: var(--surface2); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <h4 style="margin-bottom: 1rem; color: var(--text);">🎯 Passo-a-passo simples:</h4>
+                    <ol style="color: var(--muted); line-height: 1.8; padding-left: 1.5rem;">
+                        <li><strong>Clique neste link:</strong> 
+                            <div class="code" style="margin: 0.5rem 0; font-size: 0.85rem;">
+                                <button class="copy-btn" onclick="copyToClipboard('https://github.com/settings/tokens/new?description=CNX+CMS&scopes=repo')">Copiar</button>
+                                https://github.com/settings/tokens/new?description=CNX+CMS&scopes=repo
+                            </div>
+                            <em style="color: var(--subtle);">O link já abre com as opções certas marcadas!</em>
+                        </li>
+                        <li><strong>Deixe tudo como está</strong> e role até o final da página</li>
+                        <li>Clique no botão verde <strong>"Generate token"</strong></li>
+                        <li><strong>⚠️ IMPORTANTE:</strong> Copie o token que aparece (começa com <code>ghp_</code>)</li>
+                        <li>Cole o token em um <strong>bloco de notas</strong> - você vai precisar dele no próximo passo!</li>
+                    </ol>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>⚠️ Cuidado:</strong> O GitHub só mostra o token UMA VEZ! Se você não copiar agora, terá que gerar outro. Guarde ele em um lugar seguro.
+                </div>
+
+                <div style="background: var(--surface2); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem;">
+                    <h4 style="color: var(--yellow); margin-bottom: 0.5rem;">🤔 Por que preciso de um token?</h4>
+                    <p style="color: var(--muted); font-size: 0.95rem;">
+                        É uma questão de segurança! O token permite que apenas você (ou o CNX com sua autorização) 
+                        faça alterações no seu site. É como dar uma chave da casa para alguém de confiança.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Passo 3: Deploy -->
+            <div class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #a855f7, #8b5cf6);">3</div>
+                <h3 class="step-title">🚀 Deploy com 1 Clique</h3>
+                
+                <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 1.05rem;">
+                    Agora é a parte mais fácil! Clique no botão e preencha 4 campos simples. 
+                    Em 2 minutos seu site estará online!
+                </p>
+
+                <div style="text-align: center; margin: 2rem 0;">
+                    <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2F8linksapp-maker%2Fcnx&env=ADMIN_SECRET,GITHUB_TOKEN,GITHUB_OWNER,GITHUB_REPO&envDescription=ADMIN_SECRET%3A%20sua%20senha%20(login%3A%20admin%40admin.com%20%2B%20este%20valor)%20%7C%20GITHUB_TOKEN%3A%20gere%20em%20github.com%2Fsettings%2Ftokens%20marcando%20%22repo%22%20%7C%20GITHUB_OWNER%3A%20seu%20usu%C3%A1rio%20do%20GitHub%20%7C%20GITHUB_REPO%3A%20nome%20do%20projeto%20escolhido%20acima&envLink=https%3A%2F%2F8linksapp-maker.github.io%2Fcnx&project-name=meu-site-cnx&repository-name=meu-site-cnx" 
+                       class="hero-cta" target="_blank" style="margin-bottom: 1rem; font-size: 1.1rem;">
+                        🚀 Deploy with Vercel
+                    </a>
+                </div>
+
+                <div style="background: var(--surface2); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text);">📝 Campos para preencher:</h4>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--accent); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 140px; text-align: center; font-size: 0.85rem;">
+                                ADMIN_SECRET
+                            </div>
+                            <div>
+                                <strong>Uma senha que você escolhe</strong><br>
+                                <small style="color: var(--muted);">Exemplo: <code>minhasenha123</code> • Será usada para entrar no painel</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--green); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 140px; text-align: center; font-size: 0.85rem;">
+                                GITHUB_TOKEN
+                            </div>
+                            <div>
+                                <strong>O token que você copiou no passo anterior</strong><br>
+                                <small style="color: var(--muted);">Começa com <code>ghp_</code> • Cole aqui o que você guardou</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--blue); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 140px; text-align: center; font-size: 0.85rem;">
+                                GITHUB_OWNER
+                            </div>
+                            <div>
+                                <strong>Seu nome de usuário no GitHub</strong><br>
+                                <small style="color: var(--muted);">Exemplo: <code>joaosilva</code> • Clique na sua foto no GitHub para ver</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--orange); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 140px; text-align: center; font-size: 0.85rem;">
+                                GITHUB_REPO
+                            </div>
+                            <div>
+                                <strong>Nome do projeto (o mesmo que escolheu acima)</strong><br>
+                                <small style="color: var(--muted);">Exemplo: <code>meu-site-cnx</code> • Deve ser idêntico ao nome do projeto</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>🎉 Pronto!</strong> Depois que clicar em "Deploy", aguarde uns 2 minutos. 
+                    Quando aparecer "✅ Success", seu site já está no ar!
+                </div>
+            </div>
+
+            <!-- Passo 4: Acessar Painel -->
+            <div class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">4</div>
+                <h3 class="step-title">🎛️ Acessar o Painel Admin</h3>
+                
+                <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 1.05rem;">
+                    Agora você pode acessar o painel de controle do seu site e começar a personalizá-lo!
+                </p>
+
+                <div style="background: var(--surface2); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <h4 style="margin-bottom: 1rem; color: var(--text);">🔗 Como acessar:</h4>
+                    <ol style="color: var(--muted); line-height: 1.8; padding-left: 1.5rem;">
+                        <li>Acesse: <code style="background: var(--surface3); padding: 0.25rem 0.5rem; border-radius: 4px;">SEU-SITE.vercel.app/admin</code></li>
+                        <li>Substitua <strong>SEU-SITE</strong> pelo nome que você deu no deploy</li>
+                        <li>Use o login: <strong>admin@admin.com</strong></li>
+                        <li>Use a senha que você colocou em <strong>ADMIN_SECRET</strong></li>
+                    </ol>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--green);">
+                        <h5 style="color: var(--green-bright); margin-bottom: 0.75rem;">🆕 Primeira vez (Configuração Inicial)</h5>
+                        <ul style="color: var(--muted); line-height: 1.6; padding-left: 1rem;">
+                            <li>Preencha: Nome, E-mail, Senha e Confirme</li>
+                            <li>Clique em <strong>"Criar conta e entrar"</strong></li>
+                            <li>Pronto! Você já está logado</li>
+                        </ul>
+                    </div>
+
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--blue);">
+                        <h5 style="color: var(--blue); margin-bottom: 0.75rem;">🔄 Login normal</h5>
+                        <ul style="color: var(--muted); line-height: 1.6; padding-left: 1rem;">
+                            <li>E-mail: <code>admin@admin.com</code></li>
+                            <li>Senha: valor do <strong>ADMIN_SECRET</strong></li>
+                            <li>Clique em <strong>"Entrar"</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert alert-tip">
+                    <strong>🔒 Segurança:</strong> Depois do primeiro login, vá em <strong>Autores</strong> e troque o e-mail e senha para os seus. É muito importante fazer isso!
+                </div>
+            </div>
+
+            <!-- Passo 5: Trocar E-mail e Senha -->
+            <div class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #ef4444, #dc2626);">5</div>
+                <h3 class="step-title">🔒 Trocar E-mail e Senha (Segurança)</h3>
+                
+                <div class="alert alert-warning" style="margin-bottom: 1.5rem;">
+                    <strong>⚠️ OBRIGATÓRIO:</strong> Faça isso logo após o primeiro acesso por questões de segurança!
+                </div>
+
+                <div style="background: var(--surface2); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <h4 style="margin-bottom: 1rem; color: var(--text);">🛡️ Passo-a-passo:</h4>
+                    <ol style="color: var(--muted); line-height: 1.8; padding-left: 1.5rem;">
+                        <li>No painel, clique em <strong>Autores</strong> no menu lateral</li>
+                        <li>Clique no usuário <strong>"Administrador"</strong></li>
+                        <li>Altere <strong>E-mail</strong>, <strong>Senha</strong> e <strong>Nome</strong> para os seus</li>
+                        <li>Clique em <strong>Salvar</strong></li>
+                    </ol>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>✅ A partir daí:</strong> Use seu e-mail e senha pessoais para entrar no painel.
+                </div>
+            </div>
+
+            <!-- Passo 6: Ativar Atualizações -->
+            <div class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #f59e0b, #d97706);">6</div>
+                <h3 class="step-title">🔄 Ativar Atualizações Automáticas</h3>
+                
+                <div class="alert alert-warning" style="margin-bottom: 1.5rem;">
+                    <strong>⚠️ OBRIGATÓRIO:</strong> Sem este passo, o botão "Aplicar agora" não funciona e você não receberá melhorias do template!
+                </div>
+
+                <div style="background: var(--surface2); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <h4 style="margin-bottom: 1rem; color: var(--text);">⚡ Configurar permissões no GitHub:</h4>
+                    <ol style="color: var(--muted); line-height: 1.8; padding-left: 1.5rem;">
+                        <li>Acesse <a href="https://github.com" target="_blank" style="color: var(--accent);">github.com</a> e clique no <strong>repositório</strong> que foi criado no deploy</li>
+                        <li>Clique em <strong>Settings</strong> (Configurações) — aba no topo</li>
+                        <li>No menu da esquerda: <strong>Actions</strong> → <strong>General</strong></li>
+                        <li>Role até <strong>"Workflow permissions"</strong></li>
+                        <li>Marque ✅ <strong>"Read and write permissions"</strong></li>
+                        <li>Marque ✅ <strong>"Allow GitHub Actions to create and approve pull requests"</strong></li>
+                        <li>Clique em <strong>Save</strong></li>
+                    </ol>
+                </div>
+
+                <div class="alert alert-info">
+                    <strong>📖 Guia detalhado:</strong> No painel admin, vá em <strong>Ajuda</strong> → <strong>Primeiros passos</strong> (passo 3) para ver imagens e mais detalhes.
+                </div>
+            </div>
+
+            <!-- Passo 7: Primeiros Ajustes -->
+            <div class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">7</div>
+                <h3 class="step-title">🎨 Primeiros Ajustes no Site</h3>
+                
+                <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 1.05rem;">
+                    Agora vamos personalizar seu site! Estas são as principais alterações que você pode fazer:
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--accent);">
+                        <h5 style="color: var(--accent-bright); margin-bottom: 1rem;">✏️ Alterar nome do site</h5>
+                        <p style="color: var(--muted); font-size: 0.9rem;">
+                            <strong>Páginas</strong> → <strong>Rodapé</strong><br>
+                            <small>Campo "Nome do site"</small>
+                        </p>
+                    </div>
+
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--green);">
+                        <h5 style="color: var(--green-bright); margin-bottom: 1rem;">🖼️ Adicionar logo</h5>
+                        <p style="color: var(--muted); font-size: 0.9rem;">
+                            <strong>Páginas</strong> → <strong>Menu</strong><br>
+                            <small>Faça upload da sua logo</small>
+                        </p>
+                    </div>
+
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--blue);">
+                        <h5 style="color: var(--blue); margin-bottom: 1rem;">🏠 Editar página inicial</h5>
+                        <p style="color: var(--muted); font-size: 0.9rem;">
+                            <strong>Páginas</strong> → <strong>Home</strong><br>
+                            <small>Personalize o conteúdo</small>
+                        </p>
+                    </div>
+
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--yellow);">
+                        <h5 style="color: var(--yellow); margin-bottom: 1rem;">📝 Criar primeiro post</h5>
+                        <p style="color: var(--muted); font-size: 0.9rem;">
+                            <strong>Posts</strong> → <strong>Novo Post</strong><br>
+                            <small>Escreva seu primeiro artigo</small>
+                        </p>
+                    </div>
+
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--orange);">
+                        <h5 style="color: var(--orange); margin-bottom: 1rem;">🏷️ Criar categorias</h5>
+                        <p style="color: var(--muted); font-size: 0.9rem;">
+                            <strong>Categorias</strong><br>
+                            <small>Organize seus posts por temas</small>
+                        </p>
+                    </div>
+
+                    <div style="background: var(--surface3); padding: 1.5rem; border-radius: 12px; border-left: 4px solid var(--red);">
+                        <h5 style="color: var(--red); margin-bottom: 1rem;">👁️ Ver site público</h5>
+                        <p style="color: var(--muted); font-size: 0.9rem;">
+                            <code>SEU-SITE.vercel.app</code><br>
+                            <small>Veja como ficou para visitantes</small>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Passo 8: Teste Final -->
+            <div class="step-card fade-in" style="margin-bottom: 2rem;">
+                <div class="step-number" style="background: linear-gradient(135deg, #10b981, #059669);">8</div>
+                <h3 class="step-title">✅ Conferir se Tudo Funciona</h3>
+                
+                <p style="color: var(--muted); margin-bottom: 1.5rem; font-size: 1.05rem;">
+                    Último passo! Vamos testar se tudo está funcionando perfeitamente:
+                </p>
+
+                <div style="background: var(--surface2); padding: 2rem; border-radius: 12px; margin: 1.5rem 0;">
+                    <h4 style="margin-bottom: 1.5rem; color: var(--text);">🧪 Lista de verificação:</h4>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--green); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 100px; text-align: center; font-size: 0.85rem;">
+                                ✅ Site abre
+                            </div>
+                            <div>
+                                <strong>Acesse <code>SEU-SITE.vercel.app</code></strong><br>
+                                <small style="color: var(--muted);">Deve carregar normalmente</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--blue); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 100px; text-align: center; font-size: 0.85rem;">
+                                🎛️ Painel abre
+                            </div>
+                            <div>
+                                <strong>Acesse <code>SEU-SITE.vercel.app/admin</code></strong><br>
+                                <small style="color: var(--muted);">Deve mostrar a tela de login</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--accent); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 100px; text-align: center; font-size: 0.85rem;">
+                                🔐 Login funciona
+                            </div>
+                            <div>
+                                <strong>Use seu e-mail e senha</strong><br>
+                                <small style="color: var(--muted);">Deve entrar no dashboard</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--yellow); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 100px; text-align: center; font-size: 0.85rem;">
+                                📝 Criar post
+                            </div>
+                            <div>
+                                <strong>Posts → Novo Post → Salvar</strong><br>
+                                <small style="color: var(--muted);">Deve salvar sem erro</small>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center; padding: 1rem; background: var(--surface3); border-radius: 8px;">
+                            <div style="background: var(--orange); color: white; padding: 0.5rem; border-radius: 6px; font-weight: bold; min-width: 100px; text-align: center; font-size: 0.85rem;">
+                                🌐 Post no blog
+                            </div>
+                            <div>
+                                <strong>Acesse o blog após salvar</strong><br>
+                                <small style="color: var(--muted);">O post deve aparecer online</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 2rem;">
+                    <div class="badge badge-success" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                        🎉 <strong>Parabéns! Seu site está funcionando perfeitamente!</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resolução de Problemas -->
+    <section id="problemas" class="faq">
+        <div class="container">
+            <div class="section-header">
+                <h2>🔧 Resolução de Problemas</h2>
+                <p class="section-subtitle">
+                    Soluções rápidas para os problemas mais comuns, explicadas em linguagem simples
+                </p>
+            </div>
+
+            <div class="faq-list">
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🚫 O painel não aceita meu login
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Soluções por ordem de prioridade:</strong><br><br>
+                        
+                        <strong>1. Se você ainda não mudou a senha:</strong><br>
+                        • E-mail: <code>admin@admin.com</code><br>
+                        • Senha: o valor que você colocou em <strong>ADMIN_SECRET</strong> no deploy<br><br>
+                        
+                        <strong>2. Se o template veio com senha padrão:</strong><br>
+                        • E-mail: <code>admin@admin.com</code><br>
+                        • Senha: <code>admin123</code><br><br>
+                        
+                        <strong>3. Para trocar a senha:</strong><br>
+                        Depois de entrar, vá em <strong>Autores</strong> → clique no "Administrador" → altere e-mail e senha.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🔐 Esqueci minha senha
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Solução simples:</strong><br><br>
+                        
+                        1. Vá para <a href="https://vercel.com" target="_blank" style="color: var(--accent);">vercel.com</a><br>
+                        2. Entre na sua conta → clique no seu projeto<br>
+                        3. Vá em <strong>Settings</strong> → <strong>Environment Variables</strong><br>
+                        4. Clique em <strong>ADMIN_SECRET</strong> e mude para uma nova senha<br>
+                        5. Clique em <strong>Save</strong> e aguarde o redeploy (~1 minuto)<br>
+                        6. Entre com <code>admin@admin.com</code> e a nova senha
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        💾 Não consigo salvar posts (erro ao publicar)
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Problema:</strong> As configurações do GitHub não estão corretas.<br><br>
+                        
+                        <strong>Solução passo-a-passo:</strong><br><br>
+                        
+                        1. Vá para <a href="https://vercel.com" target="_blank" style="color: var(--accent);">vercel.com</a> → seu projeto → <strong>Settings</strong> → <strong>Environment Variables</strong><br>
+                        2. Confira se estas 3 variáveis existem e estão corretas:<br>
+                        • <strong>GITHUB_TOKEN</strong> (começa com ghp_)<br>
+                        • <strong>GITHUB_OWNER</strong> (seu usuário do GitHub)<br>
+                        • <strong>GITHUB_REPO</strong> (nome do repositório)<br>
+                        3. Se alterou algo, faça <strong>Redeploy</strong> no painel da Vercel<br>
+                        4. Aguarde 2 minutos e tente salvar novamente
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🔄 "Aplicar agora" dá erro
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Problema:</strong> As permissões do GitHub Actions não estão ativadas.<br><br>
+                        
+                        <strong>Solução (muito importante):</strong><br><br>
+                        
+                        1. Acesse <a href="https://github.com" target="_blank" style="color: var(--accent);">github.com</a><br>
+                        2. Clique no <strong>repositório</strong> que foi criado no deploy<br>
+                        3. Clique em <strong>Settings</strong> (última aba no topo)<br>
+                        4. No menu da esquerda: <strong>Actions</strong> → <strong>General</strong><br>
+                        5. Role até "Workflow permissions"<br>
+                        6. Marque ✅ <strong>"Read and write permissions"</strong><br>
+                        7. Marque ✅ <strong>"Allow GitHub Actions to create and approve pull requests"</strong><br>
+                        8. Clique em <strong>Save</strong><br><br>
+                        
+                        Agora o botão "Aplicar agora" vai funcionar!
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ⚪ O site abre em branco ou erro 500
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Problema:</strong> Alguma variável de ambiente está faltando ou incorreta.<br><br>
+                        
+                        <strong>Como descobrir o problema:</strong><br><br>
+                        
+                        1. Vá para <a href="https://vercel.com" target="_blank" style="color: var(--accent);">vercel.com</a><br>
+                        2. Clique no seu projeto → <strong>Deployments</strong><br>
+                        3. Clique no último deploy (o primeiro da lista)<br>
+                        4. Clique em <strong>"View Build Logs"</strong><br>
+                        5. Procure por mensagens de erro em vermelho<br><br>
+                        
+                        <strong>Solução:</strong> Geralmente é uma variável ausente. 
+                        Vá em <strong>Settings</strong> → <strong>Environment Variables</strong> e confira se todas estão preenchidas.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        📡 Atualizações não chegam
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Duas coisas para verificar:</strong><br><br>
+                        
+                        <strong>1. Permissões do GitHub Actions (principal causa):</strong><br>
+                        • Siga os passos do problema "Aplicar agora dá erro" acima<br><br>
+                        
+                        <strong>2. Actions ativadas:</strong><br>
+                        • Vá no seu repositório no GitHub<br>
+                        • Clique na aba <strong>Actions</strong><br>
+                        • Se aparecer um botão para ativar, clique em <strong>"I understand my workflows, go ahead and enable them"</strong><br><br>
+                        
+                        Pronto! As atualizações vão começar a chegar automaticamente.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        🆘 Nada funciona, preciso de ajuda!
+                        <span class="faq-icon">▼</span>
+                    </button>
+                    <div class="faq-answer">
+                        <strong>Não desista! Temos mais recursos para ajudar:</strong><br><br>
+                        
+                        <strong>1. Diagnóstico Automático:</strong><br>
+                        No painel do seu site, vá em <strong>Configurações</strong> → <strong>Atualizações</strong> → clique em <strong>"🔍 Diagnosticar"</strong>. 
+                        O sistema vai explicar exatamente qual é o problema e como resolver.<br><br>
+                        
+                        <strong>2. Central de Ajuda:</strong><br>
+                        No painel, clique em <strong>Ajuda</strong> no menu lateral para ver mais soluções.<br><br>
+                        
+                        <strong>3. GitHub:</strong><br>
+                        Se ainda tiver problemas, abra uma issue no <a href="https://github.com/8linksapp-maker/cnx/issues" target="_blank" style="color: var(--accent);">GitHub do projeto</a> 
+                        descrevendo o problema. A comunidade vai ajudar!
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info" style="margin-top: 3rem; text-align: center;">
+                <strong>💡 Lembre-se:</strong> 95% dos problemas são resolvidos verificando as configurações no Vercel (Environment Variables) 
+                e as permissões no GitHub (Actions). Se alguma coisa não funciona, comece por aí! 
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://github.com/8linksapp-maker/cnx">GitHub</a>
+                <a href="#inicio-rapido">Começar</a>
+                <a href="#faq">FAQ</a>
+                <a href="#problemas">Ajuda</a>
+            </div>
+            <p>&copy; 2026 CNX CMS • Feito com 💜 para simplificar sua vida digital</p>
+        </div>
+    </footer>
+
+    <script>
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const progress = document.getElementById('progress');
+            const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+            progress.style.width = scrolled + '%';
+        });
+
+        // FAQ toggle
+        function toggleFaq(button) {
+            const item = button.parentElement;
+            item.classList.toggle('active');
+        }
+
+        // Copy to clipboard
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Link copiado! 📋');
+            });
+        }
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeIn 0.6s ease forwards';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

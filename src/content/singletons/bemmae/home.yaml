@@ -1,0 +1,37 @@
+heroKicker: Bem-vinda
+heroTitle: Maternidade Real e com Leveza
+heroSubtitle: Um espaço para rotina, alimentação e saúde com simplicidade e afeto.
+heroBgImage: https://images.unsplash.com/photo-1492725764893-90b379c2b6e7?auto=format&fit=crop&w=1920&q=80
+heroCtaPrimaryText: Ver artigos
+heroCtaPrimaryHref: /blog
+heroCtaSecondaryText: Quem somos
+heroCtaSecondaryHref: /sobre
+aboutTitle: Sobre nós
+aboutText: |-
+  O Bem Mãe é um espaço feito para mães e famílias que buscam informação de verdade, sem julgamento e com linguagem acessível.
+
+  Falamos de rotina, alimentação, saúde e enxoval com o pé no chão, sempre lembrando que cada família tem o seu ritmo.
+aboutImage: https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=960&q=80
+aboutCtaText: Saiba mais sobre o projeto
+aboutCtaHref: /sobre
+categoriesSectionTitle: O que você encontra aqui
+categoryCards:
+  - href: /blog
+    icon: ☀️
+    title: Rotina
+    description: Organização do dia a dia com os pequenos.
+  - href: /blog
+    icon: 🥗
+    title: Alimentação
+    description: Receitas e dicas para a família.
+  - href: /blog
+    icon: 💚
+    title: Saúde
+    description: Cuidados e bem-estar para mães e filhos.
+latestPostsTitle: Últimos artigos
+latestPostsCtaText: Ver todos os artigos
+emptyLatestText: Nenhum artigo publicado ainda.
+newsletterTitle: Newsletter
+newsletterDescription: Receba dicas e novidades no seu e-mail, sem spam.
+newsletterPlaceholder: seu@email.com
+newsletterButtonText: Inscrever

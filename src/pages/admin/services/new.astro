@@ -1,0 +1,14 @@
+---
+/**
+ * admin/services/new.astro
+ *
+ * Página de criação de novo serviço no painel administrativo.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ServiceEditor from '../../../components/admin/ServiceEditor';
+---
+
+<AdminLayout title="Novo Serviço - CNX Agency Admin">
+    <ServiceEditor client:only="react" />
+</AdminLayout>

@@ -1,0 +1,16 @@
+heroTitle: Contato
+heroSubtitle: Envie sua mensagem, dúvida ou sugestão.
+email: contato@bemmae.com.br
+phone: ""
+address: ""
+socialLinks:
+  - platform: YouTube
+    url: https://www.youtube.com/@bemmaeMV
+    icon: youtube
+  - platform: Pinterest
+    url: https://br.pinterest.com/bemmaeoficial/
+    icon: pinterest
+formTitle: ""
+formSubmitText: Enviar
+formSuccessMessage: Mensagem enviada com sucesso! Retornaremos em breve.
+ctaTitle: ""

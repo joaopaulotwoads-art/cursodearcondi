@@ -1,0 +1,51 @@
+---
+/**
+ * Termos de Uso — layout conforme tema (Bem Mãe / classic / local).
+ */
+import { getEntry } from 'astro:content';
+import MainLayout from '../layouts/MainLayout.astro';
+import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
+import LegalPage from '../themes/bemmae/LegalPage.astro';
+import TermosDeUsoContent from '../components/legal/TermosDeUsoContent.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+const isLocal = siteMode === 'local';
+const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
+
+const siteName = settings?.data?.siteName || 'Site';
+const siteUrl = Astro.url.origin;
+
+const beMenu = !isLocal && activeTheme === 'bemmae' ? await readSingleton('menu', 'bemmae') : null;
+const beFoot = !isLocal && activeTheme === 'bemmae' ? await readSingleton('footer', 'bemmae') : null;
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+---
+
+{isLocal || activeTheme !== 'bemmae' ? (
+    <MainLayout title={`Termos de Uso - ${siteName}`}>
+        <section class="container mx-auto px-6 py-16 max-w-3xl">
+            <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Termos de Uso</h1>
+            <div class="text-slate-300 leading-relaxed space-y-4">
+                <TermosDeUsoContent />
+            </div>
+        </section>
+    </MainLayout>
+) : (
+    <BaseLayoutBemmae
+        title={`Termos de Uso - ${siteName}`}
+        description="Termos e condições de uso deste site."
+        siteName={(beMenu as Record<string, string>)?.logoText || siteName}
+        logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
+        siteUrl={siteUrl}
+        nav={beNav}
+        footerNav={beFootNav}
+        contentThemeId="bemmae"
+    >
+        <LegalPage title="Termos de Uso">
+            <TermosDeUsoContent />
+        </LegalPage>
+    </BaseLayoutBemmae>
+)}

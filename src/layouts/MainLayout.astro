@@ -1,0 +1,115 @@
+---
+/**
+ * MainLayout.astro
+ *
+ * Layout base para modo Blog/Agência.
+ * Usa tema classic fixo (Header, Footer, cores).
+ */
+
+import { getEntry } from 'astro:content';
+import CookieConsent from '../components/CookieConsent.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { readSiteSettings } from '../utils/read-site-settings';
+import Header from '../themes/classic/components/Header.astro';
+import Footer from '../themes/classic/components/Footer.astro';
+import '../styles/global.css';
+import '@fontsource/inter';
+import '@fontsource/outfit';
+
+interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+}
+
+const { 
+    title = "Meu Site",
+    description = "Bem-vindo ao meu site",
+    ogImage = "/images/og-default.png",
+} = Astro.props;
+
+const siteSettings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteConfig   = await readSiteSettings();
+const themeId = 'classic';
+const colorScheme: 'dark' | 'light' = (siteSettings?.data?.colorScheme as 'dark' | 'light') || 'dark';
+
+const theme = await getEntry('siteThemes', 'classic').catch(() => null);
+
+// Canonical URL: preferir settings, fallback para URL da requisição
+const canonicalBase = (siteConfig.canonicalUrl as string)?.trim() || '';
+const pathname      = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonicalHref = canonicalBase
+    ? `${canonicalBase.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`
+    : Astro.url.origin + pathname;
+const pixelSettings = await readSingleton('pixels', themeId).catch(() => null);
+const gaId = pixelSettings?.googleAnalyticsId || '';
+const fbPixelId = pixelSettings?.facebookPixelId || '';
+
+const primaryColor = theme?.data?.primaryColor || '#a855f7';
+const secondaryColor = theme?.data?.secondaryColor || '#ec4899';
+const borderRadius = theme?.data?.borderRadius || '16px';
+
+function hexToRgb(hex: string) {
+    if (!hex || typeof hex !== 'string' || !hex.startsWith('#')) return '168 85 247';
+    try {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        if (isNaN(r) || isNaN(g) || isNaN(b)) return '168 85 247';
+        return `${r} ${g} ${b}`;
+    } catch {
+        return '168 85 247';
+    }
+}
+
+const primaryRGB = hexToRgb(primaryColor);
+const secondaryRGB = hexToRgb(secondaryColor);
+---
+
+<!doctype html>
+<html lang="pt-BR" class={colorScheme}>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={canonicalHref} />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+        <meta name="description" content={description} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.url)} />}
+
+        <!-- GA e Meta Pixel são injetados via CookieConsent apenas após consentimento -->
+
+        <!-- Theme Engine: Injected Variables -->
+        <style is:global define:vars={{ primaryRGB, secondaryRGB, borderRadius }}>
+			:root {
+				--primary-rgb: var(--primaryRGB);
+				--secondary-rgb: var(--secondaryRGB);
+				--radius: var(--borderRadius);
+			}
+            /* Force basic styles even if tailwind fails for a second */
+            body { background: var(--blog-bg); color: var(--blog-text); }
+		</style>
+	</head>
+	<body class="font-sans antialiased min-h-screen flex flex-col selection:bg-primary selection:text-white" style="background: var(--blog-bg); color: var(--blog-text);">
+        <!-- Background Gradient -->
+        <div class="fixed inset-0 -z-10 h-full w-full bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]" style="background-color: var(--blog-bg);">
+            <div class="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/20 blur-[100px]"></div>
+        </div>
+
+        <Header activeThemeId={themeId} />
+
+        <main class="flex-grow">
+            <slot />
+        </main>
+
+        <Footer activeThemeId={themeId} />
+
+        <!-- Banner de consentimento de cookies (LGPD/GDPR) -->
+        <CookieConsent gaId={gaId} fbPixelId={fbPixelId} />
+	</body>
+</html>

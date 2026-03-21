@@ -1,0 +1,82 @@
+---
+/**
+ * index.astro — Página inicial
+ *
+ * Renderiza condicionalmente:
+ *   siteMode === 'local' → LocalHome (modo rank-and-rent)
+ *   siteMode === 'blog' + activeTheme bemmae → tema Bem Mãe
+ *   siteMode === 'blog'  → ClassicHome
+ */
+import { getCollection, getEntry } from 'astro:content';
+import { readSingleton } from '../utils/singleton-utils';
+import ClassicHome from '../themes/classic/Home.astro';
+import LocalHome   from '../themes/local/Home.astro';
+import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
+import BemMaeHome from '../themes/bemmae/Home.astro';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
+
+const localData = siteMode === 'local'
+    ? await readSingleton('home', 'local') || {}
+    : null;
+
+const homeThemeId = siteMode !== 'local' ? (activeTheme === 'bemmae' ? 'bemmae' : 'classic') : 'classic';
+const home = siteMode !== 'local'
+    ? await readSingleton('home', homeThemeId) || {}
+    : null;
+
+const latestPosts = siteMode !== 'local'
+    ? await getCollection('posts').then((posts: any[]) =>
+        posts
+            .filter((p: any) => p.data.publishedDate)
+            .sort((a: any, b: any) => new Date(b.data.publishedDate).getTime() - new Date(a.data.publishedDate).getTime())
+            .slice(0, 9)
+      )
+    : [];
+
+const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as import('../utils/blog-permalink').BlogPermalinkStructure) || 'postname';
+const blogUrlPrefix = (settings?.data?.blogUrlPrefix as import('../utils/blog-permalink').BlogUrlPrefix) || 'blog';
+
+const siteName = settings?.data?.siteName || 'Site';
+const siteUrl = Astro.url.origin;
+
+const bemmaeMenu = activeTheme === 'bemmae' && siteMode !== 'local'
+    ? await readSingleton('menu', 'bemmae')
+    : null;
+const bemmaeFooter = activeTheme === 'bemmae' && siteMode !== 'local'
+    ? await readSingleton('footer', 'bemmae')
+    : null;
+const bemmaeNav = bemmaeMenu ? navFromMenu(bemmaeMenu) : [];
+const bemmaeFooterNav = bemmaeFooter ? footerNavFromSingleton(bemmaeFooter) : [];
+const bemmaeMetaDesc =
+    (home && (home as Record<string, string>).heroSubtitle) ||
+    (settings?.data as Record<string, string>)?.companyPhone ||
+    '';
+---
+
+{siteMode === 'local' ? (
+    <LocalHome homeData={localData} />
+) : activeTheme === 'bemmae' ? (
+    <BaseLayoutBemmae
+        title={siteName}
+        description={bemmaeMetaDesc}
+        siteName={(bemmaeMenu as any)?.logoText || siteName}
+        logoSrc={logoSrcFromMenu(bemmaeMenu as Record<string, unknown>)}
+        siteUrl={siteUrl}
+        nav={bemmaeNav}
+        footerNav={bemmaeFooterNav}
+        contentThemeId="bemmae"
+    >
+        <BemMaeHome
+            homeData={home || {}}
+            latestPosts={latestPosts}
+            blogPermalinkStructure={blogPermalinkStructure}
+            blogUrlPrefix={blogUrlPrefix}
+        />
+    </BaseLayoutBemmae>
+) : (
+    <ClassicHome homeData={home} themeId="classic" latestPosts={latestPosts} blogPermalinkStructure={blogPermalinkStructure} blogUrlPrefix={blogUrlPrefix} />
+)}

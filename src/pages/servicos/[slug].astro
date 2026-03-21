@@ -1,0 +1,36 @@
+---
+/**
+ * /servicos/[slug].astro — Redireciona para página com copy da localidade principal
+ *
+ * Redireciona /servicos/{slug} → /{cidadePrincipal}/{slug}
+ * para exibir a página completa (LocationServicePage) com copy, breadcrumbs e hero.
+ * Principal = cidade com mais bairros cadastrados.
+ */
+
+import { listServices, readService } from '../../utils/service-utils';
+import { getPrincipalLocationSlug } from '../../utils/location-utils';
+
+export async function getStaticPaths() {
+    const services = await listServices();
+    return services.map(({ data }) => ({
+        params: { slug: data.slug },
+    }));
+}
+
+const { slug } = Astro.params;
+const serviceFile = await readService(slug as string);
+
+if (!serviceFile) {
+    return Astro.redirect('/servicos');
+}
+
+const principalSlug = await getPrincipalLocationSlug();
+if (principalSlug) {
+    return Astro.redirect(`/${principalSlug}/${slug}`);
+}
+
+// Fallback: sem localidades, mantém página simples
+import ServicePage from '../../themes/local/ServicePage.astro';
+---
+
+<ServicePage service={serviceFile.data} />

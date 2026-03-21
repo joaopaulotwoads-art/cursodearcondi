@@ -1,0 +1,24 @@
+{
+  "headings": [
+    {
+      "tag": "h1",
+      "text": "Service Details"
+    },
+    {
+      "tag": "h2",
+      "text": "Contact with \n                          us for any \n                          ad"
+    },
+    {
+      "tag": "h3",
+      "text": "Service Overview"
+    },
+    {
+      "tag": "h3",
+      "text": "Service Center"
+    },
+    {
+      "tag": "h3",
+      "text": "Frequently Asked Question"
+    }
+  ]
+}

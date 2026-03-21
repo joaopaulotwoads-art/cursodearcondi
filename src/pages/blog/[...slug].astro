@@ -1,0 +1,125 @@
+---
+/**
+ * blog/[...slug].astro
+ *
+ * Página individual de post com suporte a estrutura de permalink configurável.
+ * Aceita: /blog/nome-post | /blog/2025/03/nome-post | /blog/2025/03/04/nome-post
+ * Usa layout conforme siteMode: local → LocalLayout, blog → MainLayout.
+ */
+
+import { getCollection, getEntry, render } from 'astro:content';
+import BlogPost from '../../themes/classic/BlogPost.astro';
+import BaseLayoutBemmae from '../../themes/bemmae/BaseLayout.astro';
+import BemMaeBlogPost from '../../themes/bemmae/BlogPost.astro';
+import { readSingleton } from '../../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
+import { readPost } from '../../utils/post-utils';
+import { buildPostPath, type BlogPermalinkStructure } from '../../utils/blog-permalink';
+import { readSiteSettings, normalizeCanonicalUrl } from '../../utils/read-site-settings';
+import { buildPostJsonLd, toAbsoluteUrl, toIsoDateTime } from '../../utils/post-json-ld';
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+  const structure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+  const prefix = (settings?.data?.blogUrlPrefix as string) || 'blog';
+
+  // Só gera paths com /blog quando o prefixo for 'blog'
+  if (prefix !== 'blog') return [];
+
+  return posts.map(post => ({
+    params: { slug: buildPostPath({ ...post, data: { ...post.data, slug: post.data.slug || post.id } }, structure) },
+    props: { post },
+  }));
+}
+
+const { slug } = Astro.params;
+const { post } = Astro.props;
+
+if (!post) return Astro.redirect('/404');
+
+const slugKey = post.data.slug || post.id;
+const postFile = await readPost(slugKey);
+const htmlContent =
+  post.data.contentFormat === 'html' && postFile?.content?.trim()
+    ? postFile.content.trim()
+    : null;
+
+let Content: (() => unknown) | undefined;
+if (!htmlContent) {
+  const r = await render(post);
+  Content = r.Content;
+}
+
+const author = post.data.author ? await getEntry('authors', post.data.author) : null;
+
+// Tempo de leitura: ~200 palavras/min em português
+const wordCount = postFile?.content ? postFile.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length : 0;
+const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+const layoutType = siteMode === 'local' ? 'local' : 'main';
+const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
+const useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
+
+const siteName = settings?.data?.siteName || 'Site';
+const siteUrl = Astro.url.origin;
+const beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
+const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const pageTitle = post.data.metaTitle || post.data.title;
+
+const siteCfg = await readSiteSettings();
+const publicSiteUrl = normalizeCanonicalUrl(siteCfg.canonicalUrl as string) || siteUrl;
+const pageUrl = `${publicSiteUrl.replace(/\/+$/, '')}${Astro.url.pathname}`.replace(/\/+$/, '') || `${publicSiteUrl}${Astro.url.pathname}`;
+const ogImageAbs = toAbsoluteUrl(publicSiteUrl, post.data.metaImage || post.data.thumbnail);
+const articleIso = toIsoDateTime(post.data.publishedDate);
+const postJsonLd = useBemmae
+  ? buildPostJsonLd({
+      seoSchema: post.data.seoSchema,
+      title: pageTitle,
+      description: post.data.metaDescription || '',
+      pageUrl,
+      siteUrl: publicSiteUrl,
+      siteName: (beMenu as { logoText?: string } | null)?.logoText || siteName,
+      publishedDate: post.data.publishedDate,
+      imageUrl: ogImageAbs,
+      authorName: author?.data?.name,
+      htmlContent,
+    })
+  : null;
+---
+
+{useBemmae ? (
+<BaseLayoutBemmae
+    title={`${pageTitle} - ${siteName}`}
+    description={post.data.metaDescription || ''}
+    siteName={(beMenu as any)?.logoText || siteName}
+    logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
+    siteUrl={publicSiteUrl}
+    nav={beNav}
+    footerNav={beFootNav}
+    contentThemeId="bemmae"
+    ogType="article"
+    ogImageAbs={ogImageAbs}
+    articlePublishedTime={articleIso}
+    articleModifiedTime={articleIso}
+    extraJsonLd={postJsonLd}
+>
+    <BemMaeBlogPost post={post} author={author} Content={Content} htmlContent={htmlContent} readingTimeMinutes={readingTimeMinutes} />
+</BaseLayoutBemmae>
+) : (
+<BlogPost
+    post={post}
+    author={author}
+    Content={Content}
+    htmlContent={htmlContent}
+    themeId="classic"
+    layoutType={layoutType}
+    readingTimeMinutes={readingTimeMinutes}
+/>
+)}

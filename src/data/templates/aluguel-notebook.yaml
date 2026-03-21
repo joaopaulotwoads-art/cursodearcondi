@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Notebook
+id: aluguel-notebook
+name: Aluguel de Notebook
+description: "Site pronto para locadoras de notebooks e equipamentos de informática"
+icon: "💻"
+color: "#8b5cf6"
+
+niche:
+  name: Aluguel de Notebook
+  slug: aluguel-notebook
+  icon: "💻"
+  description: "Locação de notebooks, computadores e equipamentos para eventos e trabalho"
+  color: "#8b5cf6"
+  active: true
+
+homeCopy:
+  heroBadge: "💻 Locação de Notebook"
+  heroTitle: "Aluguel de Notebook"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Notebooks e computadores para eventos, treinamentos e trabalho remoto. Entrega rápida e suporte técnico."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver equipamentos"
+  heroWhatsappMessage: "Olá! Preciso alugar notebooks. Vocês atendem na minha região?"
+  servicesTitle: "Equipamentos para Locação"
+  servicesSubtitle: "Tecnologia quando você precisa"
+  aboutTitle: "Especialistas em Locação de Notebooks"
+  aboutSubtitle: "Tecnologia a seu favor"
+  aboutText: "Alugamos notebooks, desktops, monitores e periféricos para eventos corporativos, treinamentos, congressos e trabalho remoto. Equipamentos atualizados, entrega e retirada."
+  aboutStats:
+    - number: "5+"
+      label: Anos de experiência
+    - number: "300+"
+      label: Eventos atendidos
+    - number: "100%"
+      label: Equipamentos testados
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Equipamentos de qualidade para seu evento ou trabalho."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece notebooks e equipamentos de informática para locação. Entrega em {cidade}. Consulte disponibilidade."
+  benefits:
+    - "Entrega em {cidade}"
+    - "Orçamento gratuito"
+    - "Suporte técnico"
+    - "Equipamentos atualizados"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} atende eventos e empresas. Ligue agora!"
+
+services:
+  - title: "Aluguel de Notebook"
+    slug: aluguel-de-notebook
+    shortDescription: "Notebooks para eventos, treinamentos e trabalho"
+    icon: "💻"
+    niche: aluguel-notebook
+  - title: "Aluguel de Computador"
+    slug: aluguel-de-computador
+    shortDescription: "Desktops completos para locação"
+    icon: "🖥️"
+    niche: aluguel-notebook
+  - title: "Aluguel de Projetor"
+    slug: aluguel-de-projetor
+    shortDescription: "Projetores para apresentações e eventos"
+    icon: "📽️"
+    niche: aluguel-notebook
+  - title: "Aluguel de Monitor"
+    slug: aluguel-de-monitor
+    shortDescription: "Monitores para eventos e videoconferências"
+    icon: "🖥️"
+    niche: aluguel-notebook
+  - title: "Aluguel de Notebook Gamer"
+    slug: aluguel-notebook-gamer
+    shortDescription: "Notebooks potentes para eventos gaming"
+    icon: "🎮"
+    niche: aluguel-notebook
+  - title: "Aluguel de Impressora"
+    slug: aluguel-de-impressora
+    shortDescription: "Impressoras para eventos e escritório temporário"
+    icon: "🖨️"
+    niche: aluguel-notebook
+  - title: "Aluguel de Webcam"
+    slug: aluguel-de-webcam
+    shortDescription: "Webcams profissionais para transmissões"
+    icon: "📹"
+    niche: aluguel-notebook

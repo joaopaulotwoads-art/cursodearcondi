@@ -1,0 +1,257 @@
+---
+/**
+ * admin/categories/index.astro
+ * 
+ * Página de listagem de categorias no painel administrativo.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getCollection } from 'astro:content';
+
+const categories = await getCollection('categories');
+---
+
+<AdminLayout title="Categorias - CNX Agency Admin">
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">
+                    Categorias
+                </h1>
+                <p class="text-[#a3a3a3]">
+                    Organize seus posts por categorias
+                </p>
+            </div>
+            <a 
+                href="/admin/categories/new"
+                class="admin-btn admin-btn-primary"
+            >
+                + Nova Categoria
+            </a>
+        </div>
+
+        <!-- Table -->
+        <div class="admin-card overflow-hidden p-0">
+            <table class="w-full">
+                <thead class="bg-[#111111] border-b border-[rgba(255,255,255,0.08)]">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Nome</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-[#a3a3a3]">Slug</th>
+                        <th class="px-6 py-4 text-right text-sm font-semibold text-[#a3a3a3]">Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-[rgba(255,255,255,0.08)]">
+                    {categories.length === 0 ? (
+                        <tr>
+                            <td colspan="3" class="px-6 py-12 text-center text-[#a3a3a3]">
+                                Nenhuma categoria encontrada. 
+                                <a href="/admin/categories/new" class="text-[#3b82f6] hover:underline ml-1">
+                                    Criar primeira categoria
+                                </a>
+                            </td>
+                        </tr>
+                    ) : (
+                        categories.map((category) => (
+                            <tr class="hover:bg-[#111111] transition-colors">
+                                <td class="px-6 py-4">
+                                    <div class="font-semibold text-[#e5e5e5]">{category.data.name}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <code class="text-xs text-[#737373] bg-[#0a0a0a] px-2 py-1 rounded">
+                                        {category.id}
+                                    </code>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a 
+                                            href={`/admin/categories/${category.id}`}
+                                            class="admin-btn admin-btn-ghost text-sm"
+                                        >
+                                            Editar
+                                        </a>
+                                        <button
+                                            type="button"
+                                            class="admin-btn admin-btn-danger text-sm delete-category-btn"
+                                            data-slug={category.id}
+                                            data-name={category.data.name}
+                                        >
+                                            🗑️ Excluir
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de confirmação de deleção de categoria -->
+    <div id="delete-category-modal-backdrop" class="admin-modal-backdrop" style="display: none;">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <div class="admin-modal-icon">
+                    <span>✖</span>
+                </div>
+                <div>
+                    <div class="admin-modal-title">Excluir categoria</div>
+                </div>
+            </div>
+            <div class="admin-modal-body">
+                <p id="delete-category-modal-message">
+                    Tem certeza que deseja excluir esta categoria?
+                </p>
+                <small>
+                    Esta ação é permanente e não poderá ser desfeita. Verifique se não há posts importantes dependendo desta categoria.
+                </small>
+            </div>
+            <div class="admin-modal-footer">
+                <button 
+                    type="button" 
+                    class="admin-modal-btn admin-modal-btn-cancel" 
+                    id="delete-category-modal-cancel"
+                >
+                    Cancelar
+                </button>
+                <button 
+                    type="button" 
+                    class="admin-modal-btn admin-modal-btn-danger" 
+                    id="delete-category-modal-confirm"
+                >
+                    Excluir categoria
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de feedback para categorias -->
+    <div id="category-toast" class="admin-toast admin-toast--error" style="display: none;">
+        <div class="admin-toast-icon">
+            <span>❌</span>
+        </div>
+        <div class="admin-toast-content">
+            <strong>Erro ao excluir categoria</strong>
+            <span id="category-toast-message">Ocorreu um erro inesperado.</span>
+        </div>
+        <button 
+            type="button" 
+            class="admin-toast-close" 
+            aria-label="Fechar notificação"
+        >
+            ×
+        </button>
+    </div>
+</AdminLayout>
+
+<script is:inline>
+    (function() {
+        const backdrop = document.getElementById('delete-category-modal-backdrop');
+        const confirmBtn = document.getElementById('delete-category-modal-confirm');
+        const cancelBtn = document.getElementById('delete-category-modal-cancel');
+        const messageEl = document.getElementById('delete-category-modal-message');
+        const toastEl = document.getElementById('category-toast');
+        const toastMessageEl = document.getElementById('category-toast-message');
+        const toastClose = toastEl ? toastEl.querySelector('.admin-toast-close') : null;
+
+        let currentSlug = null;
+        let currentName = null;
+
+        function openModal(slug, name) {
+            currentSlug = slug;
+            currentName = name;
+            if (messageEl) {
+                messageEl.textContent = `Tem certeza que deseja excluir a categoria \"${name}\"?`;
+            }
+            if (backdrop) {
+                backdrop.style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            currentSlug = null;
+            currentName = null;
+            if (backdrop) {
+                backdrop.style.display = 'none';
+            }
+        }
+
+        function showToast(message) {
+            if (!toastEl || !toastMessageEl) return;
+            toastMessageEl.textContent = message;
+            toastEl.style.display = 'flex';
+            setTimeout(() => {
+                toastEl.style.display = 'none';
+            }, 5000);
+        }
+
+        async function handleDeleteCategory() {
+            if (!currentSlug || !currentName) {
+                showToast('Dados da categoria não encontrados. Tente recarregar a página.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/categories/${currentSlug}`, {
+                    method: 'DELETE',
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const row = document.querySelector(`button[data-slug=\"${currentSlug}\"]`)?.closest('tr');
+                    if (row && row.parentElement) {
+                        row.parentElement.removeChild(row);
+                    }
+                    closeModal();
+                } else {
+                    showToast(result.error || 'Erro desconhecido ao deletar categoria.');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao deletar categoria:', error);
+                showToast('Erro ao deletar categoria. Verifique o console para mais detalhes.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-category-btn');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const slug = this.getAttribute('data-slug');
+                    const name = this.getAttribute('data-name');
+
+                    if (slug && name) {
+                        openModal(slug, name);
+                    } else {
+                        console.error('❌ Erro: slug ou name não encontrado');
+                        showToast('Não foi possível identificar a categoria selecionada.');
+                    }
+                });
+            });
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', closeModal);
+            }
+
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', handleDeleteCategory);
+            }
+
+            if (toastClose && toastEl) {
+                toastClose.addEventListener('click', () => {
+                    toastEl.style.display = 'none';
+                });
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', (event) => {
+                    if (event.target === backdrop) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    })();
+</script>

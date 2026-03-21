@@ -1,0 +1,22 @@
+---
+/**
+ * admin/media/index.astro
+ * 
+ * Página dedicada para gerenciar a biblioteca de mídia.
+ * Similar ao WordPress Media Library, permite visualizar, fazer upload e gerenciar todas as imagens.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import MediaLibraryPage from '../../../components/admin/MediaLibraryPage.tsx';
+---
+
+<AdminLayout title="Biblioteca de Mídia - CNX Agency Admin">
+    <div id="media-library-page-wrapper" class="min-h-[400px]">
+        <MediaLibraryPage client:only="react" />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para gerenciar mídia.</p>
+        </div>
+    </noscript>
+</AdminLayout>

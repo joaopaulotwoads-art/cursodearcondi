@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Mesas e Cadeiras
+id: aluguel-mesas-cadeiras
+name: Aluguel de Mesas e Cadeiras
+description: "Site pronto para locadoras de mesas, cadeiras e mobiliário para eventos"
+icon: "🪑"
+color: "#7c3aed"
+
+niche:
+  name: Aluguel de Mesas e Cadeiras
+  slug: aluguel-mesas-cadeiras
+  icon: "🪑"
+  description: "Locação de mesas, cadeiras, toalhas e estrutura completa para festas e eventos"
+  color: "#7c3aed"
+  active: true
+
+homeCopy:
+  heroBadge: "Mesas e Cadeiras para Festa"
+  heroTitle: "Aluguel de Mesas e Cadeiras"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Estrutura completa para seu evento. Mesas, cadeiras, toalhas e muito mais. Montagem e desmontagem inclusas. Festas, formaturas e corporativos."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver equipamentos"
+  heroWhatsappMessage: "Olá! Preciso alugar mesas e cadeiras para minha festa. Vocês atendem aqui?"
+  servicesTitle: "Equipamentos para Eventos"
+  servicesSubtitle: "Tudo para sua festa ficar perfeita"
+  aboutTitle: "Especialistas em Aluguel para Eventos"
+  aboutSubtitle: "Estrutura completa"
+  aboutText: "Locamos mesas, cadeiras, toalhas, tendas, pratos e copos para festas, formaturas, casamentos e eventos corporativos. Montagem e desmontagem inclusas. Atendemos toda a região."
+  aboutStats:
+    - number: "10+"
+      label: Anos de experiência
+    - number: "3000+"
+      label: Eventos realizados
+    - number: "100%"
+      label: Satisfação garantida
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Estrutura completa para seu evento."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece mesas, cadeiras e equipamentos para locação. Montagem inclusa. Atuamos em {cidade} e região. Peça orçamento!"
+  benefits:
+    - "Entrega e montagem em {cidade}"
+    - "Orçamento gratuito"
+    - "Montagem e desmontagem"
+    - "Equipamentos limpos"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - estrutura para seu evento. Ligue!"
+
+services:
+  - title: "Aluguel de Mesas e Cadeiras"
+    slug: aluguel-de-mesas-e-cadeiras
+    shortDescription: "Mesas e cadeiras para festas e eventos"
+    icon: "🪑"
+    niche: aluguel-mesas-cadeiras
+  - title: "Aluguel de Mesa Redonda"
+    slug: aluguel-mesa-redonda
+    shortDescription: "Mesas redondas para festas e formaturas"
+    icon: "⭕"
+    niche: aluguel-mesas-cadeiras
+  - title: "Aluguel de Cadeira de Festa"
+    slug: aluguel-cadeira-festa
+    shortDescription: "Cadeiras estofadas e plásticas para eventos"
+    icon: "🪑"
+    niche: aluguel-mesas-cadeiras
+  - title: "Aluguel de Toalha de Mesa"
+    slug: aluguel-toalha-mesa
+    shortDescription: "Toalhas para mesas de festa"
+    icon: "🧺"
+    niche: aluguel-mesas-cadeiras
+  - title: "Aluguel de Mesa Retangular"
+    slug: aluguel-mesa-retangular
+    shortDescription: "Mesas retangulares para buffet e eventos"
+    icon: "🪑"
+    niche: aluguel-mesas-cadeiras
+  - title: "Aluguel de Cadeira Toscana"
+    slug: aluguel-cadeira-toscana
+    shortDescription: "Cadeiras toscanas para casamentos"
+    icon: "🪑"
+    niche: aluguel-mesas-cadeiras
+  - title: "Aluguel de Estrutura para Festa"
+    slug: aluguel-estrutura-festa
+    shortDescription: "Mesas, cadeiras e toalhas em combo"
+    icon: "🎉"
+    niche: aluguel-mesas-cadeiras

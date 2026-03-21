@@ -1,0 +1,25 @@
+---
+/**
+ * admin/templates/index.astro
+ *
+ * Página admin para seleção de templates de nicho no Modo Local.
+ * Exibe cards com os templates disponíveis, destaca o ativo e permite aplicar outro.
+ * Ao trocar: remove todos os serviços, mantém bairros, substitui copy.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import TemplateSelector from '../../../components/admin/TemplateSelector';
+import { readSingleton } from '../../../utils/singleton-utils';
+import { verifySession, SESSION_COOKIE } from '../../../utils/auth-utils';
+
+const token = Astro.cookies.get(SESSION_COOKIE)?.value;
+const sessionUser = token ? verifySession(token) : null;
+if (!sessionUser) return Astro.redirect('/admin/login');
+
+const localHome = await readSingleton('home', 'local');
+const activeTemplateId = localHome?.activeTemplateId ?? null;
+---
+
+<AdminLayout title="Templates - CNX Agency Admin">
+    <TemplateSelector activeTemplateId={activeTemplateId} client:only="react" />
+</AdminLayout>

@@ -1,0 +1,456 @@
+---
+/**
+ * Home.astro — Tema Local (Modo Local / Rank and Rent)
+ *
+ * Página inicial completa para sites de negócio local com 7 seções:
+ *   1. Hero         — título, subtítulo, CTA para WhatsApp
+ *   2. Prova Social — logos de clientes atendidos
+ *   3. Serviços     — grid 3x3 dos serviços em destaque (páginas individuais)
+ *   4. Quem Somos   — 2 colunas: imagem + texto + stats
+ *   5. Localização  — 2 colunas: endereço + Google Maps embed
+ *   6. CTA WhatsApp — banner de conversão
+ *   (rodapé renderizado pelo LocalLayout)
+ *
+ * Todos os textos são lidos do singleton 'local/home.yaml' via readSingleton.
+ */
+
+import { getCollection } from 'astro:content';
+import LocalLayout from '../../layouts/LocalLayout.astro';
+import { getSiteContactInfo, formatPhone } from '../../utils/site-contact';
+import { listServices } from '../../utils/service-utils';
+import { getPrincipalLocationSlug } from '../../utils/location-utils';
+
+interface Props {
+    homeData: any;
+}
+
+const { homeData } = Astro.props;
+
+const contact     = await getSiteContactInfo();
+const company     = homeData?.companyName      || 'Minha Empresa';
+const whatsapp    = contact.whatsapp;
+const phone       = contact.phone;
+
+const waHeroMsg   = encodeURIComponent(homeData?.heroWhatsappMessage || 'Olá! Vim pelo site e gostaria de um orçamento.');
+const waCtaMsg    = encodeURIComponent(homeData?.ctaWhatsappMessage  || 'Olá! Preciso de ajuda. Podem me atender?');
+const waHeroUrl   = whatsapp ? `https://wa.me/55${whatsapp.replace(/\D/g,'')}?text=${waHeroMsg}` : '#';
+const waCtaUrl    = whatsapp ? `https://wa.me/55${whatsapp.replace(/\D/g,'')}?text=${waCtaMsg}`  : '#';
+
+const principalSlug = await getPrincipalLocationSlug();
+const serviceBase = principalSlug ? `/${principalSlug}` : '/servicos';
+
+// Cidade com mais bairros (via content layer — funciona em dev e produção)
+function slugFrom(str: string): string {
+    return (str || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'default';
+}
+const allLocations = await getCollection('locations').catch(() => []);
+const bairros = allLocations.filter((l: any) => l.data?.active && l.data?.type !== 'cidade');
+const byCityKey = new Map<string, { cityName: string; count: number }>();
+for (const loc of bairros) {
+    const key = loc.data?.citySlug ? slugFrom(loc.data.citySlug) : slugFrom(loc.data?.city || loc.data?.name || '');
+    const cityName = loc.data?.city || loc.data?.name || '';
+    if (!key || key === 'default') continue;
+    const curr = byCityKey.get(key);
+    if (curr) {
+        curr.count++;
+    } else {
+        byCityKey.set(key, { cityName, count: 1 });
+    }
+}
+let principalCityName: string | null = null;
+let maxCount = 0;
+for (const [, { cityName, count }] of byCityKey) {
+    if (count > maxCount && cityName) {
+        maxCount = count;
+        principalCityName = cityName;
+    }
+}
+if (!principalCityName && allLocations.length > 0) {
+    const first = allLocations.find((l: any) => l.data?.active && l.data?.type === 'cidade');
+    principalCityName = first?.data?.name || first?.data?.city || null;
+}
+
+// Hero highlight: manual (heroTitleHighlight) > cidade com mais bairros > companyCity > "sua cidade"
+const heroHighlight = homeData?.heroTitleHighlight?.trim()
+    || (principalCityName ? `em ${principalCityName}` : null)
+    || (homeData?.companyCity ? `em ${homeData.companyCity}` : null)
+    || 'em sua cidade';
+
+// Busca serviços em destaque (6 principais: home, footer, menu)
+const allServices   = await listServices();
+const featuredSlugs: string[] = (homeData?.featuredServices || []).slice(0, 6);
+const featuredServices = featuredSlugs.length > 0
+    ? featuredSlugs.map(slug => allServices.find(s => s.data.slug === slug)?.data).filter(Boolean)
+    : allServices.slice(0, 6).map(s => s.data);
+
+const clients: any[] = homeData?.clients || [];
+const aboutStats: any[] = homeData?.aboutStats || [];
+const mapEmbed = homeData?.locationMapEmbed || '';
+const heroBg = homeData?.heroBackground || '';
+const heroStyle = heroBg
+    ? `background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,95,0.88) 50%, rgba(30,64,175,0.85) 100%), url(${heroBg}) center/cover no-repeat; min-height: 85vh; display: flex; align-items: center; padding: 5rem 1.5rem 4rem;`
+    : 'background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1e40af 100%); min-height: 85vh; display: flex; align-items: center; padding: 5rem 1.5rem 4rem;';
+---
+
+<LocalLayout
+    title={`${company} - Serviços Profissionais`}
+    description={homeData?.heroSubtitle || `Serviços profissionais com qualidade em ${principalCityName || homeData?.companyCity || 'sua cidade'}.`}
+>
+
+    <!-- ── 1. HERO ─────────────────────────────────────────────────── -->
+    <section style={heroStyle}>
+        <div class="container mx-auto text-center max-w-4xl">
+            {homeData?.heroBadge && (
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1.25rem; border-radius: 999px; background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.4); margin-bottom: 1.5rem;">
+                    <span style="font-size: 0.85rem; font-weight: 600; color: #93c5fd;">{homeData.heroBadge}</span>
+                </div>
+            )}
+
+            <h1 style="font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 900; color: #fff; line-height: 1.1; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">
+                {homeData?.heroTitle || 'Especialistas em Serviços'}
+                {heroHighlight && (
+                    <span style="display: block; background: linear-gradient(90deg, #60a5fa, #93c5fd); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                        {heroHighlight}
+                    </span>
+                )}
+            </h1>
+
+            <p style="font-size: clamp(1rem, 2.5vw, 1.25rem); color: #94a3b8; max-width: 600px; margin: 0 auto 2.5rem; line-height: 1.7;">
+                {homeData?.heroSubtitle || 'Atendimento rápido, qualidade garantida.'}
+            </p>
+
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                {whatsapp && (
+                    <a
+                        href={waHeroUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 1rem 2rem; border-radius: 999px; background: #25d366; color: #fff; font-weight: 700; font-size: 1rem; text-decoration: none; transition: opacity 0.2s; box-shadow: 0 4px 24px rgba(37,211,102,0.35);"
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        {homeData?.heroCtaText || 'Falar no WhatsApp'}
+                    </a>
+                )}
+                {homeData?.heroCtaSecondaryText && (
+                    <a
+                        href="#servicos"
+                        style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; border-radius: 999px; border: 2px solid rgba(255,255,255,0.2); color: #e2e8f0; font-weight: 600; font-size: 1rem; text-decoration: none; transition: all 0.2s;"
+                    >
+                        {homeData.heroCtaSecondaryText}
+                    </a>
+                )}
+            </div>
+
+            {phone && (
+                <p style="margin-top: 1.5rem; font-size: 0.875rem; color: #64748b;">
+                    📞 Ligue agora:
+                    <a href={`tel:+55${phone}`} style="color: #93c5fd; font-weight: 600; text-decoration: none; margin-left: 0.25rem;">
+                        {formatPhone(phone)}
+                    </a>
+                </p>
+            )}
+        </div>
+    </section>
+
+    <!-- ── 2. PROVA SOCIAL ────────────────────────────────────────── -->
+    {(homeData?.socialProofActive !== false) && clients.length > 0 && (
+        <section style="background: #f8fafc; padding: 3rem 1.5rem; border-bottom: 1px solid #e2e8f0;">
+            <div class="container mx-auto text-center">
+                {homeData?.socialTitle && (
+                    <p style="font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #94a3b8; margin-bottom: 1.5rem;">
+                        {homeData.socialTitle}
+                    </p>
+                )}
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2rem 3rem;">
+                    {clients.map((client: any) => (
+                        <div style="display: flex; align-items: center; gap: 0.5rem; opacity: 0.6; filter: grayscale(1); transition: all 0.2s;" class="hover:opacity-100 hover:filter-none">
+                            {client.logo ? (
+                                <img src={client.logo} alt={client.name} style="height: 36px; width: auto; object-fit: contain;" loading="lazy" />
+                            ) : (
+                                <span style="font-weight: 700; font-size: 0.9rem; color: #475569;">{client.name}</span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <!-- ── 3. SERVIÇOS ────────────────────────────────────────────── -->
+    <section id="servicos" style="padding: 5rem 1.5rem; background: #fff;">
+        <div class="container mx-auto">
+            <div class="text-center mb-12">
+                <h2 style="font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; color: #0f172a; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif;">
+                    {homeData?.servicesTitle || 'Nossos Serviços'}
+                </h2>
+                {homeData?.servicesSubtitle && (
+                    <p style="font-size: 1.05rem; color: #64748b; max-width: 500px; margin: 0 auto;">
+                        {homeData.servicesSubtitle}
+                    </p>
+                )}
+            </div>
+
+            {featuredServices.length > 0 ? (
+                <div class="local-home-services-grid">
+                    {featuredServices.map((service: any) => service && (
+                        <a
+                            href={`${serviceBase}/${service.slug}`}
+                            class="local-home-service-card"
+                        >
+                            {(service.thumbnail || service.image) ? (
+                                <div class="local-home-service-thumb">
+                                    <img
+                                        src={service.thumbnail || service.image}
+                                        alt={service.title}
+                                        width="400"
+                                        height="280"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            ) : service.icon ? (
+                                <div class="local-home-service-icon">{service.icon}</div>
+                            ) : (
+                                <div class="local-home-service-icon" aria-hidden="true">🔧</div>
+                            )}
+                            <div class="local-home-service-body">
+                                <h3 class="local-home-service-title">{service.title}</h3>
+                                {service.shortDescription && (
+                                    <p class="local-home-service-desc">{service.shortDescription}</p>
+                                )}
+                                <span class="local-home-service-link">Saiba mais →</span>
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            ) : (
+                <p style="text-align: center; color: #94a3b8;">Nenhum serviço cadastrado ainda. Adicione serviços no painel.</p>
+            )}
+        </div>
+    </section>
+
+    <!-- ── 4. QUEM SOMOS ──────────────────────────────────────────── -->
+    <section style="padding: 5rem 1.5rem; background: #f8fafc;">
+        <div class="container mx-auto">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; max-width: 1000px; margin: 0 auto;"
+                 class="grid-cols-local-about">
+                <!-- Imagem -->
+                <div style="border-radius: 16px; overflow: hidden; aspect-ratio: 4/3; background: #e2e8f0;">
+                    {homeData?.aboutImage ? (
+                        <img
+                            src={homeData.aboutImage}
+                            alt={homeData?.aboutTitle || 'Sobre nós'}
+                            style="width: 100%; height: 100%; object-fit: cover;"
+                            loading="lazy"
+                        />
+                    ) : (
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 4rem; background: linear-gradient(135deg, #dbeafe, #bfdbfe);">
+                            🏢
+                        </div>
+                    )}
+                </div>
+                <!-- Texto -->
+                <div>
+                    <h2 style="font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 800; color: #0f172a; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;">
+                        {homeData?.aboutTitle || 'Sobre Nós'}
+                    </h2>
+                    {homeData?.aboutSubtitle && (
+                        <p style="font-size: 1rem; font-weight: 600; color: var(--primary, #2563eb); margin-bottom: 1.25rem;">
+                            {homeData.aboutSubtitle}
+                        </p>
+                    )}
+                    {homeData?.aboutText && (
+                        <p style="color: #475569; line-height: 1.8; margin-bottom: 2rem; font-size: 0.95rem;">
+                            {homeData.aboutText}
+                        </p>
+                    )}
+                    {aboutStats.length > 0 && (
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 1.25rem;">
+                            {aboutStats.map((stat: any) => (
+                                <div style="text-align: center; padding: 1rem; border-radius: 10px; background: #fff; border: 1px solid #e2e8f0;">
+                                    <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary, #2563eb); font-family: 'Outfit', sans-serif;">{stat.number}</div>
+                                    <div style="font-size: 0.72rem; color: #64748b; margin-top: 0.25rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">{stat.label}</div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 5. LOCALIZAÇÃO ─────────────────────────────────────────── -->
+    <section style="padding: 5rem 1.5rem; background: #fff;">
+        <div class="container mx-auto">
+            <div class="text-center mb-10">
+                <h2 style="font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 800; color: #0f172a; font-family: 'Outfit', sans-serif;">
+                    {homeData?.locationTitle || 'Nossa Localização'}
+                </h2>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; max-width: 900px; margin: 0 auto;"
+                 class="grid-cols-local-location">
+                <!-- Endereço -->
+                <div style="padding: 2rem; border-radius: 14px; background: #f8fafc; border: 1px solid #e2e8f0;">
+                    <h3 style="font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 1.25rem;">📍 Como nos encontrar</h3>
+                    <div style="space-y: 0.75rem;">
+                        {homeData?.locationAddress && (
+                            <p style="color: #475569; font-size: 0.9rem; line-height: 1.6; margin-bottom: 0.75rem;">
+                                {homeData.locationAddress}
+                            </p>
+                        )}
+                        {phone && (
+                            <p style="margin-bottom: 0.5rem;">
+                                <span style="font-size: 0.85rem; color: #64748b;">Telefone:</span>
+                                <a href={`tel:+55${phone}`}
+                                   style="font-weight: 600; color: var(--primary, #2563eb); text-decoration: none; margin-left: 0.35rem;">
+                                    {formatPhone(phone)}
+                                </a>
+                            </p>
+                        )}
+                        {homeData?.companyEmail && (
+                            <p>
+                                <span style="font-size: 0.85rem; color: #64748b;">E-mail:</span>
+                                <a href={`mailto:${homeData.companyEmail}`}
+                                   style="font-weight: 600; color: var(--primary, #2563eb); text-decoration: none; margin-left: 0.35rem;">
+                                    {homeData.companyEmail}
+                                </a>
+                            </p>
+                        )}
+                    </div>
+                </div>
+                <!-- Mapa -->
+                <div style="border-radius: 14px; overflow: hidden; aspect-ratio: 4/3; background: #e2e8f0; border: 1px solid #e2e8f0;">
+                    {mapEmbed ? (
+                        <iframe
+                            src={mapEmbed}
+                            width="100%"
+                            height="100%"
+                            style="border:0; width: 100%; height: 100%;"
+                            allowfullscreen
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                        ></iframe>
+                    ) : (
+                        <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.5rem; color: #94a3b8;">
+                            <span style="font-size: 2.5rem;">🗺️</span>
+                            <p style="font-size: 0.8rem; text-align: center; padding: 0 1rem;">Configure o embed do Google Maps no painel</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 6. CTA WHATSAPP ────────────────────────────────────────── -->
+    {whatsapp && (
+        <section style="padding: 5rem 1.5rem; background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%);">
+            <div class="container mx-auto text-center max-w-2xl">
+                <h2 style="font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; color: #fff; margin-bottom: 1rem; font-family: 'Outfit', sans-serif;">
+                    {homeData?.ctaTitle || 'Precisa de ajuda agora?'}
+                </h2>
+                {homeData?.ctaText && (
+                    <p style="font-size: 1.05rem; color: #93c5fd; margin-bottom: 2rem; line-height: 1.7;">
+                        {homeData.ctaText}
+                    </p>
+                )}
+                <a
+                    href={waCtaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="display: inline-flex; align-items: center; gap: 0.75rem; padding: 1.1rem 2.5rem; border-radius: 999px; background: #25d366; color: #fff; font-weight: 700; font-size: 1.1rem; text-decoration: none; transition: all 0.2s; box-shadow: 0 6px 30px rgba(37,211,102,0.4);"
+                >
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    {homeData?.ctaButtonText || 'Chamar no WhatsApp'}
+                </a>
+            </div>
+        </section>
+    )}
+
+</LocalLayout>
+
+<style>
+    /* ── Cards de serviços com thumbnail ─── */
+    .local-home-services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1.25rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    .local-home-service-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0;
+        border-radius: 14px;
+        border: 2px solid #e2e8f0;
+        background: #fff;
+        text-decoration: none;
+        transition: all 0.2s;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .local-home-service-card:hover {
+        border-color: var(--primary, #2563eb);
+        box-shadow: 0 8px 24px rgba(37,99,235,0.15);
+        transform: translateY(-4px);
+    }
+    .local-home-service-thumb {
+        width: 100%;
+        aspect-ratio: 400/280;
+        overflow: hidden;
+        background: #f1f5f9;
+    }
+    .local-home-service-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .local-home-service-icon {
+        font-size: 2rem;
+        padding: 1.5rem 1.5rem 0;
+    }
+    .local-home-service-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+        padding: 1rem 1.5rem 1.5rem;
+    }
+    .local-home-service-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #0f172a;
+        font-family: 'Outfit', sans-serif;
+        line-height: 1.3;
+        margin: 0;
+    }
+    .local-home-service-desc {
+        font-size: 0.85rem;
+        color: #64748b;
+        line-height: 1.6;
+        flex: 1;
+        margin: 0;
+    }
+    .local-home-service-link {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--primary, #2563eb);
+        margin-top: auto;
+    }
+    .local-home-service-card:hover .local-home-service-link {
+        text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+        .grid-cols-local-about,
+        .grid-cols-local-location {
+            grid-template-columns: 1fr !important;
+        }
+    }
+    a:hover {
+        opacity: 0.9;
+    }
+</style>

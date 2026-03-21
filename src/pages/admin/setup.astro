@@ -1,0 +1,86 @@
+---
+import { listAuthors } from '../../utils/author-utils';
+import '../../styles/global.css';
+import '../../styles/admin.css';
+import '@fontsource/inter';
+import '@fontsource/outfit';
+
+// Se já existe admin com senha, redirecionar para login
+const authors = await listAuthors();
+const hasAdmin = authors.some(a => a.data.adminRole === 'admin' && a.data.adminPasswordHash);
+if (hasAdmin) return Astro.redirect('/admin/login');
+
+const error = Astro.url.searchParams.get('error');
+const errorMessages: Record<string, string> = {
+    mismatch:    'As senhas não coincidem.',
+    short:       'A senha deve ter pelo menos 6 caracteres.',
+    required:    'Preencha todos os campos obrigatórios.',
+    exists:      'Já existe um admin cadastrado.',
+    save_failed: 'Não foi possível salvar a conta. Para usar em produção, configure as variáveis GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO na Vercel (Settings → Environment Variables) e aguarde o redeploy.',
+};
+---
+
+<!doctype html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configuração Inicial — Admin</title>
+</head>
+<body class="bg-[#0a0a0a] text-[#e5e5e5] font-sans antialiased min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex w-14 h-14 rounded-2xl bg-[#111] border border-[rgba(255,255,255,0.1)] items-center justify-center text-2xl font-bold mb-4">
+                CNX
+            </div>
+            <h1 class="text-2xl font-heading font-bold text-white">Configuração Inicial</h1>
+            <p class="text-sm text-[#737373] mt-1">Crie a conta de administrador do seu site</p>
+        </div>
+
+        <!-- Info -->
+        <div class="mb-6 p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 text-sm text-[#a3a3a3]">
+            Esta tela aparece apenas uma vez — quando o sistema ainda não tem nenhum administrador configurado.
+        </div>
+
+        <!-- Error -->
+        {error && errorMessages[error] && (
+            <div class="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                {errorMessages[error]}
+            </div>
+        )}
+
+        <!-- Form -->
+        <form method="POST" action="/api/admin/auth/setup" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-[#a3a3a3] mb-1.5">Nome completo *</label>
+                    <input type="text" name="name" required placeholder="Seu Nome" class="admin-input w-full" />
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-[#a3a3a3] mb-1.5">E-mail *</label>
+                    <input type="email" name="email" required placeholder="seu@email.com" class="admin-input w-full" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#a3a3a3] mb-1.5">Senha *</label>
+                    <input type="password" name="password" required minlength="6" placeholder="Mín. 6 caracteres" class="admin-input w-full" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-[#a3a3a3] mb-1.5">Confirmar senha *</label>
+                    <input type="password" name="confirmPassword" required placeholder="••••••••" class="admin-input w-full" />
+                </div>
+            </div>
+
+            <button type="submit" class="admin-btn admin-btn-primary w-full py-3 text-base mt-2">
+                Criar conta e entrar
+            </button>
+
+            <div class="mt-5 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 text-sm text-[#a3a3a3]">
+                <p class="font-medium text-[#fbbf24] mb-1">📌 Próximo passo importante</p>
+                <p>Após criar a conta: ative as atualizações automáticas em <strong>GitHub → Settings → Actions</strong>. Veja o guia em <a href="/admin/ajuda#primeiros-passos" class="text-indigo-400 hover:underline">Ajuda → Primeiros passos</a>.</p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

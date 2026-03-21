@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Freezer
+id: aluguel-freezer
+name: Aluguel de Freezer
+description: "Site pronto para locadoras de freezers e equipamentos de refrigeração"
+icon: "❄️"
+color: "#06b6d4"
+
+niche:
+  name: Aluguel de Freezer
+  slug: aluguel-freezer
+  icon: "❄️"
+  description: "Locação de freezers para eventos e comércio"
+  color: "#06b6d4"
+  active: true
+
+homeCopy:
+  heroBadge: "Freezer para Alugar"
+  heroTitle: "Aluguel de Freezer"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Freezers horizontais e verticais para eventos, festas e comércio. Diária ou mensal. Entrega e retirada."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver modelos"
+  heroWhatsappMessage: "Olá! Preciso alugar freezer para meu evento. Vocês atendem aqui?"
+  servicesTitle: "Equipamentos de Refrigeração"
+  servicesSubtitle: "Quando você precisa de espaço extra"
+  aboutTitle: "Especialistas em Aluguel de Freezer"
+  aboutSubtitle: "Refrigeração para eventos"
+  aboutText: "Locamos freezers horizontais e verticais para eventos, festas, bares e restaurantes. Equipamentos limpos e em perfeito funcionamento. Diária, semanal ou mensal."
+  aboutStats:
+    - number: "10+"
+      label: Anos de experiência
+    - number: "800+"
+      label: Eventos atendidos
+    - number: "24h"
+      label: Entrega rápida
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Freezers para eventos e comércio."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece freezers para locação. Atuamos em {cidade} e região. Entrega no local. Consulte disponibilidade!"
+  benefits:
+    - "Entrega em {cidade}"
+    - "Orçamento gratuito"
+    - "Diária ou mensal"
+    - "Equipamentos revisados"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - refrigeração para seu evento. Ligue!"
+
+services:
+  - title: "Aluguel de Freezer"
+    slug: aluguel-de-freezer
+    shortDescription: "Freezers para eventos e comércio"
+    icon: "❄️"
+    niche: aluguel-freezer
+  - title: "Aluguel de Freezer Horizontal"
+    slug: aluguel-freezer-horizontal
+    shortDescription: "Freezer horizontal para bebidas e alimentos"
+    icon: "🧊"
+    niche: aluguel-freezer
+  - title: "Aluguel de Freezer Vertical"
+    slug: aluguel-freezer-vertical
+    shortDescription: "Freezer vertical tipo geladeira"
+    icon: "🧊"
+    niche: aluguel-freezer
+  - title: "Aluguel de Geladeira"
+    slug: aluguel-de-geladeira
+    shortDescription: "Geladeiras para eventos e comércio"
+    icon: "🧊"
+    niche: aluguel-freezer
+  - title: "Aluguel de Freezer para Festa"
+    slug: aluguel-freezer-festa
+    shortDescription: "Freezer para bebidas em festas"
+    icon: "🍺"
+    niche: aluguel-freezer
+  - title: "Aluguel de Balcão Frigorífico"
+    slug: aluguel-balcao-frigorifico
+    shortDescription: "Balcões refrigerados para eventos"
+    icon: "🍽️"
+    niche: aluguel-freezer
+  - title: "Aluguel de Câmara Fria"
+    slug: aluguel-camara-fria
+    shortDescription: "Câmaras frias para grandes volumes"
+    icon: "❄️"
+    niche: aluguel-freezer

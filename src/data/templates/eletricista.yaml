@@ -1,0 +1,81 @@
+# Template de nicho: Eletricista
+# Usado pelo sistema de templates do Modo Local para aplicar copy e serviços iniciais.
+
+id: eletricista
+name: Eletricista
+description: "Site pronto para eletricistas e prestadores de serviços elétricos"
+icon: "⚡"
+color: "#f59e0b"
+
+niche:
+  name: Serviços Elétricos
+  slug: eletrica
+  icon: "⚡"
+  description: "Instalações, manutenção e reparos elétricos residenciais e comerciais"
+  color: "#f59e0b"
+  active: true
+
+homeCopy:
+  heroBadge: "⚡ Eletricista de confiança"
+  heroTitle: "Especialistas em Instalações Elétricas"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Instalação, manutenção e reparo elétrico. Atendimento seguro e com certificação. Orçamento sem compromisso!"
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver nossos serviços"
+  heroWhatsappMessage: "Olá! Preciso de um eletricista. Vocês atendem aqui?"
+  servicesTitle: "Serviços Elétricos"
+  servicesSubtitle: "Soluções elétricas para sua casa ou empresa"
+  aboutTitle: "Eletricista Residencial e Comercial"
+  aboutSubtitle: "Profissionais qualificados"
+  aboutText: "Nossa equipe de eletricistas oferece instalações, manutenções e reparos com segurança e qualidade. Trabalhamos em residências e comércios, sempre seguindo as normas técnicas. Conserto de quadro elétrico, tomadas, iluminação e muito mais."
+  aboutStats:
+    - number: "10+"
+      label: Anos de experiência
+    - number: "800+"
+      label: Instalações realizadas
+    - number: "100%"
+      label: Satisfação garantida
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Serviços elétricos de {servico} em {cidade} e região. Eletricista qualificado, atendimento rápido e orçamento grátis."
+  pageContent: "Precisa de {servico} em {cidade}? Nossa equipe de eletricistas está pronta para atender. Atuamos em toda a região de {cidade} - {estado} com instalações, manutenções e reparos elétricos. Entre em contato e receba seu orçamento gratuito."
+  benefits:
+    - "Atendimento rápido em {cidade} e região"
+    - "Orçamento gratuito e sem compromisso"
+    - "Eletricista experiente e qualificado"
+    - "Garantia em todos os serviços"
+  metaTitle: "{servico} em {cidade} | Eletricista - {empresa}"
+  metaDescription: "Precisa de {servico} em {cidade}? A {empresa} oferece atendimento de eletricista. Orçamento grátis. Ligue agora!"
+
+services:
+  - title: "Instalação Elétrica Residencial"
+    slug: instalacao-eletrica-residencial
+    shortDescription: "Instalação completa e reforma de rede elétrica em casas e apartamentos"
+    icon: "🏠"
+    niche: eletrica
+  - title: "Troca de Quadro Elétrico"
+    slug: troca-de-quadro-eletrico
+    shortDescription: "Substituição e modernização de quadros de luz"
+    icon: "🔌"
+    niche: eletrica
+  - title: "Instalação de Tomada"
+    slug: instalacao-de-tomada
+    shortDescription: "Instalação e troca de tomadas e pontos elétricos"
+    icon: "🔌"
+    niche: eletrica
+  - title: "Instalação de Luminária"
+    slug: instalacao-de-luminaria
+    shortDescription: "Colocação de lustres, arandelas e spots"
+    icon: "💡"
+    niche: eletrica
+  - title: "Manutenção Elétrica"
+    slug: manutencao-eletrica
+    shortDescription: "Prevenção, inspeção e correção de problemas elétricos"
+    icon: "⚡"
+    niche: eletrica
+  - title: "Chaveamento de Lâmpada"
+    slug: chaveamento-de-lampada
+    shortDescription: "Instalação de interruptores e sistemas de iluminação"
+    icon: "💡"
+    niche: eletrica

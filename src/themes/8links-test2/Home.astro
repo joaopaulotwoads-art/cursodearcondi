@@ -1,0 +1,120 @@
+---
+/**
+ * Home.astro – Página inicial do tema 8links-test2
+ * Lê todos os campos do singleton home. Layout: Hero, About, Features.
+ */
+import MainLayout from '../../layouts/MainLayout.astro';
+
+interface Props {
+  homeData?: Record<string, unknown>;
+}
+
+const { homeData = {} } = Astro.props;
+const d = homeData as Record<string, unknown>;
+
+const heroTitle = (d.heroTitle as string) || 'Bem-vindo à 8links';
+const heroSubtitle = (d.heroSubtitle as string) || 'Transformamos ideias em experiências digitais que conectam marcas e pessoas.';
+const heroCtaText = (d.heroCtaText as string) || 'Conheça o que fazemos';
+const heroCtaUrl = (d.heroCtaUrl as string) || '/sobre';
+const heroImage = (d.heroImage as string) || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1920&h=800&fit=crop';
+
+const aboutParagraph = (d.aboutParagraph as string) || 'Acreditamos em inovação, colaboração e design orientado a dados para ajudar clientes a se destacarem no mundo digital.';
+const aboutStatNumber = (d.aboutStatNumber as string) || '10M+';
+const aboutStatLabel = (d.aboutStatLabel as string) || 'Captados para clientes';
+const aboutImage = (d.aboutImage as string) || 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&h=600&fit=crop';
+const aboutQuote = (d.aboutQuote as string) || 'O progresso verdadeiro é feito em parceria—com quem confia em nós, nos desafia e cresce conosco.';
+const aboutBlocks = (d.aboutBlocks as Array<{ icon?: string; title?: string; description?: string }>) || [
+  { icon: '⚡', title: 'Conteúdo Criativo & Design', description: 'Desenvolvemos conteúdo e identidades visuais que conectam marcas e audiências.' },
+  { icon: '📊', title: 'Estratégia & Consultoria', description: 'Consultoria especializada para alavancar seus resultados no digital.' },
+];
+const aboutCtaText = (d.aboutCtaText as string) || 'Saiba mais sobre nós';
+const aboutCtaUrl = (d.aboutCtaUrl as string) || '/sobre';
+
+const featuresBadge = (d.featuresBadge as string) || 'Nossos diferenciais';
+const featuresTitle = (d.featuresTitle as string) || 'Transformando negócios em';
+const featuresHighlight = (d.featuresHighlight as string) || 'histórias de sucesso digital';
+const features = (d.features as Array<{ title?: string }>) || [
+  { title: 'Estratégia de Marca' },
+  { title: 'Web Design' },
+  { title: 'Marketing Digital' },
+  { title: 'Criação de Conteúdo' },
+  { title: 'Automação de E-mail' },
+];
+
+const pageTitle = `${heroTitle} - 8links`;
+const pageDesc = (d.heroSubtitle as string) || heroSubtitle;
+---
+
+<MainLayout title={pageTitle} description={pageDesc}>
+  <!-- Hero -->
+  <section class="relative min-h-[320px] flex items-center justify-center bg-cover bg-center pt-20" style={`background-image: url(${heroImage})`}>
+    <div class="absolute inset-0 bg-black/50" />
+    <div class="relative z-10 text-center px-4 py-20">
+      <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">{heroTitle}</h1>
+      <p class="text-xl text-white/90 max-w-2xl mx-auto mb-6">{heroSubtitle}</p>
+      <a href={heroCtaUrl} class="inline-flex items-center gap-2 px-6 py-4 bg-[#D9F45F] text-[#0f0f0f] font-semibold rounded-lg hover:bg-[#c5e04f] transition-colors min-h-[44px]">
+        {heroCtaText}
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="py-16 md:py-24 px-4 bg-[#0f0f0f]">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+        <div class="lg:col-span-4">
+          <p class="text-white/80 mb-6">{aboutParagraph}</p>
+          <div class="flex flex-col gap-4">
+            <div>
+              <h3 class="text-2xl font-bold text-[#D9F45F]">{aboutStatNumber}</h3>
+              <p class="text-white/70 text-sm">{aboutStatLabel}</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:col-span-5 relative">
+          <img src={aboutImage} alt="Equipe" class="w-full rounded-lg object-cover max-h-[400px]" />
+          <div class="absolute bottom-4 left-4 right-4 md:right-8 bg-[#131212]/95 p-4 rounded-lg">
+            <p class="text-white/90 text-sm italic">{aboutQuote}</p>
+          </div>
+        </div>
+        <div class="lg:col-span-3 space-y-6">
+          {aboutBlocks.map((block) => (
+            <div class="flex gap-4">
+              <div class="w-12 h-12 rounded-lg bg-[#D9F45F]/20 flex items-center justify-center text-[#D9F45F] shrink-0">{block.icon || '⚡'}</div>
+              <div>
+                <h4 class="font-bold text-white mb-1">{block.title}</h4>
+                <p class="text-white/70 text-sm">{block.description}</p>
+              </div>
+            </div>
+          ))}
+          <a href={aboutCtaUrl} class="inline-flex items-center gap-2 px-6 py-3 bg-[#D9F45F] text-[#0f0f0f] font-medium rounded-md hover:bg-[#c5e04f] transition-colors min-h-[44px]">
+            {aboutCtaText}
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="py-16 md:py-24 bg-[#131212] relative overflow-hidden">
+    <div class="absolute top-0 left-0 right-0 h-40 bg-[#D9F45F]" style="clip-path: polygon(0 0, 100% 0, 100% 60%, 0 100%);" />
+    <div class="relative z-10 max-w-7xl mx-auto px-4">
+      <div class="text-center mb-12">
+        <span class="inline-block text-[#D9F45F] text-sm font-medium mb-2">{featuresBadge}</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-white">
+          {featuresTitle} <span class="text-[#D9F45F]">{featuresHighlight}</span>
+        </h2>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        {features.map((f) => (
+          <a href="/servicos" class="block p-6 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors group">
+            <div class="w-12 h-12 mb-4 rounded-lg bg-[#D9F45F]/20 flex items-center justify-center text-[#D9F45F]">◆</div>
+            <h3 class="font-bold text-white group-hover:text-[#D9F45F] transition-colors">{f.title}</h3>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>

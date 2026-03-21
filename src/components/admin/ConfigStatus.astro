@@ -1,0 +1,218 @@
+---
+/**
+ * ConfigStatus.astro
+ *
+ * Widget do dashboard que verifica o status de configuração do ambiente.
+ * Exibe quais variáveis de ambiente estão configuradas e guia o usuário
+ * passo a passo para completar a configuração — especialmente útil para
+ * iniciantes que acabaram de fazer o deploy na Vercel.
+ *
+ * Checagens:
+ * - ADMIN_SECRET: proteção das sessões do painel
+ * - GITHUB_TOKEN: permite editar conteúdo pelo painel em produção
+ * - GITHUB_OWNER: usuário/org do GitHub
+ * - GITHUB_REPO: nome do repositório
+ * - GitHub Actions: link dinâmico para ativar permissões de PR
+ */
+
+const hasSecret = !!process.env.ADMIN_SECRET;
+const hasToken  = !!process.env.GITHUB_TOKEN;
+const hasOwner  = !!process.env.GITHUB_OWNER;
+const hasRepo   = !!process.env.GITHUB_REPO;
+
+const githubOwner = process.env.GITHUB_OWNER || '';
+const githubRepo  = process.env.GITHUB_REPO  || '';
+
+const isFullyConfigured = hasSecret && hasToken && hasOwner && hasRepo;
+const isGitHubConfigured = hasToken && hasOwner && hasRepo;
+
+// Link direto para as configurações de Actions do repositório do aluno
+const actionsSettingsUrl = githubOwner && githubRepo
+    ? `https://github.com/${githubOwner}/${githubRepo}/settings/actions`
+    : 'https://github.com';
+
+const tokenUrl = 'https://github.com/settings/tokens/new?description=CNX+CMS+Token&scopes=repo';
+const vercelEnvUrl = 'https://vercel.com/dashboard';
+---
+
+{!isFullyConfigured && (
+<div class="mt-6 admin-card" style="border-color: rgba(59,130,246,0.3); background: rgba(59,130,246,0.03);">
+    <!-- Header -->
+    <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--admin-border); display: flex; align-items: center; gap: 0.75rem;">
+        <span style="font-size: 1.1rem;">⚙️</span>
+        <div style="flex: 1;">
+            <div style="font-size: 0.875rem; font-weight: 700; color: var(--admin-text);">Configuração do Sistema</div>
+            <div style="font-size: 0.75rem; color: var(--admin-text-muted);">Complete os passos abaixo para o site funcionar 100%</div>
+        </div>
+        <span style="font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 999px; background: rgba(59,130,246,0.15); color: #93c5fd; font-weight: 600;">
+            {[hasSecret, hasToken, hasOwner, hasRepo].filter(Boolean).length}/4 configurado
+        </span>
+    </div>
+
+    <!-- Steps -->
+    <div style="padding: 0.75rem 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;">
+
+        <!-- ADMIN_SECRET -->
+        <div style={`display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; background: ${hasSecret ? 'rgba(74,222,128,0.05)' : 'rgba(239,68,68,0.05)'}; border: 1px solid ${hasSecret ? 'rgba(74,222,128,0.15)' : 'rgba(239,68,68,0.2)'};`}>
+            <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px;">{hasSecret ? '✅' : '❌'}</span>
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 0.82rem; font-weight: 600; color: var(--admin-text);">
+                    ADMIN_SECRET {hasSecret ? '— Configurado' : '— Não configurado'}
+                </div>
+                {!hasSecret && (
+                    <p style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 0.25rem;">
+                        Acesse <strong>Vercel → seu projeto → Settings → Environment Variables</strong> e adicione <code style="background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px;">ADMIN_SECRET</code> com qualquer texto longo (ex: <em>meu-site-2025-secreto</em>). Depois clique em Redeploy.
+                    </p>
+                )}
+            </div>
+        </div>
+
+        <!-- GITHUB_TOKEN -->
+        <div style={`display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; background: ${hasToken ? 'rgba(74,222,128,0.05)' : 'rgba(239,68,68,0.05)'}; border: 1px solid ${hasToken ? 'rgba(74,222,128,0.15)' : 'rgba(239,68,68,0.2)'};`}>
+            <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px;">{hasToken ? '✅' : '❌'}</span>
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 0.82rem; font-weight: 600; color: var(--admin-text);">
+                    GITHUB_TOKEN {hasToken ? '— Configurado' : '— Necessário para editar conteúdo'}
+                </div>
+                {!hasToken && (
+                    <div style="margin-top: 0.375rem;">
+                        <p style="font-size: 0.75rem; color: var(--admin-text-muted); margin-bottom: 0.375rem;">
+                            Sem isso, você não consegue criar ou editar posts pelo painel em produção.
+                        </p>
+                        <ol style="font-size: 0.73rem; color: var(--admin-text-muted); padding-left: 1.1rem; line-height: 1.8; margin-bottom: 0.5rem;">
+                            <li>Clique no botão abaixo para gerar o token no GitHub</li>
+                            <li>Role a página até <strong>"Generate token"</strong> e clique — copie o token gerado</li>
+                            <li>Acesse <strong>Vercel → projeto → Settings → Environment Variables</strong></li>
+                            <li>Adicione <code style="background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px;">GITHUB_TOKEN</code> com o valor copiado</li>
+                            <li>Clique em <strong>Save</strong> e aguarde o redeploy (~1 min)</li>
+                        </ol>
+                        <a
+                            href={tokenUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; font-weight: 600; padding: 0.375rem 0.75rem; border-radius: 0.375rem; background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); text-decoration: none; transition: all 0.15s ease;"
+                        >
+                            🔑 Gerar GITHUB_TOKEN →
+                        </a>
+                    </div>
+                )}
+            </div>
+        </div>
+
+        <!-- GITHUB_OWNER + GITHUB_REPO -->
+        <div style={`display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; background: ${(hasOwner && hasRepo) ? 'rgba(74,222,128,0.05)' : 'rgba(239,68,68,0.05)'}; border: 1px solid ${(hasOwner && hasRepo) ? 'rgba(74,222,128,0.15)' : 'rgba(239,68,68,0.2)'};`}>
+            <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px;">{(hasOwner && hasRepo) ? '✅' : '❌'}</span>
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 0.82rem; font-weight: 600; color: var(--admin-text);">
+                    GITHUB_OWNER + GITHUB_REPO {(hasOwner && hasRepo) ? '— Configurado' : '— Não configurado'}
+                </div>
+                {!(hasOwner && hasRepo) && (
+                    <div style="margin-top: 0.375rem;">
+                        <p style="font-size: 0.75rem; color: var(--admin-text-muted); margin-bottom: 0.375rem;">
+                            Adicione nas variáveis da Vercel:
+                        </p>
+                        <ul style="font-size: 0.73rem; color: var(--admin-text-muted); padding-left: 1.1rem; line-height: 1.8; margin-bottom: 0.5rem;">
+                            <li><code style="background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px;">GITHUB_OWNER</code> = seu usuário do GitHub (ex: <em>joao-silva</em>)</li>
+                            <li><code style="background: rgba(255,255,255,0.08); padding: 1px 4px; border-radius: 3px;">GITHUB_REPO</code> = nome do repositório (ex: <em>meu-site-cnx</em>)</li>
+                        </ul>
+                        <p style="font-size: 0.72rem; color: var(--admin-text-subtle);">
+                            💡 Encontre o nome do repositório na URL do GitHub: github.com/<strong>[OWNER]</strong>/<strong>[REPO]</strong>
+                        </p>
+                    </div>
+                )}
+                {hasOwner && !hasRepo && (
+                    <p style="font-size: 0.75rem; color: #fbbf24; margin-top: 0.25rem;">
+                        GITHUB_OWNER configurado. Falta adicionar GITHUB_REPO.
+                    </p>
+                )}
+                {!hasOwner && hasRepo && (
+                    <p style="font-size: 0.75rem; color: #fbbf24; margin-top: 0.25rem;">
+                        GITHUB_REPO configurado. Falta adicionar GITHUB_OWNER.
+                    </p>
+                )}
+            </div>
+        </div>
+
+        <!-- GitHub Actions (só mostra se GitHub está configurado) -->
+        {isGitHubConfigured && (
+            <div style="display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem; border-radius: 0.5rem; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.35);">
+                <span style="font-size: 1rem; flex-shrink: 0; margin-top: 1px;">⚠️</span>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #fbbf24;">
+                        GitHub Actions — Obrigatório para atualizações funcionarem
+                    </div>
+                    <p style="font-size: 0.74rem; color: var(--admin-text-muted); margin-top: 0.25rem; margin-bottom: 0.375rem;">
+                        Sem isso, o botão <strong>&quot;Aplicar agora&quot;</strong> no banner de atualização retornará erro.
+                    </p>
+                    <div style="margin-top: 0.375rem;">
+                        <ol style="font-size: 0.73rem; color: var(--admin-text-muted); padding-left: 1.1rem; line-height: 1.8; margin-bottom: 0.5rem;">
+                            <li>Clique no botão abaixo para abrir as configurações do seu repositório</li>
+                            <li>Role até <strong>"Workflow permissions"</strong></li>
+                            <li>Marque <strong>"Read and write permissions"</strong></li>
+                            <li>Marque <strong>"Allow GitHub Actions to create and approve pull requests"</strong></li>
+                            <li>Clique em <strong>Save</strong></li>
+                        </ol>
+                        <a
+                            href={actionsSettingsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style="display: inline-flex; align-items: center; gap: 0.375rem; font-size: 0.75rem; font-weight: 600; padding: 0.375rem 0.75rem; border-radius: 0.375rem; background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); text-decoration: none; transition: all 0.15s ease;"
+                        >
+                            ⚙️ Abrir configurações do GitHub →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        <!-- Link Vercel -->
+        {(!hasToken || !hasOwner || !hasRepo) && (
+            <div style="padding: 0.625rem 0.75rem; border-radius: 0.5rem; background: var(--admin-surface-hover); display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap;">
+                <span style="font-size: 0.75rem; color: var(--admin-text-muted);">
+                    Após configurar as variáveis, faça o redeploy para aplicar
+                </span>
+                <a
+                    href={vercelEnvUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="font-size: 0.75rem; font-weight: 600; color: var(--admin-accent); text-decoration: none;"
+                >
+                    Abrir Vercel Dashboard →
+                </a>
+            </div>
+        )}
+    </div>
+</div>
+)}
+
+{isFullyConfigured && (
+<div class="mt-6 admin-card" style="border-color: rgba(74,222,128,0.2); background: rgba(74,222,128,0.03);">
+    <div style="padding: 0.875rem 1.25rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+        <span style="font-size: 1.1rem;">✅</span>
+        <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 0.85rem; font-weight: 600; color: var(--admin-text);">Sistema configurado corretamente</div>
+            <div style="font-size: 0.75rem; color: var(--admin-text-muted);">Todas as variáveis estão configuradas. Edição em produção ativa.</div>
+        </div>
+        {isGitHubConfigured && (
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-shrink: 0;">
+                <a
+                    href="/api/admin/test-github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="font-size: 0.75rem; font-weight: 600; padding: 0.35rem 0.65rem; border-radius: 0.375rem; background: rgba(59,130,246,0.15); color: #93c5fd; border: 1px solid rgba(59,130,246,0.3); text-decoration: none;"
+                >
+                    🔧 Testar GitHub
+                </a>
+                <a
+                    href={actionsSettingsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="font-size: 0.72rem; color: var(--admin-text-subtle); text-decoration: none;"
+                >
+                    Configurações →
+                </a>
+            </div>
+        )}
+    </div>
+</div>
+)}

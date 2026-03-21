@@ -1,0 +1,463 @@
+/**
+ * admin.css
+ *
+ * Estilos específicos para o painel administrativo.
+ * Suporta modo claro (html.light) e modo escuro (html.dark — padrão).
+ */
+
+/* ─── Modo Escuro (padrão) ────────────────────────────────────────────────── */
+html, html.dark {
+    --admin-bg:              #0a0a0a;
+    --admin-surface:         #111111;
+    --admin-surface-hover:   #1a1a1a;
+    --admin-border:          rgba(255, 255, 255, 0.08);
+    --admin-border-hover:    rgba(255, 255, 255, 0.12);
+    --admin-text:            #e5e5e5;
+    --admin-text-muted:      #a3a3a3;
+    --admin-text-subtle:     #737373;
+    --admin-accent:          #3b82f6;
+    --admin-accent-hover:    #2563eb;
+    /* componentes específicos */
+    --admin-bar-bg:          #1a1a1a;
+    --admin-bar-border:      rgba(255, 255, 255, 0.07);
+    --admin-bar-text:        #9ca3af;
+    --admin-bar-text-hover:  #ffffff;
+    --admin-bar-hover-bg:    rgba(255, 255, 255, 0.05);
+    --admin-search-bg:       #0a0a0a;
+    --admin-logo-bg:         #1a1a1a;
+    --admin-modal-bg:        rgba(15, 23, 42, 0.98);
+    --admin-modal-body-text: #e5e7eb;
+    --admin-modal-small:     #9ca3af;
+    --admin-toast-bg:        rgba(15, 23, 42, 0.98);
+    --admin-toast-text:      #e5e5e5;
+    --admin-input-text:      #e5e5e5;
+    --admin-input-ph:        #525252;
+    --admin-toggle-bg:       #1a1a1a;
+    --admin-toggle-icon:     🌙;
+}
+
+/* ─── Modo Claro ─────────────────────────────────────────────────────────── */
+html.light {
+    --admin-bg:              #f4f4f5;
+    --admin-surface:         #ffffff;
+    --admin-surface-hover:   #f0f0f1;
+    --admin-border:          rgba(0, 0, 0, 0.08);
+    --admin-border-hover:    rgba(0, 0, 0, 0.15);
+    --admin-text:            #18181b;
+    --admin-text-muted:      #52525b;
+    --admin-text-subtle:     #a1a1aa;
+    --admin-accent:          #3b82f6;
+    --admin-accent-hover:    #2563eb;
+    /* componentes específicos */
+    --admin-bar-bg:          #18181b;
+    --admin-bar-border:      rgba(0, 0, 0, 0.12);
+    --admin-bar-text:        #9ca3af;
+    --admin-bar-text-hover:  #ffffff;
+    --admin-bar-hover-bg:    rgba(255, 255, 255, 0.08);
+    --admin-search-bg:       #f4f4f5;
+    --admin-logo-bg:         #f4f4f5;
+    --admin-modal-bg:        #ffffff;
+    --admin-modal-body-text: #374151;
+    --admin-modal-small:     #6b7280;
+    --admin-toast-bg:        #ffffff;
+    --admin-toast-text:      #18181b;
+    --admin-input-text:      #18181b;
+    --admin-input-ph:        #a1a1aa;
+    --admin-toggle-bg:       #f4f4f5;
+    --admin-toggle-icon:     ☀️;
+}
+
+/* ─── Modo Local: sinalização visual nas bordas ───────────────────────────────
+ * Quando siteMode === 'local', o admin exibe bordas em destaque (teal/emerald)
+ * para diferenciar claramente do modo Blog normal.
+ */
+[data-site-mode="local"] .w-64 {
+    border-left: 3px solid #10b981 !important;
+    box-shadow: inset 3px 0 12px rgba(16, 185, 129, 0.08);
+}
+[data-site-mode="local"] .admin-main-area {
+    border-left: 1px solid rgba(16, 185, 129, 0.2);
+}
+[data-site-mode="local"] .h-8 {
+    border-bottom-color: rgba(16, 185, 129, 0.25) !important;
+    box-shadow: 0 1px 0 0 rgba(16, 185, 129, 0.15);
+}
+/* Badge sutil no canto da barra superior quando em modo local */
+[data-site-mode="local"] #site-mode-toggle {
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    background: rgba(16, 185, 129, 0.06) !important;
+}
+
+/* Base dos botões do toggle modo (antes do JS) */
+.site-mode-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--admin-bar-text);
+    cursor: pointer;
+}
+.site-mode-btn:hover { color: var(--admin-bar-text-hover); }
+.site-mode-btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+/* Modal de confirmação ao trocar modo (Header + página Modo) */
+#mode-confirm-dialog,
+#modo-page-confirm-dialog {
+    z-index: 9999;
+}
+#mode-confirm-dialog::backdrop,
+#modo-page-confirm-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* Admin Cards */
+.admin-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.admin-card:hover {
+    border-color: var(--admin-border-hover);
+}
+
+/* Admin Buttons */
+.admin-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.admin-btn-primary {
+    background: var(--admin-accent);
+    color: white;
+}
+
+.admin-btn-primary:hover {
+    background: var(--admin-accent-hover);
+}
+
+.admin-btn-secondary {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text);
+}
+
+.admin-btn-secondary:hover {
+    background: var(--admin-surface-hover);
+    border-color: var(--admin-border-hover);
+}
+
+.admin-btn-ghost {
+    color: var(--admin-text-muted);
+}
+
+.admin-btn-ghost:hover {
+    color: var(--admin-text);
+    background: var(--admin-surface-hover);
+}
+
+.admin-btn-danger {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+}
+
+.admin-btn-danger:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #f87171;
+}
+
+/* Admin Modal (Confirmações Bonitas) */
+.admin-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+}
+
+.admin-modal {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 1rem;
+    background: radial-gradient(circle at top left, rgba(248, 113, 113, 0.18), transparent 55%),
+                var(--admin-modal-bg);
+    border: 1px solid rgba(248, 113, 113, 0.4);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+.admin-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem 1.5rem 0.75rem;
+}
+
+.admin-modal-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 999px;
+    background: radial-gradient(circle at 30% 0%, #fecaca, #ef4444);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 30px rgba(248, 113, 113, 0.6);
+}
+
+.admin-modal-icon span {
+    font-size: 1.35rem;
+    color: #0b1120;
+}
+
+.admin-modal-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fee2e2;
+}
+
+.admin-modal-body {
+    padding: 0 1.5rem 1.25rem;
+    color: var(--admin-modal-body-text);
+    font-size: 0.9rem;
+}
+
+.admin-modal-body p {
+    margin-bottom: 0.25rem;
+}
+
+.admin-modal-body small {
+    display: block;
+    color: var(--admin-modal-small);
+    margin-top: 0.5rem;
+}
+
+.admin-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem 1.25rem;
+    background: var(--admin-modal-bg);
+    border-top: 1px solid rgba(248, 113, 113, 0.25);
+    border-radius: 0 0 1rem 1rem;
+}
+
+.admin-modal-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.admin-modal-btn-cancel {
+    background: transparent;
+    color: var(--admin-text);
+    border-color: var(--admin-border-hover);
+}
+
+.admin-modal-btn-cancel:hover {
+    background: var(--admin-surface-hover);
+    border-color: var(--admin-text-subtle);
+}
+
+.admin-modal-btn-danger {
+    background: #ef4444;
+    color: #0b1120;
+    border-color: transparent;
+    box-shadow: 0 0 20px rgba(248, 113, 113, 0.6);
+}
+
+.admin-modal-btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* Admin Toast (Feedback elegante) */
+@keyframes toastIn {
+    from { opacity: 0; transform: translateY(8px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.admin-toast {
+    position: relative;
+    min-width: 260px;
+    max-width: 380px;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: var(--admin-toast-bg);
+    border: 1px solid var(--admin-border-hover);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    color: var(--admin-toast-text);
+    font-size: 0.8rem;
+    animation: toastIn 0.2s ease;
+}
+
+.admin-toast--error {
+    border-color: rgba(248, 113, 113, 0.7);
+    background: radial-gradient(circle at top left, rgba(248, 113, 113, 0.08), transparent 60%), var(--admin-toast-bg);
+}
+
+.admin-toast--success {
+    border-color: rgba(74, 222, 128, 0.6);
+    background: radial-gradient(circle at top left, rgba(74, 222, 128, 0.08), transparent 60%), var(--admin-toast-bg);
+}
+
+.admin-toast--info {
+    border-color: rgba(96, 165, 250, 0.6);
+    background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.08), transparent 60%), var(--admin-toast-bg);
+}
+
+.admin-toast--warning {
+    border-color: rgba(251, 191, 36, 0.6);
+    background: radial-gradient(circle at top left, rgba(251, 191, 36, 0.08), transparent 60%), var(--admin-toast-bg);
+}
+
+.admin-toast-icon {
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+}
+
+.admin-toast-icon span {
+    font-size: 1.1rem;
+}
+
+.admin-toast-content {
+    flex: 1;
+}
+
+.admin-toast-content strong {
+    display: block;
+    margin-bottom: 0.15rem;
+}
+
+.admin-toast-close {
+    margin-left: auto;
+    cursor: pointer;
+    color: var(--admin-text-muted);
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    line-height: 1;
+    padding: 0;
+}
+
+.admin-toast-close:hover {
+    color: var(--admin-text);
+}
+
+/* Admin Inputs */
+.admin-input {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    color: var(--admin-text);
+    transition: all 0.2s ease;
+}
+
+.admin-input::placeholder {
+    color: var(--admin-text-subtle);
+}
+
+.admin-input:focus {
+    outline: none;
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Admin Sidebar */
+.admin-sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    color: var(--admin-text-muted);
+    transition: all 0.2s ease;
+}
+
+.admin-sidebar-item:hover {
+    background: var(--admin-surface-hover);
+    color: var(--admin-text);
+}
+
+.admin-sidebar-item.active {
+    background: var(--admin-surface-hover);
+    color: var(--admin-text);
+    border-left: 2px solid var(--admin-accent);
+}
+
+/* Configurações expandível no sidebar */
+.config-group summary {
+    list-style: none;
+}
+.config-group summary::-webkit-details-marker {
+    display: none;
+}
+.config-group[open] .config-chevron {
+    transform: rotate(90deg);
+}
+
+/* Admin Table */
+.admin-table {
+    width: 100%;
+}
+
+.admin-table th {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--admin-text-subtle);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-table td {
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    color: var(--admin-text);
+    border-bottom: 1px solid var(--admin-border);
+}
+
+.admin-table tr:hover {
+    background: var(--admin-surface-hover);
+}
+
+/* Admin Badge */
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.625rem;
+    border-radius: 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.admin-badge-success {
+    background: var(--admin-surface-hover);
+    color: var(--admin-text);
+}
+
+.admin-badge-warning {
+    background: var(--admin-surface-hover);
+    color: var(--admin-text-muted);
+}
+
+.admin-badge-neutral {
+    background: var(--admin-surface-hover);
+    color: var(--admin-text-muted);
+}

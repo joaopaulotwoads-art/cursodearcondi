@@ -1,0 +1,19 @@
+logoType: image
+logoText: Bem Mãe
+logoImage: /bemmae-logo.png
+items:
+  - label: Início
+    href: /
+    target: _self
+  - label: Carrinhos de bebê
+    href: /blog?categoria=carrinhos-de-bebe
+    target: _self
+  - label: Sobre
+    href: /sobre
+    target: _self
+  - label: Blog
+    href: /blog
+    target: _self
+  - label: Contato
+    href: /contato
+    target: _self

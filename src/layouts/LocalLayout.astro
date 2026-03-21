@@ -1,0 +1,170 @@
+---
+/**
+ * LocalLayout.astro
+ *
+ * Layout base para o Modo Local (rank and rent).
+ * Usa Header e Footer específicos para negócios locais.
+ * Injeta schema LocalBusiness JSON-LD para SEO local.
+ * Lê NAP (Name, Address, Phone) do singleton 'local/home'.
+ * Inclui canonical para SEO e indexação pelo Google.
+ */
+
+import LocalHeader from '../themes/local/components/Header.astro';
+import LocalFooter from '../themes/local/components/Footer.astro';
+import CookieConsent from '../components/CookieConsent.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { getSiteContactInfo } from '../utils/site-contact';
+import { readSiteSettings } from '../utils/read-site-settings';
+import { getEntry } from 'astro:content';
+import '../styles/global.css';
+import '@fontsource/inter';
+import '@fontsource/outfit';
+
+interface Props {
+    title?: string;
+    description?: string;
+    ogImage?: string;
+    schemaService?: string;
+    extraSchemas?: object[];
+}
+
+const {
+    title        = 'Minha Empresa',
+    description  = 'Serviços profissionais com qualidade e garantia.',
+    ogImage      = '/images/og-default.png',
+    schemaService,
+    extraSchemas = [],
+} = Astro.props;
+
+const localData    = await readSingleton('home', 'local');
+const contact      = await getSiteContactInfo();
+const siteSettings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteConfig   = await readSiteSettings();
+const colorScheme  = (siteSettings?.data?.colorScheme as 'dark' | 'light') || 'light';
+const themeId = 'classic';
+
+// Canonical URL: preferir settings, fallback para URL da requisição
+const canonicalBase = (siteConfig.canonicalUrl as string)?.trim() || '';
+const pathname      = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonicalHref = canonicalBase
+    ? `${canonicalBase.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`
+    : Astro.url.origin + pathname;
+const pixelSettings = await readSingleton('pixels', themeId).catch(() => null);
+const gaId     = pixelSettings?.googleAnalyticsId || '';
+const fbPixelId = pixelSettings?.facebookPixelId  || '';
+
+const company  = localData?.companyName    || '';
+const phone    = contact.phone             || '';
+const address  = localData?.companyAddress || '';
+const city     = localData?.companyCity    || '';
+const state    = localData?.companyState   || '';
+const cep      = localData?.companyCEP     || '';
+const email    = localData?.companyEmail   || '';
+
+// Schema LocalBusiness para SEO
+const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'LocalBusiness',
+    name: company,
+    telephone: phone ? `+55${phone}` : undefined,
+    email: email || undefined,
+    address: (address || city) ? {
+        '@type': 'PostalAddress',
+        streetAddress: address,
+        addressLocality: city,
+        addressRegion: state,
+        postalCode: cep,
+        addressCountry: 'BR',
+    } : undefined,
+    url: '',
+    ...(schemaService ? {
+        hasOfferCatalog: {
+            '@type': 'OfferCatalog',
+            name: schemaService,
+        },
+    } : {}),
+};
+---
+
+<!doctype html>
+<html lang="pt-BR" class={colorScheme}>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalHref} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.url)} />}
+
+    <!-- Schema LocalBusiness JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(schema, null, 2)} />
+
+    <!-- Schemas extras (FAQPage, BreadcrumbList, etc.) -->
+    {extraSchemas.map(s => (
+        <script type="application/ld+json" set:html={JSON.stringify(s)} />
+    ))}
+
+    <!-- GA e Meta Pixel injetados via CookieConsent -->
+
+    <style is:global>
+        :root {
+            --primary: #2563eb;
+            --primary-rgb: 37 99 235;
+            --secondary: #1d4ed8;
+            --local-text: #0f172a;
+            --local-bg: #ffffff;
+            --local-surface: #f8fafc;
+            --local-border: #e2e8f0;
+            --local-muted: #64748b;
+        }
+        .dark {
+            --local-text: #f1f5f9;
+            --local-bg: #0f172a;
+            --local-surface: #1e293b;
+            --local-border: #334155;
+            --local-muted: #94a3b8;
+        }
+        body {
+            background: var(--local-bg);
+            color: var(--local-text);
+        }
+        /* Variáveis do blog para BlogList/BlogPost no modo local */
+        :root {
+            --blog-bg: var(--local-bg);
+            --blog-text: var(--local-text);
+            --blog-text-muted: var(--local-muted);
+            --blog-text-subtle: var(--local-muted);
+            --blog-section-alt: var(--local-surface);
+            --blog-section-dark: var(--local-bg);
+            --blog-surface: var(--local-surface);
+            --blog-surface-hover: #e2e8f0;
+            --blog-border: var(--local-border);
+            --blog-hero-grad: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%);
+            --blog-grid: rgba(37, 99, 235, 0.08);
+            --blog-fade-bottom: linear-gradient(to top, var(--local-bg) 0%, transparent 100%);
+            --blog-nav-bg: var(--local-bg);
+            --blog-nav-border: var(--local-border);
+            --blog-mob-bg: var(--local-surface);
+            --blog-mob-border: var(--local-border);
+        }
+        .dark :root {
+            --blog-surface-hover: #334155;
+        }
+    </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col">
+    <LocalHeader />
+
+    <main class="flex-grow">
+        <slot />
+    </main>
+
+    <LocalFooter />
+
+    <CookieConsent gaId={gaId} fbPixelId={fbPixelId} />
+</body>
+</html>

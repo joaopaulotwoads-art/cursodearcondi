@@ -1,0 +1,9 @@
+---
+title: Política de Privacidade
+slug: politica-de-privacidade
+author: admin
+publishedDate: "2026-01-29"
+contentFormat: html
+metaDescription: No Bem Mãe , a privacidade dos nossos visitantes é uma prioridade absoluta. Esta Política de Privacidade descreve os tipos de informações pessoais que coletamos e como as utilizamos para melhorar sua experiência em nosso site. 2. Coleta de Dados e Cookies Como a maioria dos sites profissionais, util
+---
+<p>No <strong>Bem Mãe</strong>, a privacidade dos nossos visitantes é uma prioridade absoluta. Esta Política de Privacidade descreve os tipos de informações pessoais que coletamos e como as utilizamos para melhorar sua experiência em nosso site.</p><h3 id="2-coleta-de-dados-e-cookies">2. Coleta de Dados e Cookies</h3><p>Como a maioria dos sites profissionais, utilizamos cookies para entender como você interage com o nosso conteúdo. Isso nos ajuda a:</p><ul><li>Personalizar sua navegação.</li><li>Analisar o tráfego do site através de ferramentas como o Google Analytics.</li><li>Exibir anúncios e ofertas relevantes para o seu perfil.</li></ul><h3 id="3-links-de-terceiros-e-afiliados">3. Links de Terceiros e Afiliados</h3><p>O <strong>Bem Mãe</strong> contém links para sites externos, como a <strong>Amazon</strong>. Não temos controle sobre as políticas de privacidade desses sites e recomendamos que você as leia ao visitá-los.</p><h3 id="4-prote%C3%A7%C3%A3o-de-dados-lgpd">4. Proteção de Dados (LGPD)</h3><p>Em conformidade com a LGPD, garantimos que qualquer dado fornecido (como o seu e-mail em nossa newsletter) será armazenado com segurança e nunca será vendido a terceiros. Você tem o direito de solicitar a exclusão dos seus dados a qualquer momento enviando um e-mail para <strong>contato@bemmae.com.br</strong>.</p>

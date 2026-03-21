@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Andaime
+id: aluguel-andaime
+name: Aluguel de Andaime
+description: "Site pronto para locadoras de andaimes e equipamentos de altura"
+icon: "🪜"
+color: "#eab308"
+
+niche:
+  name: Aluguel de Andaime
+  slug: aluguel-andaime
+  icon: "🪜"
+  description: "Locação de andaimes para obras e serviços em altura"
+  color: "#eab308"
+  active: true
+
+homeCopy:
+  heroBadge: "Andaime para Obra"
+  heroTitle: "Aluguel de Andaime"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Andaimes metálicos e fachadeiros para obras e serviços em altura. Montagem inclusa. Segurança garantida. Diária ou mensal."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver tipos"
+  heroWhatsappMessage: "Olá! Preciso alugar andaime para minha obra. Vocês montam?"
+  servicesTitle: "Andaimes para Locação"
+  servicesSubtitle: "Segurança nas alturas"
+  aboutTitle: "Referência em Aluguel de Andaime"
+  aboutSubtitle: "Equipamentos certificados"
+  aboutText: "Locamos andaimes metálicos, fachadeiros e móveis para obras e serviços em altura. Montagem e desmontagem por equipe treinada. Equipamentos com certificação."
+  aboutStats:
+    - number: "20+"
+      label: Anos de experiência
+    - number: "3000+"
+      label: Obras atendidas
+    - number: "100%"
+      label: Segurança garantida
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Andaimes para sua obra."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece andaimes para locação com montagem. Atuamos em {cidade} e região. Consulte valores e disponibilidade!"
+  benefits:
+    - "Montagem em {cidade}"
+    - "Orçamento gratuito"
+    - "Equipe treinada"
+    - "Equipamentos certificados"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - segurança na obra. Ligue!"
+
+services:
+  - title: "Aluguel de Andaime"
+    slug: aluguel-de-andaime
+    shortDescription: "Andaimes metálicos para obras"
+    icon: "🪜"
+    niche: aluguel-andaime
+  - title: "Aluguel de Andaime Fachadeiro"
+    slug: aluguel-andaime-fachadeiro
+    shortDescription: "Andaime para fachadas e pintura externa"
+    icon: "🏗️"
+    niche: aluguel-andaime
+  - title: "Aluguel de Andaime Móvel"
+    slug: aluguel-andaime-movel
+    shortDescription: "Andaime com rodas para uso interno"
+    icon: "🪜"
+    niche: aluguel-andaime
+  - title: "Aluguel de Andaime Tubular"
+    slug: aluguel-andaime-tubular
+    shortDescription: "Andaime de tubos de aço"
+    icon: "🪜"
+    niche: aluguel-andaime
+  - title: "Aluguel de Plataforma Elevatória"
+    slug: aluguel-plataforma-elevatoria
+    shortDescription: "Plataformas para trabalho em altura"
+    icon: "🏗️"
+    niche: aluguel-andaime
+  - title: "Aluguel de Escada de Alumínio"
+    slug: aluguel-escada-aluminio
+    shortDescription: "Escadas profissionais para obras"
+    icon: "🪜"
+    niche: aluguel-andaime
+  - title: "Montagem de Andaime"
+    slug: montagem-de-andaime
+    shortDescription: "Serviço completo com montagem e desmontagem"
+    icon: "🔧"
+    niche: aluguel-andaime

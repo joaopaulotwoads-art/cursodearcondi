@@ -1,0 +1,239 @@
+---
+/**
+ * admin/pages/index.astro
+ *
+ * Página de listagem de páginas (singletons) no painel administrativo.
+ * No Modo Local, Contato e Sobre editam local/contact.yaml e local/about.yaml.
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
+const isLocal = siteMode === 'local';
+---
+
+<AdminLayout title="Configurações - CNX Agency Admin">
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+                <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">
+                    Configurações
+                </h1>
+                <p class="text-[#a3a3a3]">
+                    Gerencie o conteúdo das páginas do seu site
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <a 
+                    href="/" 
+                    target="_blank"
+                    class="admin-btn admin-btn-secondary text-sm"
+                >
+                    👁️ Ver Site
+                </a>
+            </div>
+        </div>
+
+        <!-- Pages Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Home -->
+            <a 
+                href="/admin/pages/home"
+                class="admin-card p-6 hover:border-primary/50 transition-all group"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-2xl">
+                        🏠
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Home
+                        </h3>
+                        <p class="text-xs text-[#a3a3a3]">Página inicial</p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Edite o conteúdo da página inicial, hero, features e CTA
+                </p>
+            </a>
+
+            <!-- Sobre -->
+            <a 
+                href="/admin/pages/about"
+                class={`admin-card p-6 hover:border-primary/50 transition-all group ${isLocal ? 'border-blue-500/20' : ''}`}
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${isLocal ? 'bg-blue-900/40' : 'bg-[#1a1a1a]'}`}>
+                        📄
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Sobre
+                        </h3>
+                        <p class="text-xs text-[#a3a3a3]">
+                            Quem Somos {isLocal ? '(Modo Local)' : ''}
+                        </p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Missão, visão, valores, equipe e diferenciais
+                </p>
+            </a>
+
+            <!-- Contato -->
+            <a 
+                href="/admin/pages/contact"
+                class={`admin-card p-6 hover:border-primary/50 transition-all group ${isLocal ? 'border-blue-500/20' : ''}`}
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl ${isLocal ? 'bg-blue-900/40' : 'bg-[#1a1a1a]'}`}>
+                        📧
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Contato
+                        </h3>
+                        <p class="text-xs text-[#a3a3a3]">
+                            Página de contato {isLocal ? '(Modo Local)' : ''}
+                        </p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Informações de contato e formulário
+                </p>
+            </a>
+
+            <!-- Menu -->
+            <a 
+                href="/admin/pages/menu"
+                class="admin-card p-6 hover:border-primary/50 transition-all group"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-2xl">
+                        ☰
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Menu & Logo
+                        </h3>
+                        <p class="text-xs text-[#a3a3a3]">Navegação e identidade visual</p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Logo (texto ou imagem) e itens do menu de navegação
+                </p>
+            </a>
+
+            <!-- Rodapé -->
+            <a 
+                href="/admin/pages/footer"
+                class="admin-card p-6 hover:border-primary/50 transition-all group"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-2xl">
+                        📋
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Rodapé
+                        </h3>
+                        <p class="text-xs text-[#a3a3a3]">Rodapé do site</p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Copyright, links e redes sociais
+                </p>
+            </a>
+
+            <!-- Blog -->
+            <a
+                href="/admin/pages/blog"
+                class="admin-card p-6 hover:border-primary/50 transition-all group"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-2xl">
+                        📝
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Blog
+                        </h3>
+                        <p class="text-xs text-[#a3a3a3]">Listagem de posts</p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Edite o título, subtítulo e descrição da página de blog
+                </p>
+            </a>
+
+            <!-- Home Local (Modo Local) -->
+            <a
+                href="/admin/pages/local-home"
+                class="admin-card p-6 hover:border-primary/50 transition-all group"
+                style="border-color: rgba(37,99,235,0.3);"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-blue-900/40 flex items-center justify-center text-2xl">
+                        📍
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Home Local
+                        </h3>
+                        <p class="text-xs text-blue-400">Modo Local (Rank and Rent)</p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    NAP, hero, serviços em destaque, quem somos, localização e CTA
+                </p>
+            </a>
+
+            <!-- Template de Páginas Locais -->
+            <a
+                href="/admin/gerar-paginas?tab=template"
+                class="admin-card p-6 hover:border-primary/50 transition-all group"
+                style="border-color: rgba(37,99,235,0.3);"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-blue-900/40 flex items-center justify-center text-2xl">
+                        📄
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Template de Páginas Locais
+                        </h3>
+                        <p class="text-xs text-blue-400">Modo Local</p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Hero, conteúdo padrão, benefícios e SEO das páginas /bairro/serviço
+                </p>
+            </a>
+
+            <!-- Landing Page 1 -->
+            <a 
+                href="/admin/pages/lp1"
+                class="admin-card p-6 hover:border-primary/50 transition-all group"
+            >
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-2xl">
+                        🚀
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-heading font-bold text-[#e5e5e5] group-hover:text-white transition-colors">
+                            Landing Page 1
+                        </h3>
+                        <p class="text-xs text-[#a3a3a3]">LP1 - Dot Com Secrets</p>
+                    </div>
+                </div>
+                <p class="text-sm text-[#a3a3a3]">
+                    Edite todo o conteúdo da landing page
+                </p>
+            </a>
+        </div>
+    </div>
+</AdminLayout>

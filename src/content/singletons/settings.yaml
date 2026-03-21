@@ -1,0 +1,18 @@
+siteName: Bem Mãe
+activeTheme: bemmae
+colorScheme: light
+siteMode: blog
+aiProvider: gemini
+aiApiKey: ""
+pexelsApiKey: ""
+canonicalUrl: ""
+companyPhone: ""
+companyWhatsapp: ""
+generateSitemap: true
+generateRobots: true
+robotsDisallow:
+  - /admin
+  - /api
+blogPermalinkStructure: postname
+blogUrlPrefix: blog
+autoUpdateEnabled: false

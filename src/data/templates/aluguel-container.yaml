@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Container
+id: aluguel-container
+name: Aluguel de Container
+description: "Site pronto para locadoras de containers"
+icon: "📦"
+color: "#b45309"
+
+niche:
+  name: Aluguel de Container
+  slug: aluguel-container
+  icon: "📦"
+  description: "Locação de containers para armazenamento, obra e eventos"
+  color: "#b45309"
+  active: true
+
+homeCopy:
+  heroBadge: "Container para Alugar"
+  heroTitle: "Aluguel de Container"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Containers para armazenamento, obra e eventos. 10 a 40 pés. Entrega no local. Ideal para depósito e canteiro."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver tamanhos"
+  heroWhatsappMessage: "Olá! Preciso alugar um container. Vocês entregam no endereço?"
+  servicesTitle: "Nossos Containers"
+  servicesSubtitle: "Armazenamento e obra"
+  aboutTitle: "Especialistas em Aluguel de Container"
+  aboutSubtitle: "Soluções em armazenamento"
+  aboutText: "Locamos containers de 10 a 40 pés para armazenamento, obras, eventos e depósito. Entrega e retirada no local. Containers em bom estado de conservação."
+  aboutStats:
+    - number: "15+"
+      label: Anos no mercado
+    - number: "1500+"
+      label: Locações realizadas
+    - number: "100%"
+      label: Documentação em dia
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Containers para armazenamento e obra."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece containers para locação. Atuamos em {cidade} e região. Entrega no local. Peça orçamento!"
+  benefits:
+    - "Entrega em {cidade}"
+    - "Orçamento gratuito"
+    - "10 a 40 pés"
+    - "Entrega e retirada"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - armazenamento quando precisa. Ligue!"
+
+services:
+  - title: "Aluguel de Container"
+    slug: aluguel-de-container
+    shortDescription: "Containers para armazenamento e obra"
+    icon: "📦"
+    niche: aluguel-container
+  - title: "Aluguel de Container 20 pés"
+    slug: aluguel-container-20-pes
+    shortDescription: "Container padrão 20 pés"
+    icon: "📦"
+    niche: aluguel-container
+  - title: "Aluguel de Container 40 pés"
+    slug: aluguel-container-40-pes
+    shortDescription: "Container 40 pés para grandes volumes"
+    icon: "📦"
+    niche: aluguel-container
+  - title: "Aluguel de Container 10 pés"
+    slug: aluguel-container-10-pes
+    shortDescription: "Container compacto para armazenamento"
+    icon: "📦"
+    niche: aluguel-container
+  - title: "Aluguel de Container para Obra"
+    slug: aluguel-container-obra
+    shortDescription: "Container como almoxarifado de obra"
+    icon: "🏗️"
+    niche: aluguel-container
+  - title: "Aluguel de Container para Evento"
+    slug: aluguel-container-evento
+    shortDescription: "Containers adaptados para eventos"
+    icon: "🎉"
+    niche: aluguel-container
+  - title: "Aluguel de Container Frigorífico"
+    slug: aluguel-container-frigorifico
+    shortDescription: "Container com refrigeração"
+    icon: "❄️"
+    niche: aluguel-container

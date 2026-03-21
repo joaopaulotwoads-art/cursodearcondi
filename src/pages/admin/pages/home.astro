@@ -1,0 +1,45 @@
+---
+/**
+ * admin/pages/home.astro
+ *
+ * Edição da Home: tema classic → HomeEditor; tema bemmae → SingletonEditor (campos Bem Mãe).
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import HomeEditor from '../../../components/admin/HomeEditor.tsx';
+import SingletonEditor from '../../../components/admin/SingletonEditor.tsx';
+import { BEMMAE_HOME_FIELDS } from '../../../components/admin/bemmae-editor-fields';
+import { readSingleton } from '../../../utils/singleton-utils';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const activeThemeId = (settings?.data?.activeTheme || 'classic') as string;
+const initialData = await readSingleton('home', activeThemeId);
+---
+
+<AdminLayout title="Página Inicial - Admin">
+    <div id="home-editor-wrapper" class="min-h-[400px]">
+        {activeThemeId === 'bemmae' ? (
+            <SingletonEditor
+                client:only="react"
+                name="home"
+                title="Página inicial (tema Bem Mãe)"
+                fields={BEMMAE_HOME_FIELDS}
+                initialData={initialData ?? {}}
+                themeId="bemmae"
+            />
+        ) : initialData !== null ? (
+            <HomeEditor client:only="react" initialData={initialData} />
+        ) : (
+            <div class="p-8 text-center">
+                <p class="text-[#a3a3a3] mb-4">Carregando dados da página inicial...</p>
+                <p class="text-[#737373] text-sm">Verifique se home.yaml existe em src/content/singletons/{activeThemeId}/.</p>
+            </div>
+        )}
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar páginas.</p>
+        </div>
+    </noscript>
+</AdminLayout>

@@ -1,0 +1,89 @@
+---
+interface Props {
+  data: Record<string, any>;
+}
+
+const { data: d } = Astro.props;
+const team = Array.isArray(d.teamMembers) ? d.teamMembers : [];
+const singleAuthor = team.length === 1;
+---
+<article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+  <header class="mb-10 md:mb-12 text-center md:text-left">
+    <h1 class="text-3xl md:text-4xl font-semibold text-[var(--color-text)] tracking-tight leading-tight">
+      {d.heroTitle || 'Sobre'}
+    </h1>
+  </header>
+
+  {d.heroImage && (
+    <div class="rounded-2xl overflow-hidden mb-10 shadow-sm ring-1 ring-[var(--color-border)]">
+      <img src={d.heroImage} alt="" class="w-full h-auto object-cover max-h-[380px]" loading="lazy" />
+    </div>
+  )}
+  {!d.heroImage && d.heroImagePlaceholder && (
+    <div class="aspect-[16/9] rounded-2xl bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm mb-10">
+      {d.heroImagePlaceholder}
+    </div>
+  )}
+
+  {d.body && (
+    <div
+      class="prose prose-neutral prose-lg max-w-none text-[var(--color-text)] prose-p:text-[var(--color-muted)] prose-p:leading-[1.8] prose-headings:text-[var(--color-text)]"
+    >
+      <div class="whitespace-pre-line">{d.body}</div>
+    </div>
+  )}
+
+  {team.length > 0 && (
+    <section class="mt-14 md:mt-16" aria-labelledby="equipe-title">
+      <h2 id="equipe-title" class="text-xl md:text-2xl font-semibold text-[var(--color-text)] mb-8 text-center md:text-left">
+        Quem escreve
+      </h2>
+
+      {singleAuthor ? (
+        <div
+          class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start p-8 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm"
+        >
+          <div
+            class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[var(--color-rosa)] flex items-center justify-center text-4xl sm:text-5xl ring-4 ring-[var(--color-nude)]"
+            aria-hidden="true"
+          >
+            {team[0].emoji || '👤'}
+          </div>
+          <div class="text-center sm:text-left min-w-0 flex-1">
+            <h3 class="text-xl font-semibold text-[var(--color-accent)]">{team[0].name}</h3>
+            {team[0].role && (
+              <p class="text-sm font-medium text-[var(--color-text)] mt-2">{team[0].role}</p>
+            )}
+            {team[0].bio && (
+              <p class="text-[var(--color-muted)] mt-3 leading-relaxed text-base">{team[0].bio}</p>
+            )}
+          </div>
+        </div>
+      ) : (
+        <div class="grid sm:grid-cols-2 gap-6">
+          {team.map((m: any) => (
+            <div class="p-6 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm">
+              <div class="aspect-square max-w-[120px] rounded-full bg-[var(--color-rosa)] mx-auto mb-4 flex items-center justify-center text-3xl ring-2 ring-[var(--color-nude)]">
+                {m.emoji || '👤'}
+              </div>
+              <h3 class="font-semibold text-[var(--color-accent)] text-center">{m.name}</h3>
+              {m.role && <p class="text-sm text-[var(--color-text)] text-center mt-2 font-medium">{m.role}</p>}
+              {m.bio && <p class="text-sm text-[var(--color-muted)] text-center mt-3 leading-relaxed">{m.bio}</p>}
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  )}
+
+  {d.ctaLinkHref && (
+    <p class="mt-12 text-center md:text-left">
+      <a
+        href={d.ctaLinkHref}
+        class="inline-flex min-h-[44px] items-center justify-center rounded-full bg-[var(--color-accent)] px-8 py-3 text-sm font-medium text-white hover:opacity-90 transition-opacity"
+      >
+        {d.ctaLinkText || 'Entre em contato'}
+      </a>
+    </p>
+  )}
+</article>

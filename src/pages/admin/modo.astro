@@ -1,0 +1,232 @@
+---
+/**
+ * admin/modo.astro
+ *
+ * Página de configuração do Modo do Site.
+ * Permite alternar entre:
+ *   - Modo Blog/Agência  — home clássica com posts e seções institucionais
+ *   - Modo Local         — home para negócio local (rank and rent)
+ *
+ * Atualiza o campo `siteMode` em src/content/singletons/settings.yaml
+ * via o endpoint existente /api/admin/site-settings (PUT).
+ */
+
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getEntry } from 'astro:content';
+import { getEffectiveSiteMode } from '../../utils/admin-site-mode';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const currentMode = getEffectiveSiteMode(Astro.cookies, settings);
+---
+
+<AdminLayout title="Modo do Site - CNX Agency Admin">
+    <div class="space-y-8 max-w-3xl">
+
+        <div>
+            <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">Modo do Site</h1>
+            <p class="text-[#a3a3a3]">Escolha como a página inicial e a estrutura do site se comportam.</p>
+        </div>
+
+        <>
+        <!-- Status atual -->
+        <div class="admin-card p-5 flex items-center gap-4">
+            <div class="text-3xl">{currentMode === 'local' ? '📍' : '📝'}</div>
+            <div>
+                <p class="text-sm text-[#a3a3a3] mb-0.5">Modo atual</p>
+                <p class="text-xl font-bold text-[#e5e5e5]">
+                    {currentMode === 'local' ? '📍 Modo Local (Rank and Rent)' : '📝 Modo Blog/Agência'}
+                </p>
+            </div>
+        </div>
+
+        <!-- Cards de opção -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+            <!-- Modo Blog -->
+            <div
+                id="card-blog"
+                class={`admin-card p-6 cursor-pointer transition-all border-2 ${currentMode === 'blog' ? 'border-primary' : 'border-transparent hover:border-[rgba(255,255,255,0.2)]'}`}
+                style={currentMode === 'blog' ? 'border-color: var(--primary);' : ''}
+                data-mode="blog"
+            >
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-3xl">📝</span>
+                    <div>
+                        <h2 class="text-lg font-bold text-[#e5e5e5]">Modo Blog / Agência</h2>
+                        <p class="text-xs text-[#a3a3a3]">Padrão</p>
+                    </div>
+                    {currentMode === 'blog' && (
+                        <span class="ml-auto text-xs font-bold px-2.5 py-1 rounded-full bg-primary/20 text-primary">ATIVO</span>
+                    )}
+                </div>
+                <ul class="text-sm text-[#a3a3a3] space-y-2">
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Home com posts em destaque</li>
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Seções: hero, prova social, quem somos</li>
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Blog com listagem de artigos</li>
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Ideal para agências e criadores de conteúdo</li>
+                </ul>
+            </div>
+
+            <!-- Modo Local -->
+            <div
+                id="card-local"
+                class={`admin-card p-6 cursor-pointer transition-all border-2 ${currentMode === 'local' ? 'border-primary' : 'border-transparent hover:border-[rgba(255,255,255,0.2)]'}`}
+                style={currentMode === 'local' ? 'border-color: var(--primary);' : ''}
+                data-mode="local"
+            >
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-3xl">📍</span>
+                    <div>
+                        <h2 class="text-lg font-bold text-[#e5e5e5]">Modo Local</h2>
+                        <p class="text-xs text-blue-400">Rank and Rent</p>
+                    </div>
+                    {currentMode === 'local' && (
+                        <span class="ml-auto text-xs font-bold px-2.5 py-1 rounded-full bg-primary/20 text-primary">ATIVO</span>
+                    )}
+                </div>
+                <ul class="text-sm text-[#a3a3a3] space-y-2">
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Home para negócio local com WhatsApp CTA</li>
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Grid de serviços com páginas individuais</li>
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Rodapé com NAP (nome, endereço, telefone)</li>
+                    <li class="flex items-start gap-2"><span class="text-green-400 mt-0.5">✓</span> Schema LocalBusiness JSON-LD para SEO</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- Modal de confirmação -->
+        <dialog id="modo-page-confirm-dialog" style="background: var(--admin-surface); border: 1px solid var(--admin-border); border-radius: 12px; padding: 0; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+            <div style="padding: 20px;">
+                <p id="modo-page-confirm-msg" style="color: var(--admin-text); font-size: 14px; line-height: 1.5; margin: 0 0 20px 0;"></p>
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button id="modo-page-confirm-cancel" type="button" style="padding: 8px 16px; border-radius: 8px; border: 1px solid var(--admin-border); background: transparent; color: var(--admin-text); cursor: pointer; font-size: 13px;">Cancelar</button>
+                    <button id="modo-page-confirm-ok" type="button" style="padding: 8px 16px; border-radius: 8px; border: none; background: var(--primary); color: white; cursor: pointer; font-size: 13px; font-weight: 600;">Confirmar</button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- Botão de salvar -->
+        <div class="flex items-center gap-4">
+            <button
+                id="btn-save-mode"
+                class="admin-btn admin-btn-primary disabled:opacity-50"
+                disabled
+            >
+                💾 Salvar Modo
+            </button>
+            <span id="mode-status" class="text-sm text-[#a3a3a3]"></span>
+        </div>
+
+        <!-- Dicas -->
+        <div class="admin-card p-5 space-y-3 border-blue-900/40" style="border-color: rgba(37,99,235,0.2);">
+            <h3 class="text-sm font-bold text-blue-400">💡 Como configurar o Modo Local</h3>
+            <ol class="text-sm text-[#a3a3a3] space-y-2 list-decimal list-inside">
+                <li>Ative o <strong class="text-[#e5e5e5]">Modo Local</strong> aqui e salve.</li>
+                <li>Acesse <a href="/admin/gerar-paginas?tab=keywords" class="text-blue-400 hover:underline">Page Generator → Keywords</a> e cadastre os serviços do negócio.</li>
+                <li>Acesse <a href="/admin/pages/local-home" class="text-blue-400 hover:underline">Páginas → Home Local</a> para configurar textos, NAP e selecionar serviços em destaque.</li>
+                <li>Visite o site para ver o resultado.</li>
+            </ol>
+        </div>
+        </>
+
+    </div>
+</AdminLayout>
+
+<script is:inline define:vars={{ currentMode }}>
+(function () {
+    var currentModeVal = currentMode;
+    var selectedMode = currentModeVal;
+
+    function init() {
+        var cardBlog  = document.getElementById('card-blog');
+        var cardLocal = document.getElementById('card-local');
+        var btnSave   = document.getElementById('btn-save-mode');
+        var status    = document.getElementById('mode-status');
+        var dialog    = document.getElementById('modo-page-confirm-dialog');
+        var msgEl     = document.getElementById('modo-page-confirm-msg');
+        var cancelBtn = document.getElementById('modo-page-confirm-cancel');
+        var okBtn     = document.getElementById('modo-page-confirm-ok');
+
+        function selectMode(mode) {
+            selectedMode = mode;
+            [cardBlog, cardLocal].forEach(function (card) {
+                if (!card) return;
+                card.style.borderColor = '';
+                card.style.borderWidth = '2px';
+                card.style.borderStyle = 'solid';
+                card.querySelectorAll('.text-primary').forEach(function (el) { el.remove(); });
+            });
+            var activeCard = mode === 'blog' ? cardBlog : cardLocal;
+            if (activeCard) activeCard.style.borderColor = 'var(--primary)';
+            if (btnSave) btnSave.disabled = mode === currentModeVal;
+            if (status) {
+                status.textContent = mode !== currentModeVal
+                    ? 'Modo ' + (mode === 'local' ? 'Local' : 'Blog') + ' selecionado — clique em Salvar para aplicar.'
+                    : '';
+            }
+        }
+
+        function doSave() {
+            if (!btnSave) return;
+            btnSave.disabled = true;
+            btnSave.textContent = 'Salvando...';
+            fetch('/api/admin/site-settings', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ siteMode: selectedMode }),
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.success) {
+                    setTimeout(function () { window.location.href = '/admin/modo?saved=1'; }, 150);
+                } else {
+                    if (status) status.textContent = '❌ Erro: ' + (data.error || 'Erro desconhecido');
+                    btnSave.disabled = false;
+                    btnSave.textContent = '💾 Salvar Modo';
+                }
+            })
+            .catch(function () {
+                if (status) status.textContent = '❌ Erro ao salvar';
+                btnSave.disabled = false;
+                btnSave.textContent = '💾 Salvar Modo';
+            });
+        }
+
+        if (cardBlog) cardBlog.addEventListener('click', function () { selectMode('blog'); });
+        if (cardLocal) cardLocal.addEventListener('click', function () { selectMode('local'); });
+
+        if (btnSave) btnSave.addEventListener('click', function () {
+            if (!btnSave || selectedMode === currentModeVal) return;
+            var msg = selectedMode === 'local'
+                ? 'Tem certeza que deseja mudar para o Modo Local? O layout e a estrutura do site serão alterados.'
+                : 'Tem certeza que deseja mudar para o Modo Blog? O layout e a estrutura do site serão alterados.';
+            if (msgEl) msgEl.textContent = msg;
+            if (dialog) {
+                dialog.showModal();
+            } else {
+                if (window.confirm(msg)) doSave();
+            }
+        });
+
+        if (okBtn) okBtn.addEventListener('click', function () {
+            if (dialog) dialog.close();
+            doSave();
+        });
+        if (cancelBtn) cancelBtn.addEventListener('click', function () {
+            if (dialog) dialog.close();
+        });
+
+        var params = new URLSearchParams(window.location.search);
+        if (params.get('saved') === '1' && status) {
+            status.textContent = '✅ Modo salvo com sucesso!';
+            status.style.color = '#4ade80';
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>

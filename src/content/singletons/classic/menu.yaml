@@ -1,0 +1,7 @@
+logoType: text
+logoText: Meu Site
+logoImage: ""
+items:
+  - label: Home
+    href: /
+    target: _self
