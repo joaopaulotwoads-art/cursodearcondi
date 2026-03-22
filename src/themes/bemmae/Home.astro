@@ -3,7 +3,7 @@
  * Home Bem Mãe — conteúdo principal; layout (head/header/footer) vem da página.
  */
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
-import { alignThumbnailHost } from '../../utils/media-url';
+import { resolveBemmaeMediaUrl } from '../../utils/media-url';
 interface Props {
   homeData: Record<string, any>;
   latestPosts: any[];
@@ -103,7 +103,7 @@ const aboutParagraphs = aboutText
           <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
             {latestPosts.map((post) => {
               const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
-              const thumb = alignThumbnailHost(post.data.thumbnail || post.data.metaImage);
+              const thumb = resolveBemmaeMediaUrl(post.data.thumbnail || post.data.metaImage);
               return (
                 <a
                   href={url}

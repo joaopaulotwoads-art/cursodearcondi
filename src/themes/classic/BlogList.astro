@@ -13,7 +13,7 @@ import { readSingleton } from '../../utils/singleton-utils';
 import { getCollection } from 'astro:content';
 
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
-import { alignThumbnailHost } from '../../utils/media-url';
+import { resolveBemmaeMediaUrl } from '../../utils/media-url';
 
 interface Props {
     posts: any[];
@@ -86,7 +86,7 @@ const emptySubMessage  = blogData?.emptySubMessage  || 'Volte em breve para ver 
             ) : (
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
                     {posts.map((post) => {
-                        const thumbnail = alignThumbnailHost(post.data.thumbnail || post.data.metaImage);
+                        const thumbnail = resolveBemmaeMediaUrl(post.data.thumbnail || post.data.metaImage);
                         const postUrl = getPostUrl(
                             { ...post, data: { ...post.data, slug: post.data.slug || post.id } },
                             blogPermalinkStructure,

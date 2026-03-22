@@ -17,6 +17,7 @@ import { readPost } from '../../utils/post-utils';
 import { buildPostPath, type BlogPermalinkStructure } from '../../utils/blog-permalink';
 import { readSiteSettings, normalizeCanonicalUrl } from '../../utils/read-site-settings';
 import { buildPostJsonLd, toAbsoluteUrl, toIsoDateTime } from '../../utils/post-json-ld';
+import { resolveBemmaeMediaUrl } from '../../utils/media-url';
 
 export const prerender = true;
 
@@ -76,7 +77,8 @@ const pageTitle = post.data.metaTitle || post.data.title;
 const siteCfg = await readSiteSettings();
 const publicSiteUrl = normalizeCanonicalUrl(siteCfg.canonicalUrl as string) || siteUrl;
 const pageUrl = `${publicSiteUrl.replace(/\/+$/, '')}${Astro.url.pathname}`.replace(/\/+$/, '') || `${publicSiteUrl}${Astro.url.pathname}`;
-const ogImageAbs = toAbsoluteUrl(publicSiteUrl, post.data.metaImage || post.data.thumbnail);
+const rawPostImg = post.data.metaImage || post.data.thumbnail;
+const ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolveBemmaeMediaUrl(rawPostImg) || rawPostImg);
 const articleIso = toIsoDateTime(post.data.publishedDate);
 const postJsonLd = useBemmae
   ? buildPostJsonLd({

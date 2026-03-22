@@ -9,7 +9,8 @@
     "preview": "bun run astro preview",
     "astro": "astro",
     "deploy": "vercel --prod",
-    "import:bemmae-posts": "bun run scripts/import-bemmae-posts.mjs"
+    "import:bemmae-posts": "bun run scripts/import-bemmae-posts.mjs",
+    "list:content-images": "bun run scripts/list-bemmae-content-images.mjs"
   },
   "dependencies": {
     "@astrojs/markdoc": "^0.15.10",

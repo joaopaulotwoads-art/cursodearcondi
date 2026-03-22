@@ -1,6 +1,6 @@
 ---
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
-import { alignThumbnailHost } from '../../utils/media-url';
+import { resolveBemmaeMediaUrl } from '../../utils/media-url';
 
 interface Props {
   posts: any[];
@@ -37,7 +37,7 @@ const showUnknownCategory = Boolean(categoryFilterActive && !categoryName);
     <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
       {posts.map((post) => {
         const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
-        const thumb = alignThumbnailHost(post.data.thumbnail || post.data.metaImage);
+        const thumb = resolveBemmaeMediaUrl(post.data.thumbnail || post.data.metaImage);
         const date = post.data.publishedDate;
         return (
           <a
