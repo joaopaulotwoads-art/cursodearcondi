@@ -2,25 +2,43 @@
 /**
  * [...slug].astro
  *
- * Rota para posts na raiz do site (quando blogUrlPrefix = 'root').
- * URLs: /slug-do-post | /2025/03/slug | /2025/03/04/slug
- * Só gera paths quando blogUrlPrefix está em 'root'.
+ * Com blogUrlPrefix = root:
+ * - Posts: /slug-do-post | /2025/03/slug
+ * - Categorias: /carrinhos-de-bebe (lista filtrada; id da categoria = segmento da URL)
  */
 
 import { getCollection, getEntry, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 import BlogPost from '../themes/classic/BlogPost.astro';
+import BlogList from '../themes/classic/BlogList.astro';
 import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
 import BemMaeBlogPost from '../themes/bemmae/BlogPost.astro';
+import BemMaeBlogList from '../themes/bemmae/BlogList.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { readPost } from '../utils/post-utils';
-import { buildPostPath, type BlogPermalinkStructure } from '../utils/blog-permalink';
+import { buildPostPath, type BlogPermalinkStructure, type BlogUrlPrefix } from '../utils/blog-permalink';
 import { readSiteSettings, normalizeCanonicalUrl } from '../utils/read-site-settings';
 import { buildPostJsonLd, toAbsoluteUrl, toIsoDateTime } from '../utils/post-json-ld';
 
 export const prerender = true;
 
 export async function getStaticPaths() {
+  const reservedTopLevel = new Set([
+    'sobre',
+    'contato',
+    'blog',
+    'admin',
+    'authors',
+    'api',
+    'termos',
+    'politica-de-cookies',
+    'servicos',
+    'lp1',
+    'curso-vendas',
+    'setup',
+  ]);
+
   const settings = await getEntry('siteSettings', 'settings').catch(() => null);
   const prefix = (settings?.data?.blogUrlPrefix as string) || 'blog';
 
@@ -28,101 +46,232 @@ export async function getStaticPaths() {
 
   const posts = await getCollection('posts');
   const structure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
-  /** Mesmas rotas que `sobre.astro` / `contato.astro` — não duplicar como post. */
   const slugReservedForStaticPages = new Set(['sobre', 'contato']);
 
-  return posts
+  const postPaths = posts
     .filter((post) => !slugReservedForStaticPages.has(post.data.slug || post.id))
     .map((post) => ({
-    params: { slug: buildPostPath({ ...post, data: { ...post.data, slug: post.data.slug || post.id } }, structure) },
-    props: { post },
-  }));
-}
+      params: {
+        slug: buildPostPath({ ...post, data: { ...post.data, slug: post.data.slug || post.id } }, structure),
+      },
+      props: { kind: 'post' as const, post },
+    }));
 
-const { slug } = Astro.params;
-const { post } = Astro.props;
+  const postSlugSet = new Set(postPaths.map((p) => p.params.slug));
 
-if (!post) return Astro.redirect('/404');
-
-const slugKey = post.data.slug || post.id;
-const postFile = await readPost(slugKey);
-const htmlContent =
-  post.data.contentFormat === 'html' && postFile?.content?.trim()
-    ? postFile.content.trim()
-    : null;
-
-let Content: (() => unknown) | undefined;
-if (!htmlContent) {
-  const r = await render(post);
-  Content = r.Content;
-}
-
-const author = post.data.author ? await getEntry('authors', post.data.author) : null;
-
-const wordCount = postFile?.content ? postFile.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length : 0;
-const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
-
-const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
-const layoutType = siteMode === 'local' ? 'local' : 'main';
-const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
-const useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
-
-const siteName = settings?.data?.siteName || 'Site';
-const siteUrl = Astro.url.origin;
-const beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
-const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
-const beNav = beMenu ? navFromMenu(beMenu) : [];
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const pageTitle = post.data.metaTitle || post.data.title;
-
-const siteCfg = await readSiteSettings();
-const publicSiteUrl = normalizeCanonicalUrl(siteCfg.canonicalUrl as string) || siteUrl;
-const pageUrl = `${publicSiteUrl.replace(/\/+$/, '')}${Astro.url.pathname}`.replace(/\/+$/, '') || `${publicSiteUrl}${Astro.url.pathname}`;
-const ogImageAbs = toAbsoluteUrl(publicSiteUrl, post.data.metaImage || post.data.thumbnail);
-const articleIso = toIsoDateTime(post.data.publishedDate);
-const postJsonLd = useBemmae
-  ? buildPostJsonLd({
-      seoSchema: post.data.seoSchema,
-      title: pageTitle,
-      description: post.data.metaDescription || '',
-      pageUrl,
-      siteUrl: publicSiteUrl,
-      siteName: (beMenu as { logoText?: string } | null)?.logoText || siteName,
-      publishedDate: post.data.publishedDate,
-      imageUrl: ogImageAbs,
-      authorName: author?.data?.name,
-      htmlContent,
+  const categories = await getCollection('categories');
+  const categoryPaths = categories
+    .filter((c) => {
+      const id = c.id;
+      if (!id || id.includes('/')) return false;
+      if (postSlugSet.has(id)) return false;
+      if (slugReservedForStaticPages.has(id)) return false;
+      if (reservedTopLevel.has(id)) return false;
+      return true;
     })
-  : null;
+    .map((category) => ({
+      params: { slug: category.id },
+      props: { kind: 'category' as const, category },
+    }));
+
+  return [...postPaths, ...categoryPaths];
+}
+
+type Props =
+  | { kind: 'post'; post: CollectionEntry<'posts'> }
+  | { kind: 'category'; category: CollectionEntry<'categories'> };
+
+const props = Astro.props as Props;
+
+let useBemmae = false;
+let layoutType: 'main' | 'local' = 'main';
+let siteName = 'Site';
+let beMenu: Record<string, unknown> | null = null;
+let beFootNav: ReturnType<typeof footerNavFromSingleton> = [];
+let beNav: ReturnType<typeof navFromMenu> = [];
+let publicSiteUrl = '';
+
+// Post
+let post: CollectionEntry<'posts'> | null = null;
+let Content: (() => unknown) | undefined;
+let htmlContent: string | null = null;
+let author: Awaited<ReturnType<typeof getEntry<'authors'>>> | null = null;
+let readingTimeMinutes = 1;
+let pageTitle = '';
+let pageUrl = '';
+let ogImageAbs: string | undefined;
+let articleIso: string | undefined;
+let postJsonLd: ReturnType<typeof buildPostJsonLd> | null = null;
+
+// Category
+let category: CollectionEntry<'categories'> | null = null;
+let publishedPosts: CollectionEntry<'posts'>[] = [];
+let beBlog: Record<string, unknown> = {};
+let pageDesc = '';
+let blogPermalinkStructure: BlogPermalinkStructure = 'postname';
+let blogUrlPrefix: BlogUrlPrefix = 'blog';
+
+if (props.kind === 'post') {
+  post = props.post;
+  const slugKey = post.data.slug || post.id;
+  const postFile = await readPost(slugKey);
+  htmlContent =
+    post.data.contentFormat === 'html' && postFile?.content?.trim()
+      ? postFile.content.trim()
+      : null;
+
+  if (!htmlContent) {
+    const r = await render(post);
+    Content = r.Content;
+  }
+
+  author = post.data.author ? await getEntry('authors', post.data.author) : null;
+
+  const wordCount = postFile?.content
+    ? postFile.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
+    : 0;
+  readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+
+  const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+  const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+  layoutType = siteMode === 'local' ? 'local' : 'main';
+  const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
+  useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
+
+  siteName = settings?.data?.siteName || 'Site';
+  const siteUrl = Astro.url.origin;
+  beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
+  const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
+  beNav = beMenu ? navFromMenu(beMenu) : [];
+  beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+  pageTitle = post.data.metaTitle || post.data.title;
+
+  const siteCfg = await readSiteSettings();
+  publicSiteUrl = normalizeCanonicalUrl(siteCfg.canonicalUrl as string) || siteUrl;
+  pageUrl = `${publicSiteUrl.replace(/\/+$/, '')}${Astro.url.pathname}`.replace(/\/+$/, '') || `${publicSiteUrl}${Astro.url.pathname}`;
+  ogImageAbs = toAbsoluteUrl(publicSiteUrl, post.data.metaImage || post.data.thumbnail);
+  articleIso = toIsoDateTime(post.data.publishedDate);
+  postJsonLd = useBemmae
+    ? buildPostJsonLd({
+        seoSchema: post.data.seoSchema,
+        title: pageTitle,
+        description: post.data.metaDescription || '',
+        pageUrl,
+        siteUrl: publicSiteUrl,
+        siteName: (beMenu as { logoText?: string } | null)?.logoText || siteName,
+        publishedDate: post.data.publishedDate,
+        imageUrl: ogImageAbs,
+        authorName: author?.data?.name,
+        htmlContent,
+      })
+    : null;
+} else {
+  category = props.category;
+  const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+  const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+  layoutType = siteMode === 'local' ? 'local' : 'main';
+  const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
+  useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
+  blogPermalinkStructure =
+    (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+  blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'blog';
+
+  const allPosts = await getCollection('posts');
+  publishedPosts = allPosts
+    .filter((p) => p.data.publishedDate)
+    .sort(
+      (a, b) =>
+        new Date(b.data.publishedDate!).getTime() - new Date(a.data.publishedDate!).getTime(),
+    );
+  publishedPosts = publishedPosts.filter((p) => p.data.category === category!.id);
+
+  siteName = settings?.data?.siteName || 'Site';
+  const siteUrl = Astro.url.origin;
+  beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
+  const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
+  beBlog = useBemmae ? (await readSingleton('blog', 'bemmae')) || {} : {};
+  beNav = beMenu ? navFromMenu(beMenu) : [];
+  beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+
+  const siteCfg = await readSiteSettings();
+  publicSiteUrl = normalizeCanonicalUrl(siteCfg.canonicalUrl as string) || siteUrl;
+  pageDesc =
+    (beBlog as { heroDescription?: string }).heroDescription ||
+    `Artigos em ${category!.data.name} no ${siteName}`;
+}
 ---
 
-{useBemmae ? (
-<BaseLayoutBemmae
-    title={`${pageTitle} - ${siteName}`}
-    description={post.data.metaDescription || ''}
-    siteName={(beMenu as any)?.logoText || siteName}
-    logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
-    siteUrl={publicSiteUrl}
-    nav={beNav}
-    footerNav={beFootNav}
-    contentThemeId="bemmae"
-    ogType="article"
-    ogImageAbs={ogImageAbs}
-    articlePublishedTime={articleIso}
-    articleModifiedTime={articleIso}
-    extraJsonLd={postJsonLd}
->
-    <BemMaeBlogPost post={post} author={author} Content={Content} htmlContent={htmlContent} readingTimeMinutes={readingTimeMinutes} />
-</BaseLayoutBemmae>
-) : (
-<BlogPost
-    post={post}
-    author={author}
-    Content={Content}
-    htmlContent={htmlContent}
-    themeId="classic"
-    layoutType={layoutType}
-    readingTimeMinutes={readingTimeMinutes}
-/>
-)}
+{
+  props.kind === 'post' && post ? (
+    useBemmae ? (
+      <BaseLayoutBemmae
+        title={`${pageTitle} - ${siteName}`}
+        description={post.data.metaDescription || ''}
+        siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
+        logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
+        siteUrl={publicSiteUrl}
+        nav={beNav}
+        footerNav={beFootNav}
+        contentThemeId="bemmae"
+        ogType="article"
+        ogImageAbs={ogImageAbs}
+        articlePublishedTime={articleIso}
+        articleModifiedTime={articleIso}
+        extraJsonLd={postJsonLd}
+      >
+        <BemMaeBlogPost
+          post={post}
+          author={author}
+          Content={Content}
+          htmlContent={htmlContent}
+          readingTimeMinutes={readingTimeMinutes}
+        />
+      </BaseLayoutBemmae>
+    ) : (
+      <BlogPost
+        post={post}
+        author={author}
+        Content={Content}
+        htmlContent={htmlContent}
+        themeId="classic"
+        layoutType={layoutType}
+        readingTimeMinutes={readingTimeMinutes}
+      />
+    )
+  ) : null
+}
+
+{
+  props.kind === 'category' && category ? (
+    useBemmae ? (
+      <BaseLayoutBemmae
+        title={`${category.data.name} - ${siteName}`}
+        description={pageDesc}
+        siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
+        logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
+        siteUrl={publicSiteUrl}
+        nav={beNav}
+        footerNav={beFootNav}
+        contentThemeId="bemmae"
+      >
+        <BemMaeBlogList
+          posts={publishedPosts}
+          blogData={beBlog}
+          blogPermalinkStructure={blogPermalinkStructure}
+          blogUrlPrefix={blogUrlPrefix}
+          categoryName={category.data.name}
+          categoryFilterActive={true}
+        />
+      </BaseLayoutBemmae>
+    ) : (
+      <BlogList
+        posts={publishedPosts}
+        themeId="classic"
+        layoutType={layoutType}
+        blogPermalinkStructure={blogPermalinkStructure}
+        blogUrlPrefix={blogUrlPrefix}
+        listTitle={`${category.data.name} — ${siteName}`}
+      />
+    )
+  ) : null
+}

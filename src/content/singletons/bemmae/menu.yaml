@@ -6,7 +6,7 @@ items:
     href: /
     target: _self
   - label: Carrinhos de bebê
-    href: /blog?categoria=carrinhos-de-bebe
+    href: /carrinhos-de-bebe
     target: _self
   - label: Sobre
     href: /sobre

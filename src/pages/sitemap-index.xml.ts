@@ -12,7 +12,12 @@ import { getCollection } from 'astro:content';
 import { readSiteSettings } from '../utils/read-site-settings';
 import { listLocations } from '../utils/location-utils';
 import { listServices } from '../utils/service-utils';
-import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../utils/blog-permalink';
+import {
+    buildPostPath,
+    getPostUrl,
+    type BlogPermalinkStructure,
+    type BlogUrlPrefix,
+} from '../utils/blog-permalink';
 
 function esc(str: string): string {
     return str
@@ -91,6 +96,44 @@ ${stylesheet}
         for (const post of posts) {
             const postPath = getPostUrl({ ...post, data: { ...post.data, slug: post.data.slug || post.id } }, permalinkStructure, urlPrefix);
             urls.push(urlNode(base, postPath, post.data.publishedDate as string || today));
+        }
+
+        // Arquivos de categoria na raiz: /carrinhos-de-bebe (mesma regra que [...slug].astro)
+        if (urlPrefix === 'root') {
+            const slugReservedForStaticPages = new Set(['sobre', 'contato']);
+            const reservedTopLevel = new Set([
+                'sobre',
+                'contato',
+                'blog',
+                'admin',
+                'authors',
+                'api',
+                'termos',
+                'politica-de-cookies',
+                'servicos',
+                'lp1',
+                'curso-vendas',
+                'setup',
+            ]);
+            const postSlugSet = new Set(
+                posts
+                    .filter((p) => !slugReservedForStaticPages.has(p.data.slug || p.id))
+                    .map((p) =>
+                        buildPostPath(
+                            { ...p, data: { ...p.data, slug: p.data.slug || p.id } },
+                            permalinkStructure,
+                        ),
+                    ),
+            );
+            const categories = await getCollection('categories');
+            for (const cat of categories) {
+                const id = cat.id;
+                if (!id || id.includes('/')) continue;
+                if (postSlugSet.has(id)) continue;
+                if (slugReservedForStaticPages.has(id)) continue;
+                if (reservedTopLevel.has(id)) continue;
+                urls.push(urlNode(base, `/${id}`, today));
+            }
         }
     } catch (e) {
         console.error('\x1b[31m✗ Erro ao coletar posts para sitemap:\x1b[0m', e);

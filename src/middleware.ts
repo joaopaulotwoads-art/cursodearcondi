@@ -12,7 +12,22 @@ const ADMIN_ONLY_PATHS = [
 ];
 
 export const onRequest = defineMiddleware(async (context, next) => {
-    const { pathname } = context.url;
+    const { pathname, searchParams } = context.url;
+
+    // 301: /blog?categoria=slug → /slug (URLs antigas da listagem por categoria na raiz)
+    if (pathname === '/blog' && searchParams.has('categoria')) {
+        try {
+            const settings = await readSiteSettings();
+            if (settings.blogUrlPrefix === 'root') {
+                const slug = (searchParams.get('categoria') || '').trim();
+                if (slug && !slug.includes('/')) {
+                    return context.redirect(`/${encodeURIComponent(slug)}`, 301);
+                }
+            }
+        } catch {
+            /* continua */
+        }
+    }
 
     // 301: /blog/slug/... → /slug/... (links antigos e Google) quando posts estão na raiz
     if (pathname.startsWith('/blog/') && pathname.length > '/blog/'.length) {
