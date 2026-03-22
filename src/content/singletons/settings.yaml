@@ -5,7 +5,7 @@ siteMode: blog
 aiProvider: gemini
 aiApiKey: ""
 pexelsApiKey: ""
-canonicalUrl: ""
+canonicalUrl: https://www.bemmae.com.br
 companyPhone: ""
 companyWhatsapp: ""
 generateSitemap: true
@@ -14,5 +14,5 @@ robotsDisallow:
   - /admin
   - /api
 blogPermalinkStructure: postname
-blogUrlPrefix: blog
+blogUrlPrefix: root
 autoUpdateEnabled: false

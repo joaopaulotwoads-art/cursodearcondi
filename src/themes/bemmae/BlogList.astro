@@ -1,5 +1,6 @@
 ---
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+import { alignThumbnailHost } from '../../utils/media-url';
 
 interface Props {
   posts: any[];
@@ -45,7 +46,14 @@ const showUnknownCategory = Boolean(categoryFilterActive && !categoryName);
           >
             {thumb ? (
               <div class="aspect-[4/3] overflow-hidden bg-[var(--color-rosa)]">
-                <img src={thumb} alt="" class="w-full h-full object-cover" loading="lazy" />
+                <img
+                  src={thumb}
+                  alt=""
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                  referrerpolicy="no-referrer"
+                />
               </div>
             ) : (
               <div class="aspect-[4/3] bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm">—</div>

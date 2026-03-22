@@ -3,6 +3,7 @@
  * Home Bem Mãe — conteúdo principal; layout (head/header/footer) vem da página.
  */
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+import { alignThumbnailHost } from '../../utils/media-url';
 interface Props {
   homeData: Record<string, any>;
   latestPosts: any[];
@@ -102,7 +103,7 @@ const aboutParagraphs = aboutText
           <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
             {latestPosts.map((post) => {
               const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
-              const thumb = post.data.thumbnail || post.data.metaImage;
+              const thumb = alignThumbnailHost(post.data.thumbnail || post.data.metaImage);
               return (
                 <a
                   href={url}
@@ -110,7 +111,14 @@ const aboutParagraphs = aboutText
                 >
                   {thumb ? (
                     <div class="aspect-[4/3] overflow-hidden bg-[var(--color-rosa)]">
-                      <img src={thumb} alt="" class="w-full h-full object-cover" loading="lazy" />
+                      <img
+                        src={thumb}
+                        alt=""
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                        referrerpolicy="no-referrer"
+                      />
                     </div>
                   ) : (
                     <div class="aspect-[4/3] bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm">

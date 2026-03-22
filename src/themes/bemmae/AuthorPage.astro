@@ -1,5 +1,6 @@
 ---
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+import { alignThumbnailHost } from '../../utils/media-url';
 
 interface Props {
   author: { id: string; data: { name: string; role?: string; bio?: string; avatar?: string } };
@@ -31,7 +32,7 @@ const a = author.data;
     <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
       {a.avatar ? (
         <img
-          src={a.avatar}
+          src={alignThumbnailHost(a.avatar)}
           alt={a.name}
           width="120"
           height="120"
@@ -69,7 +70,7 @@ const a = author.data;
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
         {posts.map((post) => {
           const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
-          const thumb = post.data.thumbnail || post.data.metaImage;
+          const thumb = alignThumbnailHost(post.data.thumbnail || post.data.metaImage);
           const date = post.data.publishedDate;
           const cat = categoryLabel(post.data.category);
           return (
@@ -79,7 +80,14 @@ const a = author.data;
             >
               {thumb ? (
                 <div class="aspect-[4/3] overflow-hidden bg-[var(--color-rosa)]">
-                  <img src={thumb} alt="" class="w-full h-full object-cover" loading="lazy" />
+                  <img
+                    src={thumb}
+                    alt=""
+                    class="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    referrerpolicy="no-referrer"
+                  />
                 </div>
               ) : (
                 <div class="aspect-[4/3] bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm">—</div>

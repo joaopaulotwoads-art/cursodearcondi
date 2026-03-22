@@ -1,5 +1,6 @@
 import { defineMiddleware } from 'astro:middleware';
 import { verifySession, SESSION_COOKIE } from './utils/auth-utils';
+import { readSiteSettings } from './utils/read-site-settings';
 
 const ADMIN_ONLY_PATHS = [
     '/admin/pixels',
@@ -12,6 +13,19 @@ const ADMIN_ONLY_PATHS = [
 
 export const onRequest = defineMiddleware(async (context, next) => {
     const { pathname } = context.url;
+
+    // 301: /blog/slug/... → /slug/... (links antigos e Google) quando posts estão na raiz
+    if (pathname.startsWith('/blog/') && pathname.length > '/blog/'.length) {
+        try {
+            const settings = await readSiteSettings();
+            if (settings.blogUrlPrefix === 'root') {
+                const target = pathname.replace(/^\/blog/, '') || '/';
+                return context.redirect(target, 301);
+            }
+        } catch {
+            /* continua */
+        }
+    }
 
     // Só intercepta rotas do admin
     const isAdminUI  = pathname.startsWith('/admin');

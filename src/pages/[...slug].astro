@@ -28,8 +28,12 @@ export async function getStaticPaths() {
 
   const posts = await getCollection('posts');
   const structure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+  /** Mesmas rotas que `sobre.astro` / `contato.astro` — não duplicar como post. */
+  const slugReservedForStaticPages = new Set(['sobre', 'contato']);
 
-  return posts.map(post => ({
+  return posts
+    .filter((post) => !slugReservedForStaticPages.has(post.data.slug || post.id))
+    .map((post) => ({
     params: { slug: buildPostPath({ ...post, data: { ...post.data, slug: post.data.slug || post.id } }, structure) },
     props: { post },
   }));
