@@ -22,8 +22,18 @@ export function isGitHubConfigured(): boolean {
     return !!(TOKEN && OWNER && REPO);
 }
 
+/** Segmentos codificados (espaços, unicode) — a API exige path seguro na URL. */
+function encodeRepoPath(path: string): string {
+    return path
+        .replace(/^\/+/, '')
+        .split('/')
+        .filter(Boolean)
+        .map((seg) => encodeURIComponent(seg))
+        .join('/');
+}
+
 function apiUrl(path: string) {
-    return `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`;
+    return `https://api.github.com/repos/${OWNER}/${REPO}/contents/${encodeRepoPath(path)}`;
 }
 
 const headers = () => ({
@@ -127,7 +137,7 @@ export async function githubWriteFileBuffer(
     path: string,
     buffer: Buffer,
     message: string,
-): Promise<boolean> {
+): Promise<{ ok: boolean; error?: string }> {
     const existingSha = await githubGetBlobSha(path);
     const body: Record<string, unknown> = {
         message,
@@ -141,7 +151,21 @@ export async function githubWriteFileBuffer(
         headers: headers(),
         body: JSON.stringify(body),
     });
-    return res.ok || res.status === 201;
+    if (res.ok || res.status === 201) return { ok: true };
+
+    const text = await res.text().catch(() => '');
+    let detail = text;
+    try {
+        const j = JSON.parse(text) as { message?: string; errors?: Array<{ message?: string }> };
+        detail =
+            j.message ||
+            (Array.isArray(j.errors) ? j.errors.map((e) => e.message).filter(Boolean).join('; ') : '') ||
+            text;
+    } catch {
+        /* manter text */
+    }
+    console.error(`❌ githubWriteFileBuffer ${path} — HTTP ${res.status}: ${detail.slice(0, 800)}`);
+    return { ok: false, error: `GitHub (${res.status}): ${detail.slice(0, 400)}` };
 }
 
 /** Deleta um arquivo do repositório */
