@@ -52,18 +52,47 @@ export async function githubReadFile(
 /** Lista arquivos em um diretório do repositório */
 export async function githubListDirectory(
     dirPath: string,
-): Promise<Array<{ name: string; path: string }>> {
+): Promise<Array<{ name: string; path: string; size: number }>> {
     try {
         const res = await fetch(`${apiUrl(dirPath)}?ref=${BRANCH}`, { headers: headers() });
         if (!res.ok) return [];
-        const data = await res.json() as Array<{ name: string; path: string; type: string }>;
-        return Array.isArray(data) ? data.filter(f => f.type === 'file') : [];
+        const data = await res.json() as Array<{
+            name: string;
+            path: string;
+            type: string;
+            size?: number;
+        }>;
+        if (!Array.isArray(data)) return [];
+        return data
+            .filter(f => f.type === 'file')
+            .map(f => ({
+                name: f.name,
+                path: f.path,
+                size: typeof f.size === 'number' ? f.size : 0,
+            }));
     } catch {
         return [];
     }
 }
 
-/** SHA atual do arquivo (necessário para updates/deletes) */
+/**
+ * SHA do ficheiro sem descodificar o corpo (evita carregar imagens/base64 em memória).
+ * Usar em deletes e updates de binários.
+ */
+export async function githubGetBlobSha(repoPath: string): Promise<string | null> {
+    try {
+        const res = await fetch(`${apiUrl(repoPath)}?ref=${BRANCH}`, { headers: headers() });
+        if (res.status === 404) return null;
+        if (!res.ok) return null;
+        const data = (await res.json()) as { sha?: string; type?: string };
+        if (data.type !== 'file' || !data.sha) return null;
+        return data.sha;
+    } catch {
+        return null;
+    }
+}
+
+/** SHA atual do arquivo (necessário para updates/deletes de texto) */
 export async function githubGetSha(path: string): Promise<string | null> {
     const file = await githubReadFile(path);
     return file ? file.sha : null;
@@ -99,13 +128,13 @@ export async function githubWriteFileBuffer(
     buffer: Buffer,
     message: string,
 ): Promise<boolean> {
-    const existing = await githubReadFile(path).catch(() => null);
+    const existingSha = await githubGetBlobSha(path);
     const body: Record<string, unknown> = {
         message,
         content: buffer.toString('base64'),
         branch: BRANCH,
     };
-    if (existing) body.sha = existing.sha;
+    if (existingSha) body.sha = existingSha;
 
     const res = await fetch(apiUrl(path), {
         method: 'PUT',
@@ -120,7 +149,7 @@ export async function githubDeleteFile(
     path: string,
     message: string,
 ): Promise<boolean> {
-    const sha = await githubGetSha(path);
+    const sha = await githubGetBlobSha(path);
 
     if (!sha) {
         console.warn(`⚠️ githubDeleteFile: arquivo não encontrado no GitHub — ${path} (branch: ${BRANCH}). Nada a excluir.`);

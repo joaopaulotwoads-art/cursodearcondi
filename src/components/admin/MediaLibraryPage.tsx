@@ -174,8 +174,8 @@ export default function MediaLibraryPage() {
                 'error',
                 'Erro ao deletar',
                 errorMessage.includes('Failed to fetch')
-                    ? 'Servidor não está respondendo'
-                    : 'Verifique o console para mais detalhes'
+                    ? 'Servidor não está a responder — verifique rede, login no admin ou CORS.'
+                    : errorMessage
             );
         }
     };
