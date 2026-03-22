@@ -21,6 +21,9 @@ pnpm-debug.log*
 # Vercel
 .vercel/
 
+# GitHub Actions — voltar a versionar quando o token tiver scope "workflow" (remove esta linha)
+.github/workflows/sync-cnx.yml
+
 # macOS-specific files
 .DS_Store
 
