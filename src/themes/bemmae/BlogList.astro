@@ -37,7 +37,7 @@ const showUnknownCategory = Boolean(categoryFilterActive && !categoryName);
     <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
       {posts.map((post) => {
         const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
-        const thumb = post.data.thumbnail || post.data.metaImage;
+        const thumb = alignThumbnailHost(post.data.thumbnail || post.data.metaImage);
         const date = post.data.publishedDate;
         return (
           <a
@@ -52,7 +52,6 @@ const showUnknownCategory = Boolean(categoryFilterActive && !categoryName);
                   class="w-full h-full object-cover"
                   loading="lazy"
                   decoding="async"
-                  referrerpolicy="no-referrer"
                 />
               </div>
             ) : (
