@@ -2,10 +2,11 @@
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import type { NavItem } from './types';
-import '@fontsource/outfit/400.css';
-import '@fontsource/outfit/500.css';
-import '@fontsource/outfit/600.css';
-import '@fontsource/outfit/700.css';
+/** Só subset latin (pt-BR) — evita carregar latin-ext em paralelo (menos woff2 no caminho crítico). */
+import '@fontsource/outfit/latin-400.css';
+import '@fontsource/outfit/latin-500.css';
+import '@fontsource/outfit/latin-600.css';
+import '@fontsource/outfit/latin-700.css';
 import './global.css';
 
 interface Props {
