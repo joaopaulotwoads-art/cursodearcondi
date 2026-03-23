@@ -81,8 +81,6 @@ ${stylesheet}
         '/sobre',
         '/termos',
         '/politica-de-cookies',
-        '/lp1',
-        '/curso-vendas',
     ];
     for (const p of staticPaths) {
         urls.push(urlNode(base, p, today));
