@@ -9,7 +9,7 @@
 import { getEntry } from 'astro:content';
 import CookieConsent from '../components/CookieConsent.astro';
 import { readSingleton } from '../utils/singleton-utils';
-import { readSiteSettings } from '../utils/read-site-settings';
+import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../utils/read-site-settings';
 import Header from '../themes/classic/components/Header.astro';
 import Footer from '../themes/classic/components/Footer.astro';
 import '../styles/global.css';
@@ -35,12 +35,10 @@ const colorScheme: 'dark' | 'light' = (siteSettings?.data?.colorScheme as 'dark'
 
 const theme = await getEntry('siteThemes', 'classic').catch(() => null);
 
-// Canonical URL: preferir settings, fallback para URL da requisição
-const canonicalBase = (siteConfig.canonicalUrl as string)?.trim() || '';
-const pathname      = Astro.url.pathname.replace(/\/$/, '') || '/';
-const canonicalHref = canonicalBase
-    ? `${canonicalBase.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`
-    : Astro.url.origin + pathname;
+// Canonical URL: settings (sem www) ou origem da requisição sem www
+const canonicalBase = resolvePublicSiteUrl(siteConfig.canonicalUrl as string | undefined, Astro.url.origin);
+const canonicalHref = buildCanonicalPageUrl(canonicalBase, Astro.url.pathname);
+const ogImageAbs = ogImage ? new URL(ogImage, `${canonicalBase}/`).href : '';
 const pixelSettings = await readSingleton('pixels', themeId).catch(() => null);
 const gaId = pixelSettings?.googleAnalyticsId || '';
 const fbPixelId = pixelSettings?.facebookPixelId || '';
@@ -80,7 +78,8 @@ const secondaryRGB = hexToRgb(secondaryColor);
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.url)} />}
+        <meta property="og:url" content={canonicalHref} />
+        {ogImage && <meta property="og:image" content={ogImageAbs} />}
 
         <!-- GA e Meta Pixel são injetados via CookieConsent apenas após consentimento -->
 

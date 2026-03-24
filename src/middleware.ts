@@ -12,7 +12,17 @@ const ADMIN_ONLY_PATHS = [
 ];
 
 export const onRequest = defineMiddleware(async (context, next) => {
-    const { pathname, searchParams } = context.url;
+    const { pathname, searchParams, hostname, href } = context.url;
+
+    // 301: www → apex (sem www), alinhado ao domínio principal na Vercel e às meta tags canônicas
+    if (hostname.startsWith('www.')) {
+        const h = hostname.toLowerCase();
+        if (h !== 'www.localhost' && !h.endsWith('.local')) {
+            const dest = new URL(href);
+            dest.hostname = hostname.slice(4);
+            return context.redirect(dest.toString(), 301);
+        }
+    }
 
     // 301: /blog?categoria=slug → /slug (URLs antigas da listagem por categoria na raiz)
     if (pathname === '/blog' && searchParams.has('categoria')) {

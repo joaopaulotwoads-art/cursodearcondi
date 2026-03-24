@@ -8,6 +8,7 @@ import '@fontsource/outfit/latin-500.css';
 import '@fontsource/outfit/latin-600.css';
 import '@fontsource/outfit/latin-700.css';
 import './global.css';
+import { buildCanonicalPageUrl, ensureApexSiteOrigin } from '../../utils/read-site-settings';
 
 interface Props {
   title: string;
@@ -44,6 +45,8 @@ const {
 } = Astro.props;
 const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 const fullDescription = description || '';
+const siteOrigin = ensureApexSiteOrigin(siteUrl);
+const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
 ---
 <!DOCTYPE html>
 <html lang="pt-BR" class="bemmae-root">
@@ -56,11 +59,11 @@ const fullDescription = description || '';
   <meta name="theme-color" content="#faf8f6" />
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />
-  <link rel="canonical" href={`${siteUrl.replace(/\/+$/, '')}${Astro.url.pathname || '/'}`} />
+  <link rel="canonical" href={canonicalPageUrl} />
   <meta property="og:type" content={ogType} />
   <meta property="og:title" content={fullTitle} />
   <meta property="og:description" content={fullDescription} />
-  <meta property="og:url" content={Astro.url.href} />
+  <meta property="og:url" content={canonicalPageUrl} />
   <meta property="og:locale" content="pt_BR" />
   {ogImageAbs && <meta property="og:image" content={ogImageAbs} />}
   {ogType === 'article' && articlePublishedTime && (
@@ -73,7 +76,7 @@ const fullDescription = description || '';
   <meta name="twitter:title" content={fullTitle} />
   <meta name="twitter:description" content={fullDescription} />
   {ogImageAbs && <meta name="twitter:image" content={ogImageAbs} />}
-  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: siteName, url: siteUrl, description: fullDescription || undefined })} />
+  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: siteName, url: siteOrigin || siteUrl, description: fullDescription || undefined })} />
   {extraJsonLd && (
     <script type="application/ld+json" set:html={JSON.stringify(extraJsonLd)} />
   )}

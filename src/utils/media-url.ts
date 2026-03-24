@@ -1,14 +1,14 @@
 /**
  * URLs de media do legado Ghost (bemmae.com.br) e do CMS atual.
- * - apex → www, http → https
+ * - www ou apex → https://bemmae.com.br (canônico = apex, igual Vercel)
  * - Caminhos /content/images/... passam a ser relativos ao site, servidos por public/content/images/...
  */
 
 export function alignThumbnailHost(url: string | undefined | null): string {
     if (!url || typeof url !== 'string') return '';
     let u = url.trim();
-    u = u.replace(/^http:\/\/(www\.)?bemmae\.com\.br\//i, 'https://www.bemmae.com.br/');
-    u = u.replace(/^https:\/\/bemmae\.com\.br\//i, 'https://www.bemmae.com.br/');
+    u = u.replace(/^http:\/\/(www\.)?bemmae\.com\.br\//i, 'https://bemmae.com.br/');
+    u = u.replace(/^https:\/\/www\.bemmae\.com\.br\//i, 'https://bemmae.com.br/');
     return u;
 }
 
@@ -20,7 +20,7 @@ export function alignThumbnailHost(url: string | undefined | null): string {
 export function resolveBemmaeMediaUrl(url: string | undefined | null): string {
     const aligned = alignThumbnailHost(url);
     if (!aligned) return '';
-    const m = aligned.match(/^https:\/\/www\.bemmae\.com\.br\/(content\/images\/.+)$/i);
+    const m = aligned.match(/^https:\/\/bemmae\.com\.br\/(content\/images\/.+)$/i);
     if (m) return '/' + m[1];
     return aligned;
 }

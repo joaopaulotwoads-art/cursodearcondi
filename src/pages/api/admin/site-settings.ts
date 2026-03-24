@@ -14,6 +14,7 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { isGitHubConfigured, githubWriteFile, githubReadFile } from '../../../utils/github-api';
 import { SITE_MODE_COOKIE, SITE_MODE_COOKIE_MAX_AGE, SITE_MODE_COOKIE_PATH } from '../../../utils/admin-site-mode';
+import { normalizeCanonicalUrl } from '../../../utils/read-site-settings';
 
 const SETTINGS_PATH     = path.resolve('./src/content/singletons/settings.yaml');
 const SETTINGS_GH_PATH  = 'src/content/singletons/settings.yaml';
@@ -93,6 +94,10 @@ export const PUT: APIRoute = async ({ request }) => {
         const body = await request.json();
         const current = await readSettings();
         const updated = { ...current, ...body };
+        if (typeof body.canonicalUrl === 'string' && body.canonicalUrl.trim()) {
+            const norm = normalizeCanonicalUrl(body.canonicalUrl);
+            if (norm) (updated as Record<string, unknown>).canonicalUrl = norm;
+        }
 
         const ok = await writeSettings(updated);
         if (!ok) {

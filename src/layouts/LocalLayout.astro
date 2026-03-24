@@ -14,7 +14,7 @@ import LocalFooter from '../themes/local/components/Footer.astro';
 import CookieConsent from '../components/CookieConsent.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { getSiteContactInfo } from '../utils/site-contact';
-import { readSiteSettings } from '../utils/read-site-settings';
+import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../utils/read-site-settings';
 import { getEntry } from 'astro:content';
 import '../styles/global.css';
 import '@fontsource/inter';
@@ -43,12 +43,9 @@ const siteConfig   = await readSiteSettings();
 const colorScheme  = (siteSettings?.data?.colorScheme as 'dark' | 'light') || 'light';
 const themeId = 'classic';
 
-// Canonical URL: preferir settings, fallback para URL da requisição
-const canonicalBase = (siteConfig.canonicalUrl as string)?.trim() || '';
-const pathname      = Astro.url.pathname.replace(/\/$/, '') || '/';
-const canonicalHref = canonicalBase
-    ? `${canonicalBase.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`
-    : Astro.url.origin + pathname;
+const canonicalBase = resolvePublicSiteUrl(siteConfig.canonicalUrl as string | undefined, Astro.url.origin);
+const canonicalHref = buildCanonicalPageUrl(canonicalBase, Astro.url.pathname);
+const ogImageAbs = ogImage ? new URL(ogImage, `${canonicalBase}/`).href : '';
 const pixelSettings = await readSingleton('pixels', themeId).catch(() => null);
 const gaId     = pixelSettings?.googleAnalyticsId || '';
 const fbPixelId = pixelSettings?.facebookPixelId  || '';
@@ -98,7 +95,8 @@ const schema = {
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.url)} />}
+    <meta property="og:url" content={canonicalHref} />
+    {ogImage && <meta property="og:image" content={ogImageAbs} />}
 
     <!-- Schema LocalBusiness JSON-LD -->
     <script type="application/ld+json" set:html={JSON.stringify(schema, null, 2)} />

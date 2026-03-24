@@ -27,18 +27,21 @@ export default function SettingsSEO() {
     const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [loaded, setLoaded] = useState(false);
 
-    /** Normaliza domínio: "meusite.com.br" → "https://meusite.com.br" */
+    /** Domínio canônico apex (sem www), ex.: bemmae.com.br → https://bemmae.com.br */
     function toFullUrl(domain: string): string {
         const t = domain.trim().toLowerCase();
         if (!t) return '';
         let s = t.replace(/^https?:\/\//, '').replace(/\/+$/, '').split('/')[0];
+        if (s.startsWith('www.')) s = s.slice(4);
         return s ? `https://${s}` : '';
     }
-    /** De full URL para exibição simples: "https://meusite.com.br" → "meusite.com.br" */
+    /** Exibição sem protocolo nem www */
     function toDisplayDomain(url: string): string {
         const t = url.trim();
         if (!t) return '';
-        return t.replace(/^https?:\/\//, '').replace(/\/+$/, '').split('/')[0] || '';
+        let host = t.replace(/^https?:\/\//, '').replace(/\/+$/, '').split('/')[0] || '';
+        if (host.startsWith('www.')) host = host.slice(4);
+        return host;
     }
 
     useEffect(() => {
@@ -140,7 +143,7 @@ export default function SettingsSEO() {
                     }}
                 />
                 <p style={{ fontSize: '0.7rem', color: '#52525b', marginTop: '0.35rem' }}>
-                    Digite apenas o domínio (ex: meusite.com.br ou www.meusite.com.br). O https:// é adicionado automaticamente.
+                    Use o domínio principal sem www (ex.: meusite.com.br), alinhado ao domínio na Vercel. O https:// é adicionado ao salvar.
                 </p>
             </div>
 

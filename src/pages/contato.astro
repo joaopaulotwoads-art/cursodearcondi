@@ -15,6 +15,7 @@ import BemMaeContato from '../themes/bemmae/Contato.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { getSiteContactInfo } from '../utils/site-contact';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
@@ -51,7 +52,7 @@ const beMenu = !isLocal && activeTheme === 'bemmae' ? await readSingleton('menu'
 const beFoot = !isLocal && activeTheme === 'bemmae' ? await readSingleton('footer', 'bemmae') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const siteUrl = Astro.url.origin;
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 ---
 
 {isLocal ? (

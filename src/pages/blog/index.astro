@@ -13,6 +13,7 @@ import BaseLayoutBemmae from '../../themes/bemmae/BaseLayout.astro';
 import BemMaeBlogList from '../../themes/bemmae/BlogList.astro';
 import { readSingleton } from '../../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../../utils/read-site-settings';
 import type { BlogPermalinkStructure, BlogUrlPrefix } from '../../utils/blog-permalink';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
@@ -39,7 +40,7 @@ if (categoriaSlug) {
 }
 
 const siteName = settings?.data?.siteName || 'Site';
-const siteUrl = Astro.url.origin;
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 const beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
 const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
 const beBlog = useBemmae ? (await readSingleton('blog', 'bemmae')) || {} : {};

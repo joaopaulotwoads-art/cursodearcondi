@@ -9,6 +9,7 @@ import LegalPage from '../themes/bemmae/LegalPage.astro';
 import PoliticaCookiesContent from '../components/legal/PoliticaCookiesContent.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
@@ -16,7 +17,7 @@ const isLocal = siteMode === 'local';
 const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
 
 const siteName = settings?.data?.siteName || 'Site';
-const siteUrl = Astro.url.origin;
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
 const beMenu = !isLocal && activeTheme === 'bemmae' ? await readSingleton('menu', 'bemmae') : null;
 const beFoot = !isLocal && activeTheme === 'bemmae' ? await readSingleton('footer', 'bemmae') : null;

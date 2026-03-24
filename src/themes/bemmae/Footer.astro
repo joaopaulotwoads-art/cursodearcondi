@@ -4,7 +4,7 @@
  */
 import type { NavItem } from './types';
 import { readSingleton } from '../../utils/singleton-utils';
-import { readSiteSettings } from '../../utils/read-site-settings';
+import { readSiteSettings, resolvePublicSiteUrl } from '../../utils/read-site-settings';
 import { getSiteContactInfo, formatPhone } from '../../utils/site-contact';
 
 interface Props {
@@ -50,7 +50,7 @@ const addressLocality = [city, state].filter(Boolean).join(' — ');
 const streetAddress = addressLine;
 const hasPostalAddress = streetAddress || addressLocality || postalCode;
 
-const canonicalBase = String(settings.canonicalUrl || Astro.url.origin || '').replace(/\/+$/, '') || Astro.url.origin;
+const canonicalBase = resolvePublicSiteUrl(settings.canonicalUrl as string | undefined, Astro.url.origin);
 
 const orgJsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',

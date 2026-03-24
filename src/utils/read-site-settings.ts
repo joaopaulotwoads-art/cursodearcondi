@@ -26,13 +26,77 @@ const DEFAULTS: Record<string, unknown> = {
     blogUrlPrefix: 'blog',
 };
 
-/** Normaliza canonicalUrl: se não tiver protocolo, adiciona https:// */
+/**
+ * Normaliza URL canônica do site: https, só origem (sem path), sem prefixo www.
+ * Alinha com domínio principal apex na Vercel.
+ */
 export function normalizeCanonicalUrl(url: string | undefined): string {
     const t = (url || '').trim();
     if (!t) return '';
-    if (t.startsWith('http://') || t.startsWith('https://')) return t.replace(/\/+$/, '');
-    const domain = t.split('/')[0];
-    return domain ? `https://${domain}` : '';
+    let href = t;
+    if (!/^https?:\/\//i.test(href)) {
+        const domain = href.split('/')[0]?.trim() || '';
+        if (!domain) return '';
+        href = `https://${domain}`;
+    } else {
+        href = href.replace(/\/+$/, '');
+    }
+    try {
+        const u = new URL(href);
+        if (u.hostname.startsWith('www.')) {
+            u.hostname = u.hostname.slice(4);
+        }
+        return u.origin;
+    } catch {
+        return '';
+    }
+}
+
+/** Remove www do host da requisição (fallback quando canonicalUrl não está definido). */
+export function stripWwwFromOrigin(origin: string): string {
+    try {
+        const u = new URL(origin);
+        if (u.hostname.startsWith('www.')) {
+            u.hostname = u.hostname.slice(4);
+        }
+        return u.origin;
+    } catch {
+        return origin;
+    }
+}
+
+/** Base pública do site: settings primeiro, senão origem da requisição sem www. */
+export function resolvePublicSiteUrl(canonicalFromSettings: string | undefined, requestOrigin: string): string {
+    const fromSettings = normalizeCanonicalUrl(canonicalFromSettings);
+    if (fromSettings) return fromSettings;
+    return stripWwwFromOrigin(requestOrigin);
+}
+
+/**
+ * Força origem pública apex (https, sem www) a partir de qualquer string de base que as páginas recebam.
+ */
+export function ensureApexSiteOrigin(url: string): string {
+    const t = (url || '').trim();
+    if (!t) return '';
+    const n = normalizeCanonicalUrl(t);
+    if (n) return n;
+    return stripWwwFromOrigin(t);
+}
+
+/** Path para &lt;link rel="canonical"&gt;: "/" na raiz; demais URLs sem barra final. */
+export function canonicalPathname(pathname: string): string {
+    const p = pathname || '/';
+    if (p === '/' || p === '') return '/';
+    return p.replace(/\/+$/, '') || '/';
+}
+
+/** URL canônica da página atual (apex + path normalizado, sem barra final exceto na raiz). */
+export function buildCanonicalPageUrl(siteBaseOrigin: string, pathname: string): string {
+    const origin = ensureApexSiteOrigin(siteBaseOrigin);
+    const path = canonicalPathname(pathname);
+    const base = origin.replace(/\/+$/, '');
+    if (path === '/') return `${base}/`;
+    return `${base}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 export async function readSiteSettings(): Promise<Record<string, unknown>> {

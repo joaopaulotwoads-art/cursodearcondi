@@ -5,6 +5,7 @@ import BaseLayoutBemmae from '../../themes/bemmae/BaseLayout.astro';
 import BemMaeAuthorPage from '../../themes/bemmae/AuthorPage.astro';
 import { readSingleton } from '../../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../../utils/read-site-settings';
 import { getPostUrl, type BlogPermalinkStructure } from '../../utils/blog-permalink';
 
 export const prerender = true;
@@ -33,7 +34,7 @@ const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
 const useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
 
 const siteName = settings?.data?.siteName || 'Site';
-const siteUrl = Astro.url.origin;
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 const beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
 const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];

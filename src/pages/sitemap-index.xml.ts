@@ -9,7 +9,7 @@
 
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { readSiteSettings } from '../utils/read-site-settings';
+import { readSiteSettings, normalizeCanonicalUrl, stripWwwFromOrigin } from '../utils/read-site-settings';
 import { listLocations } from '../utils/location-utils';
 import { listServices } from '../utils/service-utils';
 import {
@@ -41,11 +41,10 @@ export const GET: APIRoute = async ({ request }) => {
     const settings = await readSiteSettings();
     const generate = settings.generateSitemap !== false;
     const siteMode = (settings.siteMode as string) || 'blog';
-    let base = (settings.canonicalUrl as string)?.trim();
+    let base = normalizeCanonicalUrl(settings.canonicalUrl as string | undefined);
     if (!base) {
         try {
-            const url = new URL(request.url);
-            base = `${url.protocol}//${url.host}`;
+            base = stripWwwFromOrigin(new URL(request.url).origin);
         } catch {
             base = 'https://example.com';
         }

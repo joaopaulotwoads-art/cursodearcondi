@@ -14,6 +14,7 @@ import LocalHome   from '../themes/local/Home.astro';
 import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
 import BemMaeHome from '../themes/bemmae/Home.astro';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
@@ -41,7 +42,7 @@ const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as import
 const blogUrlPrefix = (settings?.data?.blogUrlPrefix as import('../utils/blog-permalink').BlogUrlPrefix) || 'blog';
 
 const siteName = settings?.data?.siteName || 'Site';
-const siteUrl = Astro.url.origin;
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
 const bemmaeMenu = activeTheme === 'bemmae' && siteMode !== 'local'
     ? await readSingleton('menu', 'bemmae')

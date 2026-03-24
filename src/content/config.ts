@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { normalizeCanonicalUrl } from '../utils/read-site-settings';
 // Force reload v2
 import { glob } from 'astro/loaders';
 
@@ -131,8 +132,14 @@ const siteSettings = defineCollection({
         aiApiKey: z.string().optional(),
         // Pexels API — imagens em posts gerados por IA (1 a cada ~400 palavras, máx 5)
         pexelsApiKey: z.string().optional(),
-        // SEO Técnico (sitemap, robots.txt) — configurável no admin
-        canonicalUrl: z.string().optional(),
+        // SEO Técnico — sempre apex https:// sem www (igual Vercel)
+        canonicalUrl: z
+            .string()
+            .optional()
+            .transform((val) => {
+                if (val == null || String(val).trim() === '') return undefined;
+                return normalizeCanonicalUrl(String(val)) || undefined;
+            }),
         generateSitemap: z.boolean().default(true),
         generateRobots: z.boolean().default(true),
         robotsDisallow: z.array(z.string()).optional(),
