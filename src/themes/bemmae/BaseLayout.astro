@@ -60,6 +60,7 @@ const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
   <meta name="theme-color" content="#faf8f6" />
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <link rel="canonical" href={canonicalPageUrl} />
   <meta property="og:type" content={ogType} />
   <meta property="og:title" content={fullTitle} />
