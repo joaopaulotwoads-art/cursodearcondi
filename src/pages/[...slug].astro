@@ -19,7 +19,12 @@ import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/t
 import { readPost } from '../utils/post-utils';
 import { buildPostPath, type BlogPermalinkStructure, type BlogUrlPrefix } from '../utils/blog-permalink';
 import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../utils/read-site-settings';
-import { buildPostJsonLd, toAbsoluteUrl, toIsoDateTime } from '../utils/post-json-ld';
+import {
+  buildAuthorAbsoluteUrl,
+  buildPostJsonLd,
+  toAbsoluteUrl,
+  toIsoDateTime,
+} from '../utils/post-json-ld';
 import { resolveBemmaeMediaUrl } from '../utils/media-url';
 
 export const prerender = true;
@@ -162,6 +167,7 @@ if (props.kind === 'post') {
         publishedDate: post.data.publishedDate,
         imageUrl: ogImageAbs,
         authorName: author?.data?.name,
+        authorUrl: author ? buildAuthorAbsoluteUrl(publicSiteUrl, author.id) : undefined,
         htmlContent,
       })
     : null;

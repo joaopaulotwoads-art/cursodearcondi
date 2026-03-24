@@ -33,6 +33,21 @@ export function toIsoDateTime(dateStr?: string | null): string | undefined {
     return `${d}T12:00:00.000Z`;
 }
 
+/** URL absoluta da página do autor (mesmo padrão que `/authors/${author.id}` nas rotas). */
+export function buildAuthorAbsoluteUrl(siteOrigin: string, authorId: string): string {
+    const base = siteOrigin.replace(/\/+$/, '');
+    const seg = authorId.split('/').map(encodeURIComponent).join('/');
+    return `${base}/authors/${seg}`;
+}
+
+function personAuthor(name: string, url?: string): Record<string, unknown> {
+    return {
+        '@type': 'Person',
+        name,
+        ...(url ? { url } : {}),
+    };
+}
+
 function blogPostingBlock(opts: {
     title: string;
     description: string;
@@ -42,6 +57,7 @@ function blogPostingBlock(opts: {
     publishedDate?: string;
     imageUrl?: string;
     authorName?: string;
+    authorUrl?: string;
 }): Record<string, unknown> {
     const iso = toIsoDateTime(opts.publishedDate);
     return {
@@ -52,7 +68,7 @@ function blogPostingBlock(opts: {
         image: opts.imageUrl ? [opts.imageUrl] : undefined,
         datePublished: iso,
         dateModified: iso,
-        author: opts.authorName ? { '@type': 'Person', name: opts.authorName } : undefined,
+        author: opts.authorName ? personAuthor(opts.authorName, opts.authorUrl) : undefined,
         publisher: {
             '@type': 'Organization',
             name: opts.siteName,
@@ -75,6 +91,7 @@ function articleItemListBlock(
         publishedDate?: string;
         imageUrl?: string;
         authorName?: string;
+        authorUrl?: string;
     },
     itemNames: string[],
 ): Record<string, unknown> {
@@ -87,7 +104,7 @@ function articleItemListBlock(
         image: opts.imageUrl ? [opts.imageUrl] : undefined,
         datePublished: iso,
         dateModified: iso,
-        author: opts.authorName ? { '@type': 'Person', name: opts.authorName } : undefined,
+        author: opts.authorName ? personAuthor(opts.authorName, opts.authorUrl) : undefined,
         publisher: {
             '@type': 'Organization',
             name: opts.siteName,
@@ -119,6 +136,7 @@ export function buildPostJsonLd(opts: {
     publishedDate?: string;
     imageUrl?: string;
     authorName?: string;
+    authorUrl?: string;
     htmlContent?: string | null;
 }): Record<string, unknown> | null {
     let mode: PostSeoSchema = opts.seoSchema || 'auto';
@@ -138,6 +156,7 @@ export function buildPostJsonLd(opts: {
         publishedDate: opts.publishedDate,
         imageUrl: opts.imageUrl,
         authorName: opts.authorName,
+        authorUrl: opts.authorUrl,
     };
 
     if (mode === 'articleItemList') {
