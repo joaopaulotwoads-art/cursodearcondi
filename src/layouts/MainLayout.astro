@@ -12,6 +12,7 @@ import { readSingleton } from '../utils/singleton-utils';
 import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../utils/read-site-settings';
 import Header from '../themes/classic/components/Header.astro';
 import Footer from '../themes/classic/components/Footer.astro';
+import FaviconLinks from '../components/FaviconLinks.astro';
 import '../styles/global.css';
 import '@fontsource/inter';
 import '@fontsource/outfit';
@@ -69,7 +70,7 @@ const secondaryRGB = hexToRgb(secondaryColor);
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<FaviconLinks />
 		<link rel="canonical" href={canonicalHref} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>

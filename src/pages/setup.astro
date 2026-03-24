@@ -12,6 +12,7 @@
  */
 
 import crypto from 'node:crypto';
+import FaviconLinks from '../components/FaviconLinks.astro';
 import '../styles/global.css';
 import '@fontsource/inter';
 import '@fontsource/outfit';
@@ -37,7 +38,7 @@ const isAuthenticated = !setupPassword || (expectedToken && cookieValue === expe
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <FaviconLinks />
     <title>CNX CMS — Crie seu site em 5 minutos</title>
     <meta name="description" content="Guia simples para colocar seu site no ar com CNX CMS. Deploy grátis na Vercel em poucos cliques." />
 </head>

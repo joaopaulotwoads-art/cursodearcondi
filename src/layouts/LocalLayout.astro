@@ -16,6 +16,7 @@ import { readSingleton } from '../utils/singleton-utils';
 import { getSiteContactInfo } from '../utils/site-contact';
 import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../utils/read-site-settings';
 import { getEntry } from 'astro:content';
+import FaviconLinks from '../components/FaviconLinks.astro';
 import '../styles/global.css';
 import '@fontsource/inter';
 import '@fontsource/outfit';
@@ -88,7 +89,7 @@ const schema = {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <FaviconLinks />
     <link rel="canonical" href={canonicalHref} />
     <title>{title}</title>
     <meta name="description" content={description} />

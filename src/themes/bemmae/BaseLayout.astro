@@ -9,6 +9,7 @@ import '@fontsource/outfit/latin-600.css';
 import '@fontsource/outfit/latin-700.css';
 import './global.css';
 import { buildCanonicalPageUrl, ensureApexSiteOrigin } from '../../utils/read-site-settings';
+import FaviconLinks from '../../components/FaviconLinks.astro';
 
 interface Props {
   title: string;
@@ -57,9 +58,7 @@ const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
   {ogType === 'article' && (
     <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
   )}
-  <link rel="icon" type="image/svg+xml" href="/bemmae-favicon.svg" sizes="any" />
-  <link rel="alternate icon" href="/bemmae-favicon.svg" />
-  <link rel="apple-touch-icon" href="/bemmae-favicon.svg" />
+  <FaviconLinks />
   <meta name="theme-color" content="#faf8f6" />
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />

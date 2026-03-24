@@ -18,6 +18,7 @@ import AdminHeader from '../components/admin/Header.astro';
 import { verifySession, SESSION_COOKIE } from '../utils/auth-utils';
 import { getEffectiveSiteMode, themeSupportsBlogAndLocal } from '../utils/admin-site-mode';
 import { getEntry } from 'astro:content';
+import FaviconLinks from '../components/FaviconLinks.astro';
 import '../styles/global.css';
 import '../styles/admin.css';
 import '@fontsource/inter';
@@ -74,7 +75,7 @@ const secondaryRGB = hexToRgb(secondaryColor);
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <FaviconLinks />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
         <meta name="description" content={description} />

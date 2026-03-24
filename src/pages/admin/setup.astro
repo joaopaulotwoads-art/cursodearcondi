@@ -1,5 +1,6 @@
 ---
 import { listAuthors } from '../../utils/author-utils';
+import FaviconLinks from '../../components/FaviconLinks.astro';
 import '../../styles/global.css';
 import '../../styles/admin.css';
 import '@fontsource/inter';
@@ -25,6 +26,7 @@ const errorMessages: Record<string, string> = {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <FaviconLinks />
     <title>Configuração Inicial — Admin</title>
 </head>
 <body class="bg-[#0a0a0a] text-[#e5e5e5] font-sans antialiased min-h-screen flex items-center justify-center p-4">

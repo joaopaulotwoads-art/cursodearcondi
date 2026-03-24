@@ -10,7 +10,8 @@
     "astro": "astro",
     "deploy": "vercel --prod",
     "import:bemmae-posts": "bun run scripts/import-bemmae-posts.mjs",
-    "list:content-images": "bun run scripts/list-bemmae-content-images.mjs"
+    "list:content-images": "bun run scripts/list-bemmae-content-images.mjs",
+    "favicons": "node scripts/generate-favicons.mjs"
   },
   "dependencies": {
     "@astrojs/markdoc": "^0.15.10",
@@ -56,5 +57,8 @@
     "tailwindcss": "^3.4.17",
     "turndown": "^7.2.2",
     "vanilla-cookieconsent": "^3.1.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }
