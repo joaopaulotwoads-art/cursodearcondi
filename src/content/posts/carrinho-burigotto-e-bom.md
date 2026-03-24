@@ -1,7 +1,7 @@
 ---
 title: Carrinho Burigotto é Bom? Análise Completa para Pais
 slug: carrinho-burigotto-e-bom
-author: admin
+author: vitoria-caroline
 category: carrinhos-de-bebe
 publishedDate: "2026-03-01"
 thumbnail: https://bemmae.com.br/content/images/2026/03/Carrinho-de-Beb---burigotto----bom.webp

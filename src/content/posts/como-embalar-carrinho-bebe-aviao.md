@@ -1,7 +1,7 @@
 ---
 title: Como embalar carrinho de bebê para viagem de avião
 slug: como-embalar-carrinho-bebe-aviao
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-02-27"
 category: carrinhos-de-bebe
 contentFormat: html

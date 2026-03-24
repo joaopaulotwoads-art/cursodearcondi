@@ -1,7 +1,7 @@
 ---
 title: Sobre
 slug: sobre
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-01-29"
 contentFormat: html
 metaDescription: Sobre o Bem Mãe Seja bem-vinda ao meu blog. Este aqui é um espaço que eu uso para falar sobre carrinhos de bebê e tudo relacionado ao universo dos pequenos. Sinta-se em casa! Meu objetivo principal é poder ajudar pais, principalmente de primeira viagem, que não sabem qual tipo, modelo ou opção escol

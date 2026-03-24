@@ -1,7 +1,7 @@
 ---
 title: Como Fechar Carrinho de Bebê Guia Prático para não Passar Sufoco
 slug: como-fechar-carrinho-de-bebe
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-02-26"
 category: carrinhos-de-bebe
 contentFormat: html

@@ -1,7 +1,7 @@
 ---
 title: Como Lavar Carrinho de Bebê O Guia Prático para uma Limpeza Pesada Sem Estragar o Tecido
 slug: como-lavar-carrinho-de-bebe
-author: admin
+author: vitoria-caroline
 category: carrinhos-de-bebe
 publishedDate: "2026-02-02"
 thumbnail: /images/posts/1774276117660-como-tirar-mofo-carrinho-de-bebe.webp

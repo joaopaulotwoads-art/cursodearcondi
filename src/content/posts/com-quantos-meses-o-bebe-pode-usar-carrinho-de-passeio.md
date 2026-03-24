@@ -1,7 +1,7 @@
 ---
 title: Com quantos meses o bebê pode usar carrinho de passeio
 slug: com-quantos-meses-o-bebe-pode-usar-carrinho-de-passeio
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-02-14"
 category: carrinhos-de-bebe
 contentFormat: html

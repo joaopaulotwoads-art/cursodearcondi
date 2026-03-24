@@ -1,7 +1,7 @@
 ---
 title: Como Escolher Carrinho de Bebê O Guia de Mãe para Não se Arrepender em 2026
 slug: como-escolher-carrinho-de-bebe
-author: admin
+author: vitoria-caroline
 category: carrinhos-de-bebe
 publishedDate: "2026-02-05"
 thumbnail: /images/posts/1774276426103-guia-como-escolher-carrinho-de-bebe-mae-parque.jpg

@@ -1,7 +1,7 @@
 ---
 title: Como tirar mofo de carrinho de bebê Guia prático e seguro
 slug: como-tirar-mofo-carrinho-de-bebe
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-02-12"
 category: carrinhos-de-bebe
 contentFormat: html

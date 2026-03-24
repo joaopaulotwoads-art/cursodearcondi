@@ -1,7 +1,7 @@
 ---
 title: Melhores Marcas de Carrinho de Bebê de 2026
 slug: melhor-marca-de-carrinho-de-bebe
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-02-27"
 category: carrinhos-de-bebe
 contentFormat: html

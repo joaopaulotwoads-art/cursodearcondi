@@ -1,7 +1,7 @@
 ---
 title: Política de Privacidade
 slug: politica-de-privacidade
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-01-29"
 contentFormat: html
 metaDescription: No Bem Mãe , a privacidade dos nossos visitantes é uma prioridade absoluta. Esta Política de Privacidade descreve os tipos de informações pessoais que coletamos e como as utilizamos para melhorar sua experiência em nosso site. 2. Coleta de Dados e Cookies Como a maioria dos sites profissionais, util

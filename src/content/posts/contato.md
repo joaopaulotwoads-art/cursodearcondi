@@ -1,7 +1,7 @@
 ---
 title: Contato
 slug: contato
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-01-29"
 contentFormat: html
 metaDescription: Adoramos ouvir outras mães, pais e famílias que, assim como nós, buscam o melhor para seus pequenos. Seja para tirar uma dúvida sobre um review, sugerir um produto para análise ou apenas compartilhar uma experiência de maternidade, estamos aqui para ouvir você. 3. Canais de Comunicação A forma mais 

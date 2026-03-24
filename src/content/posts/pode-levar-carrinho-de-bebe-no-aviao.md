@@ -1,7 +1,7 @@
 ---
 title: Pode levar carrinho de bebê no avião? Regras e Dicas Práticas
 slug: pode-levar-carrinho-de-bebe-no-aviao
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-02-12"
 category: carrinhos-de-bebe
 contentFormat: html

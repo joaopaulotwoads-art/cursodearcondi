@@ -128,7 +128,7 @@ for (const p of posts) {
         '---',
         `title: ${yamlEscape(p.title || slug)}`,
         `slug: ${yamlEscape(slug)}`,
-        `author: admin`,
+        `author: vitoria-caroline`,
         `publishedDate: "${dateOnly}"`,
         'contentFormat: html',
         metaDescription ? `metaDescription: ${yamlEscape(metaDescription)}` : null,

@@ -1,7 +1,7 @@
 ---
 title: Melhores Carrinho de Bebê 2026 Top 16 Safety 1st, Chicco e +
 slug: melhor-carrinho-de-bebe
-author: admin
+author: vitoria-caroline
 category: carrinhos-de-bebe
 publishedDate: "2026-03-23"
 thumbnail: /images/posts/1774272629165-familia-passeando-no-parque-com-seu-filho-no-carrinho-de-bebe.webp

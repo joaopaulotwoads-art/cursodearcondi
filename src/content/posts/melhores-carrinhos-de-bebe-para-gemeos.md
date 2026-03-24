@@ -1,7 +1,7 @@
 ---
 title: 10 Melhores Carrinhos de Bebê para Gêmeos em 2026
 slug: melhores-carrinhos-de-bebe-para-gemeos
-author: admin
+author: vitoria-caroline
 category: carrinhos-de-bebe
 publishedDate: "2026-03-23"
 thumbnail: /images/posts/1774276504425-melhores-carrinhos-de-bebe-para-gemeos-.webp

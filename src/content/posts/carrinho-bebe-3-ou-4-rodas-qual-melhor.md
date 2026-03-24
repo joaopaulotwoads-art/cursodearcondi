@@ -1,7 +1,7 @@
 ---
 title: Carrinho de Bebê 3 ou 4 Rodas Qual é Melhor em 2026?
 slug: carrinho-bebe-3-ou-4-rodas-qual-melhor
-author: admin
+author: vitoria-caroline
 publishedDate: "2026-02-14"
 category: carrinhos-de-bebe
 contentFormat: html
