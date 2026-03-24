@@ -1,4 +1,6 @@
 ---
+import { resolveBemmaeMediaUrl } from '../../utils/media-url';
+
 interface Props {
   data: Record<string, any>;
 }
@@ -43,12 +45,24 @@ const singleAuthor = team.length === 1;
         <div
           class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-center sm:items-start p-8 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm"
         >
-          <div
-            class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[var(--color-rosa)] flex items-center justify-center text-4xl sm:text-5xl ring-4 ring-[var(--color-nude)]"
-            aria-hidden="true"
-          >
-            {team[0].emoji || '👤'}
-          </div>
+          {team[0].photo?.trim() ? (
+            <img
+              src={resolveBemmaeMediaUrl(team[0].photo.trim()) || team[0].photo.trim()}
+              alt={team[0].name || ''}
+              width="128"
+              height="128"
+              class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover ring-4 ring-[var(--color-nude)] border border-[var(--color-border)]"
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <div
+              class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[var(--color-rosa)] flex items-center justify-center text-4xl sm:text-5xl ring-4 ring-[var(--color-nude)]"
+              aria-hidden="true"
+            >
+              {team[0].emoji || '👤'}
+            </div>
+          )}
           <div class="text-center sm:text-left min-w-0 flex-1">
             <h3 class="text-xl font-semibold text-[var(--color-accent)]">{team[0].name}</h3>
             {team[0].role && (
@@ -63,9 +77,21 @@ const singleAuthor = team.length === 1;
         <div class="grid sm:grid-cols-2 gap-6">
           {team.map((m: any) => (
             <div class="p-6 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm">
-              <div class="aspect-square max-w-[120px] rounded-full bg-[var(--color-rosa)] mx-auto mb-4 flex items-center justify-center text-3xl ring-2 ring-[var(--color-nude)]">
-                {m.emoji || '👤'}
-              </div>
+              {m.photo?.trim() ? (
+                <img
+                  src={resolveBemmaeMediaUrl(m.photo.trim()) || m.photo.trim()}
+                  alt={m.name || ''}
+                  width="120"
+                  height="120"
+                  class="aspect-square max-w-[120px] w-[120px] h-[120px] rounded-full object-cover mx-auto mb-4 ring-2 ring-[var(--color-nude)] border border-[var(--color-border)]"
+                  loading="lazy"
+                  decoding="async"
+                />
+              ) : (
+                <div class="aspect-square max-w-[120px] rounded-full bg-[var(--color-rosa)] mx-auto mb-4 flex items-center justify-center text-3xl ring-2 ring-[var(--color-nude)]">
+                  {m.emoji || '👤'}
+                </div>
+              )}
               <h3 class="font-semibold text-[var(--color-accent)] text-center">{m.name}</h3>
               {m.role && <p class="text-sm text-[var(--color-text)] text-center mt-2 font-medium">{m.role}</p>}
               {m.bio && <p class="text-sm text-[var(--color-muted)] text-center mt-3 leading-relaxed">{m.bio}</p>}

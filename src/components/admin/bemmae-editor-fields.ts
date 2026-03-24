@@ -49,12 +49,17 @@ export const BEMMAE_ABOUT_FIELDS = [
         type: 'array',
         label: 'Equipe',
         itemLabel: (item: { name?: string }) => item?.name || 'Pessoa',
-        defaultItem: { name: '', role: '', bio: '', emoji: '👤' },
+        defaultItem: { name: '', role: '', bio: '', emoji: '👤', photo: '' },
         fields: [
             { key: 'name', type: 'text', label: 'Nome' },
             { key: 'role', type: 'text', label: 'Função' },
             { key: 'bio', type: 'text', label: 'Bio', multiline: true, rows: 2 },
-            { key: 'emoji', type: 'text', label: 'Emoji / avatar texto' },
+            {
+                key: 'photo',
+                type: 'text',
+                label: 'URL da foto (ex. /authors/nome.png). Se preenchido, substitui o emoji no site',
+            },
+            { key: 'emoji', type: 'text', label: 'Emoji (só aparece se a foto estiver vazia)' },
         ],
     },
 ];
