@@ -1,14 +1,16 @@
 ---
-title: Pode levar carrinho de bebê no avião? Regras e Dicas Práticas
+title: Como levar carrinho de bebê no avião Guia Prático e Regras
 slug: pode-levar-carrinho-de-bebe-no-aviao
 author: vitoria-caroline
-publishedDate: "2026-02-12"
 category: carrinhos-de-bebe
+publishedDate: "2026-02-12"
+thumbnail: /images/posts/1774382124664-carrinho-de-bebe-no-aviao.webp
+metaTitle: Como levar carrinho de bebê no avião Guia Prático e Regras
+metaDescription: Confira as regras das companhias para levar carrinho de bebê no avião. Saiba como funciona o despacho no portão e dicas para viajar com total tranquilidade.
+metaImage: https://bemmae.com.br/content/images/2026/02/bebe-viajando-no-aviao.webp
 contentFormat: html
-metaDescription: "Viajar com bebês exige planejamento, e a dúvida sobre o carrinho é uma das principais causas de estresse no aeroporto. A boa notícia é que as principais companhias aéreas brasileiras permitem o transporte gratuito desse item para crianças de até 2 anos. A regra geral é simples: você pode levar o car"
-thumbnail: "https://bemmae.com.br/content/images/2026/02/bebe-viajando-no-aviao.webp"
-metaImage: "https://bemmae.com.br/content/images/2026/02/bebe-viajando-no-aviao.webp"
 ---
+
 <p>Viajar com bebês exige planejamento, e a dúvida sobre o carrinho é uma das principais causas de estresse no aeroporto.</p><p>A boa notícia é que as principais companhias aéreas brasileiras permitem o transporte gratuito desse item para crianças de até 2 anos.</p><p>A regra geral é simples: você pode levar o carrinho até a porta da aeronave, onde ele será etiquetado e levado para o porão.</p><p>No desembarque, dependendo do aeroporto, você o recebe na porta do avião ou na esteira de bagagens.</p><h2 id="regras-de-carrinho-por-companhia-a%C3%A9rea-2026">Regras de Carrinho por Companhia Aérea 2026</h2><p>Para evitar surpresas no check-in, confira as especificações atuais das três maiores empresas do país:</p>
 
 <style>
