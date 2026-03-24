@@ -29,7 +29,7 @@ contentFormat: html
             </div>
         </div><h2 id="burigotto-rio-k-robusto-e-com-al%C3%A7a-revers%C3%ADvel">Burigotto Rio K Robusto e com Alça Reversível</h2><p>O modelo Rio K é outro sucesso de vendas na categoria Travel System e divide muitas qualidades estruturais com a linha Ecco. Porém, o seu grande diferencial de mercado é a famosa alça reversível.</p><p>Esse recurso é considerado indispensável por muitas famílias na hora de fechar a compra.</p><p>Ele permite que você empurre o carrinho com o bebê virado para você nos primeiros meses, ou de frente para a rua quando ele crescer.</p><p>É a opção ideal para os pais que fazem questão de manter o contato visual constante durante as caminhadas. Ele une a praticidade do sistema de acoplar o bebê conforto com uma versatilidade incrível na direção.</p><div class="kg-card kg-product-card">
             <div class="kg-product-card-container">
-                <img src="https://bemmae.com.br/content/images/2026/03/Carrinho-de-Beb---Rio-k.webp" width="500" height="500" class="kg-product-card-image" loading="lazy">
+                <img src="https://bemmae.com.br/content/images/2026/03/burigotto-rio-k.png" width="500" height="500" class="kg-product-card-image" loading="lazy" alt="Travel System Burigotto Rio K com carrinho bege e bebê conforto">
                 <div class="kg-product-card-title-container">
                     <h4 class="kg-product-card-title"><span style="white-space: pre-wrap;">Carrinho de Bebê Rio k</span></h4>
                 </div>
@@ -42,7 +42,7 @@ contentFormat: html
             </div>
         </div><h3 id="burigotto-up-o-modelo-ultracompacto-para-viagens">Burigotto Up! O Modelo Ultracompacto para Viagens</h3><p>Se a sua família ama viajar ou tem pouco espaço no carro, o Burigotto Up! é a solução perfeita. Pesando apenas 6,6 kg, ele brilha no mercado pelo seu design inteligente.</p><p>Seu maior diferencial é o fechamento ultracompacto, sendo aceito como bagagem de mão na maioria dos aviões. </p><p>É o carrinho de apoio ideal para garantir conforto ao bebê sem carregar peso extra nos passeios.</p><div class="kg-card kg-product-card">
             <div class="kg-product-card-container">
-                <img src="https://bemmae.com.br/content/images/2026/03/Carrinho-de-Bebe-Up-Burigotto-500x500-1.webp" width="500" height="500" class="kg-product-card-image" loading="lazy">
+                <img src="https://bemmae.com.br/content/images/2026/03/burigotto-up.png" width="500" height="500" class="kg-product-card-image" loading="lazy" alt="Carrinho de bebê Burigotto Up compacto cinza com estrutura prata">
                 <div class="kg-product-card-title-container">
                     <h4 class="kg-product-card-title"><span style="white-space: pre-wrap;">Carrinho de Bebê Burigotto Up!</span></h4>
                 </div>
