@@ -98,7 +98,7 @@ let Content: (() => unknown) | undefined;
 let htmlContent: string | null = null;
 let author: Awaited<ReturnType<typeof getEntry<'authors'>>> | null = null;
 let readingTimeMinutes = 1;
-let pageTitle = '';
+let documentTitle = '';
 let pageUrl = '';
 let ogImageAbs: string | undefined;
 let articleIso: string | undefined;
@@ -144,7 +144,10 @@ if (props.kind === 'post') {
   const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
   beNav = beMenu ? navFromMenu(beMenu) : [];
   beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-  pageTitle = post.data.metaTitle || post.data.title;
+  {
+    const metaTitleTrim = post.data.metaTitle?.trim();
+    documentTitle = metaTitleTrim ? metaTitleTrim : `${post.data.title} - ${siteName}`;
+  }
 
   const siteCfg = await readSiteSettings();
   publicSiteUrl = resolvePublicSiteUrl(siteCfg.canonicalUrl as string | undefined, Astro.url.origin);
@@ -157,7 +160,7 @@ if (props.kind === 'post') {
   postJsonLd = useBemmae
     ? buildPostJsonLd({
         seoSchema: post.data.seoSchema,
-        title: pageTitle,
+        title: documentTitle,
         description: post.data.metaDescription || '',
         pageUrl,
         siteUrl: publicSiteUrl,
@@ -207,7 +210,7 @@ if (props.kind === 'post') {
   props.kind === 'post' && post ? (
     useBemmae ? (
       <BaseLayoutBemmae
-        title={`${pageTitle} - ${siteName}`}
+        title={documentTitle}
         description={post.data.metaDescription || ''}
         siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
         logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}

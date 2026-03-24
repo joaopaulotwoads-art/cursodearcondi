@@ -43,7 +43,8 @@ const {
   articleModifiedTime,
   extraJsonLd,
 } = Astro.props;
-const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+/** Título do documento: o que cada página passa em `title` (sem sufixo automático | marca). */
+const fullTitle = title;
 const fullDescription = description || '';
 const siteOrigin = ensureApexSiteOrigin(siteUrl);
 const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);

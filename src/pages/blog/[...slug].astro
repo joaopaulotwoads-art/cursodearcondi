@@ -71,7 +71,8 @@ const beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
 const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const pageTitle = post.data.metaTitle || post.data.title;
+const metaTitleTrim = post.data.metaTitle?.trim();
+const documentTitle = metaTitleTrim ? metaTitleTrim : `${post.data.title} - ${siteName}`;
 
 const siteCfg = await readSiteSettings();
 const publicSiteUrl = resolvePublicSiteUrl(siteCfg.canonicalUrl as string | undefined, Astro.url.origin);
@@ -82,7 +83,7 @@ const articleIso = toIsoDateTime(post.data.publishedDate);
 const postJsonLd = useBemmae
   ? buildPostJsonLd({
       seoSchema: post.data.seoSchema,
-      title: pageTitle,
+      title: documentTitle,
       description: post.data.metaDescription || '',
       pageUrl,
       siteUrl: publicSiteUrl,
@@ -97,7 +98,7 @@ const postJsonLd = useBemmae
 
 {useBemmae ? (
 <BaseLayoutBemmae
-    title={`${pageTitle} - ${siteName}`}
+    title={documentTitle}
     description={post.data.metaDescription || ''}
     siteName={(beMenu as any)?.logoText || siteName}
     logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
