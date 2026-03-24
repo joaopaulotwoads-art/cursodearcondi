@@ -462,7 +462,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/1st-safety.webp" alt="Logo Safety 1st" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/1st-safety.png" alt="Logo Safety 1st" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Safety 1st</h2>
         
         <div class="bemmae-rating-row">
@@ -606,7 +606,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/Burigotto.webp" alt="Logo Burigotto" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/burigotto.png" alt="Logo Burigotto" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Burigotto</h2>
         
         <div class="bemmae-rating-row">
@@ -750,7 +750,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/Galzerano.jpg" alt="Logo Galzerano" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/galzerano.png" alt="Logo Galzerano" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Galzerano</h2>
         
         <div class="bemmae-rating-row">
@@ -894,7 +894,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/Chicco.webp" alt="Logo Chicco" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/chicco.png" alt="Logo Chicco" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Chicco</h2>
         
         <div class="bemmae-rating-row">
@@ -1038,7 +1038,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/Maxi-cosi.png" alt="Logo Maxi-Cosi" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/maxi-cosi.png" alt="Logo Maxi-Cosi" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Maxi-Cosi</h2>
         
         <div class="bemmae-rating-row">
@@ -1182,7 +1182,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/Kiddo.png" alt="Logo Kiddo" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/kiddo.png" alt="Logo Kiddo" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Kiddo</h2>
         
         <div class="bemmae-rating-row">
@@ -1326,7 +1326,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/abc-design--2-.webp" alt="Logo ABC Design" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/abc-design.png" alt="Logo ABC Design" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê ABC Design</h2>
         
         <div class="bemmae-rating-row">
@@ -1470,7 +1470,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/logo-infanti-1.webp" alt="Logo Infanti" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/infanti.png" alt="Logo Infanti" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Infanti</h2>
         
         <div class="bemmae-rating-row">
@@ -1614,7 +1614,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="bemmae-product-highlight">
     <div class="bemmae-product-header">
-        <img src="https://bemmae.com.br/content/images/2026/02/Litet.webp" alt="Logo Litet" class="bemmae-product-image">
+        <img src="https://bemmae.com.br/content/images/2026/02/litet.png" alt="Logo Litet" class="bemmae-product-image">
         <h2 class="bemmae-product-title">Carrinhos de Bebê Litet</h2>
         
         <div class="bemmae-rating-row">
@@ -1717,7 +1717,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="product-box-bemmae">
     <div class="product-image-bemmae">
-        <img src="https://bemmae.com.br/content/images/2026/02/Voyage.png" alt="Carrinhos Voyage">
+        <img src="https://bemmae.com.br/content/images/2026/02/voyage.png" alt="Carrinhos Voyage">
     </div>
     <div class="product-info-bemmae">
         <h2 class="product-title-bemmae">Voyage - Economia e Praticidade no Enxoval</h2>
@@ -1804,7 +1804,7 @@ metaImage: "https://bemmae.com.br/content/images/2026/02/Melhor-marca-de-carrinh
 
 <div class="product-box-bemmae">
     <div class="product-image-bemmae">
-        <img src="https://bemmae.com.br/content/images/2026/02/Tutti-Baby.webp" alt="Carrinhos Tutti Baby">
+        <img src="https://bemmae.com.br/content/images/2026/02/tutti-baby.png" alt="Carrinhos Tutti Baby">
     </div>
     <div class="product-info-bemmae">
         <h2 class="product-title-bemmae">Tutti Baby - Segurança e Tradição Nacional</h2>
