@@ -20,6 +20,7 @@ const { siteName, nav, logoSrc } = Astro.props;
           height="108"
           class="h-14 w-auto sm:h-[4.5rem] md:h-20 lg:h-[5.5rem] max-w-[min(92vw,28rem)] sm:max-w-[min(90vw,32rem)] md:max-w-none object-contain object-left"
           decoding="async"
+          fetchpriority="low"
         />
       ) : (
         <span class="text-lg font-semibold text-[var(--color-accent)]">{siteName}</span>

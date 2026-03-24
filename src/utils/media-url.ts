@@ -4,6 +4,8 @@
  * - Caminhos /content/images/... passam a ser relativos ao site, servidos por public/content/images/...
  */
 
+import { shrinkAmazonImagesInHtml } from './amazon-image-url';
+
 export function alignThumbnailHost(url: string | undefined | null): string {
     if (!url || typeof url !== 'string') return '';
     let u = url.trim();
@@ -28,8 +30,10 @@ export function resolveBemmaeMediaUrl(url: string | undefined | null): string {
 /** Substitui URLs absolutas do Ghost no HTML do post por caminhos relativos /content/images/... */
 export function rewriteBemmaeContentImagesInHtml(html: string | null | undefined): string {
     if (!html) return '';
-    return html.replace(
+    let out = html.replace(
         /https?:\/\/(?:www\.)?bemmae\.com\.br(\/content\/images\/[^"'<>\s]+)/gi,
         '$1',
     );
+    out = shrinkAmazonImagesInHtml(out);
+    return out;
 }

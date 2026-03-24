@@ -54,6 +54,9 @@ const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {ogType === 'article' && (
+    <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
+  )}
   <link rel="icon" type="image/svg+xml" href="/bemmae-favicon.svg" sizes="any" />
   <link rel="alternate icon" href="/bemmae-favicon.svg" />
   <link rel="apple-touch-icon" href="/bemmae-favicon.svg" />

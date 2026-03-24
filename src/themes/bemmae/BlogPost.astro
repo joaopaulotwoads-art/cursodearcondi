@@ -30,7 +30,10 @@ const htmlBody = htmlContent ? rewriteBemmaeContentImagesInHtml(htmlContent) : n
       <img
         src={heroImage}
         alt=""
+        width={900}
+        height={600}
         class="w-full h-auto object-cover max-h-[420px]"
+        sizes="(max-width: 896px) 100vw, 832px"
         fetchpriority="high"
         decoding="async"
       />
