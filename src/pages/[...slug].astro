@@ -97,7 +97,6 @@ let post: CollectionEntry<'posts'> | null = null;
 let Content: (() => unknown) | undefined;
 let htmlContent: string | null = null;
 let author: Awaited<ReturnType<typeof getEntry<'authors'>>> | null = null;
-let readingTimeMinutes = 1;
 let documentTitle = '';
 let pageUrl = '';
 let ogImageAbs: string | undefined;
@@ -127,11 +126,6 @@ if (props.kind === 'post') {
   }
 
   author = post.data.author ? await getEntry('authors', post.data.author) : null;
-
-  const wordCount = postFile?.content
-    ? postFile.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
-    : 0;
-  readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
 
   const settings = await getEntry('siteSettings', 'settings').catch(() => null);
   const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
@@ -229,7 +223,6 @@ if (props.kind === 'post') {
           author={author}
           Content={Content}
           htmlContent={htmlContent}
-          readingTimeMinutes={readingTimeMinutes}
         />
       </BaseLayoutBemmae>
     ) : (
@@ -240,7 +233,6 @@ if (props.kind === 'post') {
         htmlContent={htmlContent}
         themeId="classic"
         layoutType={layoutType}
-        readingTimeMinutes={readingTimeMinutes}
       />
     )
   ) : null

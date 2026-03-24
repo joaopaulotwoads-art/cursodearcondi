@@ -7,10 +7,9 @@ interface Props {
   Content?: any;
   /** Corpo HTML (import Ghost / contentFormat: html); ignora Content. */
   htmlContent?: string | null;
-  readingTimeMinutes?: number;
 }
 
-const { post, author, Content, htmlContent, readingTimeMinutes } = Astro.props;
+const { post, author, Content, htmlContent } = Astro.props;
 const date = post.data.publishedDate;
 const heroImage = resolveBemmaeMediaUrl(post.data.thumbnail || post.data.metaImage);
 const htmlBody = htmlContent ? rewriteBemmaeContentImagesInHtml(htmlContent) : null;
@@ -24,7 +23,6 @@ const htmlBody = htmlContent ? rewriteBemmaeContentImagesInHtml(htmlContent) : n
         <time datetime={date}>{new Date(date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}</time>
       )}
       {author && <span>{author.data.name}</span>}
-      {readingTimeMinutes && readingTimeMinutes > 0 && <span>{readingTimeMinutes} min de leitura</span>}
     </div>
   </header>
   {heroImage && (

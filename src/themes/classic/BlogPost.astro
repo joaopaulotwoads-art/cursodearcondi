@@ -16,10 +16,9 @@ interface Props {
     htmlContent?: string | null;
     themeId: string;
     layoutType?: 'main' | 'local';
-    readingTimeMinutes?: number;
 }
 
-const { post, author, Content, htmlContent, themeId, layoutType = 'main', readingTimeMinutes } = Astro.props;
+const { post, author, Content, htmlContent, themeId, layoutType = 'main' } = Astro.props;
 const Layout = layoutType === 'local' ? LocalLayout : MainLayout;
 const pageTitle = post.data.metaTitle || post.data.title;
 ---
@@ -71,22 +70,15 @@ const pageTitle = post.data.metaTitle || post.data.title;
                             </div>
                         </div>
                     )}
-                    {(post.data.publishedDate || readingTimeMinutes) && (
+                    {post.data.publishedDate && (
                         <div class="flex items-center gap-4">
-                            {post.data.publishedDate && (
-                                <span class="text-sm" style="color: var(--blog-text-subtle);">
-                                    {new Date(post.data.publishedDate).toLocaleDateString('pt-BR', {
-                                        day: '2-digit',
-                                        month: 'long',
-                                        year: 'numeric'
-                                    })}
-                                </span>
-                            )}
-                            {readingTimeMinutes && readingTimeMinutes > 0 && (
-                                <span class="text-sm" style="color: var(--blog-text-subtle);">
-                                    ⏱ {readingTimeMinutes} min de leitura
-                                </span>
-                            )}
+                            <span class="text-sm" style="color: var(--blog-text-subtle);">
+                                {new Date(post.data.publishedDate).toLocaleDateString('pt-BR', {
+                                    day: '2-digit',
+                                    month: 'long',
+                                    year: 'numeric'
+                                })}
+                            </span>
                         </div>
                     )}
                 </div>

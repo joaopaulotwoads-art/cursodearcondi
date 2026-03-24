@@ -56,10 +56,6 @@ if (!htmlContent) {
 
 const author = post.data.author ? await getEntry('authors', post.data.author) : null;
 
-// Tempo de leitura: ~200 palavras/min em português
-const wordCount = postFile?.content ? postFile.content.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length : 0;
-const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
-
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
 const layoutType = siteMode === 'local' ? 'local' : 'main';
@@ -112,7 +108,7 @@ const postJsonLd = useBemmae
     articleModifiedTime={articleIso}
     extraJsonLd={postJsonLd}
 >
-    <BemMaeBlogPost post={post} author={author} Content={Content} htmlContent={htmlContent} readingTimeMinutes={readingTimeMinutes} />
+    <BemMaeBlogPost post={post} author={author} Content={Content} htmlContent={htmlContent} />
 </BaseLayoutBemmae>
 ) : (
 <BlogPost
@@ -122,6 +118,5 @@ const postJsonLd = useBemmae
     htmlContent={htmlContent}
     themeId="classic"
     layoutType={layoutType}
-    readingTimeMinutes={readingTimeMinutes}
 />
 )}
