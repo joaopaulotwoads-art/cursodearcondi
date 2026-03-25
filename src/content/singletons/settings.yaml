@@ -1,6 +1,6 @@
 siteName: Bem Mãe
 activeTheme: bemmae
-colorScheme: light
+colorScheme: dark
 siteMode: blog
 aiProvider: gemini
 aiApiKey: ""
