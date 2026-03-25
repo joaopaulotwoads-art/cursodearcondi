@@ -8,8 +8,8 @@
  *   - Testar se a chave está funcionando com uma chamada mínima
  *   - Visualizar o status atual da configuração
  *
- * A chave é salva em settings.yaml via PUT /api/admin/site-settings.
- * Exibe aviso de segurança recomendando repositório privado.
+ * Provedor e opções são salvos em settings.yaml. Com integração GitHub (Vercel),
+ * chaves de API não vão para o repositório — o GitHub bloqueia segredos; use env vars.
  */
 
 import { useState, useEffect } from 'react';
@@ -63,6 +63,9 @@ export default function SettingsAI() {
     const [testResult, setTestResult]   = useState<TestResult | null>(null);
     const [saveStatus, setSaveStatus]   = useState<'idle' | 'success' | 'error'>('idle');
     const [saveErrorDetail, setSaveErrorDetail] = useState<string | null>(null);
+    const [saveInfoNote, setSaveInfoNote] = useState<string | null>(null);
+    const [aiKeyFromEnv, setAiKeyFromEnv] = useState(false);
+    const [pexelsKeyFromEnv, setPexelsKeyFromEnv] = useState(false);
     const [loaded, setLoaded]           = useState(false);
 
     useEffect(() => {
@@ -73,6 +76,8 @@ export default function SettingsAI() {
                     setProvider(res.data.aiProvider || 'gemini');
                     setApiKey(res.data.aiApiKey || '');
                     setPexelsApiKey(res.data.pexelsApiKey || '');
+                    setAiKeyFromEnv(res.data.aiApiKeyConfiguredInEnvironment === true);
+                    setPexelsKeyFromEnv(res.data.pexelsApiKeyConfiguredInEnvironment === true);
                 }
                 setLoaded(true);
             })
@@ -83,6 +88,7 @@ export default function SettingsAI() {
         setSaving(true);
         setSaveStatus('idle');
         setSaveErrorDetail(null);
+        setSaveInfoNote(null);
         setTestResult(null);
         let saveOk = false;
         try {
@@ -91,13 +97,21 @@ export default function SettingsAI() {
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ aiProvider: provider, aiApiKey: apiKey, pexelsApiKey: pexelsApiKey }),
             });
-            const data = (await res.json().catch(() => ({}))) as { success?: boolean; error?: string };
+            const data = (await res.json().catch(() => ({}))) as {
+                success?: boolean;
+                error?: string;
+                secretsSkippedForRepo?: boolean;
+            };
             saveOk = Boolean(data.success);
             setSaveStatus(saveOk ? 'success' : 'error');
             if (!saveOk) {
                 setSaveErrorDetail(
                     data.error ||
                         'Não foi possível gravar. No site publicado (Vercel), a gravação usa o GitHub: confira GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO nas variáveis de ambiente.',
+                );
+            } else if (data.secretsSkippedForRepo) {
+                setSaveInfoNote(
+                    'Provedor e opções foram gravados no repositório. As chaves de API não são enviadas ao GitHub (o GitHub rejeita segredos no código). Defina na Vercel: OPENAI_API_KEY ou GEMINI_API_KEY conforme o provedor; para imagens nos posts, PEXELS_API_KEY. Depois faça um novo deploy ou aguarde o próximo.',
                 );
             }
         } catch {
@@ -110,8 +124,12 @@ export default function SettingsAI() {
     }
 
     async function handleTest() {
-        if (!apiKey.trim()) {
-            setTestResult({ ok: false, message: 'Insira uma API Key antes de testar.' });
+        if (!apiKey.trim() && !aiKeyFromEnv) {
+            setTestResult({
+                ok: false,
+                message:
+                    'Insira uma API Key ou configure OPENAI_API_KEY / GEMINI_API_KEY nas variáveis de ambiente do servidor.',
+            });
             return;
         }
         setTesting(true);
@@ -157,11 +175,15 @@ export default function SettingsAI() {
                 <span style={{ fontSize: '1.25rem', flexShrink: 0 }}>⚠️</span>
                 <div>
                     <p style={{ fontWeight: 700, color: '#fbbf24', fontSize: '0.875rem', marginBottom: '0.25rem' }}>
-                        Repositório Privado Obrigatório
+                        Site na Vercel / GitHub
                     </p>
                     <p style={{ color: '#a3a3a3', fontSize: '0.8rem', lineHeight: 1.6 }}>
-                        Sua API Key será salva no arquivo <code style={{ background: 'rgba(255,255,255,0.08)', padding: '0.1em 0.4em', borderRadius: '4px' }}>settings.yaml</code> do repositório.
-                        Certifique-se de que o repositório é <strong style={{ color: '#e5e5e5' }}>privado</strong> no GitHub antes de salvar.
+                        O GitHub <strong style={{ color: '#e5e5e5' }}>bloqueia</strong> commits que contenham chaves de API no código.
+                        Com o CMS ligado ao repositório, as chaves <strong style={{ color: '#e5e5e5' }}>não</strong> são gravadas no{' '}
+                        <code style={{ background: 'rgba(255,255,255,0.08)', padding: '0.1em 0.4em', borderRadius: '4px' }}>settings.yaml</code>.
+                        Configure <strong style={{ color: '#e5e5e5' }}>OPENAI_API_KEY</strong> ou <strong style={{ color: '#e5e5e5' }}>GEMINI_API_KEY</strong> e, se quiser Pexels,{' '}
+                        <strong style={{ color: '#e5e5e5' }}>PEXELS_API_KEY</strong> nas Environment Variables da Vercel.
+                        Em desenvolvimento local sem GitHub, a chave pode continuar só no ficheiro.
                     </p>
                 </div>
             </div>
@@ -353,7 +375,7 @@ export default function SettingsAI() {
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <button
                     onClick={handleTest}
-                    disabled={testing || !apiKey.trim()}
+                    disabled={testing || (!apiKey.trim() && !aiKeyFromEnv)}
                     style={{
                         padding: '0.75rem 1.25rem',
                         borderRadius: '8px',
@@ -362,12 +384,12 @@ export default function SettingsAI() {
                         color: '#e5e5e5',
                         fontWeight: 600,
                         fontSize: '0.875rem',
-                        cursor: testing || !apiKey.trim() ? 'not-allowed' : 'pointer',
-                        opacity: !apiKey.trim() ? 0.5 : 1,
+                        cursor: testing || (!apiKey.trim() && !aiKeyFromEnv) ? 'not-allowed' : 'pointer',
+                        opacity: !apiKey.trim() && !aiKeyFromEnv ? 0.5 : 1,
                         transition: 'all 0.15s',
                     }}
                 >
-                    {testing ? '⏳ Testando...' : '🧪 Testar Chave'}
+                    {testing ? '⏳ Testando...' : aiKeyFromEnv && !apiKey.trim() ? '🧪 Testar (chave no servidor)' : '🧪 Testar Chave'}
                 </button>
 
                 <button
@@ -415,6 +437,23 @@ export default function SettingsAI() {
                 </p>
             )}
 
+            {saveInfoNote && (
+                <p
+                    style={{
+                        margin: '0.5rem 0 0',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '8px',
+                        background: 'rgba(22, 163, 74, 0.12)',
+                        border: '1px solid rgba(22, 163, 74, 0.35)',
+                        color: '#bbf7d0',
+                        fontSize: '0.8125rem',
+                        lineHeight: 1.45,
+                    }}
+                >
+                    {saveInfoNote}
+                </p>
+            )}
+
             {/* Status atual da configuração */}
             <div style={{
                 padding: '1rem 1.25rem',
@@ -432,14 +471,36 @@ export default function SettingsAI() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
                         <span style={{ color: '#71717a' }}>API Key IA</span>
-                        <span style={{ color: apiKey ? '#4ade80' : '#f87171', fontWeight: 600 }}>
-                            {apiKey ? '● Configurada' : '○ Não configurada'}
+                        <span
+                            style={{
+                                color: apiKey || aiKeyFromEnv ? '#4ade80' : '#f87171',
+                                fontWeight: 600,
+                                textAlign: 'right',
+                                maxWidth: '62%',
+                            }}
+                        >
+                            {apiKey
+                                ? '● No formulário / ficheiro'
+                                : aiKeyFromEnv
+                                  ? '● Variável de ambiente (Vercel)'
+                                  : '○ Não configurada'}
                         </span>
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
                         <span style={{ color: '#71717a' }}>Pexels (imagens)</span>
-                        <span style={{ color: pexelsApiKey ? '#4ade80' : '#71717a', fontWeight: 600 }}>
-                            {pexelsApiKey ? '● Configurada' : '○ Opcional'}
+                        <span
+                            style={{
+                                color: pexelsApiKey || pexelsKeyFromEnv ? '#4ade80' : '#71717a',
+                                fontWeight: 600,
+                                textAlign: 'right',
+                                maxWidth: '62%',
+                            }}
+                        >
+                            {pexelsApiKey
+                                ? '● No formulário / ficheiro'
+                                : pexelsKeyFromEnv
+                                  ? '● PEXELS_API_KEY no servidor'
+                                  : '○ Opcional'}
                         </span>
                     </div>
                 </div>

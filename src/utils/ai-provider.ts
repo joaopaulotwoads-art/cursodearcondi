@@ -9,9 +9,11 @@
  *   - callOpenAI(): chama a API OpenAI (gpt-4o-mini)
  *   - callGemini(): chama a API Google Gemini (gemini-1.5-flash)
  *
- * Ordem de prioridade para API Key:
- *   1. settings.yaml (aiProvider + aiApiKey)
- *   2. Variáveis de ambiente (OPENAI_API_KEY / GEMINI_API_KEY)
+ * Ordem de prioridade para API Key de IA:
+ *   1. settings.yaml (aiApiKey) — só em ambiente sem integração GitHub ao gravar
+ *   2. Variáveis de ambiente (OPENAI_API_KEY / GEMINI_API_KEY) — obrigatório na Vercel
+ *
+ * Pexels: settings.yaml (pexelsApiKey) ou PEXELS_API_KEY no ambiente.
  */
 
 import fs from 'node:fs/promises';
@@ -61,6 +63,13 @@ export function resolveApiKey(settings: AISettings): string {
     if (settings.apiKey?.trim()) return settings.apiKey.trim();
     if (settings.provider === 'openai') return (process.env.OPENAI_API_KEY || '').trim();
     return (process.env.GEMINI_API_KEY || '').trim();
+}
+
+/** Chave Pexels: ficheiro de settings primeiro, depois variável de ambiente. */
+export function resolvePexelsApiKey(settings: AISettings): string {
+    const fromFile = settings.pexelsApiKey?.trim() || '';
+    if (fromFile) return fromFile;
+    return (process.env.PEXELS_API_KEY || '').trim();
 }
 
 /**

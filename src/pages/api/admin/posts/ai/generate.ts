@@ -17,7 +17,7 @@
 import type { APIRoute } from 'astro';
 import { writePost, slugExists } from '../../../../../utils/post-utils';
 import type { PostData } from '../../../../../utils/post-utils';
-import { loadAISettings, resolveApiKey, callAI } from '../../../../../utils/ai-provider';
+import { loadAISettings, resolveApiKey, resolvePexelsApiKey, callAI } from '../../../../../utils/ai-provider';
 import { searchPexelsPhotos, getPhotoUrl, getThumbnailUrl } from '../../../../../utils/pexels';
 
 interface Outline {
@@ -523,6 +523,7 @@ export const POST: APIRoute = async ({ request }) => {
 
         const aiSettings = await loadAISettings();
         const apiKey = resolveApiKey(aiSettings);
+        const pexelsKey = resolvePexelsApiKey(aiSettings);
 
         const encoder = new TextEncoder();
         const send = (data: object) => `data: ${JSON.stringify(data)}\n\n`;
@@ -563,7 +564,7 @@ export const POST: APIRoute = async ({ request }) => {
                     }
 
                     let thumbnailUrl: string | undefined;
-                    if (aiSettings.pexelsApiKey?.trim()) {
+                    if (pexelsKey) {
                         onProgress('🖼️ Traduzindo título para busca no Pexels...');
                         let searchQuery = title;
                         if (apiKey) {
@@ -580,7 +581,7 @@ export const POST: APIRoute = async ({ request }) => {
                             const result = await insertImagesByWordCount(
                                 content,
                                 title,
-                                aiSettings.pexelsApiKey.trim(),
+                                pexelsKey,
                                 searchQuery
                             );
                             content = result.content;
