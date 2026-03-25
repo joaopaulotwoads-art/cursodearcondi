@@ -2,9 +2,7 @@ siteName: Bem Mãe
 activeTheme: bemmae
 colorScheme: light
 siteMode: blog
-aiProvider: gemini
-aiApiKey: ""
-pexelsApiKey: ""
+aiProvider: openai
 canonicalUrl: https://bemmae.com.br
 companyPhone: ""
 companyWhatsapp: ""
