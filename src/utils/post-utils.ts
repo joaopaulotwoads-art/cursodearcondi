@@ -140,11 +140,11 @@ export async function writePost(
         }
 
         if (isGitHubConfigured()) {
-            return githubWriteFile(
+            return (await githubWriteFile(
                 `src/content/posts/${filename}`,
                 fileContent,
                 `content: save post "${slug}"`,
-            );
+            )).ok;
         }
 
         const filePath = path.join(POSTS_DIR, filename);

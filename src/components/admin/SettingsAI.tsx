@@ -62,6 +62,7 @@ export default function SettingsAI() {
     const [testing, setTesting]         = useState(false);
     const [testResult, setTestResult]   = useState<TestResult | null>(null);
     const [saveStatus, setSaveStatus]   = useState<'idle' | 'success' | 'error'>('idle');
+    const [saveErrorDetail, setSaveErrorDetail] = useState<string | null>(null);
     const [loaded, setLoaded]           = useState(false);
 
     useEffect(() => {
@@ -81,20 +82,30 @@ export default function SettingsAI() {
     async function handleSave() {
         setSaving(true);
         setSaveStatus('idle');
+        setSaveErrorDetail(null);
         setTestResult(null);
+        let saveOk = false;
         try {
             const res = await fetch('/api/admin/site-settings', {
                 method:  'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body:    JSON.stringify({ aiProvider: provider, aiApiKey: apiKey, pexelsApiKey: pexelsApiKey }),
             });
-            const data = await res.json();
-            setSaveStatus(data.success ? 'success' : 'error');
+            const data = (await res.json().catch(() => ({}))) as { success?: boolean; error?: string };
+            saveOk = Boolean(data.success);
+            setSaveStatus(saveOk ? 'success' : 'error');
+            if (!saveOk) {
+                setSaveErrorDetail(
+                    data.error ||
+                        'Não foi possível gravar. No site publicado (Vercel), a gravação usa o GitHub: confira GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO nas variáveis de ambiente.',
+                );
+            }
         } catch {
             setSaveStatus('error');
+            setSaveErrorDetail('Erro de rede ou resposta inválida ao salvar.');
         } finally {
             setSaving(false);
-            setTimeout(() => setSaveStatus('idle'), 3000);
+            setTimeout(() => setSaveStatus('idle'), saveOk ? 3000 : 6000);
         }
     }
 
@@ -386,6 +397,23 @@ export default function SettingsAI() {
                         : '💾 Salvar Configurações'}
                 </button>
             </div>
+
+            {saveErrorDetail && (
+                <p
+                    style={{
+                        margin: '0.5rem 0 0',
+                        padding: '0.75rem 1rem',
+                        borderRadius: '8px',
+                        background: 'rgba(220, 38, 38, 0.12)',
+                        border: '1px solid rgba(220, 38, 38, 0.35)',
+                        color: '#fecaca',
+                        fontSize: '0.8125rem',
+                        lineHeight: 1.45,
+                    }}
+                >
+                    {saveErrorDetail}
+                </p>
+            )}
 
             {/* Status atual da configuração */}
             <div style={{

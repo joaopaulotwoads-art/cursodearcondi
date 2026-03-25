@@ -39,7 +39,7 @@ async function readSettings(): Promise<Record<string, unknown>> {
     }
 }
 
-async function writeSettings(data: Record<string, unknown>): Promise<boolean> {
+async function writeSettings(data: Record<string, unknown>): Promise<{ success: boolean; error?: string }> {
     const content = yaml.dump(data, { lineWidth: -1, noRefs: true, quotingType: '"' });
 
     // Sempre tentar escrever localmente primeiro — assim o Astro content layer (getEntry)
@@ -53,9 +53,15 @@ async function writeSettings(data: Record<string, unknown>): Promise<boolean> {
     }
 
     if (isGitHubConfigured()) {
-        return githubWriteFile(SETTINGS_GH_PATH, content, 'content: update site settings');
+        const gh = await githubWriteFile(SETTINGS_GH_PATH, content, 'content: update site settings');
+        if (!gh.ok) {
+            return {
+                success: false,
+                error: gh.error || 'Não foi possível gravar settings.yaml no GitHub (verifique token e variáveis na Vercel).',
+            };
+        }
     }
-    return true;
+    return { success: true };
 }
 
 export const GET: APIRoute = async () => {
@@ -99,12 +105,18 @@ export const PUT: APIRoute = async ({ request }) => {
             if (norm) (updated as Record<string, unknown>).canonicalUrl = norm;
         }
 
-        const ok = await writeSettings(updated);
-        if (!ok) {
-            return new Response(JSON.stringify({ success: false, error: 'Erro ao salvar configurações' }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json' },
-            });
+        const wrote = await writeSettings(updated);
+        if (!wrote.success) {
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    error: wrote.error || 'Erro ao salvar configurações',
+                }),
+                {
+                    status: 500,
+                    headers: { 'Content-Type': 'application/json' },
+                },
+            );
         }
 
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };

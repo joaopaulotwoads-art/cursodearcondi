@@ -96,11 +96,11 @@ export async function writeNicho(slug: string, data: NichoData): Promise<boolean
         const filename = `${slug}.yaml`;
 
         if (isGitHubConfigured()) {
-            return githubWriteFile(
+            return (await githubWriteFile(
                 `${NICHOS_GH}/${filename}`,
                 yamlContent,
                 `content: save niche "${slug}"`,
-            );
+            )).ok;
         }
 
         await fs.mkdir(NICHOS_DIR, { recursive: true });

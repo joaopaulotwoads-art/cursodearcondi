@@ -115,7 +115,7 @@ export async function githubWriteFile(
     path: string,
     content: string,
     message: string,
-): Promise<boolean> {
+): Promise<{ ok: boolean; error?: string }> {
     const existing = await githubReadFile(path);
     const body: Record<string, unknown> = {
         message,
@@ -129,7 +129,21 @@ export async function githubWriteFile(
         headers: headers(),
         body: JSON.stringify(body),
     });
-    return res.ok || res.status === 201;
+    if (res.ok || res.status === 201) return { ok: true };
+
+    const text = await res.text().catch(() => '');
+    let detail = text;
+    try {
+        const j = JSON.parse(text) as { message?: string; errors?: Array<{ message?: string }> };
+        detail =
+            j.message ||
+            (Array.isArray(j.errors) ? j.errors.map((e) => e.message).filter(Boolean).join('; ') : '') ||
+            text;
+    } catch {
+        /* manter text */
+    }
+    console.error(`❌ githubWriteFile ${path} — HTTP ${res.status}: ${detail.slice(0, 800)}`);
+    return { ok: false, error: `GitHub (${res.status}): ${detail.slice(0, 400)}` };
 }
 
 /** Cria ou atualiza um arquivo binário (Buffer) no repositório */

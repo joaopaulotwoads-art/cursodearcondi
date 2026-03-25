@@ -79,11 +79,11 @@ export async function writeSingleton(name: string, data: unknown, themeId?: stri
         });
 
         if (isGitHubConfigured()) {
-            return githubWriteFile(
+            return (await githubWriteFile(
                 `src/content/singletons/${activeTheme}/${name}.yaml`,
                 yamlContent,
                 `content: save singleton "${name}"`,
-            );
+            )).ok;
         }
 
         const themeDir = path.join(SINGLETONS_BASE_DIR, activeTheme);
