@@ -104,7 +104,7 @@ export default function SettingsSEO() {
     }
 
     const base = toFullUrl(canonicalUrl);
-    const sitemapUrl = base ? `${base}/sitemap-index.xml` : null;
+    const sitemapUrl = base ? `${base}/sitemap.xml` : null;
     const robotsUrl = base ? `${base}/robots.txt` : null;
 
     return (
@@ -498,8 +498,8 @@ export default function SettingsSEO() {
                     Links para testar
                 </p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    <a href="/sitemap-index.xml" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.875rem', color: 'var(--primary, #6366f1)', textDecoration: 'none' }}>
-                        📄 Sitemap (site atual) — /sitemap-index.xml
+                    <a href="/sitemap.xml" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.875rem', color: 'var(--primary, #6366f1)', textDecoration: 'none' }}>
+                        📄 Sitemap (site atual) — /sitemap.xml
                     </a>
                     <a href="/robots.txt" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.875rem', color: 'var(--primary, #6366f1)', textDecoration: 'none' }}>
                         🤖 robots.txt (site atual) — /robots.txt
