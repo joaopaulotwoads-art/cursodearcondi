@@ -73,7 +73,7 @@ html.dark .cnx-aff-block-wrap {
 }
 
 .bemmae-post-html .cnx-aff-product-badge {
-  margin: 0 0 1rem;
+  margin: 0 0 1rem 0.35rem;
   padding: 0.35rem 0.75rem;
   font-size: 0.62rem;
   letter-spacing: 0.1em;
@@ -219,7 +219,7 @@ html.dark .cnx-aff-block-wrap {
   }
 
   .bemmae-post-html .cnx-aff-product-badge {
-    margin-left: 0.2rem;
+    margin-left: 0.35rem;
   }
 
   .bemmae-post-html .cnx-aff-product-score {

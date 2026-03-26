@@ -352,6 +352,9 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
                 openOnClick: false,
                 HTMLAttributes: {
                     class: 'text-[#3b82f6] hover:underline cursor-pointer',
+                    // Links editoriais (internos/externos de conteúdo) devem ser follow por padrão.
+                    rel: null,
+                    target: null,
                 },
             }),
             Image.configure({
@@ -480,7 +483,7 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
             editor?.chain()
                 .focus()
                 .extendMarkRange('link')
-                .setLink({ href: linkUrl })
+                .setLink({ href: linkUrl, target: null, rel: null })
                 .run();
         } else {
             // Se não há texto selecionado, insere link com texto

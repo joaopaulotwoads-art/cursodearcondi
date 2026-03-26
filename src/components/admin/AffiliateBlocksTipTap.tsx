@@ -107,7 +107,11 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                         )}
                         {a.ctaText && a.ctaUrl && (
                             <div className="cnx-aff-product-cta">
-                                <a href={a.ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
+                                <a
+                                    href={a.ctaUrl}
+                                    target="_blank"
+                                    rel={a.ctaNofollow ? 'nofollow sponsored noopener noreferrer' : 'noopener noreferrer'}
+                                >
                                     {a.ctaText}
                                 </a>
                             </div>
@@ -138,6 +142,14 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                             <input className={inputCls} placeholder="Texto do botão" value={d.ctaText} onChange={(e) => setD({ ...d, ctaText: e.target.value })} />
                             <input className={inputCls} placeholder="URL afiliado" value={d.ctaUrl} onChange={(e) => setD({ ...d, ctaUrl: e.target.value })} />
                         </div>
+                        <label className="flex items-center gap-2 text-xs text-[#a3a3a3]">
+                            <input
+                                type="checkbox"
+                                checked={d.ctaNofollow !== false}
+                                onChange={(e) => setD({ ...d, ctaNofollow: e.target.checked })}
+                            />
+                            Botao com nofollow (recomendado para afiliado)
+                        </label>
                         <div className="flex gap-2 pt-2">
                             <button type="button" onClick={save} disabled={!d.productName?.trim()} className="flex-1 py-2 rounded-lg bg-[#3b82f6] text-white text-sm font-semibold disabled:opacity-40">
                                 Salvar
@@ -171,13 +183,22 @@ export const AffiliateProductCardExtension = Node.create({
             },
             ctaText: { default: '' },
             ctaUrl: { default: '' },
+            ctaNofollow: {
+                default: true,
+                parseHTML: (el) => {
+                    const a = el.querySelector('.cnx-aff-product-cta a');
+                    if (!a) return true;
+                    const rel = (a.getAttribute('rel') || '').toLowerCase();
+                    return rel.includes('nofollow');
+                },
+            },
         };
     },
     parseHTML() {
         return [{ tag: 'div.cnx-aff-product.cnx-aff-block-wrap' }];
     },
     renderHTML({ node }) {
-        const { badge, productName, subtitle, productImage, rating, features, ctaText, ctaUrl } = node.attrs;
+        const { badge, productName, subtitle, productImage, rating, features, ctaText, ctaUrl, ctaNofollow } = node.attrs;
         const feats = Array.isArray(features) ? features : [];
         const li = feats.map((t: string) => ['li', {}, t]);
         const img = productImage ? [['img', { src: productImage, alt: '', class: 'cnx-aff-product-img' }]] : [];
@@ -191,7 +212,7 @@ export const AffiliateProductCardExtension = Node.create({
                       [
                           'div',
                           { class: 'cnx-aff-product-cta' },
-                          ['a', { href: ctaUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, ctaText],
+                          ['a', { href: ctaUrl, target: '_blank', rel: ctaNofollow !== false ? 'nofollow sponsored noopener noreferrer' : 'noopener noreferrer' }, ctaText],
                       ],
                   ]
                 : [];
@@ -1063,6 +1084,7 @@ export const affiliateBlockDefaults = {
             features: ['Destaque 1', 'Destaque 2', 'Destaque 3'],
             ctaText: 'Ver na Amazon',
             ctaUrl: 'https://',
+            ctaNofollow: true,
         },
     },
     prosCons: {
