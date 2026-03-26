@@ -99,6 +99,9 @@ html.dark .cnx-aff-block-wrap {
 .bemmae-post-html .cnx-aff-product-img {
   width: 140px;
   height: 140px;
+  max-width: 100%;
+  display: block;
+  box-sizing: border-box;
   border-radius: 0.65rem;
   border: 1px solid rgba(196, 167, 125, 0.35);
   box-shadow: 0 6px 18px rgba(92, 77, 60, 0.12);
