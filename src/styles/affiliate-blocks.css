@@ -43,6 +43,149 @@ html.dark .cnx-aff-block-wrap {
   --aff-red: #c2410c;
 }
 
+/* Product box (Bem Mãe) — layout mais próximo de “product box” profissional */
+.bemmae-post-html .cnx-aff-product.cnx-aff-block-wrap {
+  position: relative;
+  padding: 0;
+  border-radius: 1rem;
+  border: 1px solid rgba(196, 167, 125, 0.45);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 14px 42px rgba(92, 77, 60, 0.1);
+  background: linear-gradient(180deg, #fffefb 0%, #fffdf9 40%, #fffaf5 100%);
+}
+
+.bemmae-post-html .cnx-aff-product.cnx-aff-block-wrap::before {
+  content: '';
+  display: block;
+  height: 4px;
+  border-radius: 1rem 1rem 0 0;
+  background: linear-gradient(
+    90deg,
+    var(--aff-accent, #c4a77d),
+    #d4b896,
+    #a78bfa
+  );
+}
+
+.bemmae-post-html .cnx-aff-product {
+  padding: 1.25rem 1.35rem 1.35rem;
+}
+
+.bemmae-post-html .cnx-aff-product-badge {
+  margin: 0 0 1rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  background: linear-gradient(
+    135deg,
+    rgba(245, 230, 232, 0.95),
+    rgba(232, 220, 211, 0.75)
+  );
+  border: 1px solid rgba(196, 167, 125, 0.35);
+  color: #6b5344 !important;
+  box-shadow: 0 1px 2px rgba(92, 77, 60, 0.06);
+}
+
+.bemmae-post-html .cnx-aff-product-body {
+  gap: 1.35rem;
+  align-items: stretch;
+}
+
+.bemmae-post-html .cnx-aff-product-img {
+  width: 132px;
+  height: 132px;
+  border-radius: 0.65rem;
+  border: 1px solid rgba(196, 167, 125, 0.35);
+  box-shadow: 0 6px 18px rgba(92, 77, 60, 0.12);
+  background: #fff;
+}
+
+.bemmae-post-html .cnx-aff-product-title {
+  font-size: 1.2rem !important;
+  line-height: 1.3 !important;
+  letter-spacing: -0.02em;
+}
+
+.bemmae-post-html .cnx-aff-product-score {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.35rem 0 0.65rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(196, 167, 125, 0.18);
+  border: 1px solid rgba(196, 167, 125, 0.35);
+  color: #5c4d3c !important;
+}
+
+.bemmae-post-html .cnx-aff-product-features {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin-top: 0.65rem !important;
+}
+
+.bemmae-post-html .cnx-aff-product-features li {
+  position: relative;
+  padding-left: 1.35rem !important;
+  margin: 0.4rem 0 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.45 !important;
+  color: var(--aff-text) !important;
+}
+
+.bemmae-post-html .cnx-aff-product-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  font-weight: 800;
+  font-size: 0.85em;
+  color: var(--aff-green, #0d9488);
+}
+
+.bemmae-post-html .cnx-aff-product-cta {
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(196, 167, 125, 0.45);
+}
+
+.bemmae-post-html .cnx-aff-product-cta a {
+  display: flex !important;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0.85rem 1.25rem !important;
+  border-radius: 0.75rem !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.02em;
+  box-shadow:
+    0 4px 14px rgba(167, 139, 250, 0.25),
+    0 10px 28px rgba(92, 77, 60, 0.12);
+  background: linear-gradient(
+    92deg,
+    var(--aff-accent, #c4a77d),
+    #b8956a,
+    #7c6cf0
+  ) !important;
+}
+
+.bemmae-post-html .cnx-aff-product-cta a:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 520px) {
+  .bemmae-post-html .cnx-aff-product-img {
+    width: 100%;
+    height: 200px;
+  }
+}
+
 /* ── Produto único ─────────────────────────────────────────────────────────── */
 .cnx-aff-product {
   padding: 1.5rem;
