@@ -95,7 +95,7 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                         <img src={a.productImage} alt="" className="cnx-aff-product-img" />
                     )}
                     <div className="cnx-aff-product-main">
-                        <h3 className="cnx-aff-product-title">{a.productName || 'Produto'}</h3>
+                        <h2 className="cnx-aff-product-title">{a.productName || 'Produto'}</h2>
                         {a.subtitle && <p className="cnx-aff-product-sub">{a.subtitle}</p>}
                         {a.rating && <div className="cnx-aff-product-score">Nota {a.rating}</div>}
                         {features.length > 0 && (
@@ -206,7 +206,7 @@ export const AffiliateProductCardExtension = Node.create({
                 [
                     'div',
                     { class: 'cnx-aff-product-main' },
-                    ['h3', { class: 'cnx-aff-product-title' }, productName || 'Produto'],
+                    ['h2', { class: 'cnx-aff-product-title' }, productName || 'Produto'],
                     ...sub,
                     ...score,
                     ...featBlock,
