@@ -52,6 +52,37 @@ interface Props {
 }
 
 export default function PostEditor({ post, authors, categories }: Props) {
+    const normalizeInternalLinksToFollow = (html: string): string => {
+        if (!html || !html.includes('<a')) return html;
+        // Para links internos do próprio site, removemos nofollow/sponsored.
+        return html.replace(/<a\b([^>]*?)>/gi, (full, attrs) => {
+            const hrefMatch = attrs.match(/\bhref\s*=\s*["']([^"']+)["']/i);
+            if (!hrefMatch) return full;
+            const href = hrefMatch[1];
+            const isInternal =
+                href.startsWith('/') ||
+                href.startsWith('#') ||
+                href.includes('bemmae.com.br');
+            if (!isInternal) return full;
+
+            const relMatch = attrs.match(/\brel\s*=\s*["']([^"']*)["']/i);
+            if (!relMatch) return full;
+            const cleanedRel = relMatch[1]
+                .split(/\s+/)
+                .filter(Boolean)
+                .filter((token) => {
+                    const t = token.toLowerCase();
+                    return t !== 'nofollow' && t !== 'sponsored';
+                })
+                .join(' ');
+
+            const updatedAttrs = cleanedRel
+                ? attrs.replace(relMatch[0], `rel="${cleanedRel}"`)
+                : attrs.replace(/\s*\brel\s*=\s*["'][^"']*["']/i, '');
+            return `<a${updatedAttrs}>`;
+        });
+    };
+
     const { toasts, showToast, removeToast } = useToast();
     const [isMounted, setIsMounted] = useState(false);
     const [title, setTitle] = useState(post?.title || '');
@@ -155,6 +186,10 @@ export default function PostEditor({ post, authors, categories }: Props) {
                 } catch (error) {
                     console.error('❌ Erro ao converter HTML para Markdown:', error);
                 }
+            }
+
+            if (finalContentFormatHtml) {
+                bodyContent = normalizeInternalLinksToFollow(bodyContent);
             }
 
             const postData: PostData = {

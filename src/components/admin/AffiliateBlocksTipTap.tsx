@@ -245,8 +245,9 @@ export const AffiliateProductCardExtension = Node.create({
 function ProsConsView({ node, updateAttributes, deleteNode }: any) {
     const pros: string[] = Array.isArray(node.attrs.pros) ? node.attrs.pros : [];
     const cons: string[] = Array.isArray(node.attrs.cons) ? node.attrs.cons : [];
+    const ctaUrl: string = node.attrs.ctaUrl || '';
     const [open, setOpen] = useState(false);
-    const [d, setD] = useState({ pros: [...pros], cons: [...cons] });
+    const [d, setD] = useState({ pros: [...pros], cons: [...cons], ctaUrl });
 
     return (
         <BlockChrome
@@ -257,32 +258,31 @@ function ProsConsView({ node, updateAttributes, deleteNode }: any) {
             onDelete={deleteNode}
         >
             <div className="cnx-aff-pros-cons cnx-aff-block-wrap">
-                <table className="cnx-aff-pros-cons-table">
-                    <thead>
-                        <tr>
-                            <th className="cnx-aff-pc-pros-h">Prós</th>
-                            <th className="cnx-aff-pc-cons-h">Contras</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="cnx-aff-pc-pros-td">
-                                <ul>
-                                    {pros.map((p, i) => (
-                                        <li key={i}>{p}</li>
-                                    ))}
-                                </ul>
-                            </td>
-                            <td className="cnx-aff-pc-cons-td">
-                                <ul>
-                                    {cons.map((c, i) => (
-                                        <li key={i}>{c}</li>
-                                    ))}
-                                </ul>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div className="cnx-aff-pros-cons-sections">
+                    <section className="cnx-aff-pros-section">
+                        <h3 className="cnx-aff-pros-title">Pros</h3>
+                        <ul className="cnx-aff-pros-list">
+                            {pros.map((p, i) => (
+                                <li key={i}>{p}</li>
+                            ))}
+                        </ul>
+                    </section>
+                    <section className="cnx-aff-cons-section">
+                        <h3 className="cnx-aff-cons-title">Contras</h3>
+                        <ul className="cnx-aff-cons-list">
+                            {cons.map((c, i) => (
+                                <li key={i}>{c}</li>
+                            ))}
+                        </ul>
+                    </section>
+                </div>
+                {node.attrs.ctaUrl && (
+                    <div className="cnx-aff-pros-cons-cta">
+                        <a href={node.attrs.ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
+                            Ver Preco na Amazon
+                        </a>
+                    </div>
+                )}
             </div>
             {open && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setOpen(false)}>
@@ -302,6 +302,12 @@ function ProsConsView({ node, updateAttributes, deleteNode }: any) {
                             value={d.cons.join('\n')}
                             onChange={(e) => setD({ ...d, cons: e.target.value.split('\n') })}
                         />
+                        <input
+                            className={inputCls}
+                            placeholder="URL do botao (Amazon)"
+                            value={d.ctaUrl}
+                            onChange={(e) => setD({ ...d, ctaUrl: e.target.value })}
+                        />
                         <div className="flex gap-2">
                             <button
                                 type="button"
@@ -309,6 +315,7 @@ function ProsConsView({ node, updateAttributes, deleteNode }: any) {
                                     updateAttributes({
                                         pros: d.pros.filter((x) => x.trim()),
                                         cons: d.cons.filter((x) => x.trim()),
+                                        ctaUrl: d.ctaUrl || '',
                                     });
                                     setOpen(false);
                                 }}
@@ -336,12 +343,16 @@ export const AffiliateProsConsExtension = Node.create({
             pros: {
                 default: [],
                 parseHTML: (el) =>
-                    Array.from(el.querySelectorAll('.cnx-aff-pc-pros-td li')).map((li) => li.textContent || ''),
+                    Array.from(el.querySelectorAll('.cnx-aff-pc-pros-td li, .cnx-aff-pros-list li')).map((li) => li.textContent || ''),
             },
             cons: {
                 default: [],
                 parseHTML: (el) =>
-                    Array.from(el.querySelectorAll('.cnx-aff-pc-cons-td li')).map((li) => li.textContent || ''),
+                    Array.from(el.querySelectorAll('.cnx-aff-pc-cons-td li, .cnx-aff-cons-list li')).map((li) => li.textContent || ''),
+            },
+            ctaUrl: {
+                default: '',
+                parseHTML: (el) => (el.querySelector('.cnx-aff-pros-cons-cta a') as HTMLAnchorElement | null)?.href || '',
             },
         };
     },
@@ -351,33 +362,34 @@ export const AffiliateProsConsExtension = Node.create({
     renderHTML({ node }) {
         const pros = (Array.isArray(node.attrs.pros) ? node.attrs.pros : []).map((t: string) => ['li', {}, t]);
         const cons = (Array.isArray(node.attrs.cons) ? node.attrs.cons : []).map((t: string) => ['li', {}, t]);
+        const cta = node.attrs.ctaUrl
+            ? [[
+                'div',
+                { class: 'cnx-aff-pros-cons-cta' },
+                ['a', { href: node.attrs.ctaUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, 'Ver Preco na Amazon'],
+            ]]
+            : [];
+
         return [
             'div',
             { class: 'cnx-aff-pros-cons cnx-aff-block-wrap' },
             [
-                'table',
-                { class: 'cnx-aff-pros-cons-table' },
+                'div',
+                { class: 'cnx-aff-pros-cons-sections' },
                 [
-                    'thead',
-                    {},
-                    [
-                        'tr',
-                        {},
-                        ['th', { class: 'cnx-aff-pc-pros-h' }, 'Prós'],
-                        ['th', { class: 'cnx-aff-pc-cons-h' }, 'Contras'],
-                    ],
+                    'section',
+                    { class: 'cnx-aff-pros-section' },
+                    ['h3', { class: 'cnx-aff-pros-title' }, 'Pros'],
+                    ['ul', { class: 'cnx-aff-pros-list' }, ...pros],
                 ],
                 [
-                    'tbody',
-                    {},
-                    [
-                        'tr',
-                        {},
-                        ['td', { class: 'cnx-aff-pc-pros-td' }, ['ul', {}, ...pros]],
-                        ['td', { class: 'cnx-aff-pc-cons-td' }, ['ul', {}, ...cons]],
-                    ],
+                    'section',
+                    { class: 'cnx-aff-cons-section' },
+                    ['h3', { class: 'cnx-aff-cons-title' }, 'Contras'],
+                    ['ul', { class: 'cnx-aff-cons-list' }, ...cons],
                 ],
             ],
+            ...cta,
         ] as any;
     },
     addNodeView() {
@@ -1092,6 +1104,7 @@ export const affiliateBlockDefaults = {
         attrs: {
             pros: ['Ponto positivo 1', 'Ponto positivo 2'],
             cons: ['Ponto negativo 1'],
+            ctaUrl: '',
         },
     },
     compare: {

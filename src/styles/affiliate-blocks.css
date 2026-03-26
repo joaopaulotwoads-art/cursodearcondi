@@ -49,23 +49,16 @@ html.dark .cnx-aff-block-wrap {
   padding: 0;
   border-radius: 1rem;
   border: 1px solid rgba(196, 167, 125, 0.45);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 14px 42px rgba(92, 77, 60, 0.1);
-  background: linear-gradient(180deg, #fffefb 0%, #fffdf9 40%, #fffaf5 100%);
+  box-shadow: none;
+  background: #fffdf9;
 }
 
 .bemmae-post-html .cnx-aff-product.cnx-aff-block-wrap::before {
   content: '';
   display: block;
-  height: 4px;
+  height: 2px;
   border-radius: 1rem 1rem 0 0;
-  background: linear-gradient(
-    90deg,
-    var(--aff-accent, #c4a77d),
-    #d4b896,
-    #a78bfa
-  );
+  background: rgba(196, 167, 125, 0.55);
 }
 
 .bemmae-post-html .cnx-aff-product {
@@ -81,14 +74,10 @@ html.dark .cnx-aff-block-wrap {
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
-  background: linear-gradient(
-    135deg,
-    rgba(245, 230, 232, 0.95),
-    rgba(232, 220, 211, 0.75)
-  );
+  background: #ead2c4;
   border: 1px solid rgba(196, 167, 125, 0.35);
   color: #6b5344 !important;
-  box-shadow: 0 1px 2px rgba(92, 77, 60, 0.06);
+  box-shadow: none;
 }
 
 .bemmae-post-html .cnx-aff-product-body {
@@ -104,7 +93,7 @@ html.dark .cnx-aff-block-wrap {
   box-sizing: border-box;
   border-radius: 0.65rem;
   border: 1px solid rgba(196, 167, 125, 0.35);
-  box-shadow: 0 6px 18px rgba(92, 77, 60, 0.12);
+  box-shadow: none;
   background: #fff;
   /* No product box do Bem Mãe, queremos evitar recorte.
      O base usa object-fit: cover; aqui forçamos contain pra não cortar. */
@@ -170,24 +159,18 @@ html.dark .cnx-aff-block-wrap {
   width: 100%;
   justify-content: center;
   align-items: center;
-  padding: 0.65rem 1.1rem !important;
-  border-radius: 0.75rem !important;
+  padding: 0.9rem 1.25rem !important;
+  border-radius: 6px !important;
   font-size: 0.95rem !important;
   letter-spacing: 0.02em;
-  box-shadow:
-    0 4px 14px rgba(167, 139, 250, 0.25),
-    0 10px 28px rgba(92, 77, 60, 0.12);
-  background: linear-gradient(
-    92deg,
-    var(--aff-accent, #c4a77d),
-    #b8956a,
-    #7c6cf0
-  ) !important;
+  box-shadow: none;
+  background: #c4a77d !important;
+  border: 1px solid #b8956a;
 }
 
 .bemmae-post-html .cnx-aff-product-cta a:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
+  filter: brightness(0.96);
+  transform: none;
 }
 
 @media (max-width: 520px) {
@@ -245,19 +228,93 @@ html.dark .cnx-aff-block-wrap {
 
 /* ── Bem Mãe: garantir leitura do Pros/Contras ───────────────────────────── */
 .bemmae-post-html .cnx-aff-pros-cons {
-  background: transparent;
+  background: #fffdf9;
+  border: 1px solid rgba(196, 167, 125, 0.35);
+  border-radius: 1rem;
+  padding: 1rem;
 }
 
-.bemmae-post-html .cnx-aff-pc-pros-td,
-.bemmae-post-html .cnx-aff-pc-cons-td {
-  color: var(--color-text, #5c4d3c) !important;
+.bemmae-post-html .cnx-aff-pros-cons-sections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
 }
 
-.bemmae-post-html .cnx-aff-pc-pros-td ul,
-.bemmae-post-html .cnx-aff-pc-cons-td ul,
-.bemmae-post-html .cnx-aff-pc-pros-td li,
-.bemmae-post-html .cnx-aff-pc-cons-td li {
+.bemmae-post-html .cnx-aff-pros-title,
+.bemmae-post-html .cnx-aff-cons-title {
+  margin: 0 0 0.55rem 0 !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.01em;
+}
+
+.bemmae-post-html .cnx-aff-pros-title {
+  color: #0f766e !important;
+}
+
+.bemmae-post-html .cnx-aff-cons-title {
+  color: #b91c1c !important;
+}
+
+.bemmae-post-html .cnx-aff-pros-list,
+.bemmae-post-html .cnx-aff-cons-list {
+  list-style: none !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+}
+
+.bemmae-post-html .cnx-aff-pros-list li,
+.bemmae-post-html .cnx-aff-cons-list li {
+  position: relative;
   color: var(--color-text, #5c4d3c) !important;
+  padding-left: 1.4rem !important;
+  margin: 0 0 0.5rem 0 !important;
+  line-height: 1.6 !important;
+}
+
+.bemmae-post-html .cnx-aff-pros-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.bemmae-post-html .cnx-aff-cons-list li::before {
+  content: '✕';
+  position: absolute;
+  left: 0;
+  top: 0.05em;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.bemmae-post-html .cnx-aff-pros-cons-cta {
+  margin-top: 0.85rem;
+}
+
+.bemmae-post-html .cnx-aff-pros-cons-cta a {
+  display: flex !important;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 0.9rem 1.25rem !important;
+  border-radius: 6px !important;
+  text-decoration: none !important;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff !important;
+  background: #c4a77d !important;
+  border: 1px solid #b8956a;
+  box-shadow: none !important;
+}
+
+@media (min-width: 768px) {
+  .bemmae-post-html .cnx-aff-pros-cons-sections {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
 }
 
 /* ── Produto único ─────────────────────────────────────────────────────────── */
