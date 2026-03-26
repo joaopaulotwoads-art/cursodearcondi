@@ -133,8 +133,14 @@ export default function PostEditor({ post, authors, categories }: Props) {
 
         setIsSaving(true);
         try {
+            const hasAffiliateBlocks = Boolean(content && content.includes('cnx-aff-'));
+            // Estes blocos são HTML "rich" (tabelas, grid, classes). Converter para markdown pode destruir a estrutura
+            // e causar perda após reload. Então, se existir qualquer bloco cnx-aff no HTML, salvamos como HTML.
+            const forceAffiliateBlocksHtml = !contentFormatHtml && hasAffiliateBlocks;
             let bodyContent = content;
-            if (!contentFormatHtml && content && content.trim().startsWith('<')) {
+            let finalContentFormatHtml = contentFormatHtml || forceAffiliateBlocksHtml;
+
+            if (!finalContentFormatHtml && content && content.trim().startsWith('<')) {
                 try {
                     bodyContent = turndownService.turndown(content);
                 } catch (error) {
@@ -152,7 +158,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
                 metaTitle: metaTitle || undefined,
                 metaDescription: metaDescription || undefined,
                 metaImage: metaImage || undefined,
-                contentFormat: contentFormatHtml ? 'html' : undefined,
+                contentFormat: finalContentFormatHtml ? 'html' : undefined,
                 content: bodyContent,
             };
             

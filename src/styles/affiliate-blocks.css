@@ -7,17 +7,19 @@
 .cnx-aff-block-wrap {
   --aff-border: #e5e7eb;
   --aff-bg: #ffffff;
-  --aff-text: #374151;
+  --aff-text: #111827;
   --aff-muted: #6b7280;
-  --aff-accent: #6366f1;
+  --aff-accent: #6d28d9;
+  --aff-accent-2: #4f46e5;
   --aff-green: #059669;
   --aff-red: #dc2626;
-  margin: 1.5rem 0;
-  border-radius: 0.75rem;
+  margin: 1.75rem 0;
+  border-radius: 1rem;
   border: 1px solid var(--aff-border);
   background: var(--aff-bg);
   color: var(--aff-text);
   overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.04);
 }
 
 .prose-invert .cnx-aff-block-wrap,
@@ -43,7 +45,7 @@ html.dark .cnx-aff-block-wrap {
 
 /* ── Produto único ─────────────────────────────────────────────────────────── */
 .cnx-aff-product {
-  padding: 1.25rem;
+  padding: 1.5rem;
 }
 .cnx-aff-product-badge {
   display: inline-block;
@@ -53,13 +55,13 @@ html.dark .cnx-aff-block-wrap {
   text-transform: uppercase;
   padding: 0.2rem 0.55rem;
   border-radius: 999px;
-  background: rgba(99, 102, 241, 0.15);
+  background: rgba(109, 40, 217, 0.12);
   color: var(--aff-accent);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
 }
 .cnx-aff-product-body {
   display: flex;
-  gap: 1rem;
+  gap: 1.15rem;
   align-items: flex-start;
 }
 .cnx-aff-product-img {
@@ -111,10 +113,11 @@ html.dark .cnx-aff-block-wrap {
   font-size: 0.875rem;
   text-decoration: none !important;
   color: #fff !important;
-  background: var(--aff-accent);
+  background: linear-gradient(90deg, var(--aff-accent), var(--aff-accent-2));
+  box-shadow: 0 8px 18px rgba(79, 70, 229, 0.2);
 }
 .cnx-aff-product-cta a:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.06) saturate(1.03);
 }
 
 @media (max-width: 520px) {
@@ -129,7 +132,7 @@ html.dark .cnx-aff-block-wrap {
 
 /* ── Só prós / contras ─────────────────────────────────────────────────────── */
 .cnx-aff-pros-cons {
-  padding: 1rem 1.25rem 1.25rem;
+  padding: 1.25rem 1.25rem 1.35rem;
 }
 .cnx-aff-pros-cons-table {
   width: 100% !important;
@@ -142,7 +145,7 @@ html.dark .cnx-aff-block-wrap {
   font-size: 0.8rem !important;
   font-weight: 700 !important;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-align: left !important;
 }
 .cnx-aff-pc-pros-h {
@@ -203,7 +206,7 @@ html.dark .cnx-aff-block-wrap {
   vertical-align: top;
 }
 .cnx-aff-compare thead th {
-  background: rgba(99, 102, 241, 0.08);
+  background: rgba(109, 40, 217, 0.08);
   font-weight: 700;
   color: var(--aff-text);
 }
@@ -287,7 +290,7 @@ html.dark .cnx-aff-block-wrap {
   color: var(--aff-text) !important;
 }
 .cnx-aff-roundup-ctas a.cnx-aff-roundup-cta-primary {
-  background: var(--aff-accent);
+  background: linear-gradient(90deg, var(--aff-accent), var(--aff-accent-2));
   color: #fff !important;
   border-color: transparent;
 }
@@ -319,7 +322,7 @@ html.dark .cnx-aff-block-wrap {
   border: 1px solid var(--aff-border);
   border-radius: 0.65rem;
   padding: 1rem;
-  background: rgba(0, 0, 0, 0.02);
+  background: rgba(99, 102, 241, 0.03);
 }
 .prose-invert .cnx-aff-versus-side,
 html.dark .cnx-aff-versus-side {
