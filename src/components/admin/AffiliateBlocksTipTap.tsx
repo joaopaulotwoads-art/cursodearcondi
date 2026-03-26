@@ -107,7 +107,7 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                         )}
                         {a.ctaText && a.ctaUrl && (
                             <div className="cnx-aff-product-cta">
-                                <a href={a.ctaUrl} target="_blank" rel="noopener noreferrer">
+                                <a href={a.ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
                                     {a.ctaText}
                                 </a>
                             </div>
@@ -191,7 +191,7 @@ export const AffiliateProductCardExtension = Node.create({
                       [
                           'div',
                           { class: 'cnx-aff-product-cta' },
-                          ['a', { href: ctaUrl, target: '_blank', rel: 'noopener noreferrer' }, ctaText],
+                          ['a', { href: ctaUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, ctaText],
                       ],
                   ]
                 : [];
@@ -615,7 +615,7 @@ function defaultRoundup(): RoundupItem[] {
             image: '',
             score: '',
             features: [''],
-            cta1: 'Ver na loja',
+            cta1: 'Ver na Amazon',
             cta1Url: '',
             cta2: '',
             cta2Url: '',
@@ -656,12 +656,12 @@ function RoundupView({ node, updateAttributes, deleteNode }: any) {
                         )}
                         <div className="cnx-aff-roundup-ctas">
                             {it.cta1 && it.cta1Url && (
-                                <a className="cnx-aff-roundup-cta-primary" href={it.cta1Url} target="_blank" rel="noopener noreferrer">
+                                <a className="cnx-aff-roundup-cta-primary" href={it.cta1Url} target="_blank" rel="nofollow sponsored noopener noreferrer">
                                     {it.cta1}
                                 </a>
                             )}
                             {it.cta2 && it.cta2Url && (
-                                <a href={it.cta2Url} target="_blank" rel="noopener noreferrer">
+                                <a href={it.cta2Url} target="_blank" rel="nofollow sponsored noopener noreferrer">
                                     {it.cta2}
                                 </a>
                             )}
@@ -766,7 +766,7 @@ function RoundupView({ node, updateAttributes, deleteNode }: any) {
                                             image: '',
                                             score: '',
                                             features: [''],
-                                            cta1: 'Ver na loja',
+                                            cta1: 'Ver na Amazon',
                                             cta1Url: '',
                                             cta2: '',
                                             cta2Url: '',
@@ -833,10 +833,10 @@ export const AffiliateRoundupExtension = Node.create({
             const feats = it.features.filter((f) => f.trim()).map((f) => ['li', {}, f]);
             const ctas: any[] = [];
             if (it.cta1 && it.cta1Url) {
-                ctas.push(['a', { class: 'cnx-aff-roundup-cta-primary', href: it.cta1Url, target: '_blank', rel: 'noopener noreferrer' }, it.cta1]);
+                ctas.push(['a', { class: 'cnx-aff-roundup-cta-primary', href: it.cta1Url, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, it.cta1]);
             }
             if (it.cta2 && it.cta2Url) {
-                ctas.push(['a', { href: it.cta2Url, target: '_blank', rel: 'noopener noreferrer' }, it.cta2]);
+                ctas.push(['a', { href: it.cta2Url, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, it.cta2]);
             }
             return [
                 'div',
@@ -901,7 +901,7 @@ function VersusView({ node, updateAttributes, deleteNode }: any) {
                             ))}
                         </ul>
                         {a.leftCta && a.leftUrl && (
-                            <a href={a.leftUrl} target="_blank" rel="noopener noreferrer">
+                            <a href={a.leftUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
                                 {a.leftCta}
                             </a>
                         )}
@@ -915,7 +915,7 @@ function VersusView({ node, updateAttributes, deleteNode }: any) {
                             ))}
                         </ul>
                         {a.rightCta && a.rightUrl && (
-                            <a href={a.rightUrl} target="_blank" rel="noopener noreferrer">
+                            <a href={a.rightUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
                                 {a.rightCta}
                             </a>
                         )}
@@ -1009,9 +1009,9 @@ export const AffiliateVersusExtension = Node.create({
         const lul = (a.leftPoints || []).map((t: string) => ['li', {}, t]);
         const rul = (a.rightPoints || []).map((t: string) => ['li', {}, t]);
         const lcta =
-            a.leftCta && a.leftUrl ? [['a', { href: a.leftUrl, target: '_blank', rel: 'noopener noreferrer' }, a.leftCta]] : [];
+            a.leftCta && a.leftUrl ? [['a', { href: a.leftUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, a.leftCta]] : [];
         const rcta =
-            a.rightCta && a.rightUrl ? [['a', { href: a.rightUrl, target: '_blank', rel: 'noopener noreferrer' }, a.rightCta]] : [];
+            a.rightCta && a.rightUrl ? [['a', { href: a.rightUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, a.rightCta]] : [];
         return [
             'div',
             { class: 'cnx-aff-versus cnx-aff-block-wrap' },
@@ -1061,7 +1061,7 @@ export const affiliateBlockDefaults = {
             productImage: '',
             rating: '9,0',
             features: ['Destaque 1', 'Destaque 2', 'Destaque 3'],
-            ctaText: 'Ver oferta',
+            ctaText: 'Ver na Amazon',
             ctaUrl: 'https://',
         },
     },
