@@ -149,3 +149,184 @@
   font-size: 14px !important;
   border-radius: 999px !important;
 }
+
+/* ── Product Review (bloco “⭐ Review” dentro do post) ──────────────────────
+ * O styling original existia em src/styles/global.css (layout "global"),
+ * mas o tema Bem Mãe não importa esse arquivo. Então carregamos aqui
+ * para o review não ficar com aparência “pobre”.
+ */
+
+.bemmae-post-html .product-review {
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin: 1.5rem 0;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
+}
+
+.bemmae-post-html .product-review-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bemmae-post-html .product-review-image {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+  margin: 0 !important;
+}
+
+.bemmae-post-html .product-review-info {
+  flex: 1;
+}
+
+.bemmae-post-html .product-review-name {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  color: var(--color-text) !important;
+  margin: 0 0 0.5rem 0 !important;
+}
+
+.bemmae-post-html .product-review-description {
+  color: var(--color-muted) !important;
+  margin: 0 0 0.6rem 0 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.7 !important;
+}
+
+.bemmae-post-html .product-review-description:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+.bemmae-post-html .product-review-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-top: 0.5rem !important;
+}
+
+.bemmae-post-html .product-review-pros-header,
+.bemmae-post-html .product-review-cons-header {
+  width: 50% !important;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  text-align: left !important;
+}
+
+.bemmae-post-html .product-review-pros-header {
+  color: #0f766e !important;
+  background: rgba(13, 148, 136, 0.08) !important;
+  border-bottom: 2px solid rgba(13, 148, 136, 0.28) !important;
+}
+
+.bemmae-post-html .product-review-cons-header {
+  color: #b45309 !important;
+  background: rgba(194, 65, 12, 0.08) !important;
+  border-bottom: 2px solid rgba(194, 65, 12, 0.28) !important;
+}
+
+.bemmae-post-html .product-review-pros-col,
+.bemmae-post-html .product-review-cons-col {
+  width: 50% !important;
+  padding: 0.75rem !important;
+  vertical-align: top !important;
+}
+
+.bemmae-post-html .product-review-pros-col {
+  border-right: 1px solid var(--color-border) !important;
+}
+
+.bemmae-post-html .product-review-pros-col ul,
+.bemmae-post-html .product-review-cons-col ul {
+  margin: 0 !important;
+  padding-left: 1.25rem !important;
+}
+
+.bemmae-post-html .product-review-pros-col li,
+.bemmae-post-html .product-review-cons-col li {
+  font-size: 0.875rem !important;
+  margin: 0.3rem 0 !important;
+  color: var(--color-text) !important;
+}
+
+.bemmae-post-html .product-review-pros-col li::marker {
+  color: #0d9488 !important;
+}
+
+.bemmae-post-html .product-review-cons-col li::marker {
+  color: #c2410c !important;
+}
+
+.bemmae-post-html .product-review-cta {
+  margin-top: 1rem !important;
+  text-align: center !important;
+}
+
+.bemmae-post-html .product-review-cta-btn {
+  display: inline-block !important;
+  padding: 0.625rem 1.75rem !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  border-radius: 0.5rem !important;
+  text-decoration: none !important;
+  letter-spacing: 0.02em !important;
+  transition: filter 0.2s !important;
+}
+
+.bemmae-post-html .product-review-cta-btn:hover {
+  filter: brightness(1.1) !important;
+}
+
+@media (max-width: 640px) {
+  .bemmae-post-html .product-review-header {
+    flex-direction: column;
+  }
+
+  .bemmae-post-html .product-review-image {
+    width: 100%;
+    height: 200px;
+  }
+
+  .bemmae-post-html .product-review-table,
+  .bemmae-post-html .product-review-table thead,
+  .bemmae-post-html .product-review-table tbody,
+  .bemmae-post-html .product-review-table tr {
+    display: block !important;
+  }
+
+  .bemmae-post-html .product-review-pros-header,
+  .bemmae-post-html .product-review-cons-header,
+  .bemmae-post-html .product-review-pros-col,
+  .bemmae-post-html .product-review-cons-col {
+    width: 100% !important;
+    display: block !important;
+  }
+
+  .bemmae-post-html .product-review-pros-col {
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-border) !important;
+    padding-bottom: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+}
+
+html.dark .bemmae-post-html .product-review {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+
+html.dark .bemmae-post-html .product-review-description,
+html.dark .bemmae-post-html .product-review-name,
+html.dark .bemmae-post-html .product-review-pros-col li,
+html.dark .bemmae-post-html .product-review-cons-col li {
+  color: #e5e7eb !important;
+}
