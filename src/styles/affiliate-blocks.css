@@ -1,0 +1,355 @@
+/**
+ * Blocos editoriais para posts (afiliados / comparações).
+ * Tema claro (Bem Mãe): cores neutras.
+ * Tema escuro (classic + editor): .prose-invert .cnx-aff-block-wrap
+ */
+
+.cnx-aff-block-wrap {
+  --aff-border: #e5e7eb;
+  --aff-bg: #ffffff;
+  --aff-text: #374151;
+  --aff-muted: #6b7280;
+  --aff-accent: #6366f1;
+  --aff-green: #059669;
+  --aff-red: #dc2626;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid var(--aff-border);
+  background: var(--aff-bg);
+  color: var(--aff-text);
+  overflow: hidden;
+}
+
+.prose-invert .cnx-aff-block-wrap,
+html.dark .cnx-aff-block-wrap {
+  --aff-border: rgba(255, 255, 255, 0.12);
+  --aff-bg: rgba(255, 255, 255, 0.04);
+  --aff-text: #e5e7eb;
+  --aff-muted: #a1a1aa;
+  --aff-accent: #818cf8;
+  --aff-green: #4ade80;
+  --aff-red: #f87171;
+}
+
+.bemmae-post-html .cnx-aff-block-wrap {
+  --aff-border: var(--color-border, #e8dcd3);
+  --aff-bg: #fffdf9;
+  --aff-text: var(--color-text, #5c4d3c);
+  --aff-muted: var(--color-muted, #8a7a6a);
+  --aff-accent: var(--color-accent, #c4a77d);
+  --aff-green: #0d9488;
+  --aff-red: #c2410c;
+}
+
+/* ── Produto único ─────────────────────────────────────────────────────────── */
+.cnx-aff-product {
+  padding: 1.25rem;
+}
+.cnx-aff-product-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.15);
+  color: var(--aff-accent);
+  margin-bottom: 0.75rem;
+}
+.cnx-aff-product-body {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.cnx-aff-product-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+  margin: 0 !important;
+}
+.cnx-aff-product-main {
+  flex: 1;
+  min-width: 0;
+}
+.cnx-aff-product-title {
+  font-size: 1.125rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.35rem 0 !important;
+  color: var(--aff-text) !important;
+}
+.cnx-aff-product-sub {
+  font-size: 0.875rem !important;
+  color: var(--aff-muted) !important;
+  margin: 0 0 0.5rem 0 !important;
+}
+.cnx-aff-product-score {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--aff-accent);
+  margin-bottom: 0.5rem;
+}
+.cnx-aff-product-features {
+  margin: 0.5rem 0 0 0 !important;
+  padding-left: 1.2rem !important;
+  font-size: 0.875rem !important;
+  color: var(--aff-text) !important;
+}
+.cnx-aff-product-features li {
+  margin: 0.25rem 0 !important;
+}
+.cnx-aff-product-cta {
+  margin-top: 1rem;
+}
+.cnx-aff-product-cta a {
+  display: inline-block;
+  padding: 0.55rem 1.35rem;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none !important;
+  color: #fff !important;
+  background: var(--aff-accent);
+}
+.cnx-aff-product-cta a:hover {
+  filter: brightness(1.08);
+}
+
+@media (max-width: 520px) {
+  .cnx-aff-product-body {
+    flex-direction: column;
+  }
+  .cnx-aff-product-img {
+    width: 100%;
+    height: 180px;
+  }
+}
+
+/* ── Só prós / contras ─────────────────────────────────────────────────────── */
+.cnx-aff-pros-cons {
+  padding: 1rem 1.25rem 1.25rem;
+}
+.cnx-aff-pros-cons-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+}
+.cnx-aff-pros-cons-table th {
+  width: 50%;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left !important;
+}
+.cnx-aff-pc-pros-h {
+  color: var(--aff-green) !important;
+  background: rgba(5, 150, 105, 0.08) !important;
+  border-bottom: 2px solid rgba(5, 150, 105, 0.25) !important;
+}
+.cnx-aff-pc-cons-h {
+  color: var(--aff-red) !important;
+  background: rgba(220, 38, 38, 0.08) !important;
+  border-bottom: 2px solid rgba(220, 38, 38, 0.25) !important;
+}
+.cnx-aff-pc-pros-td,
+.cnx-aff-pc-cons-td {
+  width: 50%;
+  padding: 0.75rem !important;
+  vertical-align: top !important;
+}
+.cnx-aff-pc-pros-td {
+  border-right: 1px solid var(--aff-border) !important;
+}
+.cnx-aff-pc-pros-td ul,
+.cnx-aff-pc-cons-td ul {
+  margin: 0 !important;
+  padding-left: 1.2rem !important;
+  font-size: 0.875rem !important;
+}
+@media (max-width: 520px) {
+  .cnx-aff-pros-cons-table thead,
+  .cnx-aff-pros-cons-table tbody,
+  .cnx-aff-pros-cons-table tr,
+  .cnx-aff-pros-cons-table th,
+  .cnx-aff-pros-cons-table td {
+    display: block !important;
+    width: 100% !important;
+  }
+  .cnx-aff-pc-pros-td {
+    border-right: none !important;
+  }
+}
+
+/* ── Tabela comparativa ───────────────────────────────────────────────────── */
+.cnx-aff-compare {
+  padding: 0;
+  overflow-x: auto;
+}
+.cnx-aff-compare table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.cnx-aff-compare th,
+.cnx-aff-compare td {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--aff-border);
+  text-align: left;
+  vertical-align: top;
+}
+.cnx-aff-compare thead th {
+  background: rgba(99, 102, 241, 0.08);
+  font-weight: 700;
+  color: var(--aff-text);
+}
+.cnx-aff-compare tbody th {
+  font-weight: 600;
+  color: var(--aff-muted);
+  width: 28%;
+}
+
+/* ── Roundup (lista) ─────────────────────────────────────────────────────── */
+.cnx-aff-roundup {
+  padding: 0;
+}
+.cnx-aff-roundup-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--aff-border);
+  align-items: flex-start;
+}
+.cnx-aff-roundup-item:last-child {
+  border-bottom: none;
+}
+.cnx-aff-roundup-rank {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--aff-muted);
+  line-height: 1;
+  min-width: 2rem;
+}
+.cnx-aff-roundup-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+  margin: 0 !important;
+}
+.cnx-aff-roundup-core {
+  flex: 1;
+  min-width: 0;
+}
+.cnx-aff-roundup-item-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--aff-accent);
+  margin-bottom: 0.25rem;
+}
+.cnx-aff-roundup-item-title {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.35rem 0 !important;
+  color: var(--aff-text) !important;
+}
+.cnx-aff-roundup-item-score {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--aff-accent);
+  margin-bottom: 0.35rem;
+}
+.cnx-aff-roundup-item ul {
+  margin: 0.35rem 0 0 0 !important;
+  padding-left: 1.2rem !important;
+  font-size: 0.8125rem !important;
+}
+.cnx-aff-roundup-ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+.cnx-aff-roundup-ctas a {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.375rem;
+  text-decoration: none !important;
+  border: 1px solid var(--aff-border);
+  color: var(--aff-text) !important;
+}
+.cnx-aff-roundup-ctas a.cnx-aff-roundup-cta-primary {
+  background: var(--aff-accent);
+  color: #fff !important;
+  border-color: transparent;
+}
+
+@media (max-width: 520px) {
+  .cnx-aff-roundup-item {
+    flex-wrap: wrap;
+  }
+  .cnx-aff-roundup-rank {
+    width: 100%;
+  }
+}
+
+/* ── Versus (dois produtos) ───────────────────────────────────────────────── */
+.cnx-aff-versus {
+  padding: 1.25rem;
+}
+.cnx-aff-versus-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 640px) {
+  .cnx-aff-versus-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.cnx-aff-versus-side {
+  border: 1px solid var(--aff-border);
+  border-radius: 0.65rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.02);
+}
+.prose-invert .cnx-aff-versus-side,
+html.dark .cnx-aff-versus-side {
+  background: rgba(255, 255, 255, 0.03);
+}
+.cnx-aff-versus-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--aff-accent);
+  margin-bottom: 0.5rem;
+}
+.cnx-aff-versus-title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  margin: 0 0 0.5rem 0 !important;
+  color: var(--aff-text) !important;
+}
+.cnx-aff-versus-side ul {
+  margin: 0 0 0.75rem 0 !important;
+  padding-left: 1.1rem !important;
+  font-size: 0.8125rem !important;
+}
+.cnx-aff-versus-side a {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--aff-accent) !important;
+  text-decoration: none !important;
+}
+.cnx-aff-versus-side a:hover {
+  text-decoration: underline !important;
+}

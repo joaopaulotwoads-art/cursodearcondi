@@ -14,6 +14,7 @@ import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
 import MediaLibrary from './MediaLibrary';
+import { affiliateBlockExtensions, affiliateBlockDefaults } from './AffiliateBlocksTipTap';
 
 // ── Product Review Node View (renderiza no editor) ───────────────────────────
 function ProductReviewNodeView({ node, updateAttributes, deleteNode }: { node: any; updateAttributes: (attrs: Record<string, any>) => void; deleteNode: () => void }) {
@@ -366,6 +367,7 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
                 },
             }),
             ProductReviewExtension,
+            ...affiliateBlockExtensions,
         ],
         content: value || '',
         editorProps: {
@@ -668,6 +670,46 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
                         title="Inserir bloco de review de produto"
                     >
                         ⭐ Review
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.productCard).run()}
+                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
+                        title="Card de produto único"
+                    >
+                        📦 Produto
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.roundup).run()}
+                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
+                        title="Lista / roundup de produtos"
+                    >
+                        📋 Lista
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.compare).run()}
+                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
+                        title="Tabela comparativa"
+                    >
+                        ⊞ Tabela
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.prosCons).run()}
+                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
+                        title="Só prós e contras"
+                    >
+                        ± Prós/Contras
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.versus).run()}
+                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
+                        title="Versus: dois produtos"
+                    >
+                        ⚔ Versus
                     </button>
                 </div>
 

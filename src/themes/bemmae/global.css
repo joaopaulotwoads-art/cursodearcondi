@@ -1,3 +1,5 @@
+@import '../../styles/affiliate-blocks.css';
+
 /* Tema Bem Mãe — variáveis (Tailwind global já vem do CMS) */
 :root {
   --color-bg: #fff;

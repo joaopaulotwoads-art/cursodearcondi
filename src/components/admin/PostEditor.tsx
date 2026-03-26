@@ -95,6 +95,11 @@ export default function PostEditor({ post, authors, categories }: Props) {
         filter: (node) => node.nodeName === 'DIV' && (node as HTMLElement).classList.contains('product-review'),
         replacement: (_content: string, node: Node) => '\n\n' + (node as HTMLElement).outerHTML + '\n\n',
     });
+    turndownService.addRule('cnx-affiliate-blocks', {
+        filter: (node) =>
+            node.nodeName === 'DIV' && (node as HTMLElement).classList.contains('cnx-aff-block-wrap'),
+        replacement: (_content: string, node: Node) => '\n\n' + (node as HTMLElement).outerHTML + '\n\n',
+    });
     
     // Proteção contra problemas de hidratação
     useEffect(() => {
