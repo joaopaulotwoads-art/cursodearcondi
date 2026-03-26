@@ -99,6 +99,10 @@ html.dark .cnx-aff-block-wrap {
   border: 1px solid rgba(196, 167, 125, 0.35);
   box-shadow: 0 6px 18px rgba(92, 77, 60, 0.12);
   background: #fff;
+  /* No product box do Bem Mãe, queremos evitar recorte.
+     O base usa object-fit: cover; aqui forçamos contain pra não cortar. */
+  object-fit: contain;
+  object-position: center;
 }
 
 .bemmae-post-html .cnx-aff-product-title {
