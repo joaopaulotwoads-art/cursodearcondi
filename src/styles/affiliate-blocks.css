@@ -62,33 +62,31 @@ html.dark .cnx-aff-block-wrap {
 }
 
 .bemmae-post-html .cnx-aff-product {
-  position: relative;
-  padding: 2.25rem 1.5rem 2rem;
+  position: static;
+  padding: 24px 24px 28px;
 }
 
 .bemmae-post-html .cnx-aff-product-badge {
-  position: absolute;
-  top: 0.8rem;
-  left: 1rem;
-  margin: 0;
+  position: static;
+  display: inline-block;
+  margin: 0 0 20px 0;
   padding: 0.35rem 0.75rem;
   font-size: 0.62rem;
   letter-spacing: 0.1em;
   white-space: nowrap;
-  max-width: calc(100% - 2rem);
+  max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   background: #ead2c4;
   border: 1px solid rgba(196, 167, 125, 0.35);
   color: #6b5344 !important;
   box-shadow: none;
-  z-index: 1;
 }
 
 .bemmae-post-html .cnx-aff-product-body {
   gap: 1.35rem;
   align-items: flex-start;
-  padding: 0.35rem 0.2rem 0;
+  padding: 0;
 }
 
 .bemmae-post-html .cnx-aff-product-img {
@@ -187,7 +185,7 @@ html.dark .cnx-aff-block-wrap {
   }
 
   .bemmae-post-html .cnx-aff-product {
-    padding: 2.3rem 1.1rem 1.9rem;
+    padding: 24px 16px 24px;
   }
 
   .bemmae-post-html .cnx-aff-product-body {
@@ -209,8 +207,7 @@ html.dark .cnx-aff-block-wrap {
   }
 
   .bemmae-post-html .cnx-aff-product-badge {
-    left: 0.8rem;
-    top: 0.65rem;
+    margin: 0 0 20px 0;
   }
 
   .bemmae-post-html .cnx-aff-product-score {
