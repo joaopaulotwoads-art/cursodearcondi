@@ -69,7 +69,7 @@ html.dark .cnx-aff-block-wrap {
 .bemmae-post-html .cnx-aff-product-badge {
   position: static;
   display: inline-block;
-  margin: 0 0 20px 0;
+  margin: 0 0 24px 0;
   padding: 0.35rem 0.75rem;
   font-size: 0.62rem;
   letter-spacing: 0.1em;
@@ -109,6 +109,7 @@ html.dark .cnx-aff-block-wrap {
   font-size: 1.2rem !important;
   line-height: 1.3 !important;
   letter-spacing: -0.02em;
+  margin-top: 0.3rem !important;
 }
 
 .bemmae-post-html .cnx-aff-product-score {
@@ -162,9 +163,11 @@ html.dark .cnx-aff-block-wrap {
 .bemmae-post-html .cnx-aff-product-cta a {
   display: flex !important;
   width: 100%;
+  max-width: 80%;
+  margin: 0 auto;
   justify-content: center;
   align-items: center;
-  padding: 0.9rem 1.25rem !important;
+  padding: 0.45rem 1.1rem !important;
   border-radius: 6px !important;
   font-size: 0.95rem !important;
   letter-spacing: 0.02em;
@@ -207,7 +210,12 @@ html.dark .cnx-aff-block-wrap {
   }
 
   .bemmae-post-html .cnx-aff-product-badge {
-    margin: 0 0 20px 0;
+    margin: 0 0 24px 0;
+  }
+
+  .bemmae-post-html .cnx-aff-product-cta a {
+    max-width: 92%;
+    padding: 0.5rem 1rem !important;
   }
 
   .bemmae-post-html .cnx-aff-product-score {
