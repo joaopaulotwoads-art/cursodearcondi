@@ -68,8 +68,13 @@ export default function PostEditor({ post, authors, categories }: Props) {
     // Converter Markdown para HTML para o editor WYSIWYG
     const getInitialContent = () => {
         if (!post?.content) return '';
+        const trimmed = post.content.trim();
         // Se já é HTML, retorna direto
-        if (post.content.trim().startsWith('<')) return post.content;
+        if (trimmed.startsWith('<')) return post.content;
+        // Se contém blocos HTML ricos (ex.: review dentro do body),
+        // também devolvemos como HTML para não passar por marked.parse
+        // e acabar "desmontando" a estrutura ao recarregar.
+        if (trimmed.includes('cnx-aff-') || trimmed.includes('product-review')) return post.content;
         // Se é Markdown, converte para HTML
         try {
             return marked.parse(post.content) as string;
@@ -134,11 +139,15 @@ export default function PostEditor({ post, authors, categories }: Props) {
         setIsSaving(true);
         try {
             const hasAffiliateBlocks = Boolean(content && content.includes('cnx-aff-'));
-            // Estes blocos são HTML "rich" (tabelas, grid, classes). Converter para markdown pode destruir a estrutura
-            // e causar perda após reload. Então, se existir qualquer bloco cnx-aff no HTML, salvamos como HTML.
+            const hasProductReviewBlocks = Boolean(content && content.includes('product-review'));
+
+            // Estes blocos são HTML "rich" (tabelas, grid, classes).
+            // Converter para markdown pode destruir a estrutura e causar perda após reload.
+            // Então, se existir qualquer bloco cnx-aff ou product-review no HTML, salvamos como HTML.
             const forceAffiliateBlocksHtml = !contentFormatHtml && hasAffiliateBlocks;
+            const forceProductReviewHtml = !contentFormatHtml && hasProductReviewBlocks;
             let bodyContent = content;
-            let finalContentFormatHtml = contentFormatHtml || forceAffiliateBlocksHtml;
+            let finalContentFormatHtml = contentFormatHtml || forceAffiliateBlocksHtml || forceProductReviewHtml;
 
             if (!finalContentFormatHtml && content && content.trim().startsWith('<')) {
                 try {
