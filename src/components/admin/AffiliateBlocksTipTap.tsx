@@ -260,7 +260,7 @@ function ProsConsView({ node, updateAttributes, deleteNode }: any) {
             <div className="cnx-aff-pros-cons cnx-aff-block-wrap">
                 <div className="cnx-aff-pros-cons-sections">
                     <section className="cnx-aff-pros-section">
-                        <h3 className="cnx-aff-pros-title">Pros</h3>
+                        <h3 className="cnx-aff-pros-title">Prós</h3>
                         <ul className="cnx-aff-pros-list">
                             {pros.map((p, i) => (
                                 <li key={i}>{p}</li>
@@ -279,7 +279,7 @@ function ProsConsView({ node, updateAttributes, deleteNode }: any) {
                 {node.attrs.ctaUrl && (
                     <div className="cnx-aff-pros-cons-cta">
                         <a href={node.attrs.ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
-                            Ver Preco na Amazon
+                            Ver Preço na Amazon
                         </a>
                     </div>
                 )}
@@ -366,7 +366,7 @@ export const AffiliateProsConsExtension = Node.create({
             ? [[
                 'div',
                 { class: 'cnx-aff-pros-cons-cta' },
-                ['a', { href: node.attrs.ctaUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, 'Ver Preco na Amazon'],
+                ['a', { href: node.attrs.ctaUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, 'Ver Preço na Amazon'],
             ]]
             : [];
 
@@ -379,7 +379,7 @@ export const AffiliateProsConsExtension = Node.create({
                 [
                     'section',
                     { class: 'cnx-aff-pros-section' },
-                    ['h3', { class: 'cnx-aff-pros-title' }, 'Pros'],
+                    ['h3', { class: 'cnx-aff-pros-title' }, 'Prós'],
                     ['ul', { class: 'cnx-aff-pros-list' }, ...pros],
                 ],
                 [
