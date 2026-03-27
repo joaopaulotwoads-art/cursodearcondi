@@ -12,7 +12,7 @@
 
 export const prerender = false;
 
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { getPostUrl, type BlogPermalinkStructure } from '../../../utils/blog-permalink';
 import { listPosts } from '../../../utils/post-utils';
@@ -497,6 +497,10 @@ function getCategoryName(categorySlug: string | undefined) {
             var statusEl = document.getElementById('posts-filter-status');
             var authorEl = document.getElementById('posts-filter-author');
             var categoryEl = document.getElementById('posts-filter-category');
+            var initialStatus = new URLSearchParams(window.location.search).get('status');
+            if (statusEl && (initialStatus === 'draft' || initialStatus === 'published')) {
+                statusEl.value = initialStatus;
+            }
             if (searchEl) searchEl.addEventListener('input', applyPostsFilter);
             if (searchEl) searchEl.addEventListener('keyup', applyPostsFilter);
             if (statusEl) statusEl.addEventListener('change', applyPostsFilter);
