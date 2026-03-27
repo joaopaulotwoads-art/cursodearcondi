@@ -9,7 +9,7 @@ import type { APIRoute } from 'astro';
  * PUT: Atualiza o post
  * DELETE: Deleta o post
  */
-import { readPost, writePost, deletePost, slugExists } from '../../../../utils/post-utils';
+import { readPost, writePost, deletePost, slugExists, generateSlug } from '../../../../utils/post-utils';
 import type { PostData } from '../../../../utils/post-utils';
 
 const SEO_SCHEMA_VALUES = ['auto', 'blogPosting', 'articleItemList', 'none'] as const;
@@ -22,8 +22,9 @@ function parseSeoSchema(v: unknown): PostData['seoSchema'] {
 export const GET: APIRoute = async ({ params }) => {
     try {
         const { slug } = params;
+        const normalizedSlug = generateSlug(String(slug || ''));
         
-        if (!slug) {
+        if (!slug || !normalizedSlug) {
             return new Response(JSON.stringify({
                 success: false,
                 error: 'Slug é obrigatório',
@@ -33,7 +34,7 @@ export const GET: APIRoute = async ({ params }) => {
             });
         }
         
-        const post = await readPost(slug);
+        const post = await readPost(String(slug)) || await readPost(normalizedSlug);
         
         if (!post) {
             return new Response(JSON.stringify({
@@ -67,10 +68,13 @@ export const GET: APIRoute = async ({ params }) => {
 export const PUT: APIRoute = async ({ params, request }) => {
     try {
         const { slug } = params;
+        const rawCurrentSlug = String(slug || '');
         const body = await request.json();
         const { title, newSlug, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, content, contentFormat, seoSchema } = body;
+        const normalizedCurrentSlug = generateSlug(rawCurrentSlug);
+        const normalizedNewSlug = newSlug ? generateSlug(String(newSlug)) : '';
         
-        if (!slug) {
+        if (!slug || !normalizedCurrentSlug) {
             return new Response(JSON.stringify({
                 success: false,
                 error: 'Slug é obrigatório',
@@ -81,8 +85,8 @@ export const PUT: APIRoute = async ({ params, request }) => {
         }
         
         // Se mudou o slug, verificar se o novo já existe
-        if (newSlug && newSlug !== slug) {
-            const exists = await slugExists(newSlug, slug);
+        if (normalizedNewSlug && normalizedNewSlug !== normalizedCurrentSlug) {
+            const exists = await slugExists(normalizedNewSlug, normalizedCurrentSlug);
             if (exists) {
                 return new Response(JSON.stringify({
                     success: false,
@@ -94,7 +98,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
             }
         }
         
-        const finalSlug = newSlug || slug;
+        const finalSlug = normalizedNewSlug || normalizedCurrentSlug;
         
         // Preparar dados
         const postData: PostData = {
@@ -112,8 +116,11 @@ export const PUT: APIRoute = async ({ params, request }) => {
         };
         
         // Se mudou o slug, deletar arquivo antigo
-        if (newSlug && newSlug !== slug) {
-            await deletePost(slug);
+        if (finalSlug !== normalizedCurrentSlug) {
+            await deletePost(rawCurrentSlug);
+            if (rawCurrentSlug !== normalizedCurrentSlug) {
+                await deletePost(normalizedCurrentSlug);
+            }
         }
         
         // Escrever arquivo

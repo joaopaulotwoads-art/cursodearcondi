@@ -53,9 +53,10 @@ export const POST: APIRoute = async ({ request }) => {
     try {
         const body = await request.json();
         const { title, slug, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, content, contentFormat, seoSchema } = body;
+        const normalizedSlug = generateSlug(String(slug || ''));
         
         // Validações
-        if (!title || !slug) {
+        if (!title || !normalizedSlug) {
             return new Response(JSON.stringify({
                 success: false,
                 error: 'Título e slug são obrigatórios',
@@ -66,7 +67,7 @@ export const POST: APIRoute = async ({ request }) => {
         }
         
         // Verificar se slug já existe
-        const exists = await slugExists(slug);
+        const exists = await slugExists(normalizedSlug);
         if (exists) {
             return new Response(JSON.stringify({
                 success: false,
@@ -80,7 +81,7 @@ export const POST: APIRoute = async ({ request }) => {
         // Preparar dados
         const postData: PostData = {
             title,
-            slug,
+            slug: normalizedSlug,
             author: author || undefined,
             category: category || undefined,
             publishedDate: publishedDate || undefined,
@@ -93,7 +94,7 @@ export const POST: APIRoute = async ({ request }) => {
         };
         
         // Escrever arquivo
-        const success = await writePost(slug, postData, content || '');
+        const success = await writePost(normalizedSlug, postData, content || '');
         
         if (!success) {
             return new Response(JSON.stringify({
@@ -108,7 +109,7 @@ export const POST: APIRoute = async ({ request }) => {
         return new Response(JSON.stringify({
             success: true,
             message: 'Post criado com sucesso',
-            slug,
+            slug: normalizedSlug,
         }), {
             status: 201,
             headers: { 'Content-Type': 'application/json' },
