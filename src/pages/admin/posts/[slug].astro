@@ -5,7 +5,11 @@
  * Página de edição de um post específico.
  * Suporta criação de novos posts (quando slug = 'new') e edição de posts existentes.
  * Integra componente React PostEditor com todas as funcionalidades.
+ *
+ * readPost() lê do GitHub em produção quando o ficheiro ainda não existe no disco do serverless.
  */
+
+export const prerender = false;
 
 import { getCollection } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';

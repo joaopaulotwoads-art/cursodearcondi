@@ -22,7 +22,13 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import { isGitHubConfigured, githubWriteFile, githubDeleteFile } from './github-api';
+import {
+    isGitHubConfigured,
+    githubWriteFile,
+    githubDeleteFile,
+    githubReadFile,
+    githubListDirectory,
+} from './github-api';
 
 export interface PostData {
     title: string;
@@ -74,31 +80,83 @@ export async function readPost(slug: string): Promise<PostFile | null> {
             continue;
         }
     }
-    return null;
-}
-
-/**
- * Lista todos os posts disponíveis
- */
-export async function listPosts(): Promise<PostFile[]> {
-    try {
-        const files = await fs.readdir(POSTS_DIR);
-        const postFiles = files.filter(f => f.endsWith('.mdoc') || f.endsWith('.md'));
-        
-        const posts = await Promise.all(
-            postFiles.map(async (filename) => {
-                const filePath = path.join(POSTS_DIR, filename);
-                const fileContent = await fs.readFile(filePath, 'utf-8');
-                const parsed = matter(fileContent);
-                
+    // Produção (Vercel): escrita vai para o GitHub; o disco do serverless não tem o ficheiro novo.
+    if (isGitHubConfigured()) {
+        for (const ext of exts) {
+            const filename = `${slug}${ext}`;
+            const pathInRepo = `src/content/posts/${filename}`;
+            try {
+                const remote = await githubReadFile(pathInRepo);
+                if (!remote) continue;
+                const parsed = matter(remote.content);
                 return {
                     data: parsed.data as PostData,
                     content: parsed.content,
                     filename,
                 };
-            })
+            } catch {
+                continue;
+            }
+        }
+    }
+    return null;
+}
+
+/**
+ * Lista todos os posts disponíveis.
+ * Com GitHub configurado, lê o diretório no repositório (fonte de verdade após deploy na Vercel).
+ * Caso contrário, usa o filesystem local (dev).
+ */
+export async function listPosts(): Promise<PostFile[]> {
+    if (isGitHubConfigured()) {
+        try {
+            const entries = await githubListDirectory('src/content/posts');
+            const postFiles = entries.filter(
+                (f) =>
+                    (f.name.endsWith('.mdoc') || f.name.endsWith('.md')) &&
+                    !f.name.startsWith('.'),
+            );
+            const posts = await Promise.all(
+                postFiles.map(async (f) => {
+                    try {
+                        const remote = await githubReadFile(f.path);
+                        if (!remote) return null;
+                        const parsed = matter(remote.content);
+                        return {
+                            data: parsed.data as PostData,
+                            content: parsed.content,
+                            filename: f.name,
+                        };
+                    } catch {
+                        return null;
+                    }
+                }),
+            );
+            return posts.filter((p): p is PostFile => p !== null);
+        } catch (error) {
+            console.error('❌ Erro ao listar posts (GitHub):', error);
+            return [];
+        }
+    }
+
+    try {
+        const files = await fs.readdir(POSTS_DIR);
+        const postFiles = files.filter((f) => (f.endsWith('.mdoc') || f.endsWith('.md')) && !f.startsWith('.'));
+
+        const posts = await Promise.all(
+            postFiles.map(async (filename) => {
+                const filePath = path.join(POSTS_DIR, filename);
+                const fileContent = await fs.readFile(filePath, 'utf-8');
+                const parsed = matter(fileContent);
+
+                return {
+                    data: parsed.data as PostData,
+                    content: parsed.content,
+                    filename,
+                };
+            }),
         );
-        
+
         return posts;
     } catch (error) {
         console.error('❌ Erro ao listar posts:', error);

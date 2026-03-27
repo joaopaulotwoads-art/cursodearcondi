@@ -5,13 +5,24 @@
  * Página de listagem de todos os posts do blog.
  * Exibe tabela com posts, filtros, busca e ações (editar, deletar, duplicar).
  * Design moderno integrado ao painel admin.
+ *
+ * Usa listPosts() (GitHub em produção) em vez de getCollection('posts'), para que
+ * rascunhos e posts salvos após o deploy apareçam na hora — não só no próximo build.
  */
 
-import { getCollection, getEntry } from 'astro:content';
+export const prerender = false;
+
+import { getEntry } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import { getPostUrl, type BlogPermalinkStructure } from '../../../utils/blog-permalink';
+import { listPosts } from '../../../utils/post-utils';
 
-const posts = await getCollection('posts');
+const postsFromRepo = await listPosts();
+/** Formato compatível com getCollection (id + data) para URLs e tabela */
+const posts = postsFromRepo.map((p) => ({
+    id: p.data.slug || p.filename.replace(/\.(mdoc|md)$/i, ''),
+    data: p.data,
+}));
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
 const blogUrlPrefix = (settings?.data?.blogUrlPrefix as import('../../../utils/blog-permalink').BlogUrlPrefix) || 'blog';
