@@ -52,6 +52,14 @@ interface Props {
 }
 
 export default function PostEditor({ post, authors, categories }: Props) {
+    const normalizeSlug = (value: string): string =>
+        (value || '')
+            .toLowerCase()
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+
     const normalizeInternalLinksToFollow = (html: string): string => {
         if (!html || !html.includes('<a')) return html;
         // Para links internos do próprio site, removemos nofollow/sponsored.
@@ -86,7 +94,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
     const { toasts, showToast, removeToast } = useToast();
     const [isMounted, setIsMounted] = useState(false);
     const [title, setTitle] = useState(post?.title || '');
-    const [slug, setSlug] = useState(post?.slug || '');
+    const [slug, setSlug] = useState(normalizeSlug(post?.slug || ''));
     const [author, setAuthor] = useState(post?.author || '');
     const [category, setCategory] = useState(post?.category || '');
     const [publishedDate, setPublishedDate] = useState(post?.publishedDate || new Date().toISOString().split('T')[0]);
@@ -146,12 +154,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
     useEffect(() => {
         if (!post && title && !slug) {
             try {
-                const generatedSlug = title
-                    .toLowerCase()
-                    .normalize('NFD')
-                    .replace(/[\u0300-\u036f]/g, '')
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '');
+                const generatedSlug = normalizeSlug(title);
                 if (generatedSlug) {
                     setSlug(generatedSlug);
                 }
@@ -194,7 +197,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
 
             const postData: PostData = {
                 title,
-                slug,
+                slug: normalizeSlug(slug),
                 author: author || undefined,
                 category: category || undefined,
                 publishedDate: isPublish ? (publishedDate || new Date().toISOString().split('T')[0]) : undefined,
@@ -397,7 +400,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
                             <input
                                 type="text"
                                 value={slug}
-                                onChange={(e) => setSlug(e.target.value)}
+                                onChange={(e) => setSlug(normalizeSlug(e.target.value))}
                                 className="admin-input font-mono text-sm"
                                 placeholder="url-do-post"
                             />
