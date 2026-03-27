@@ -5,12 +5,21 @@
  * Página pública que lista todos os serviços cadastrados.
  * Links levam a /{cidadePrincipal}/{servico} com copy completo, breadcrumbs e hero.
  * Principal = cidade com mais bairros cadastrados.
+ *
+ * No modo blog (ex.: Bem Mãe) esta rota não é usada — redireciona para a home.
  */
 
+import { getEntry } from 'astro:content';
 import LocalLayout from '../../layouts/LocalLayout.astro';
 import { listServices } from '../../utils/service-utils';
 import { getPrincipalLocationSlug } from '../../utils/location-utils';
 import { readSingleton } from '../../utils/singleton-utils';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+if (siteMode !== 'local') {
+    return Astro.redirect('/');
+}
 
 const services     = await listServices();
 const localData    = await readSingleton('home', 'local');

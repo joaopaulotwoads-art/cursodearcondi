@@ -71,7 +71,7 @@ ${stylesheet}
     const staticPaths = [
         '/',
         '/blog',
-        '/servicos',
+        ...(siteMode === 'local' ? ['/servicos'] : []),
         '/contato',
         '/sobre',
         '/termos',
@@ -81,17 +81,23 @@ ${stylesheet}
         urls.push(urlNode(base, p, today));
     }
 
+    /** Mesmas URLs que contato.astro / sobre.astro — não duplicar no sitemap como post. */
+    const slugReservedForStaticPages = new Set(['sobre', 'contato']);
+
     try {
         const posts = await getCollection('posts');
         const permalinkStructure = (settings.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
         const urlPrefix = (settings.blogUrlPrefix as BlogUrlPrefix) || 'blog';
         for (const post of posts) {
-            const postPath = getPostUrl({ ...post, data: { ...post.data, slug: post.data.slug || post.id } }, permalinkStructure, urlPrefix);
+            const postSlug = post.data.slug || post.id;
+            if (urlPrefix === 'root' && slugReservedForStaticPages.has(postSlug)) {
+                continue;
+            }
+            const postPath = getPostUrl({ ...post, data: { ...post.data, slug: postSlug } }, permalinkStructure, urlPrefix);
             urls.push(urlNode(base, postPath, post.data.publishedDate as string || today));
         }
 
         if (urlPrefix === 'root') {
-            const slugReservedForStaticPages = new Set(['sobre', 'contato']);
             const reservedTopLevel = new Set([
                 'sobre',
                 'contato',

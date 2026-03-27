@@ -52,6 +52,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
         }
     }
 
+    // Modo blog: /servicos é só para sites locais (rank-and-rent); evita URL órfã indexada
+    if (pathname === '/servicos' || pathname.startsWith('/servicos/')) {
+        try {
+            const settings = await readSiteSettings();
+            if ((settings.siteMode || 'blog') !== 'local') {
+                return context.redirect('/', 301);
+            }
+        } catch {
+            /* continua */
+        }
+    }
+
     // Só intercepta rotas do admin
     const isAdminUI  = pathname.startsWith('/admin');
     const isAdminAPI = pathname.startsWith('/api/admin');
