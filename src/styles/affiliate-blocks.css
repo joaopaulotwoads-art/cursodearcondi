@@ -490,3 +490,74 @@ html.dark .cnx-aff-versus-side {
 .cnx-aff-versus-side a:hover {
   text-decoration: underline !important;
 }
+
+/* ── Ficha técnica (especificações) ───────────────────────────────────────── */
+.cnx-aff-tech-sheet.cnx-aff-block-wrap {
+  border: 2px solid #00a884;
+  box-shadow: none;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #fff;
+  max-width: 100%;
+}
+.cnx-aff-tech-head {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid rgba(0, 168, 132, 0.25);
+  background: #fff;
+}
+.cnx-aff-tech-title {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  color: #00a884 !important;
+  letter-spacing: 0.02em;
+}
+.cnx-aff-tech-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.cnx-aff-tech-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: #374151;
+}
+.cnx-aff-tech-table th,
+.cnx-aff-tech-table td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+}
+.cnx-aff-tech-table th {
+  font-weight: 700;
+  width: 38%;
+  min-width: 7rem;
+}
+.cnx-aff-tech-table td {
+  font-weight: 400;
+  border-right: none;
+}
+.cnx-aff-tech-table tbody tr:nth-child(odd) {
+  background: #fff;
+}
+.cnx-aff-tech-table tbody tr:nth-child(even) {
+  background: rgba(0, 168, 132, 0.06);
+}
+.cnx-aff-tech-table tbody tr:last-child th,
+.cnx-aff-tech-table tbody tr:last-child td {
+  border-bottom: none;
+}
+@media (max-width: 480px) {
+  .cnx-aff-tech-table th,
+  .cnx-aff-tech-table td {
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+  .cnx-aff-tech-head {
+    padding: 0.75rem;
+  }
+}

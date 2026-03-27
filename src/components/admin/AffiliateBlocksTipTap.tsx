@@ -1149,12 +1149,191 @@ export const AffiliateVersusExtension = Node.create({
     },
 });
 
+type TechRow = { label: string; value: string };
+
+function defaultTechRows(): TechRow[] {
+    return [
+        { label: 'Marca', value: 'Burigotto' },
+        { label: 'Modelo', value: 'Ecco' },
+        { label: 'Tipo', value: 'Carrinho de passeio (4 rodas)' },
+        { label: 'Peso (aprox.)', value: '7,2 kg' },
+        { label: 'Dimensões montado (C × L × A)', value: '92 × 50 × 104 cm' },
+        { label: 'Suporta até', value: '15 kg' },
+    ];
+}
+
+function TechSheetView({ node, updateAttributes, deleteNode }: any) {
+    const title: string = node.attrs.title || 'Ficha Técnica';
+    const rows: TechRow[] = Array.isArray(node.attrs.rows) ? node.attrs.rows : defaultTechRows();
+    const [open, setOpen] = useState(false);
+    const [d, setD] = useState({ title, rows: [...rows] });
+
+    const openEdit = () => {
+        setD({
+            title: node.attrs.title || 'Ficha Técnica',
+            rows: Array.isArray(node.attrs.rows) && node.attrs.rows.length ? [...node.attrs.rows] : [...defaultTechRows()],
+        });
+        setOpen(true);
+    };
+
+    const save = () => {
+        const cleaned = d.rows
+            .map((r) => ({ label: (r.label || '').trim(), value: (r.value || '').trim() }))
+            .filter((r) => r.label || r.value);
+        updateAttributes({
+            title: (d.title || 'Ficha Técnica').trim() || 'Ficha Técnica',
+            rows: cleaned.length ? cleaned : [{ label: 'Característica', value: '—' }],
+        });
+        setOpen(false);
+    };
+
+    const addRow = () => setD((p: { title: string; rows: TechRow[] }) => ({ ...p, rows: [...p.rows, { label: '', value: '' }] }));
+    const removeRow = (i: number) =>
+        setD((p: { title: string; rows: TechRow[] }) => ({ ...p, rows: p.rows.filter((_, idx) => idx !== i) }));
+
+    return (
+        <BlockChrome onEdit={openEdit} onDelete={deleteNode}>
+            <div className="cnx-aff-tech-sheet cnx-aff-block-wrap">
+                <div className="cnx-aff-tech-head">
+                    <h3 className="cnx-aff-tech-title">{title}</h3>
+                </div>
+                <div className="cnx-aff-tech-scroll">
+                    <table className="cnx-aff-tech-table">
+                        <tbody>
+                            {rows.map((r, i) => (
+                                <tr key={i}>
+                                    <th scope="row">{r.label || '—'}</th>
+                                    <td>{r.value || '—'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {open && (
+                <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setOpen(false)}>
+                    <div
+                        className="bg-[#161616] border border-[rgba(255,255,255,0.08)] rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-5 space-y-3"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h3 className="text-sm font-semibold text-[#e5e5e5]">Ficha técnica</h3>
+                        <input
+                            className={inputCls}
+                            placeholder="Título (ex.: Ficha Técnica)"
+                            value={d.title}
+                            onChange={(e) => setD({ ...d, title: e.target.value })}
+                        />
+                        <p className="text-xs text-[#737373]">Adicione ou remova linhas. Coluna esquerda = nome da característica; direita = valor.</p>
+                        <div className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+                            {d.rows.map((row, i) => (
+                                <div key={i} className="flex gap-2 items-start">
+                                    <input
+                                        className={inputCls + ' flex-1'}
+                                        placeholder="Característica"
+                                        value={row.label}
+                                        onChange={(e) => {
+                                            const next = [...d.rows];
+                                            next[i] = { ...next[i], label: e.target.value };
+                                            setD({ ...d, rows: next });
+                                        }}
+                                    />
+                                    <input
+                                        className={inputCls + ' flex-1'}
+                                        placeholder="Valor"
+                                        value={row.value}
+                                        onChange={(e) => {
+                                            const next = [...d.rows];
+                                            next[i] = { ...next[i], value: e.target.value };
+                                            setD({ ...d, rows: next });
+                                        }}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="shrink-0 px-2 py-2 text-red-400 text-xs"
+                                        onClick={() => removeRow(i)}
+                                        title="Remover linha"
+                                    >
+                                        ✕
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                        <button type="button" onClick={addRow} className="w-full py-2 rounded-lg border border-[rgba(255,255,255,0.12)] text-[#a3a3a3] text-sm">
+                            + Adicionar linha
+                        </button>
+                        <div className="flex gap-2 pt-2">
+                            <button type="button" onClick={save} className="flex-1 py-2 rounded-lg bg-[#3b82f6] text-white text-sm font-semibold">
+                                Salvar
+                            </button>
+                            <button type="button" onClick={() => setOpen(false)} className="px-4 py-2 text-[#737373] text-sm">
+                                Cancelar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </BlockChrome>
+    );
+}
+
+export const AffiliateTechSheetExtension = Node.create({
+    name: 'affiliateTechSheet',
+    group: 'block',
+    atom: true,
+    addAttributes() {
+        return {
+            title: {
+                default: 'Ficha Técnica',
+                parseHTML: (el) => (el.querySelector('.cnx-aff-tech-title')?.textContent || '').trim() || 'Ficha Técnica',
+            },
+            rows: {
+                default: defaultTechRows(),
+                parseHTML: (el) => {
+                    const out: TechRow[] = [];
+                    el.querySelectorAll('.cnx-aff-tech-table tbody tr').forEach((tr) => {
+                        const th = tr.querySelector('th');
+                        const td = tr.querySelector('td');
+                        out.push({
+                            label: (th?.textContent || '').trim(),
+                            value: (td?.textContent || '').trim(),
+                        });
+                    });
+                    return out.length ? out : defaultTechRows();
+                },
+            },
+        };
+    },
+    parseHTML() {
+        return [{ tag: 'div.cnx-aff-tech-sheet.cnx-aff-block-wrap' }];
+    },
+    renderHTML({ node }) {
+        const sheetTitle = node.attrs.title || 'Ficha Técnica';
+        const rowList: TechRow[] = Array.isArray(node.attrs.rows) ? node.attrs.rows : defaultTechRows();
+        const bodyRows = rowList.map((r) => [
+            'tr',
+            {},
+            ['th', { scope: 'row' }, r.label || ''],
+            ['td', {}, r.value || ''],
+        ]);
+        return [
+            'div',
+            { class: 'cnx-aff-tech-sheet cnx-aff-block-wrap' },
+            ['div', { class: 'cnx-aff-tech-head' }, ['h3', { class: 'cnx-aff-tech-title' }, sheetTitle]],
+            ['div', { class: 'cnx-aff-tech-scroll' }, ['table', { class: 'cnx-aff-tech-table' }, ['tbody', {}, ...bodyRows]]],
+        ] as any;
+    },
+    addNodeView() {
+        return ReactNodeViewRenderer(TechSheetView);
+    },
+});
+
 export const affiliateBlockExtensions = [
     AffiliateProductCardExtension,
     AffiliateProsConsExtension,
     AffiliateCompareExtension,
     AffiliateRoundupExtension,
     AffiliateVersusExtension,
+    AffiliateTechSheetExtension,
 ];
 
 /** Defaults para inserção rápida no editor */
@@ -1202,6 +1381,13 @@ export const affiliateBlockDefaults = {
             rightPoints: ['Vantagem 1', 'Vantagem 2'],
             rightCta: 'Ver na Amazon',
             rightUrl: 'https://',
+        },
+    },
+    techSheet: {
+        type: 'affiliateTechSheet',
+        attrs: {
+            title: 'Ficha Técnica',
+            rows: defaultTechRows(),
         },
     },
 } as const;

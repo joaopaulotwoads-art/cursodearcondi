@@ -714,6 +714,14 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
                     >
                         ⚔ Versus
                     </button>
+                    <button
+                        type="button"
+                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.techSheet).run()}
+                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
+                        title="Ficha técnica (especificações)"
+                    >
+                        🧾 Ficha
+                    </button>
                 </div>
 
                 <div className="w-px h-6 bg-[rgba(255,255,255,0.08)] mx-1" />
