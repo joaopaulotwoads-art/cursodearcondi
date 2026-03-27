@@ -3,7 +3,7 @@
  * HTML estável + classes cnx-aff-* para Turndown preservar no .mdoc.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react';
 
@@ -72,11 +72,33 @@ function BlockChrome({
 }
 
 // ── Produto único ───────────────────────────────────────────────────────────
+function productAttrsFromNode(attrs: Record<string, unknown>) {
+    const features = Array.isArray(attrs.features) ? (attrs.features as string[]) : [];
+    return {
+        badge: String(attrs.badge ?? ''),
+        productName: String(attrs.productName ?? ''),
+        subtitle: String(attrs.subtitle ?? ''),
+        productImage: String(attrs.productImage ?? ''),
+        rating: String(attrs.rating ?? ''),
+        features: [...features],
+        ctaText: String(attrs.ctaText ?? ''),
+        ctaUrl: String(attrs.ctaUrl ?? ''),
+        ctaNofollow: attrs.ctaNofollow !== false,
+    };
+}
+
 function ProductCardView({ node, updateAttributes, deleteNode }: any) {
     const a = node.attrs;
     const features: string[] = Array.isArray(a.features) ? a.features : [];
     const [open, setOpen] = useState(false);
-    const [d, setD] = useState({ ...a, features: [...features] });
+    const [d, setD] = useState(() => productAttrsFromNode(a));
+
+    // Quando o post é reaberto, o HTML é parseado e node.attrs pode atualizar depois do mount — sincroniza o formulário.
+    const attrsSerialized = JSON.stringify(node.attrs);
+    useEffect(() => {
+        if (open) return;
+        setD(productAttrsFromNode(node.attrs));
+    }, [open, attrsSerialized]);
 
     const save = () => {
         updateAttributes({
@@ -87,7 +109,13 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
     };
 
     return (
-        <BlockChrome onEdit={() => { setD({ ...node.attrs, features: [...(node.attrs.features || [])] }); setOpen(true); }} onDelete={deleteNode}>
+        <BlockChrome
+            onEdit={() => {
+                setD(productAttrsFromNode(node.attrs));
+                setOpen(true);
+            }}
+            onDelete={deleteNode}
+        >
             <div className="cnx-aff-product cnx-aff-block-wrap">
                 {a.badge && <div className="cnx-aff-product-badge">{a.badge}</div>}
                 <div className="cnx-aff-product-body">
@@ -171,18 +199,53 @@ export const AffiliateProductCardExtension = Node.create({
     atom: true,
     addAttributes() {
         return {
-            badge: { default: '' },
-            productName: { default: '' },
-            subtitle: { default: '' },
-            productImage: { default: '' },
-            rating: { default: '' },
+            badge: {
+                default: '',
+                parseHTML: (el) => (el.querySelector('.cnx-aff-product-badge')?.textContent || '').trim(),
+            },
+            productName: {
+                default: '',
+                parseHTML: (el) => {
+                    const h2 = el.querySelector('.cnx-aff-product-title');
+                    if (h2?.hasAttribute('data-product-name')) {
+                        return (h2.getAttribute('data-product-name') || '').trim();
+                    }
+                    const t = (h2?.textContent || '').trim();
+                    return t === 'Produto' ? '' : t;
+                },
+            },
+            subtitle: {
+                default: '',
+                parseHTML: (el) => (el.querySelector('.cnx-aff-product-sub')?.textContent || '').trim(),
+            },
+            productImage: {
+                default: '',
+                parseHTML: (el) =>
+                    (el.querySelector('img.cnx-aff-product-img') as HTMLImageElement | null)?.getAttribute('src')?.trim() ||
+                    '',
+            },
+            rating: {
+                default: '',
+                parseHTML: (el) => {
+                    const raw = (el.querySelector('.cnx-aff-product-score')?.textContent || '').trim();
+                    return raw.replace(/^Nota\s*/i, '').trim();
+                },
+            },
             features: {
                 default: [],
                 parseHTML: (el) =>
                     Array.from(el.querySelectorAll('.cnx-aff-product-features li')).map((li) => li.textContent || ''),
             },
-            ctaText: { default: '' },
-            ctaUrl: { default: '' },
+            ctaText: {
+                default: '',
+                parseHTML: (el) => (el.querySelector('.cnx-aff-product-cta a')?.textContent || '').trim(),
+            },
+            ctaUrl: {
+                default: '',
+                parseHTML: (el) =>
+                    (el.querySelector('.cnx-aff-product-cta a') as HTMLAnchorElement | null)?.getAttribute('href')?.trim() ||
+                    '',
+            },
             ctaNofollow: {
                 default: true,
                 parseHTML: (el) => {
@@ -227,7 +290,14 @@ export const AffiliateProductCardExtension = Node.create({
                 [
                     'div',
                     { class: 'cnx-aff-product-main' },
-                    ['h2', { class: 'cnx-aff-product-title' }, productName || 'Produto'],
+                    [
+                        'h2',
+                        {
+                            class: 'cnx-aff-product-title',
+                            'data-product-name': productName || '',
+                        },
+                        productName || 'Produto',
+                    ],
                     ...sub,
                     ...score,
                     ...featBlock,
@@ -252,7 +322,11 @@ function ProsConsView({ node, updateAttributes, deleteNode }: any) {
     return (
         <BlockChrome
             onEdit={() => {
-                setD({ pros: [...pros], cons: [...cons] });
+                setD({
+                    pros: [...(Array.isArray(node.attrs.pros) ? node.attrs.pros : [])],
+                    cons: [...(Array.isArray(node.attrs.cons) ? node.attrs.cons : [])],
+                    ctaUrl: String(node.attrs.ctaUrl ?? ''),
+                });
                 setOpen(true);
             }}
             onDelete={deleteNode}
