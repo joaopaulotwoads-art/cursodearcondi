@@ -5,7 +5,7 @@
 
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
-import { readSiteSettings, normalizeCanonicalUrl, stripWwwFromOrigin } from './read-site-settings';
+import { readSiteSettings, normalizeCanonicalUrl, stripWwwFromOrigin, canonicalPathname } from './read-site-settings';
 import { listLocations } from './location-utils';
 import { listServices } from './service-utils';
 import {
@@ -78,7 +78,7 @@ ${stylesheet}
         '/politica-de-cookies',
     ];
     for (const p of staticPaths) {
-        urls.push(urlNode(base, p, today));
+        urls.push(urlNode(base, canonicalPathname(p), today));
     }
 
     /** Mesmas URLs que contato.astro / sobre.astro — não duplicar no sitemap como post. */
@@ -129,7 +129,7 @@ ${stylesheet}
                 if (postSlugSet.has(id)) continue;
                 if (slugReservedForStaticPages.has(id)) continue;
                 if (reservedTopLevel.has(id)) continue;
-                urls.push(urlNode(base, `/${id}`, today));
+                urls.push(urlNode(base, canonicalPathname(`/${id}`), today));
             }
         }
     } catch (e) {
@@ -139,7 +139,7 @@ ${stylesheet}
     try {
         const authors = await getCollection('authors');
         for (const author of authors) {
-            urls.push(urlNode(base, `/authors/${author.id}`, today));
+            urls.push(urlNode(base, canonicalPathname(`/authors/${author.id}`), today));
         }
     } catch (e) {
         console.error('\x1b[31m✗ Erro ao coletar autores para sitemap:\x1b[0m', e);
@@ -156,12 +156,12 @@ ${stylesheet}
             if (validLocations.length > 0 && activeServices.length > 0) {
                 for (const loc of validLocations) {
                     for (const svc of activeServices) {
-                        urls.push(urlNode(base, `/${loc.data.slug}/${svc.data.slug}`, today));
+                        urls.push(urlNode(base, canonicalPathname(`/${loc.data.slug}/${svc.data.slug}`), today));
                     }
                 }
             } else if (activeServices.length > 0) {
                 for (const svc of activeServices) {
-                    urls.push(urlNode(base, `/servicos/${svc.data.slug}`, today));
+                    urls.push(urlNode(base, canonicalPathname(`/servicos/${svc.data.slug}`), today));
                 }
             }
         } catch (e) {

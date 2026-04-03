@@ -83,20 +83,26 @@ export function ensureApexSiteOrigin(url: string): string {
     return stripWwwFromOrigin(t);
 }
 
-/** Path para &lt;link rel="canonical"&gt;: "/" na raiz; demais URLs sem barra final. */
+/**
+ * Path para &lt;link rel="canonical"&gt; e sitemap.
+ * Raiz = "/" (URL final …com/). Demais páginas com barra final, alinhado ao HTML estático na Vercel
+ * (evita divergência entre URL no navegador e canonical sem "/").
+ */
 export function canonicalPathname(pathname: string): string {
-    const p = pathname || '/';
-    if (p === '/' || p === '') return '/';
-    return p.replace(/\/+$/, '') || '/';
+    const raw = (pathname || '/').trim();
+    if (raw === '/' || raw === '') return '/';
+    const inner = raw.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (!inner) return '/';
+    return `/${inner}/`;
 }
 
-/** URL canônica da página atual (apex + path normalizado, sem barra final exceto na raiz). */
+/** URL canônica da página (apex + path com barra final nas páginas internas). */
 export function buildCanonicalPageUrl(siteBaseOrigin: string, pathname: string): string {
     const origin = ensureApexSiteOrigin(siteBaseOrigin);
     const path = canonicalPathname(pathname);
     const base = origin.replace(/\/+$/, '');
     if (path === '/') return `${base}/`;
-    return `${base}${path.startsWith('/') ? path : `/${path}`}`;
+    return `${base}${path}`;
 }
 
 export async function readSiteSettings(): Promise<Record<string, unknown>> {
