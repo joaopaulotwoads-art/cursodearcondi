@@ -24,6 +24,19 @@ export const onRequest = defineMiddleware(async (context, next) => {
         }
     }
 
+    // 301: /rota/ → /rota (exceto raiz). Alinha URL real com canonical e astro trailingSlash: 'never'
+    if (
+        context.request.method === 'GET' &&
+        pathname.length > 1 &&
+        pathname.endsWith('/') &&
+        !pathname.startsWith('/api') &&
+        !pathname.startsWith('/_')
+    ) {
+        const u = new URL(context.url.href);
+        u.pathname = pathname.replace(/\/+$/, '') || '/';
+        return context.redirect(u.toString(), 301);
+    }
+
     // 301: /blog?categoria=slug → /slug (URLs antigas da listagem por categoria na raiz)
     if (pathname === '/blog' && searchParams.has('categoria')) {
         try {

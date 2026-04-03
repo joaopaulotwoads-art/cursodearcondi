@@ -85,24 +85,21 @@ export function ensureApexSiteOrigin(url: string): string {
 
 /**
  * Path para &lt;link rel="canonical"&gt; e sitemap.
- * Raiz = "/" (URL final …com/). Demais páginas com barra final, alinhado ao HTML estático na Vercel
- * (evita divergência entre URL no navegador e canonical sem "/").
+ * Raiz = "/"; páginas internas **sem** barra final — alinhado a `trailingSlash: 'never'` e à URL que o usuário vê.
  */
 export function canonicalPathname(pathname: string): string {
-    const raw = (pathname || '/').trim();
-    if (raw === '/' || raw === '') return '/';
-    const inner = raw.replace(/^\/+/, '').replace(/\/+$/, '');
-    if (!inner) return '/';
-    return `/${inner}/`;
+    const p = pathname || '/';
+    if (p === '/' || p === '') return '/';
+    return p.replace(/\/+$/, '') || '/';
 }
 
-/** URL canônica da página (apex + path com barra final nas páginas internas). */
+/** URL canônica (apex + path sem barra final exceto na home). */
 export function buildCanonicalPageUrl(siteBaseOrigin: string, pathname: string): string {
     const origin = ensureApexSiteOrigin(siteBaseOrigin);
     const path = canonicalPathname(pathname);
     const base = origin.replace(/\/+$/, '');
     if (path === '/') return `${base}/`;
-    return `${base}${path}`;
+    return `${base}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 export async function readSiteSettings(): Promise<Record<string, unknown>> {
