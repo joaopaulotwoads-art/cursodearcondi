@@ -330,3 +330,151 @@ html.dark .bemmae-post-html .product-review-pros-col li,
 html.dark .bemmae-post-html .product-review-cons-col li {
   color: #e5e7eb !important;
 }
+
+/* Tabela comparativa (ex.: regras de companhias aéreas) — estilos no CSS para não depender de <style> no HTML */
+.bemmae-post-html .bemmae-travel-container {
+  margin: 1.5rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bemmae-post-html .bemmae-travel-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--color-border);
+}
+
+.bemmae-post-html .bemmae-travel-table thead {
+  background: linear-gradient(135deg, var(--color-accent), #a88b62);
+  color: #fff;
+}
+
+.bemmae-post-html .bemmae-travel-table th {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.bemmae-post-html .bemmae-travel-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  vertical-align: top;
+}
+
+.bemmae-post-html .bemmae-travel-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.bemmae-post-html .bemmae-travel-table .comp-name {
+  font-weight: 800;
+  color: var(--color-accent);
+  font-size: 1.0625rem;
+}
+
+@media (max-width: 768px) {
+  .bemmae-post-html .bemmae-travel-table,
+  .bemmae-post-html .bemmae-travel-table thead,
+  .bemmae-post-html .bemmae-travel-table tbody,
+  .bemmae-post-html .bemmae-travel-table th,
+  .bemmae-post-html .bemmae-travel-table td,
+  .bemmae-post-html .bemmae-travel-table tr {
+    display: block;
+  }
+
+  .bemmae-post-html .bemmae-travel-table {
+    min-width: 0;
+  }
+
+  .bemmae-post-html .bemmae-travel-table thead tr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .bemmae-post-html .bemmae-travel-table tr {
+    border: 1px solid var(--color-border);
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    padding: 0.5rem;
+    background: #fff;
+  }
+
+  .bemmae-post-html .bemmae-travel-table td {
+    border: none;
+    position: relative;
+    padding: 0.65rem 0.65rem 0.65rem 44% !important;
+    text-align: left !important;
+    min-height: 2rem;
+  }
+
+  .bemmae-post-html .bemmae-travel-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0.75rem;
+    width: 40%;
+    font-weight: 700;
+    color: var(--color-accent);
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.3;
+  }
+
+  .bemmae-post-html .bemmae-travel-table td.comp-cell {
+    padding: 0.75rem !important;
+    background: var(--color-rosa);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .bemmae-post-html .bemmae-travel-table td.comp-cell::before {
+    display: none;
+  }
+
+  .bemmae-post-html .bemmae-travel-table .comp-name {
+    font-size: 1.125rem;
+  }
+}
+
+html.dark .bemmae-post-html .bemmae-travel-table {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html.dark .bemmae-post-html .bemmae-travel-table td {
+  color: #e5e7eb;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+html.dark .bemmae-post-html .bemmae-travel-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 768px) {
+  html.dark .bemmae-post-html .bemmae-travel-table tr {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+
+  html.dark .bemmae-post-html .bemmae-travel-table td.comp-cell {
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
