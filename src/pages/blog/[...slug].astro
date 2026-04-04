@@ -81,10 +81,19 @@ const pageUrl = buildCanonicalPageUrl(publicSiteUrl, Astro.url.pathname);
 const rawPostImg = post.data.metaImage || post.data.thumbnail;
 const ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolveBemmaeMediaUrl(rawPostImg) || rawPostImg);
 const articleIso = toIsoDateTime(post.data.publishedDate);
+let categoryName: string | undefined;
+let categoryPath: string | undefined;
+if (post.data.category) {
+  const cat = await getEntry('categories', post.data.category).catch(() => null);
+  if (cat) {
+    categoryName = cat.data.name;
+    categoryPath = `/${cat.id}`;
+  }
+}
 const postJsonLd = useBemmae
   ? buildPostJsonLd({
       seoSchema: post.data.seoSchema,
-      title: documentTitle,
+      headline: post.data.title,
       description: post.data.metaDescription || '',
       pageUrl,
       siteUrl: publicSiteUrl,
@@ -94,6 +103,8 @@ const postJsonLd = useBemmae
       authorName: author?.data?.name,
       authorUrl: author ? buildAuthorAbsoluteUrl(publicSiteUrl, author.id) : undefined,
       htmlContent,
+      categoryName,
+      categoryPath,
     })
   : null;
 ---

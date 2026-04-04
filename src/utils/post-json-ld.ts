@@ -1,11 +1,16 @@
 /**
- * JSON-LD para posts (BlogPosting, Article + ItemList em reviews/listas).
+ * JSON-LD para posts: @graph com #website, #organization, #author, ImageObject, SearchAction, BreadcrumbList.
  */
+
+import { canonicalPathname } from './read-site-settings';
 
 export type PostSeoSchema = 'auto' | 'blogPosting' | 'articleItemList' | 'none';
 
 const BEMMAE_CARD_H3 =
     /<div[^>]*class="[^"]*\bbemmae-card\b[^"]*"[^>]*>[\s\S]*?<div[^>]*class="[^"]*\bbemmae-text\b[^"]*"[^>]*>[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>/gi;
+
+const DEFAULT_IMAGE_WIDTH = 1200;
+const DEFAULT_IMAGE_HEIGHT = 630;
 
 export function extractBemmaeRankedProductNames(html: string | null | undefined): string[] {
     if (!html) return [];
@@ -33,111 +38,104 @@ export function toIsoDateTime(dateStr?: string | null): string | undefined {
     return `${d}T12:00:00.000Z`;
 }
 
-/** URL absoluta da página do autor (mesmo padrão que `/authors/${author.id}` nas rotas). */
 export function buildAuthorAbsoluteUrl(siteOrigin: string, authorId: string): string {
     const base = siteOrigin.replace(/\/+$/, '');
     const seg = authorId.split('/').map(encodeURIComponent).join('/');
     return `${base}/authors/${seg}`;
 }
 
-function personAuthor(name: string, url?: string): Record<string, unknown> {
-    return {
-        '@type': 'Person',
-        name,
-        ...(url ? { url } : {}),
-    };
+function siteRootOnly(siteUrl: string): string {
+    return siteUrl.replace(/\/+$/, '');
 }
 
-function blogPostingBlock(opts: {
-    title: string;
-    description: string;
-    pageUrl: string;
+/** IDs absolutos com fragmento (ex.: https://domínio/#website). */
+function idFragment(siteRoot: string, fragment: string): string {
+    return `${siteRoot}/#${fragment}`;
+}
+
+function idPage(pageUrl: string, fragment: string): string {
+    const base = pageUrl.replace(/\/+$/, '');
+    return `${base}#${fragment}`;
+}
+
+/** Template de busca interna: listagem do blog com ?q= */
+export function buildBlogSearchUrlTemplate(siteUrl: string): string {
+    const root = siteRootOnly(siteUrl);
+    const blogPath = canonicalPathname('/blog');
+    return `${root}${blogPath}?q={search_term_string}`;
+}
+
+/**
+ * Graph mínimo (home, listagens): WebSite + Organization + SearchAction + inLanguage.
+ */
+export function buildBemmaeDefaultSiteJsonLd(opts: {
     siteUrl: string;
     siteName: string;
-    publishedDate?: string;
-    imageUrl?: string;
-    authorName?: string;
-    authorUrl?: string;
+    description?: string;
 }): Record<string, unknown> {
-    const iso = toIsoDateTime(opts.publishedDate);
+    const root = siteRootOnly(opts.siteUrl);
+    const webSiteId = idFragment(root, 'website');
+    const orgId = idFragment(root, 'organization');
+
     return {
         '@context': 'https://schema.org',
-        '@type': 'BlogPosting',
-        headline: opts.title,
-        description: opts.description || undefined,
-        image: opts.imageUrl ? [opts.imageUrl] : undefined,
-        datePublished: iso,
-        dateModified: iso,
-        author: opts.authorName ? personAuthor(opts.authorName, opts.authorUrl) : undefined,
-        publisher: {
-            '@type': 'Organization',
-            name: opts.siteName,
-            url: opts.siteUrl,
-        },
-        mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': opts.pageUrl,
-        },
+        '@graph': [
+            {
+                '@type': 'Organization',
+                '@id': orgId,
+                name: opts.siteName,
+                url: `${root}/`,
+            },
+            {
+                '@type': 'WebSite',
+                '@id': webSiteId,
+                name: opts.siteName,
+                url: `${root}/`,
+                description: opts.description || undefined,
+                inLanguage: 'pt-BR',
+                publisher: { '@id': orgId },
+                potentialAction: {
+                    '@type': 'SearchAction',
+                    target: {
+                        '@type': 'EntryPoint',
+                        urlTemplate: buildBlogSearchUrlTemplate(opts.siteUrl),
+                    },
+                    'query-input': 'required name=search_term_string',
+                },
+            },
+        ],
     };
 }
 
-function articleItemListBlock(
-    opts: {
-        title: string;
-        description: string;
-        pageUrl: string;
-        siteUrl: string;
-        siteName: string;
-        publishedDate?: string;
-        imageUrl?: string;
-        authorName?: string;
-        authorUrl?: string;
-    },
-    itemNames: string[],
-): Record<string, unknown> {
-    const iso = toIsoDateTime(opts.publishedDate);
+function personNode(name: string, authorPageUrl: string): Record<string, unknown> {
+    const base = authorPageUrl.replace(/\/+$/, '');
     return {
-        '@context': 'https://schema.org',
-        '@type': 'Article',
-        headline: opts.title,
-        description: opts.description || undefined,
-        image: opts.imageUrl ? [opts.imageUrl] : undefined,
-        datePublished: iso,
-        dateModified: iso,
-        author: opts.authorName ? personAuthor(opts.authorName, opts.authorUrl) : undefined,
-        publisher: {
-            '@type': 'Organization',
-            name: opts.siteName,
-            url: opts.siteUrl,
-        },
-        mainEntityOfPage: {
-            '@type': 'WebPage',
-            '@id': opts.pageUrl,
-        },
-        mainEntity: {
-            '@type': 'ItemList',
-            numberOfItems: itemNames.length,
-            itemListElement: itemNames.map((name, i) => ({
-                '@type': 'ListItem',
-                position: i + 1,
-                name,
-            })),
-        },
+        '@type': 'Person',
+        '@id': `${base}#author`,
+        name,
+        url: `${base}/`,
     };
 }
 
 export function buildPostJsonLd(opts: {
     seoSchema?: PostSeoSchema;
-    title: string;
+    /** Título do artigo (headline / caption) */
+    headline: string;
     description: string;
     pageUrl: string;
     siteUrl: string;
     siteName: string;
     publishedDate?: string;
     imageUrl?: string;
+    /** Largura/altura da imagem principal (OG); padrão 1200×630 */
+    imageWidth?: number;
+    imageHeight?: number;
     authorName?: string;
     authorUrl?: string;
     htmlContent?: string | null;
+    /** Categoria do post: nome e path canônico (ex. /carrinhos-de-bebe/) */
+    categoryName?: string;
+    categoryPath?: string;
 }): Record<string, unknown> | null {
     let mode: PostSeoSchema = opts.seoSchema || 'auto';
     const items = extractBemmaeRankedProductNames(opts.htmlContent);
@@ -147,21 +145,160 @@ export function buildPostJsonLd(opts: {
     }
     if (mode === 'none') return null;
 
-    const base = {
-        title: opts.title,
-        description: opts.description,
-        pageUrl: opts.pageUrl,
-        siteUrl: opts.siteUrl,
-        siteName: opts.siteName,
-        publishedDate: opts.publishedDate,
-        imageUrl: opts.imageUrl,
-        authorName: opts.authorName,
-        authorUrl: opts.authorUrl,
+    const root = siteRootOnly(opts.siteUrl);
+    const webSiteId = idFragment(root, 'website');
+    const orgId = idFragment(root, 'organization');
+    const pageUrl = opts.pageUrl.replace(/\/+$/, '') + '/';
+    const iso = toIsoDateTime(opts.publishedDate);
+    const imgUrl = opts.imageUrl;
+    const w = opts.imageWidth ?? DEFAULT_IMAGE_WIDTH;
+    const h = opts.imageHeight ?? DEFAULT_IMAGE_HEIGHT;
+    const caption = opts.headline;
+
+    const authorPageUrl = opts.authorUrl ? opts.authorUrl.replace(/\/+$/, '') + '/' : undefined;
+    const authorNode =
+        opts.authorName && authorPageUrl ? personNode(opts.authorName, authorPageUrl) : null;
+
+    const imageId = idPage(pageUrl, 'primaryimage');
+    const webPageId = idPage(pageUrl, 'webpage');
+    const articleId = idPage(pageUrl, mode === 'articleItemList' ? 'article' : 'blogposting');
+    const breadcrumbId = idPage(pageUrl, 'breadcrumb');
+
+    const imageObject: Record<string, unknown> = {
+        '@type': 'ImageObject',
+        '@id': imageId,
+        url: imgUrl,
+        width: w,
+        height: h,
+        caption,
     };
 
-    if (mode === 'articleItemList') {
-        if (items.length >= 2) return articleItemListBlock(base, items);
-        return blogPostingBlock(base);
+    const blogPath = canonicalPathname('/blog');
+    const blogIndexUrl = `${root}${blogPath}`;
+
+    const breadcrumbItems: Record<string, unknown>[] = [
+        {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Início',
+            item: `${root}/`,
+        },
+        {
+            '@type': 'ListItem',
+            position: 2,
+            name: 'Blog',
+            item: blogIndexUrl,
+        },
+    ];
+    let pos = 3;
+    if (opts.categoryName && opts.categoryPath) {
+        const catUrl = `${root}${canonicalPathname(opts.categoryPath)}`;
+        breadcrumbItems.push({
+            '@type': 'ListItem',
+            position: pos++,
+            name: opts.categoryName,
+            item: catUrl,
+        });
     }
-    return blogPostingBlock(base);
+    breadcrumbItems.push({
+        '@type': 'ListItem',
+        position: pos,
+        name: opts.headline,
+        item: pageUrl,
+    });
+
+    const publisherRef = { '@id': orgId };
+    const webSiteRef = { '@id': webSiteId };
+
+    const webPage: Record<string, unknown> = {
+        '@type': 'WebPage',
+        '@id': webPageId,
+        url: pageUrl,
+        name: opts.headline,
+        isPartOf: webSiteRef,
+        inLanguage: 'pt-BR',
+        ...(imgUrl ? { primaryImageOfPage: { '@id': imageId } } : {}),
+    };
+
+    const articleCommon: Record<string, unknown> = {
+        headline: opts.headline,
+        description: opts.description || undefined,
+        url: pageUrl,
+        inLanguage: 'pt-BR',
+        datePublished: iso,
+        dateModified: iso,
+        author: authorNode ? { '@id': authorNode['@id'] as string } : undefined,
+        publisher: publisherRef,
+        isPartOf: webSiteRef,
+        mainEntityOfPage: { '@id': webPageId },
+        ...(imgUrl
+            ? {
+                  image: { '@id': imageId },
+              }
+            : {}),
+    };
+
+    let mainEntity: Record<string, unknown>;
+
+    if (mode === 'articleItemList' && items.length >= 2) {
+        mainEntity = {
+            '@type': 'Article',
+            '@id': articleId,
+            ...articleCommon,
+            mainEntity: {
+                '@type': 'ItemList',
+                numberOfItems: items.length,
+                itemListElement: items.map((name, i) => ({
+                    '@type': 'ListItem',
+                    position: i + 1,
+                    name,
+                })),
+            },
+        };
+    } else {
+        mainEntity = {
+            '@type': 'BlogPosting',
+            '@id': articleId,
+            ...articleCommon,
+        };
+    }
+
+    const graph: Record<string, unknown>[] = [
+        {
+            '@type': 'Organization',
+            '@id': orgId,
+            name: opts.siteName,
+            url: `${root}/`,
+        },
+        {
+            '@type': 'WebSite',
+            '@id': webSiteId,
+            name: opts.siteName,
+            url: `${root}/`,
+            inLanguage: 'pt-BR',
+            publisher: { '@id': orgId },
+            potentialAction: {
+                '@type': 'SearchAction',
+                target: {
+                    '@type': 'EntryPoint',
+                    urlTemplate: buildBlogSearchUrlTemplate(opts.siteUrl),
+                },
+                'query-input': 'required name=search_term_string',
+            },
+        },
+        ...(authorNode ? [authorNode] : []),
+        ...(imgUrl ? [imageObject] : []),
+        webPage,
+        mainEntity,
+        {
+            '@type': 'BreadcrumbList',
+            '@id': breadcrumbId,
+            itemListElement: breadcrumbItems,
+        },
+    ];
+
+    return {
+        '@context': 'https://schema.org',
+        '@graph': graph,
+    };
 }

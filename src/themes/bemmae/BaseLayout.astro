@@ -9,6 +9,7 @@ import '@fontsource/outfit/latin-600.css';
 import '@fontsource/outfit/latin-700.css';
 import './global.css';
 import { buildCanonicalPageUrl, ensureApexSiteOrigin } from '../../utils/read-site-settings';
+import { buildBemmaeDefaultSiteJsonLd } from '../../utils/post-json-ld';
 import FaviconLinks from '../../components/FaviconLinks.astro';
 
 interface Props {
@@ -49,6 +50,12 @@ const fullTitle = title;
 const fullDescription = description || '';
 const siteOrigin = ensureApexSiteOrigin(siteUrl);
 const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
+/** Um único JSON-LD: post traz @graph completo; demais páginas usam WebSite + Organization + SearchAction */
+const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
+    siteUrl: siteOrigin || siteUrl,
+    siteName,
+    description: fullDescription || undefined,
+});
 ---
 <!DOCTYPE html>
 <html lang="pt-BR" class="bemmae-root">
@@ -80,10 +87,7 @@ const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
   <meta name="twitter:title" content={fullTitle} />
   <meta name="twitter:description" content={fullDescription} />
   {ogImageAbs && <meta name="twitter:image" content={ogImageAbs} />}
-  <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: siteName, url: siteOrigin || siteUrl, description: fullDescription || undefined })} />
-  {extraJsonLd && (
-    <script type="application/ld+json" set:html={JSON.stringify(extraJsonLd)} />
-  )}
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
 </head>
 <body class="bemmae-scope bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
   <Header siteName={siteName} logoSrc={logoSrc} nav={nav} />
