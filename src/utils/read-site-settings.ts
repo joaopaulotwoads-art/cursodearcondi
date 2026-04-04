@@ -118,6 +118,27 @@ export function buildCanonicalPageUrl(siteBaseOrigin: string, pathname: string):
     return `${base}${path}`;
 }
 
+/**
+ * URLs absolutas no JSON-LD com barra final em páginas (`trailingSlash: 'always'`).
+ * Não altera URLs de arquivo (último segmento com extensão).
+ */
+export function schemaPageUrl(url: string): string {
+    const t = (url || '').trim();
+    if (!t) return t;
+    try {
+        const u = new URL(t);
+        const path = u.pathname;
+        const segments = path.split('/').filter(Boolean);
+        const last = segments[segments.length - 1] ?? '';
+        if (/\.[a-z0-9]{2,12}$/i.test(last)) return t;
+        if (path.endsWith('/')) return u.toString();
+        u.pathname = path === '/' ? '/' : `${path.replace(/\/$/, '')}/`;
+        return u.toString();
+    } catch {
+        return t;
+    }
+}
+
 export async function readSiteSettings(): Promise<Record<string, unknown>> {
     try {
         const content = await fs.readFile(SETTINGS_PATH, 'utf-8');

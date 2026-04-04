@@ -4,7 +4,7 @@
  */
 import type { NavItem } from './types';
 import { readSingleton } from '../../utils/singleton-utils';
-import { readSiteSettings, resolvePublicSiteUrl } from '../../utils/read-site-settings';
+import { readSiteSettings, resolvePublicSiteUrl, schemaPageUrl } from '../../utils/read-site-settings';
 import { getSiteContactInfo, formatPhone } from '../../utils/site-contact';
 
 interface Props {
@@ -56,7 +56,7 @@ const orgJsonLd: Record<string, unknown> = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: orgLegalName,
-  url: canonicalBase,
+  url: schemaPageUrl(canonicalBase),
   description: tagline || undefined,
 };
 
@@ -141,7 +141,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
       </div>
 
       <div>
-        <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Legal</h2>
+        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Legal</div>
         <nav class="flex flex-col gap-2" aria-label="Políticas e termos">
           {legalLinks.length > 0 ? (
             legalLinks.map((item) => (
@@ -159,7 +159,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
       </div>
 
       <div>
-        <h2 class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Contato</h2>
+        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Contato</div>
         <address class="not-italic text-sm text-[var(--color-muted)] space-y-2">
           {orgLegalName && <p class="text-[var(--color-text)] font-medium">{orgLegalName}</p>}
           {(streetAddress || addressLocality || postalCode) && (

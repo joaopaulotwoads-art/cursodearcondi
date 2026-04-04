@@ -2,7 +2,7 @@
  * JSON-LD para posts: @graph com #website, #organization, #author, ImageObject, SearchAction, BreadcrumbList.
  */
 
-import { canonicalPathname } from './read-site-settings';
+import { canonicalPathname, schemaPageUrl } from './read-site-settings';
 
 export type PostSeoSchema = 'auto' | 'blogPosting' | 'articleItemList' | 'none';
 
@@ -84,13 +84,13 @@ export function buildBemmaeDefaultSiteJsonLd(opts: {
                 '@type': 'Organization',
                 '@id': orgId,
                 name: opts.siteName,
-                url: `${root}/`,
+                url: schemaPageUrl(`${root}/`),
             },
             {
                 '@type': 'WebSite',
                 '@id': webSiteId,
                 name: opts.siteName,
-                url: `${root}/`,
+                url: schemaPageUrl(`${root}/`),
                 description: opts.description || undefined,
                 inLanguage: 'pt-BR',
                 publisher: { '@id': orgId },
@@ -98,7 +98,7 @@ export function buildBemmaeDefaultSiteJsonLd(opts: {
                     '@type': 'SearchAction',
                     target: {
                         '@type': 'EntryPoint',
-                        urlTemplate: buildBlogSearchUrlTemplate(opts.siteUrl),
+                        urlTemplate: schemaPageUrl(buildBlogSearchUrlTemplate(opts.siteUrl)),
                     },
                     'query-input': 'required name=search_term_string',
                 },
@@ -113,7 +113,7 @@ function personNode(name: string, authorPageUrl: string): Record<string, unknown
         '@type': 'Person',
         '@id': `${base}#author`,
         name,
-        url: `${base}/`,
+        url: schemaPageUrl(`${base}/`),
     };
 }
 
@@ -148,7 +148,7 @@ export function buildPostJsonLd(opts: {
     const root = siteRootOnly(opts.siteUrl);
     const webSiteId = idFragment(root, 'website');
     const orgId = idFragment(root, 'organization');
-    const pageUrl = opts.pageUrl.replace(/\/+$/, '') + '/';
+    const pageUrl = schemaPageUrl(opts.pageUrl.trim());
     const iso = toIsoDateTime(opts.publishedDate);
     const imgUrl = opts.imageUrl;
     const w = opts.imageWidth ?? DEFAULT_IMAGE_WIDTH;
@@ -167,21 +167,21 @@ export function buildPostJsonLd(opts: {
     const imageObject: Record<string, unknown> = {
         '@type': 'ImageObject',
         '@id': imageId,
-        url: imgUrl,
+        url: imgUrl ? schemaPageUrl(imgUrl) : imgUrl,
         width: w,
         height: h,
         caption,
     };
 
     const blogPath = canonicalPathname('/blog');
-    const blogIndexUrl = `${root}${blogPath}`;
+    const blogIndexUrl = schemaPageUrl(`${root}${blogPath}`);
 
     const breadcrumbItems: Record<string, unknown>[] = [
         {
             '@type': 'ListItem',
             position: 1,
             name: 'Início',
-            item: `${root}/`,
+            item: schemaPageUrl(`${root}/`),
         },
         {
             '@type': 'ListItem',
@@ -192,7 +192,7 @@ export function buildPostJsonLd(opts: {
     ];
     let pos = 3;
     if (opts.categoryName && opts.categoryPath) {
-        const catUrl = `${root}${canonicalPathname(opts.categoryPath)}`;
+        const catUrl = schemaPageUrl(`${root}${canonicalPathname(opts.categoryPath)}`);
         breadcrumbItems.push({
             '@type': 'ListItem',
             position: pos++,
@@ -268,20 +268,20 @@ export function buildPostJsonLd(opts: {
             '@type': 'Organization',
             '@id': orgId,
             name: opts.siteName,
-            url: `${root}/`,
+            url: schemaPageUrl(`${root}/`),
         },
         {
             '@type': 'WebSite',
             '@id': webSiteId,
             name: opts.siteName,
-            url: `${root}/`,
+            url: schemaPageUrl(`${root}/`),
             inLanguage: 'pt-BR',
             publisher: { '@id': orgId },
             potentialAction: {
                 '@type': 'SearchAction',
                 target: {
                     '@type': 'EntryPoint',
-                    urlTemplate: buildBlogSearchUrlTemplate(opts.siteUrl),
+                    urlTemplate: schemaPageUrl(buildBlogSearchUrlTemplate(opts.siteUrl)),
                 },
                 'query-input': 'required name=search_term_string',
             },

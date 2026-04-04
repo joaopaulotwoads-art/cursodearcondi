@@ -82,9 +82,9 @@ const htmlBody = htmlContent
           )}
           <div class="min-w-0 flex-1">
             <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-1">Sobre quem escreveu</p>
-            <h2 id="post-author-heading" class="text-xl font-semibold text-[var(--color-text)]">
+            <div id="post-author-heading" class="text-xl font-semibold text-[var(--color-text)]">
               {author.data.name}
-            </h2>
+            </div>
             {author.data.role && (
               <p class="mt-1 text-sm font-medium text-[var(--color-muted)]">{author.data.role}</p>
             )}
