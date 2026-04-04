@@ -8,6 +8,7 @@
 
 import MainLayout from '../../layouts/MainLayout.astro';
 import LocalLayout from '../../layouts/LocalLayout.astro';
+import { demoteBodyH1ToH2 } from '../../utils/post-html-sanitize';
 
 interface Props {
     post: any;
@@ -21,6 +22,7 @@ interface Props {
 const { post, author, Content, htmlContent, themeId, layoutType = 'main' } = Astro.props;
 const Layout = layoutType === 'local' ? LocalLayout : MainLayout;
 const pageTitle = post.data.metaTitle || post.data.title;
+const htmlBody = htmlContent ? demoteBodyH1ToH2(htmlContent) : null;
 ---
 
 <Layout title={pageTitle}>
@@ -106,12 +108,12 @@ const pageTitle = post.data.metaTitle || post.data.title;
                 <article
                     class:list={[
                         'max-w-none prose-img:rounded-2xl prose-img:my-8',
-                        htmlContent
+                        htmlBody
                             ? 'bemmae-post-html text-[var(--blog-text)] [&_a]:text-primary [&_a:hover]:underline'
                             : 'prose prose-invert prose-lg prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-a:no-underline hover:prose-a:underline',
                     ]}
                 >
-                    {htmlContent ? <div class="contents" set:html={htmlContent} /> : Content && <Content />}
+                    {htmlBody ? <div class="contents" set:html={htmlBody} /> : Content && <Content />}
                 </article>
             </div>
         </div>

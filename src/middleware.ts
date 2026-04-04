@@ -1,6 +1,10 @@
 import { defineMiddleware } from 'astro:middleware';
 import { verifySession, SESSION_COOKIE } from './utils/auth-utils';
-import { readSiteSettings } from './utils/read-site-settings';
+import {
+    readSiteSettings,
+    canonicalPathname,
+    shouldRedirectAddTrailingSlash,
+} from './utils/read-site-settings';
 
 const ADMIN_ONLY_PATHS = [
     '/admin/pixels',
@@ -24,27 +28,36 @@ export const onRequest = defineMiddleware(async (context, next) => {
         }
     }
 
-    // 301: /rota/ → /rota (exceto raiz). Alinha URL real com canonical e astro trailingSlash: 'never'
-    if (
-        context.request.method === 'GET' &&
-        pathname.length > 1 &&
-        pathname.endsWith('/') &&
-        !pathname.startsWith('/api') &&
-        !pathname.startsWith('/_')
-    ) {
+    // Modo blog: /servicos → home em um passo (antes de forçar barra em /servicos/)
+    if (pathname === '/servicos' || pathname.startsWith('/servicos/')) {
+        try {
+            const settings = await readSiteSettings();
+            if ((settings.siteMode || 'blog') !== 'local') {
+                return context.redirect('/', 301);
+            }
+        } catch {
+            /* continua */
+        }
+    }
+
+    // 301: /rota → /rota/ (páginas). Alinha com trailingSlash: 'always', canonical e sitemap
+    if (context.request.method === 'GET' && shouldRedirectAddTrailingSlash(pathname)) {
         const u = new URL(context.url.href);
-        u.pathname = pathname.replace(/\/+$/, '') || '/';
+        u.pathname = canonicalPathname(pathname);
         return context.redirect(u.toString(), 301);
     }
 
-    // 301: /blog?categoria=slug → /slug (URLs antigas da listagem por categoria na raiz)
-    if (pathname === '/blog' && searchParams.has('categoria')) {
+    // 301: /blog?categoria=slug → /slug/ (URLs antigas da listagem por categoria na raiz)
+    const isBlogIndex = pathname === '/blog' || pathname === '/blog/';
+    if (isBlogIndex && searchParams.has('categoria')) {
         try {
             const settings = await readSiteSettings();
             if (settings.blogUrlPrefix === 'root') {
                 const slug = (searchParams.get('categoria') || '').trim();
                 if (slug && !slug.includes('/')) {
-                    return context.redirect(`/${encodeURIComponent(slug)}`, 301);
+                    const u = new URL(context.url.href);
+                    u.pathname = canonicalPathname(`/${encodeURIComponent(slug)}`);
+                    return context.redirect(u.toString(), 301);
                 }
             }
         } catch {
@@ -58,19 +71,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
             const settings = await readSiteSettings();
             if (settings.blogUrlPrefix === 'root') {
                 const target = pathname.replace(/^\/blog/, '') || '/';
-                return context.redirect(target, 301);
-            }
-        } catch {
-            /* continua */
-        }
-    }
-
-    // Modo blog: /servicos é só para sites locais (rank-and-rent); evita URL órfã indexada
-    if (pathname === '/servicos' || pathname.startsWith('/servicos/')) {
-        try {
-            const settings = await readSiteSettings();
-            if ((settings.siteMode || 'blog') !== 'local') {
-                return context.redirect('/', 301);
+                const u = new URL(context.url.href);
+                u.pathname = canonicalPathname(target);
+                return context.redirect(u.toString(), 301);
             }
         } catch {
             /* continua */

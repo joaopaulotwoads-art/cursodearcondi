@@ -85,21 +85,37 @@ export function ensureApexSiteOrigin(url: string): string {
 
 /**
  * Path para &lt;link rel="canonical"&gt; e sitemap.
- * Raiz = "/"; páginas internas **sem** barra final — alinhado a `trailingSlash: 'never'` e à URL que o usuário vê.
+ * Raiz = "/"; demais rotas **com** barra final — alinhado a `trailingSlash: 'always'`.
  */
 export function canonicalPathname(pathname: string): string {
-    const p = pathname || '/';
-    if (p === '/' || p === '') return '/';
-    return p.replace(/\/+$/, '') || '/';
+    const raw = (pathname || '/').trim();
+    if (raw === '/' || raw === '') return '/';
+    const inner = raw.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (!inner) return '/';
+    return `/${inner}/`;
 }
 
-/** URL canônica (apex + path sem barra final exceto na home). */
+/**
+ * GET sem barra em página HTML → redirecionar para versão com barra (exclui API, _* e URLs de arquivo).
+ */
+export function shouldRedirectAddTrailingSlash(pathname: string): boolean {
+    if (!pathname || pathname === '/') return false;
+    if (pathname.endsWith('/')) return false;
+    if (pathname.startsWith('/api')) return false;
+    if (pathname.startsWith('/_')) return false;
+    const segments = pathname.split('/').filter(Boolean);
+    const last = segments[segments.length - 1] ?? '';
+    if (last.includes('.') && /\.[a-z0-9]{1,12}$/i.test(last)) return false;
+    return true;
+}
+
+/** URL canônica (apex + path com barra final nas páginas internas). */
 export function buildCanonicalPageUrl(siteBaseOrigin: string, pathname: string): string {
     const origin = ensureApexSiteOrigin(siteBaseOrigin);
     const path = canonicalPathname(pathname);
     const base = origin.replace(/\/+$/, '');
     if (path === '/') return `${base}/`;
-    return `${base}${path.startsWith('/') ? path : `/${path}`}`;
+    return `${base}${path}`;
 }
 
 export async function readSiteSettings(): Promise<Record<string, unknown>> {

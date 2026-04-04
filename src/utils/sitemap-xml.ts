@@ -94,7 +94,7 @@ ${stylesheet}
                 continue;
             }
             const postPath = getPostUrl({ ...post, data: { ...post.data, slug: postSlug } }, permalinkStructure, urlPrefix);
-            urls.push(urlNode(base, postPath, post.data.publishedDate as string || today));
+            urls.push(urlNode(base, canonicalPathname(postPath), post.data.publishedDate as string || today));
         }
 
         if (urlPrefix === 'root') {
