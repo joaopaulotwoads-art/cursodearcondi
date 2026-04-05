@@ -4,6 +4,18 @@ export const BEMMAE_HOME_FIELDS = [
     { key: 'heroKicker', type: 'text', label: 'Selo acima do título (hero)' },
     { key: 'heroTitle', type: 'text', label: 'Título principal' },
     { key: 'heroSubtitle', type: 'text', label: 'Subtítulo', multiline: true, rows: 3 },
+    {
+        key: 'metaTitle',
+        type: 'text',
+        label: 'SEO — título da página (tag <title>; diferente do título do hero)',
+    },
+    {
+        key: 'metaDescription',
+        type: 'text',
+        label: 'SEO — meta description (Google)',
+        multiline: true,
+        rows: 3,
+    },
     { key: 'heroBgImage', type: 'text', label: 'URL da imagem de fundo (hero)' },
     { key: 'heroCtaPrimaryText', type: 'text', label: 'Texto botão principal' },
     { key: 'heroCtaPrimaryHref', type: 'text', label: 'Link botão principal' },

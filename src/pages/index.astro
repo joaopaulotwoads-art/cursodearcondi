@@ -52,9 +52,14 @@ const bemmaeFooter = activeTheme === 'bemmae' && siteMode !== 'local'
     : null;
 const bemmaeNav = bemmaeMenu ? navFromMenu(bemmaeMenu) : [];
 const bemmaeFooterNav = bemmaeFooter ? footerNavFromSingleton(bemmaeFooter) : [];
-const bemmaeMetaDesc =
-    (home && (home as Record<string, string>).heroSubtitle) ||
-    (settings?.data as Record<string, string>)?.companyPhone ||
+const homeRec = (home || {}) as Record<string, string>;
+const bemmaeHomeTitle =
+    String(homeRec.metaTitle || '').trim() ||
+    String(homeRec.heroTitle || '').trim() ||
+    siteName;
+const bemmaeHomeDescription =
+    String(homeRec.metaDescription || '').trim() ||
+    String(homeRec.heroSubtitle || '').trim() ||
     '';
 ---
 
@@ -62,8 +67,8 @@ const bemmaeMetaDesc =
     <LocalHome homeData={localData} />
 ) : activeTheme === 'bemmae' ? (
     <BaseLayoutBemmae
-        title={siteName}
-        description={bemmaeMetaDesc}
+        title={bemmaeHomeTitle}
+        description={bemmaeHomeDescription}
         siteName={(bemmaeMenu as any)?.logoText || siteName}
         logoSrc={logoSrcFromMenu(bemmaeMenu as Record<string, unknown>)}
         siteUrl={siteUrl}
