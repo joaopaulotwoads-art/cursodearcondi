@@ -18,7 +18,7 @@ const {
   blogUrlPrefix,
 } = Astro.props;
 
-const heroBg = h.heroBgImage || 'https://images.unsplash.com/photo-1492725764893-90b379c2b6e7?auto=format&fit=crop&w=1920&q=80';
+const heroBg = h.heroBgImage || '/images/bemmae/hero-home.png';
 const categoryCards = Array.isArray(h.categoryCards) ? h.categoryCards : [];
 const aboutText = String(h.aboutText || '').trim();
 const showAbout = aboutText.length > 0;

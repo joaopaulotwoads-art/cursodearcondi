@@ -1,7 +1,7 @@
 heroKicker: Bem-vinda
 heroTitle: Maternidade Real e com Leveza
 heroSubtitle: Um espaço para rotina, alimentação e saúde com simplicidade e afeto.
-heroBgImage: https://images.unsplash.com/photo-1492725764893-90b379c2b6e7?auto=format&fit=crop&w=1920&q=80
+heroBgImage: /images/bemmae/hero-home.png
 heroCtaPrimaryText: Ver artigos
 heroCtaPrimaryHref: /blog
 heroCtaSecondaryText: Quem somos
