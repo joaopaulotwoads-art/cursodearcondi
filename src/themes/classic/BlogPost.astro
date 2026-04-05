@@ -9,7 +9,6 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import LocalLayout from '../../layouts/LocalLayout.astro';
 import { demoteBodyH1ToH2 } from '../../utils/post-html-sanitize';
-import { expandPostHtmlComponents } from '../../utils/post-html-components';
 
 interface Props {
     post: any;
@@ -23,7 +22,7 @@ interface Props {
 const { post, author, Content, htmlContent, themeId, layoutType = 'main' } = Astro.props;
 const Layout = layoutType === 'local' ? LocalLayout : MainLayout;
 const pageTitle = post.data.metaTitle || post.data.title;
-const htmlBody = htmlContent ? expandPostHtmlComponents(demoteBodyH1ToH2(htmlContent)) : null;
+const htmlBody = htmlContent ? demoteBodyH1ToH2(htmlContent) : null;
 ---
 
 <Layout title={pageTitle}>
