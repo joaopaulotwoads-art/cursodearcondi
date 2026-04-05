@@ -1,6 +1,7 @@
 ---
 import { resolveBemmaeMediaUrl, rewriteBemmaeContentImagesInHtml } from '../../utils/media-url';
 import { demoteBodyH1ToH2 } from '../../utils/post-html-sanitize';
+import { expandPostHtmlComponents } from '../../utils/post-html-components';
 
 interface Props {
   post: any;
@@ -14,8 +15,8 @@ const { post, author, Content, htmlContent } = Astro.props;
 const date = post.data.publishedDate;
 const heroImage = resolveBemmaeMediaUrl(post.data.thumbnail || post.data.metaImage);
 const htmlBody = htmlContent
-    ? demoteBodyH1ToH2(rewriteBemmaeContentImagesInHtml(htmlContent))
-    : null;
+  ? expandPostHtmlComponents(demoteBodyH1ToH2(rewriteBemmaeContentImagesInHtml(htmlContent)))
+  : null;
 ---
 <article class:list={['mx-auto px-4 sm:px-5 py-10 sm:py-12', htmlContent ? 'max-w-3xl' : 'max-w-2xl']}>
   <header class="mb-8">
