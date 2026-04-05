@@ -34,11 +34,11 @@ html.dark .cnx-aff-block-wrap {
 }
 
 .bemmae-post-html .cnx-aff-block-wrap {
-  --aff-border: var(--color-border, #e8dcd3);
-  --aff-bg: #fffdf9;
-  --aff-text: var(--color-text, #5c4d3c);
-  --aff-muted: var(--color-muted, #8a7a6a);
-  --aff-accent: var(--color-accent, #c4a77d);
+  --aff-border: var(--color-border, #e5e7eb);
+  --aff-bg: #ffffff;
+  --aff-text: var(--color-text, #1f2937);
+  --aff-muted: var(--color-muted, #6b7280);
+  --aff-accent: var(--color-link, #2563eb);
   --aff-green: #0d9488;
   --aff-red: #c2410c;
 }

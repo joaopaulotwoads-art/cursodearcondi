@@ -8,7 +8,7 @@ const successMessage = d.formSuccessMessage || 'Mensagem enviada com sucesso! Re
 ---
 <article class="max-w-xl mx-auto px-4 py-12">
   <header class="mb-8">
-    <h1 class="text-2xl font-semibold text-[var(--color-text)]">{d.heroTitle || 'Contato'}</h1>
+    <h1 class="text-3xl font-extrabold tracking-tight text-[var(--color-heading)] md:text-4xl">{d.heroTitle || 'Contato'}</h1>
     {d.heroSubtitle && <p class="mt-1 text-[var(--color-muted)]">{d.heroSubtitle}</p>}
   </header>
 
@@ -22,7 +22,7 @@ const successMessage = d.formSuccessMessage || 'Mensagem enviada com sucesso! Re
               href={s.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-text)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors min-h-[44px]"
+              class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-white px-4 py-2 text-sm font-medium text-[var(--color-text)] hover:border-[var(--color-link)] hover:text-[var(--color-link)] transition-colors min-h-[44px]"
             >
               {s.icon === 'youtube' && (
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 shrink-0" aria-hidden="true">
@@ -47,13 +47,13 @@ const successMessage = d.formSuccessMessage || 'Mensagem enviada com sucesso! Re
       {d.email && (
         <p>
           <span class="font-medium text-[var(--color-text)]">E-mail: </span>
-          <a href={`mailto:${d.email}`} class="text-[var(--color-accent)] hover:underline">{d.email}</a>
+          <a href={`mailto:${d.email}`} class="font-medium text-[var(--color-link)] hover:underline">{d.email}</a>
         </p>
       )}
       {d.phone && (
         <p>
           <span class="font-medium text-[var(--color-text)]">Telefone: </span>
-          <a href={`tel:${String(d.phone).replace(/\D/g, '')}`} class="text-[var(--color-accent)] hover:underline">{d.phone}</a>
+          <a href={`tel:${String(d.phone).replace(/\D/g, '')}`} class="font-medium text-[var(--color-link)] hover:underline">{d.phone}</a>
         </p>
       )}
       {d.address && (

@@ -19,8 +19,13 @@ const htmlBody = htmlContent
 ---
 <article class:list={['mx-auto px-4 sm:px-5 py-10 sm:py-12', htmlContent ? 'max-w-3xl' : 'max-w-2xl']}>
   <header class="mb-8">
-    <a href="/blog" class="text-sm text-[var(--color-accent)] hover:underline mb-4 inline-block">← Blog</a>
-    <h1 class="text-2xl md:text-3xl font-semibold text-[var(--color-text)]">{post.data.title}</h1>
+    <a
+      href="/blog"
+      class="text-sm font-medium text-[var(--color-link)] no-underline hover:underline mb-4 inline-block"
+    >
+      ← Blog
+    </a>
+    <h1 class="text-3xl font-extrabold tracking-tight text-[var(--color-heading)] md:text-4xl">{post.data.title}</h1>
     <div class="mt-3 flex flex-wrap gap-4 text-sm text-[var(--color-muted)]">
       {date && (
         <time datetime={date}>{new Date(date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}</time>
@@ -46,7 +51,7 @@ const htmlBody = htmlContent
     class:list={[
       'max-w-none text-[var(--color-text)]',
       !htmlContent &&
-        'prose prose-neutral prose-lg max-w-none prose-p:leading-[1.82] prose-p:mb-[1.35em] prose-headings:text-[var(--color-text)] prose-headings:font-semibold prose-h2:text-xl md:prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4 prose-h3:mt-8 prose-h3:mb-3 prose-li:my-2 prose-a:text-[var(--color-accent)]',
+        'prose prose-neutral prose-lg max-w-none prose-p:text-[18px] prose-p:leading-[1.75] prose-p:mb-[1.25em] prose-p:text-[var(--color-text)] prose-headings:text-[var(--color-heading)] prose-headings:font-bold prose-h2:text-2xl prose-h2:tracking-tight prose-h2:mt-10 prose-h2:mb-4 prose-h3:mt-8 prose-h3:mb-3 prose-li:my-2 prose-a:font-medium prose-a:text-[var(--color-link)] prose-a:no-underline hover:prose-a:underline',
     ]}
   >
     {htmlBody ? (
@@ -58,7 +63,7 @@ const htmlBody = htmlContent
 
   {author && (
     <section class="mt-12 pt-10 border-t border-[var(--color-border)]" aria-labelledby="post-author-heading">
-      <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-rosa)]/40 p-6 md:p-8">
+      <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8">
         <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
           {author.data.avatar ? (
             <img
@@ -66,12 +71,12 @@ const htmlBody = htmlContent
               alt={author.data.name}
               width="96"
               height="96"
-              class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shrink-0 ring-2 ring-[var(--color-accent)]/35 border border-[var(--color-border)]"
+              class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shrink-0 ring-2 ring-gray-200 border border-[var(--color-border)]"
               loading="lazy"
             />
           ) : (
             <div
-              class="w-20 h-20 sm:w-24 sm:h-24 rounded-full shrink-0 flex items-center justify-center text-xl sm:text-2xl font-semibold text-[var(--color-accent)] bg-white border border-[var(--color-border)] ring-2 ring-[var(--color-accent)]/20"
+              class="w-20 h-20 sm:w-24 sm:h-24 rounded-full shrink-0 flex items-center justify-center text-xl sm:text-2xl font-semibold text-[var(--color-heading)] bg-white border border-[var(--color-border)] ring-2 ring-gray-200"
               aria-hidden="true"
             >
               {String(author.data.name || '?')
@@ -81,8 +86,8 @@ const htmlBody = htmlContent
             </div>
           )}
           <div class="min-w-0 flex-1">
-            <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-1">Sobre quem escreveu</p>
-            <div id="post-author-heading" class="text-xl font-semibold text-[var(--color-text)]">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-1">Sobre quem escreveu</p>
+            <div id="post-author-heading" class="text-xl font-semibold text-[var(--color-heading)]">
               {author.data.name}
             </div>
             {author.data.role && (
@@ -93,7 +98,7 @@ const htmlBody = htmlContent
             )}
             <a
               href={`/authors/${author.id}`}
-              class="inline-flex items-center gap-2 mt-5 text-sm font-medium text-[var(--color-accent)] hover:underline min-h-[44px]"
+              class="inline-flex items-center gap-2 mt-5 text-sm font-medium text-[var(--color-link)] no-underline hover:underline min-h-[44px]"
             >
               Ver perfil completo
               <span aria-hidden="true">→</span>

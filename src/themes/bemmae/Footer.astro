@@ -78,7 +78,7 @@ const sameAsUrls = socialLinks.map((s) => String(s.url || '').trim()).filter(Boo
 if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
 ---
 
-<footer class="border-t border-[var(--color-border)] mt-16 bg-[var(--color-nude)]/40">
+<footer class="border-t border-[var(--color-border)] mt-16 bg-[var(--color-bg)]">
   <div class="max-w-5xl mx-auto px-4 py-12">
     <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
       <div class="lg:col-span-1">
@@ -105,7 +105,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-border)] bg-white text-[var(--color-text)] hover:border-[var(--color-link)] hover:text-[var(--color-link)] transition-colors"
                 aria-label={s.platform}
                 title={s.platform}
               >
@@ -127,12 +127,12 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
       </div>
 
       <div>
-        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Navegação</div>
+        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-4">Navegação</div>
         <nav class="flex flex-col gap-2" aria-label="Links do rodapé">
           {footerNav.map((item) => (
             <a
               href={item.href}
-              class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] py-1 min-h-[44px] flex items-center"
+              class="text-sm font-medium text-[var(--color-text)] hover:text-[var(--color-link)] hover:underline py-1 min-h-[44px] flex items-center"
             >
               {item.label}
             </a>
@@ -141,13 +141,13 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
       </div>
 
       <div>
-        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Legal</div>
+        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-4">Legal</div>
         <nav class="flex flex-col gap-2" aria-label="Políticas e termos">
           {legalLinks.length > 0 ? (
             legalLinks.map((item) => (
               <a
                 href={item.href}
-                class="text-sm text-[var(--color-muted)] hover:text-[var(--color-accent)] py-1 min-h-[44px] flex items-center"
+                class="text-sm font-medium text-[var(--color-text)] hover:text-[var(--color-link)] hover:underline py-1 min-h-[44px] flex items-center"
               >
                 {item.label}
               </a>
@@ -159,7 +159,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
       </div>
 
       <div>
-        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-accent)] mb-4">Contato</div>
+        <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-4">Contato</div>
         <address class="not-italic text-sm text-[var(--color-muted)] space-y-2">
           {orgLegalName && <p class="text-[var(--color-text)] font-medium">{orgLegalName}</p>}
           {(streetAddress || addressLocality || postalCode) && (
@@ -177,7 +177,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
           )}
           {phoneDisplay && (
             <p>
-              <a href={telHref} class="text-[var(--color-accent)] hover:underline">
+              <a href={telHref} class="font-medium text-[var(--color-link)] hover:underline">
                 {phoneDisplay}
               </a>
             </p>
@@ -185,14 +185,14 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
           {waDisplay && waDigits !== phoneDigits && (
             <p>
               WhatsApp:{' '}
-              <a href={waHref} target="_blank" rel="noopener noreferrer" class="text-[var(--color-accent)] hover:underline">
+              <a href={waHref} target="_blank" rel="noopener noreferrer" class="font-medium text-[var(--color-link)] hover:underline">
                 {waDisplay}
               </a>
             </p>
           )}
           {email && (
             <p>
-              <a href={`mailto:${email}`} class="text-[var(--color-accent)] hover:underline break-all">
+              <a href={`mailto:${email}`} class="font-medium text-[var(--color-link)] hover:underline break-all">
                 {email}
               </a>
             </p>

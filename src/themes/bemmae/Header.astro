@@ -23,22 +23,32 @@ const { siteName, nav, logoSrc } = Astro.props;
           fetchpriority="low"
         />
       ) : (
-        <span class="text-lg font-semibold text-[var(--color-accent)]">{siteName}</span>
+        <span class="text-lg font-semibold text-[var(--color-heading)]">{siteName}</span>
       )}
     </a>
     <nav class="hidden md:flex items-center gap-6" aria-label="Navegação">
       {nav.map((item) => (
-        <a href={item.href} class="text-sm text-[var(--color-text)] hover:text-[var(--color-accent)] min-h-[44px] flex items-center">{item.label}</a>
+        <a
+          href={item.href}
+          class="text-sm font-medium text-[var(--color-text)] no-underline hover:text-[var(--color-link)] hover:underline min-h-[44px] flex items-center"
+        >
+          {item.label}
+        </a>
       ))}
     </nav>
     <button type="button" id="bem-mobile-menu-btn" class="md:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Abrir menu">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
     </button>
   </div>
-  <div id="bem-mobile-menu" class="md:hidden hidden border-t border-[var(--color-border)] bg-[var(--color-rosa)]/30 px-4 py-4">
+  <div id="bem-mobile-menu" class="md:hidden hidden border-t border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4">
     <nav class="flex flex-col gap-2">
       {nav.map((item) => (
-        <a href={item.href} class="bem-mobile-nav-link py-3 min-h-[44px] flex items-center text-[var(--color-text)]">{item.label}</a>
+        <a
+          href={item.href}
+          class="bem-mobile-nav-link py-3 min-h-[44px] flex items-center text-sm font-medium text-[var(--color-text)] no-underline hover:text-[var(--color-link)] hover:underline"
+        >
+          {item.label}
+        </a>
       ))}
     </nav>
   </div>

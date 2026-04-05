@@ -39,12 +39,15 @@ const aboutParagraphs = aboutText
     style={`background-image: url('${heroBg}');`}
     aria-labelledby="hero-title"
   >
-    <div class="absolute inset-0 bg-[var(--color-text)]/50" aria-hidden="true" />
+    <div class="absolute inset-0 bg-black/50" aria-hidden="true" />
     <div class="relative max-w-4xl mx-auto px-4 text-center">
       {h.heroKicker && (
         <p class="text-sm font-medium tracking-wide text-white/90 uppercase mb-4">{h.heroKicker}</p>
       )}
-      <h1 id="hero-title" class="text-4xl md:text-5xl lg:text-6xl font-semibold text-white leading-tight mb-5 max-w-3xl mx-auto drop-shadow-sm">
+      <h1
+        id="hero-title"
+        class="text-3xl font-extrabold tracking-tight text-white leading-tight mb-5 max-w-3xl mx-auto drop-shadow-sm md:text-4xl lg:text-5xl"
+      >
         {h.heroTitle || 'Seu título'}
       </h1>
       {h.heroSubtitle && (
@@ -72,19 +75,19 @@ const aboutParagraphs = aboutText
   <div class="max-w-4xl mx-auto px-4 -mt-6">
     {categoryCards.length > 0 && (
       <section class="mb-16" aria-labelledby="categorias-title">
-        <h2 id="categorias-title" class="text-xl font-semibold text-[var(--color-text)] mb-6 text-center">
+        <h2 id="categorias-title" class="text-2xl font-bold tracking-tight text-[var(--color-heading)] mb-6 text-center">
           {h.categoriesSectionTitle || 'O que você encontra aqui'}
         </h2>
         <div class="grid md:grid-cols-3 gap-6">
           {categoryCards.map((c: any) => (
             <a
               href={c.href || '/blog'}
-              class="block p-6 rounded-lg border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:bg-white transition-colors"
+              class="block p-6 rounded-lg border border-[var(--color-border)] bg-white hover:border-[var(--color-link)] transition-colors"
             >
-              <div class="aspect-square rounded-md bg-[var(--color-rosa)] mb-4 flex items-center justify-center text-[var(--color-accent)] text-3xl">
+              <div class="aspect-square rounded-md bg-[var(--color-surface)] mb-4 flex items-center justify-center text-[var(--color-heading)] text-3xl">
                 {c.icon || '✨'}
               </div>
-              <h3 class="font-medium text-[var(--color-accent)]">{c.title}</h3>
+              <h3 class="font-semibold text-[var(--color-heading)]">{c.title}</h3>
               {c.description && <p class="text-sm text-[var(--color-muted)] mt-1">{c.description}</p>}
             </a>
           ))}
@@ -93,7 +96,7 @@ const aboutParagraphs = aboutText
     )}
 
     <section class="mb-16" aria-labelledby="posts-title">
-      <h2 id="posts-title" class="text-xl font-semibold text-[var(--color-text)] mb-6">
+      <h2 id="posts-title" class="text-2xl font-bold tracking-tight text-[var(--color-heading)] mb-6">
         {h.latestPostsTitle || 'Últimos artigos'}
       </h2>
       {latestPosts.length === 0 ? (
@@ -107,10 +110,10 @@ const aboutParagraphs = aboutText
               return (
                 <a
                   href={url}
-                  class="group block rounded-lg border border-[var(--color-border)] overflow-hidden hover:border-[var(--color-accent)] transition-colors"
+                  class="group block rounded-lg border border-[var(--color-border)] bg-white overflow-hidden hover:border-[var(--color-link)] transition-colors"
                 >
                   {thumb ? (
-                    <div class="aspect-[4/3] overflow-hidden bg-[var(--color-rosa)]">
+                    <div class="aspect-[4/3] overflow-hidden bg-[var(--color-surface)]">
                       <img
                         src={thumb}
                         alt=""
@@ -120,12 +123,12 @@ const aboutParagraphs = aboutText
                       />
                     </div>
                   ) : (
-                    <div class="aspect-[4/3] bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm">
+                    <div class="aspect-[4/3] bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-muted)] text-sm">
                       Blog
                     </div>
                   )}
                   <div class="p-4">
-                    <h3 class="font-medium text-[var(--color-text)] group-hover:text-[var(--color-accent)]">
+                    <h3 class="font-semibold text-[var(--color-heading)] group-hover:text-[var(--color-link)]">
                       {post.data.title}
                     </h3>
                     {post.data.metaDescription && (
@@ -159,12 +162,12 @@ const aboutParagraphs = aboutText
           <div class="order-1 min-w-0 space-y-5">
             <h2
               id="about-section-title"
-              class="text-2xl md:text-3xl font-semibold text-[var(--color-text)] tracking-tight"
+              class="text-2xl font-bold tracking-tight text-[var(--color-heading)] md:text-3xl"
             >
               {aboutTitle}
             </h2>
             {aboutParagraphs.map((para) => (
-              <p class="text-[var(--color-muted)] leading-[1.8] text-base md:text-[1.0625rem]">{para}</p>
+              <p class="text-[var(--color-text)] text-[18px] leading-relaxed">{para}</p>
             ))}
             {(h.aboutCtaText || h.aboutCtaHref) && (
               <div class="pt-2">
@@ -178,7 +181,7 @@ const aboutParagraphs = aboutText
             )}
           </div>
           <figure class="order-2 w-full max-w-md mx-auto lg:max-w-none lg:mx-0">
-            <div class="aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-rosa)] shadow-md ring-1 ring-[var(--color-text)]/[0.06]">
+            <div class="aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-surface)] shadow-md ring-1 ring-[var(--color-border)]">
               <img
                 src={aboutImgSrc}
                 alt={aboutTitle}
@@ -196,8 +199,8 @@ const aboutParagraphs = aboutText
   )}
 
   <div class="max-w-4xl mx-auto px-4 pb-14">
-    <section class="rounded-lg border border-[var(--color-border)] bg-[var(--color-rosa)]/40 p-8 text-center" aria-labelledby="newsletter-title">
-      <h2 id="newsletter-title" class="text-lg font-semibold text-[var(--color-text)] mb-2">
+    <section class="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-8 text-center" aria-labelledby="newsletter-title">
+      <h2 id="newsletter-title" class="text-2xl font-bold tracking-tight text-[var(--color-heading)] mb-2">
         {h.newsletterTitle || 'Newsletter'}
       </h2>
       <p class="text-sm text-[var(--color-muted)] mb-4">{h.newsletterDescription || ''}</p>

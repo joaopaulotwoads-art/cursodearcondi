@@ -11,7 +11,7 @@ const singleAuthor = team.length === 1;
 ---
 <article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-16">
   <header class="mb-10 md:mb-12 text-center md:text-left">
-    <h1 class="text-3xl md:text-4xl font-semibold text-[var(--color-text)] tracking-tight leading-tight">
+    <h1 class="text-3xl font-extrabold tracking-tight text-[var(--color-heading)] leading-tight md:text-4xl">
       {d.heroTitle || 'Sobre'}
     </h1>
   </header>
@@ -22,14 +22,14 @@ const singleAuthor = team.length === 1;
     </div>
   )}
   {!d.heroImage && d.heroImagePlaceholder && (
-    <div class="aspect-[16/9] rounded-2xl bg-[var(--color-rosa)] flex items-center justify-center text-[var(--color-muted)] text-sm mb-10">
+    <div class="aspect-[16/9] rounded-2xl bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-muted)] text-sm mb-10">
       {d.heroImagePlaceholder}
     </div>
   )}
 
   {d.body && (
     <div
-      class="prose prose-neutral prose-lg max-w-none text-[var(--color-text)] prose-p:text-[var(--color-muted)] prose-p:leading-[1.8] prose-headings:text-[var(--color-text)]"
+      class="prose prose-neutral prose-lg max-w-none text-[var(--color-text)] prose-p:text-[var(--color-text)] prose-p:text-[18px] prose-p:leading-relaxed prose-headings:text-[var(--color-heading)] prose-a:font-medium prose-a:text-[var(--color-link)] prose-a:no-underline hover:prose-a:underline"
     >
       <div class="whitespace-pre-line">{d.body}</div>
     </div>
@@ -37,7 +37,7 @@ const singleAuthor = team.length === 1;
 
   {team.length > 0 && (
     <section class="mt-14 md:mt-16" aria-labelledby="equipe-title">
-      <h2 id="equipe-title" class="text-xl md:text-2xl font-semibold text-[var(--color-text)] mb-8 text-center md:text-left">
+      <h2 id="equipe-title" class="text-2xl font-bold tracking-tight text-[var(--color-heading)] mb-8 text-center md:text-left md:text-3xl">
         Quem escreve
       </h2>
 
@@ -51,20 +51,20 @@ const singleAuthor = team.length === 1;
               alt={team[0].name || ''}
               width="128"
               height="128"
-              class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover ring-4 ring-[var(--color-nude)] border border-[var(--color-border)]"
+              class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover ring-4 ring-gray-200 border border-[var(--color-border)]"
               loading="lazy"
               decoding="async"
             />
           ) : (
             <div
-              class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[var(--color-rosa)] flex items-center justify-center text-4xl sm:text-5xl ring-4 ring-[var(--color-nude)]"
+              class="shrink-0 w-28 h-28 sm:w-32 sm:h-32 rounded-full bg-[var(--color-surface)] flex items-center justify-center text-4xl sm:text-5xl ring-4 ring-gray-200"
               aria-hidden="true"
             >
               {team[0].emoji || '👤'}
             </div>
           )}
           <div class="text-center sm:text-left min-w-0 flex-1">
-            <h3 class="text-xl font-semibold text-[var(--color-accent)]">{team[0].name}</h3>
+            <h3 class="text-xl font-semibold text-[var(--color-heading)]">{team[0].name}</h3>
             {team[0].role && (
               <p class="text-sm font-medium text-[var(--color-text)] mt-2">{team[0].role}</p>
             )}
@@ -83,16 +83,16 @@ const singleAuthor = team.length === 1;
                   alt={m.name || ''}
                   width="120"
                   height="120"
-                  class="aspect-square max-w-[120px] w-[120px] h-[120px] rounded-full object-cover mx-auto mb-4 ring-2 ring-[var(--color-nude)] border border-[var(--color-border)]"
+                  class="aspect-square max-w-[120px] w-[120px] h-[120px] rounded-full object-cover mx-auto mb-4 ring-2 ring-gray-200 border border-[var(--color-border)]"
                   loading="lazy"
                   decoding="async"
                 />
               ) : (
-                <div class="aspect-square max-w-[120px] rounded-full bg-[var(--color-rosa)] mx-auto mb-4 flex items-center justify-center text-3xl ring-2 ring-[var(--color-nude)]">
+                <div class="aspect-square max-w-[120px] rounded-full bg-[var(--color-surface)] mx-auto mb-4 flex items-center justify-center text-3xl ring-2 ring-gray-200">
                   {m.emoji || '👤'}
                 </div>
               )}
-              <h3 class="font-semibold text-[var(--color-accent)] text-center">{m.name}</h3>
+              <h3 class="font-semibold text-[var(--color-heading)] text-center">{m.name}</h3>
               {m.role && <p class="text-sm text-[var(--color-text)] text-center mt-2 font-medium">{m.role}</p>}
               {m.bio && <p class="text-sm text-[var(--color-muted)] text-center mt-3 leading-relaxed">{m.bio}</p>}
             </div>

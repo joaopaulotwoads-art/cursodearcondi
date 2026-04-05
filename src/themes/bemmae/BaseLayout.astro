@@ -2,11 +2,12 @@
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import type { NavItem } from './types';
-/** Só subset latin (pt-BR) — evita carregar latin-ext em paralelo (menos woff2 no caminho crítico). */
-import '@fontsource/outfit/latin-400.css';
-import '@fontsource/outfit/latin-500.css';
-import '@fontsource/outfit/latin-600.css';
-import '@fontsource/outfit/latin-700.css';
+/** Inter (subset latin) — leitura e performance, estilo limpo tipo GeneratePress */
+import '@fontsource/inter/latin-400.css';
+import '@fontsource/inter/latin-500.css';
+import '@fontsource/inter/latin-600.css';
+import '@fontsource/inter/latin-700.css';
+import '@fontsource/inter/latin-800.css';
 import './global.css';
 import { buildCanonicalPageUrl, ensureApexSiteOrigin } from '../../utils/read-site-settings';
 import { buildBemmaeDefaultSiteJsonLd } from '../../utils/post-json-ld';
@@ -66,7 +67,7 @@ const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
     <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
   )}
   <FaviconLinks />
-  <meta name="theme-color" content="#faf8f6" />
+  <meta name="theme-color" content="#ffffff" />
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
