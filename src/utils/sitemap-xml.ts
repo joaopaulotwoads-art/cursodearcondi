@@ -1,6 +1,5 @@
 /**
- * Gera o corpo HTTP do sitemap (mesmo XML que /sitemap-index.xml).
- * Também servido em /sitemap.xml para convenção comum e Search Console.
+ * Gera o corpo HTTP do sitemap em /sitemap-index.xml (padrão Astro).
  */
 
 import type { APIRoute } from 'astro';
@@ -33,7 +32,7 @@ function urlNode(base: string, path: string, lastmod?: string): string {
   </url>`;
 }
 
-/** Handler GET compartilhado por sitemap-index.xml e sitemap.xml */
+/** Handler GET da rota sitemap-index.xml */
 export const getSitemapXmlResponse: APIRoute = async ({ request }) => {
     const settings = await readSiteSettings();
     const generate = settings.generateSitemap !== false;

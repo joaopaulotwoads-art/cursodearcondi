@@ -5,8 +5,6 @@
  * Inclui: páginas estáticas, posts, autores e páginas locais (location × service).
  * Lê configurações em settings.yaml (generateSitemap, canonicalUrl).
  * Configurável no Admin → Configurações → SEO Técnico.
- *
- * O mesmo XML está disponível em /sitemap.xml (ver sitemap.xml.ts).
  */
 
 import type { APIRoute } from 'astro';

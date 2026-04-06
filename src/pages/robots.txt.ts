@@ -29,7 +29,7 @@ export const GET: APIRoute = async () => {
             ...disallow.filter(Boolean).map(p => `Disallow: ${p}`),
         ];
         if (base) {
-            const sitemapUrl = base.replace(/\/$/, '') + '/sitemap.xml';
+            const sitemapUrl = base.replace(/\/$/, '') + '/sitemap-index.xml';
             lines.push('', `Sitemap: ${sitemapUrl}`);
         }
         body = lines.join('\n');
