@@ -206,6 +206,7 @@ export default function PostEditor({ post, authors, categories }: Props) {
                 metaDescription: metaDescription || undefined,
                 metaImage: metaImage || undefined,
                 contentFormat: finalContentFormatHtml ? 'html' : undefined,
+                seoSchema,
                 content: bodyContent,
             };
             
@@ -221,14 +222,24 @@ export default function PostEditor({ post, authors, categories }: Props) {
                     newSlug: postData.slug !== post?.slug ? postData.slug : undefined,
                 }),
             });
-            
-            const result = await response.json();
-            
-            if (result.success) {
+
+            const raw = await response.text();
+            let result: { success?: boolean; error?: string } = {};
+            try {
+                result = raw ? JSON.parse(raw) : {};
+            } catch {
+                result = {
+                    success: false,
+                    error: raw?.trim() || `Resposta inválida (HTTP ${response.status})`,
+                };
+            }
+
+            if (response.ok && result.success) {
                 showToast('success', isPublish ? 'Post publicado!' : 'Rascunho salvo!');
                 setTimeout(() => { window.location.href = `/admin/posts/${postData.slug}`; }, 1000);
             } else {
-                showToast('error', 'Erro ao salvar', result.error);
+                const msg = result.error || `Falha ao salvar (HTTP ${response.status})`;
+                showToast('error', 'Erro ao salvar', msg);
             }
         } catch (error) {
             console.error('Erro ao salvar:', error);

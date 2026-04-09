@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { listPosts, writePost, slugExists, generateSlug } from '../../../../utils/post-utils';
 import type { PostData } from '../../../../utils/post-utils';
+import { isGitHubConfigured } from '../../../../utils/github-api';
 
 const SEO_SCHEMA_VALUES = ['auto', 'blogPosting', 'articleItemList', 'none'] as const;
 
@@ -51,6 +52,16 @@ export const GET: APIRoute = async () => {
 
 export const POST: APIRoute = async ({ request }) => {
     try {
+        if (process.env.VERCEL === '1' && !isGitHubConfigured()) {
+            return new Response(JSON.stringify({
+                success: false,
+                error: 'No site publicado, configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO para salvar posts no painel.',
+            }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
         const body = await request.json();
         const { title, slug, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, content, contentFormat, seoSchema } = body;
         const normalizedSlug = generateSlug(String(slug || ''));
