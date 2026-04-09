@@ -52,10 +52,11 @@ export const GET: APIRoute = async () => {
 
 export const POST: APIRoute = async ({ request }) => {
     try {
-        if (process.env.VERCEL === '1' && !isGitHubConfigured()) {
+        if (process.env.VERCEL && !isGitHubConfigured()) {
             return new Response(JSON.stringify({
                 success: false,
-                error: 'No site publicado, configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO para salvar posts no painel.',
+                error:
+                    'Ambiente Vercel: configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO (Settings → Environment Variables) e faça redeploy para salvar posts pelo painel.',
             }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },
@@ -104,13 +105,11 @@ export const POST: APIRoute = async ({ request }) => {
             seoSchema: parseSeoSchema(seoSchema),
         };
         
-        // Escrever arquivo
-        const success = await writePost(normalizedSlug, postData, content || '');
-        
-        if (!success) {
+        const wrote = await writePost(normalizedSlug, postData, content || '');
+        if (!wrote.ok) {
             return new Response(JSON.stringify({
                 success: false,
-                error: 'Erro ao criar post',
+                error: wrote.error || 'Erro ao criar post',
             }), {
                 status: 500,
                 headers: { 'Content-Type': 'application/json' },

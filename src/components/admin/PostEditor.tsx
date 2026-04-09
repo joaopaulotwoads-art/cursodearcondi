@@ -210,12 +210,13 @@ export default function PostEditor({ post, authors, categories }: Props) {
                 content: bodyContent,
             };
             
-            // Fazer requisição direta
-            const url = post ? `/api/admin/posts/${post.slug}` : '/api/admin/posts';
+            const apiSlug = post?.slug ? encodeURIComponent(post.slug) : '';
+            const url = post ? `/api/admin/posts/${apiSlug}` : '/api/admin/posts';
             const method = post ? 'PUT' : 'POST';
             
             const response = await fetch(url, {
                 method,
+                credentials: 'same-origin',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...postData,

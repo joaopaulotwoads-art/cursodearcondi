@@ -44,10 +44,10 @@ export const POST: APIRoute = async ({ request }) => {
             publishedDate: undefined, // rascunho
         };
 
-        const success = await writePost(newSlug, newData, post.content);
-        if (!success) {
+        const wrote = await writePost(newSlug, newData, post.content);
+        if (!wrote.ok) {
             return new Response(
-                JSON.stringify({ success: false, error: 'Erro ao duplicar post' }),
+                JSON.stringify({ success: false, error: wrote.error || 'Erro ao duplicar post' }),
                 { status: 500, headers: { 'Content-Type': 'application/json' } }
             );
         }

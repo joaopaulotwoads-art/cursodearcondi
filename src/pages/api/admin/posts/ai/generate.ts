@@ -604,10 +604,12 @@ export const POST: APIRoute = async ({ request }) => {
                         ...(thumbnailUrl && { thumbnail: thumbnailUrl, metaImage: thumbnailUrl }),
                     };
 
-                    const success = await writePost(slug, postData, content);
+                    const wrote = await writePost(slug, postData, content);
 
-                    if (!success) {
-                        controller.enqueue(encoder.encode(send({ step: 'error', error: 'Erro ao salvar post' })));
+                    if (!wrote.ok) {
+                        controller.enqueue(
+                            encoder.encode(send({ step: 'error', error: wrote.error || 'Erro ao salvar post' })),
+                        );
                     } else {
                         controller.enqueue(encoder.encode(send({ step: 'done', success: true, slug, title })));
                     }

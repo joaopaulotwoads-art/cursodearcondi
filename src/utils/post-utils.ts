@@ -164,6 +164,11 @@ export async function listPosts(): Promise<PostFile[]> {
     }
 }
 
+export interface WritePostResult {
+    ok: boolean;
+    error?: string;
+}
+
 /**
  * Escreve um post em arquivo .mdoc (local ou via GitHub API em produção)
  */
@@ -171,7 +176,7 @@ export async function writePost(
     slug: string,
     data: PostData,
     content: string
-): Promise<boolean> {
+): Promise<WritePostResult> {
     try {
         const cleanData: Record<string, unknown> = {};
         Object.keys(data).forEach(key => {
@@ -198,19 +203,24 @@ export async function writePost(
         }
 
         if (isGitHubConfigured()) {
-            return (await githubWriteFile(
+            const gh = await githubWriteFile(
                 `src/content/posts/${filename}`,
                 fileContent,
                 `content: save post "${slug}"`,
-            )).ok;
+            );
+            if (!gh.ok) {
+                return { ok: false, error: gh.error || 'Falha ao gravar no GitHub.' };
+            }
+            return { ok: true };
         }
 
         const filePath = path.join(POSTS_DIR, filename);
         await fs.writeFile(filePath, fileContent, 'utf-8');
-        return true;
+        return { ok: true };
     } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
         console.error(`❌ Erro ao escrever post ${slug}:`, error);
-        return false;
+        return { ok: false, error: message };
     }
 }
 

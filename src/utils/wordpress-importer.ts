@@ -744,8 +744,8 @@ export async function importWordPressXML(xmlContent: string): Promise<ImportResu
                     metaDescription, // Meta description processada
                 };
                 
-                const success = await writePost(slug, postData, markdownContent);
-                if (success) {
+                const wrote = await writePost(slug, postData, markdownContent);
+                if (wrote.ok) {
                     result.posts.imported++;
                     console.log('✅ Post importado:', slug);
                 } else {
