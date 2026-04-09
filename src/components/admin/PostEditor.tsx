@@ -12,7 +12,8 @@
  * - onPublish: Callback quando publicar
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { getArticleTemplate } from '../../utils/article-templates';
 import WYSIWYGEditor from './WYSIWYGEditor';
 import TurndownService from 'turndown';
 import { marked } from 'marked';
@@ -49,9 +50,11 @@ interface Props {
     post?: PostData;
     authors: Author[];
     categories: Category[];
+    /** Query ?t= do assistente /admin/posts/criar — aplica modelo uma vez no novo post */
+    templateId?: string;
 }
 
-export default function PostEditor({ post, authors, categories }: Props) {
+export default function PostEditor({ post, authors, categories, templateId }: Props) {
     const normalizeSlug = (value: string): string =>
         (value || '')
             .toLowerCase()
@@ -149,6 +152,18 @@ export default function PostEditor({ post, authors, categories }: Props) {
     useEffect(() => {
         setIsMounted(true);
     }, []);
+
+    const templateAppliedRef = useRef(false);
+    useEffect(() => {
+        if (post || templateAppliedRef.current || !templateId) return;
+        const tpl = getArticleTemplate(templateId);
+        if (!tpl) return;
+        templateAppliedRef.current = true;
+        setContent(tpl.content);
+        setContentFormatHtml(tpl.contentFormatHtml);
+        setSeoSchema(tpl.seoSchema);
+        setTitle((prev) => (prev.trim() ? prev : tpl.titleHint || prev));
+    }, [post, templateId]);
 
     // Gerar slug automaticamente do título
     useEffect(() => {

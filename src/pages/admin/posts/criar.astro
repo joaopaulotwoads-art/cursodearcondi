@@ -1,0 +1,16 @@
+---
+/**
+ * Assistente para criar novo post com modelos (informative, ranking, versus, product).
+ */
+export const prerender = false;
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import NewArticleStart from '../../../components/admin/NewArticleStart.tsx';
+---
+
+<AdminLayout title="Novo artigo - Admin">
+    <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+        <a href="/admin/posts" class="text-sm text-[#a3a3a3] hover:text-[#e5e5e5]">← Voltar aos posts</a>
+    </div>
+    <NewArticleStart client:load />
+</AdminLayout>

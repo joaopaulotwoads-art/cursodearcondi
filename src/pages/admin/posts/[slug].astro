@@ -18,6 +18,7 @@ import { readPost } from '../../../utils/post-utils';
 
 const { slug } = Astro.params;
 const isNew = slug === 'new';
+const templateId = isNew ? Astro.url.searchParams.get('t') : null;
 
 // Buscar dados
 const authors = await getCollection('authors');
@@ -56,6 +57,7 @@ const categoriesList = categories.map(c => ({ id: c.id, name: c.data.name }));
             post={post || undefined}
             authors={authorsList}
             categories={categoriesList}
+            templateId={templateId || undefined}
         />
     </div>
     
