@@ -6,6 +6,8 @@
   --color-text: #1f2937;
   --color-heading: #111827;
   --color-muted: #6b7280;
+  /* Corpo do texto (par com --color-text; pode ser sobrescrita por tema futuro) */
+  --color-dark: #1f2937;
   /* CTAs e destaques da marca (botões; links do texto usam --color-link) */
   --color-accent: #c4a77d;
   --color-border: #e5e7eb;
@@ -17,15 +19,18 @@
   --color-link: #2563eb;
   --color-link-hover: #1d4ed8;
   --bemmae-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  --bemmae-post-font: var(--bemmae-font-sans);
-  --bemmae-post-line: 1.75;
+  --font-body: var(--bemmae-font-sans);
+  /* Títulos: Outfit por defeito (substituível via estilo injetado / tema) */
+  --font-heading: "Outfit", var(--bemmae-font-sans);
+  --bemmae-post-font: var(--font-body);
+  --bemmae-post-line: 1.8;
   --bemmae-post-p-space: 1.25em;
 }
 
 .bemmae-scope body {
-  font-family: var(--bemmae-font-sans);
+  font-family: var(--font-body);
   background-color: var(--color-bg);
-  color: var(--color-text);
+  color: var(--color-dark);
 }
 
 /**
@@ -33,20 +38,19 @@
  * Parágrafos curtos no HTML são decisão editorial; aqui garantimos
  * conforto visual (entrelinha, margens, largura ótima ~65–72 caracteres).
  */
+/**
+ * Conteúdo do artigo: `.bemmae-post-html` e `.post-content` (mesmo bloco no BlogPost).
+ * Hierarquia h1–h6 explícita; corpo com --font-body e títulos com --font-heading.
+ */
 .bemmae-post-html {
   font-family: var(--bemmae-post-font);
   font-size: 1.125rem; /* 18px — corpo editorial */
   line-height: var(--bemmae-post-line);
   letter-spacing: 0;
   font-weight: 400;
+  color: var(--color-dark);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-}
-
-@media (min-width: 768px) {
-  .bemmae-post-html {
-    line-height: 1.78;
-  }
 }
 
 /* Introdução e parágrafos “solto” (fora dos cards .bemmae-container) */
@@ -60,34 +64,55 @@
   margin-bottom: 0;
 }
 
-.bemmae-post-html > h2 {
-  font-size: 1.5rem; /* text-2xl */
-  font-weight: 700;
+/* Títulos no fluxo do artigo: escala alinhada a text-3xl … text-sm */
+.bemmae-post-html :where(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--font-heading);
   line-height: 1.25;
-  letter-spacing: -0.025em;
-  margin: 2.15em 0 0.95em;
   color: var(--color-heading);
   scroll-margin-top: 5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
-.bemmae-post-html > h2:first-child {
+.bemmae-post-html :where(h1, h2, h3, h4, h5, h6):first-child {
   margin-top: 0;
 }
 
-.bemmae-post-html > h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.35;
-  letter-spacing: -0.02em;
-  margin: 1.75em 0 0.65em;
-  color: var(--color-heading);
+.bemmae-post-html :where(h1) {
+  font-size: 1.875rem; /* ~text-3xl */
+  font-weight: 700;
+  letter-spacing: -0.025em;
 }
 
-.bemmae-post-html > h4 {
-  font-size: 1.125rem;
+.bemmae-post-html :where(h2) {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.bemmae-post-html :where(h3) {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.bemmae-post-html :where(h4) {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 700;
+}
+
+.bemmae-post-html :where(h5) {
+  font-size: 1rem;
   font-weight: 600;
-  margin: 1.5em 0 0.5em;
-  color: var(--color-heading);
+  letter-spacing: -0.015em;
+}
+
+.bemmae-post-html :where(h6) {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #64748b;
 }
 
 .bemmae-post-html strong,
@@ -117,13 +142,12 @@
 .bemmae-post-html a {
   color: var(--color-link);
   font-weight: 500;
-  text-decoration: none;
-}
-
-.bemmae-post-html a:hover {
   text-decoration: underline;
   text-underline-offset: 0.2em;
   text-decoration-thickness: 1px;
+}
+
+.bemmae-post-html a:hover {
   color: var(--color-link-hover);
 }
 
@@ -137,10 +161,53 @@
   line-height: 1.75;
 }
 
+.bemmae-post-html blockquote p {
+  margin: 0 0 0.75em;
+}
+
+.bemmae-post-html blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.bemmae-post-html :not(pre) > code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.9em;
+  background: var(--color-nude);
+  padding: 0.15em 0.4em;
+  border-radius: 0.25rem;
+  border: 1px solid var(--color-border);
+}
+
+.bemmae-post-html pre {
+  margin: 1.35em 0;
+  padding: 1rem 1.15rem;
+  border-radius: 0.5rem;
+  background: #1e293b;
+  color: #e2e8f0;
+  overflow-x: auto;
+  font-size: 0.9em;
+  line-height: 1.6;
+}
+
+.bemmae-post-html pre code {
+  font-family: inherit;
+  font-size: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+
 .bemmae-post-html > img,
 .bemmae-post-html > figure {
   margin: 1.5em 0;
   max-width: 100%;
+}
+
+.bemmae-post-html img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
 }
 
 .bemmae-post-html > figure img {
