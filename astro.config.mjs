@@ -8,8 +8,11 @@ import markdoc from '@astrojs/markdoc';
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
-    /** Todas as rotas de página com barra final; canonical e sitemap alinhados. */
-    trailingSlash: 'always',
+    /**
+     * `ignore` = dev e produção aceitam com ou sem barra (evita 404 ao testar sem `/` no fim).
+     * O middleware ainda faz 301 para a versão com barra — canonical e sitemap continuam com `/`.
+     */
+    trailingSlash: 'ignore',
     adapter: vercel(),
     /** CSS inline no HTML → menos pedidos bloqueantes no caminho crítico (Lighthouse / LCP). */
     build: {

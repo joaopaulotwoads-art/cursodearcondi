@@ -2,15 +2,12 @@
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import type { NavItem } from './types';
-/** Inter — corpo; Outfit — títulos (alinhado a Tailwind `font-heading`) */
-import '@fontsource/inter/latin-400.css';
-import '@fontsource/inter/latin-500.css';
-import '@fontsource/inter/latin-600.css';
-import '@fontsource/inter/latin-700.css';
-import '@fontsource/inter/latin-800.css';
-import '@fontsource/outfit/latin-400.css';
-import '@fontsource/outfit/latin-600.css';
-import '@fontsource/outfit/latin-700.css';
+/** Open Sans — corpo e títulos (tipografia editorial legível, alinhada a Tailwind `font-sans` / `font-heading`) */
+import '@fontsource/open-sans/400.css';
+import '@fontsource/open-sans/500.css';
+import '@fontsource/open-sans/600.css';
+import '@fontsource/open-sans/700.css';
+import '@fontsource/open-sans/800.css';
 import './global.css';
 import { buildCanonicalPageUrl, ensureApexSiteOrigin } from '../../utils/read-site-settings';
 import { buildBemmaeDefaultSiteJsonLd } from '../../utils/post-json-ld';
@@ -70,7 +67,7 @@ const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
     <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
   )}
   <FaviconLinks />
-  <meta name="theme-color" content="#ffffff" />
+  <meta name="theme-color" content="#faf7f5" />
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />

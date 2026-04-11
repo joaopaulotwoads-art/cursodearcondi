@@ -14,7 +14,8 @@ import BemMaeBlogPost from '../../themes/bemmae/BlogPost.astro';
 import { readSingleton } from '../../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
 import { readPost } from '../../utils/post-utils';
-import { buildPostPath, type BlogPermalinkStructure } from '../../utils/blog-permalink';
+import { buildPostPath, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+import { pickRelatedPosts } from '../../utils/related-posts';
 import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../../utils/read-site-settings';
 import {
   buildAuthorAbsoluteUrl,
@@ -107,6 +108,11 @@ const postJsonLd = useBemmae
       categoryPath,
     })
   : null;
+
+const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+const blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'blog';
+const allPosts = await getCollection('posts');
+const relatedPosts = useBemmae ? pickRelatedPosts(post, allPosts, 3) : [];
 ---
 
 {useBemmae ? (
@@ -125,7 +131,15 @@ const postJsonLd = useBemmae
     articleModifiedTime={articleIso}
     extraJsonLd={postJsonLd}
 >
-    <BemMaeBlogPost post={post} author={author} Content={Content} htmlContent={htmlContent} />
+    <BemMaeBlogPost
+      post={post}
+      author={author}
+      Content={Content}
+      htmlContent={htmlContent}
+      relatedPosts={relatedPosts}
+      blogPermalinkStructure={blogPermalinkStructure}
+      blogUrlPrefix={blogUrlPrefix}
+    />
 </BaseLayoutBemmae>
 ) : (
 <BlogPost

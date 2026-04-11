@@ -2487,7 +2487,7 @@ contentFormat: html
     </div>
 </div>
 
-<p>Esta é a escolha inteligente para quem não precisa mais do kit maternidade.</p><p>Se o seu filho já cresceu e o bebê conforto ficou apertado, ou se você já tem um ovinho de outro filho, comprar este modelo avulso é uma economia enorme.</p><p>Ele mantém toda a agilidade do sistema de três rodas — que gira 360º e pilota com uma mão só  sem te obrigar a pagar por acessórios que você não vai usar.</p><p>Ele continua sendo leve 7kg e fácil de jogar no carro, mas o foco aqui é a liberdade de passeio para bebês maiores ou para quem busca um segundo carrinho estiloso.</p><p><strong>Atenção redobrada na compra:</strong> A foto engana. Ele é idêntico ao Travel System, mas esta caixa <strong>NÃO</strong> traz o bebê conforto. </p><p>Se você precisa levar o recém-nascido do hospital para casa, esta <strong>não</strong> é a opção correta a menos que compre o ovinho Wizz separado).</p>
+<p>Esta é a escolha inteligente para quem não precisa mais do kit maternidade.</p><p>Se o seu filho já cresceu e o bebê conforto ficou apertado, ou se você já tem um ovinho de outro filho, comprar este modelo avulso é uma economia enorme.</p><p>Ele mantém toda a agilidade do sistema de três rodas, que gira 360º e pilota com uma mão só, sem te obrigar a pagar por acessórios que você não vai usar.</p><p>Ele continua sendo leve 7kg e fácil de jogar no carro, mas o foco aqui é a liberdade de passeio para bebês maiores ou para quem busca um segundo carrinho estiloso.</p><p><strong>Atenção redobrada na compra:</strong> A foto engana. Ele é idêntico ao Travel System, mas esta caixa <strong>NÃO</strong> traz o bebê conforto. </p><p>Se você precisa levar o recém-nascido do hospital para casa, esta <strong>não</strong> é a opção correta a menos que compre o ovinho Wizz separado).</p>
 
 <style>
     .bemmae-specs-clean {
@@ -3587,7 +3587,7 @@ contentFormat: html
     </div>
 </div>
 
-<p>O Anna³ é a evolução do carrinho mais famoso da marca. A grande melhoria em relação ao antigo (Anna 2) é o <strong>fechamento com uma mão só</strong>. </p><p>Antes, você precisava das duas mãos e um certo malabarismo; agora, basta apertar o botão na manopla que ele fecha rápido, facilitando muito a vida de quem está sozinho com o bebê.</p><p>Ele mantém o trunfo de ser um <strong>2 em 1 de verdade</strong>: o assento se transforma em um moisés estruturado, plano e espaçoso. Isso dispensa o uso de berço portátil nos primeiros meses, pois o bebê dorme ali como se estivesse na cama. </p><p>O cesto porta-objetos agora é <strong>gigante XXL</strong> e suporta até 10 kg — dá para fazer a compra da semana no mercado e levar tudo ali embaixo.</p>
+<p>O Anna³ é a evolução do carrinho mais famoso da marca. A grande melhoria em relação ao antigo (Anna 2) é o <strong>fechamento com uma mão só</strong>. </p><p>Antes, você precisava das duas mãos e um certo malabarismo; agora, basta apertar o botão na manopla que ele fecha rápido, facilitando muito a vida de quem está sozinho com o bebê.</p><p>Ele mantém o trunfo de ser um <strong>2 em 1 de verdade</strong>: o assento se transforma em um moisés estruturado, plano e espaçoso. Isso dispensa o uso de berço portátil nos primeiros meses, pois o bebê dorme ali como se estivesse na cama. </p><p>O cesto porta-objetos agora é <strong>gigante XXL</strong> e suporta até 10 kg, o que permite fazer a compra da semana no mercado e levar tudo ali embaixo.</p>
 
 <style>
     .bemmae-specs-clean {

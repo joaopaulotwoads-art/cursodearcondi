@@ -31,7 +31,12 @@ categoryCards:
     title: Saúde
     description: Cuidados e bem-estar para mães e filhos.
 latestPostsTitle: Últimos artigos
+latestPostsSubtitle: Guias, comparativos e respostas para a rotina com o bebê, escolhidos para você.
 latestPostsCtaText: Ver todos os artigos
+homeHighlights:
+  - Dicas práticas para o dia a dia
+  - Conteúdo pensado com calma
+  - Maternidade sem julgamento
 emptyLatestText: Nenhum artigo publicado ainda.
 newsletterTitle: Newsletter
 newsletterDescription: Receba dicas e novidades no seu e-mail, sem spam.

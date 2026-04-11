@@ -4,8 +4,8 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Inter', 'sans-serif'],
-                heading: ['Outfit', 'sans-serif'],
+                sans: ['"Open Sans"', 'Segoe UI', 'system-ui', 'sans-serif'],
+                heading: ['"Open Sans"', 'Segoe UI', 'system-ui', 'sans-serif'],
             },
             colors: {
                 primary: 'rgb(var(--primary-rgb) / <alpha-value>)',

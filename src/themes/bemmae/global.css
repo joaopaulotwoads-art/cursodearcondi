@@ -1,13 +1,14 @@
 @import '../../styles/affiliate-blocks.css';
+@import '../../styles/article-review-roundup.css';
 
-/* Tema Bem Mãe — visual limpo (referência GeneratePress): branco, contraste alto, Inter */
+/* Tema Bem Mãe — fundo #fff6f6, texto #333, Open Sans, entrelinha editorial ~1.6 */
 :root {
-  --color-bg: #ffffff;
-  --color-text: #1f2937;
-  --color-heading: #111827;
+  --color-bg: #fff6f6;
+  --color-text: #333333;
+  --color-heading: #1a1a1a;
   --color-muted: #6b7280;
-  /* Corpo do texto (par com --color-text; pode ser sobrescrita por tema futuro) */
-  --color-dark: #1f2937;
+  /* Corpo do texto (parágrafos; próximo ao cinza escuro da referência) */
+  --color-dark: #333333;
   /* CTAs e destaques da marca (botões; links do texto usam --color-link) */
   --color-accent: #c4a77d;
   --color-border: #e5e7eb;
@@ -18,12 +19,11 @@
   /* Links no corpo: azul sóbrio */
   --color-link: #2563eb;
   --color-link-hover: #1d4ed8;
-  --bemmae-font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --bemmae-font-sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   --font-body: var(--bemmae-font-sans);
-  /* Títulos: Outfit por defeito (substituível via estilo injetado / tema) */
-  --font-heading: "Outfit", var(--bemmae-font-sans);
+  --font-heading: "Open Sans", var(--bemmae-font-sans);
   --bemmae-post-font: var(--font-body);
-  --bemmae-post-line: 1.8;
+  --bemmae-post-line: 1.6;
   --bemmae-post-p-space: 1.25em;
 }
 
@@ -31,6 +31,41 @@
   font-family: var(--font-body);
   background-color: var(--color-bg);
   color: var(--color-dark);
+}
+
+/* Capa do post (thumbnail acima do autor): cantos arredondados fortes — raio no wrapper e na img */
+.post-hero-image-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem; /* ~20px — visível como “cartão” */
+  background: var(--color-surface);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.07),
+    0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 640px) {
+  .post-hero-image-wrap {
+    border-radius: 1.5rem; /* ~24px em telas maiores */
+  }
+}
+
+.post-hero-image-wrap .post-hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(480px, 60vh);
+  object-fit: contain;
+  object-position: center;
+  /* Raio explícito na própria img (alguns browsers não herdam o clip do flex + contain) */
+  border-radius: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .post-hero-image-wrap .post-hero-image {
+    border-radius: 1.5rem;
+  }
 }
 
 /**

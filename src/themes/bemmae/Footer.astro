@@ -46,7 +46,7 @@ const waDisplay = waDigits ? formatPhone(waDigits) : '';
 const telHref = phoneDigits ? `tel:+55${phoneDigits}` : '';
 const waHref = waDigits ? `https://wa.me/55${waDigits}` : '';
 
-const addressLocality = [city, state].filter(Boolean).join(' — ');
+const addressLocality = [city, state].filter(Boolean).join(' · ');
 const streetAddress = addressLine;
 const hasPostalAddress = streetAddress || addressLocality || postalCode;
 
@@ -168,7 +168,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
               {(addressLocality || postalCode) && (
                 <>
                   {addressLocality}
-                  {postalCode && ` — CEP ${postalCode}`}
+                  {postalCode && ` · CEP ${postalCode}`}
                   <br />
                 </>
               )}

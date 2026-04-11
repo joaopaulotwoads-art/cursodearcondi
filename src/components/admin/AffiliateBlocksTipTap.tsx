@@ -123,7 +123,9 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                         <img src={a.productImage} alt="" className="cnx-aff-product-img" />
                     )}
                     <div className="cnx-aff-product-main">
-                        <h2 className="cnx-aff-product-title">{a.productName || 'Produto'}</h2>
+                        <div className="cnx-aff-product-title" data-product-name={a.productName || ''}>
+                            {a.productName || 'Produto'}
+                        </div>
                         {a.subtitle && <p className="cnx-aff-product-sub">{a.subtitle}</p>}
                         {a.rating && <div className="cnx-aff-product-score">Nota {a.rating}</div>}
                         {features.length > 0 && (
@@ -206,11 +208,11 @@ export const AffiliateProductCardExtension = Node.create({
             productName: {
                 default: '',
                 parseHTML: (el) => {
-                    const h2 = el.querySelector('.cnx-aff-product-title');
-                    if (h2?.hasAttribute('data-product-name')) {
-                        return (h2.getAttribute('data-product-name') || '').trim();
+                    const titleEl = el.querySelector('.cnx-aff-product-title');
+                    if (titleEl?.hasAttribute('data-product-name')) {
+                        return (titleEl.getAttribute('data-product-name') || '').trim();
                     }
-                    const t = (h2?.textContent || '').trim();
+                    const t = (titleEl?.textContent || '').trim();
                     return t === 'Produto' ? '' : t;
                 },
             },
@@ -291,7 +293,7 @@ export const AffiliateProductCardExtension = Node.create({
                     'div',
                     { class: 'cnx-aff-product-main' },
                     [
-                        'h2',
+                        'div',
                         {
                             class: 'cnx-aff-product-title',
                             'data-product-name': productName || '',
@@ -746,14 +748,29 @@ function RoundupView({ node, updateAttributes, deleteNode }: any) {
 
     const renderItems = (list: RoundupItem[]) => (
         <div className="cnx-aff-roundup cnx-aff-block-wrap">
+            <div className="cnx-aff-roundup-head" aria-hidden="true">
+                <span className="cnx-aff-roundup-head-spacer" />
+                <span>Imagem</span>
+                <span>Produto</span>
+                <span>Destaques</span>
+                <span>Preço</span>
+            </div>
             {list.map((it, idx) => (
                 <div key={idx} className="cnx-aff-roundup-item">
                     <div className="cnx-aff-roundup-rank">{it.rank}</div>
-                    {it.image && <img src={it.image} alt="" className="cnx-aff-roundup-img" />}
-                    <div className="cnx-aff-roundup-core">
+                    {it.image ? (
+                        <div className="cnx-aff-roundup-img-cell">
+                            <img src={it.image} alt="" className="cnx-aff-roundup-img" />
+                        </div>
+                    ) : (
+                        <div className="cnx-aff-roundup-img-cell cnx-aff-roundup-img-cell--empty" aria-hidden="true" />
+                    )}
+                    <div className="cnx-aff-roundup-product-col">
                         {it.itemBadge && <div className="cnx-aff-roundup-item-badge">{it.itemBadge}</div>}
                         <h3 className="cnx-aff-roundup-item-title">{it.title}</h3>
                         {it.score && <div className="cnx-aff-roundup-item-score">Nota {it.score}</div>}
+                    </div>
+                    <div className="cnx-aff-roundup-features-col">
                         {it.features.filter((f) => f.trim()).length > 0 && (
                             <ul>
                                 {it.features.filter((f) => f.trim()).map((f, i) => (
@@ -761,6 +778,8 @@ function RoundupView({ node, updateAttributes, deleteNode }: any) {
                                 ))}
                             </ul>
                         )}
+                    </div>
+                    <div className="cnx-aff-roundup-cta-col">
                         <div className="cnx-aff-roundup-ctas">
                             {it.cta1 && it.cta1Url && (
                                 <a className="cnx-aff-roundup-cta-primary" href={it.cta1Url} target="_blank" rel="nofollow sponsored noopener noreferrer">
@@ -768,7 +787,7 @@ function RoundupView({ node, updateAttributes, deleteNode }: any) {
                                 </a>
                             )}
                             {it.cta2 && it.cta2Url && (
-                                <a href={it.cta2Url} target="_blank" rel="nofollow sponsored noopener noreferrer">
+                                <a className="cnx-aff-roundup-cta-secondary" href={it.cta2Url} target="_blank" rel="nofollow sponsored noopener noreferrer">
                                     {it.cta2}
                                 </a>
                             )}
@@ -936,6 +955,15 @@ export const AffiliateRoundupExtension = Node.create({
     },
     renderHTML({ node }) {
         const list = parseRoundup(node.attrs.itemsJson);
+        const headRow = [
+            'div',
+            { class: 'cnx-aff-roundup-head', 'aria-hidden': 'true' },
+            ['span', { class: 'cnx-aff-roundup-head-spacer' }],
+            ['span', {}, 'Imagem'],
+            ['span', {}, 'Produto'],
+            ['span', {}, 'Destaques'],
+            ['span', {}, 'Preço'],
+        ];
         const children = list.map((it) => {
             const feats = it.features.filter((f) => f.trim()).map((f) => ['li', {}, f]);
             const ctas: any[] = [];
@@ -943,22 +971,25 @@ export const AffiliateRoundupExtension = Node.create({
                 ctas.push(['a', { class: 'cnx-aff-roundup-cta-primary', href: it.cta1Url, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, it.cta1]);
             }
             if (it.cta2 && it.cta2Url) {
-                ctas.push(['a', { href: it.cta2Url, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, it.cta2]);
+                ctas.push(['a', { class: 'cnx-aff-roundup-cta-secondary', href: it.cta2Url, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, it.cta2]);
             }
+            const imgCell = it.image
+                ? ['div', { class: 'cnx-aff-roundup-img-cell' }, ['img', { src: it.image, alt: '', class: 'cnx-aff-roundup-img' }]]
+                : ['div', { class: 'cnx-aff-roundup-img-cell cnx-aff-roundup-img-cell--empty', 'aria-hidden': 'true' }];
             return [
                 'div',
                 { class: 'cnx-aff-roundup-item' },
                 ['div', { class: 'cnx-aff-roundup-rank' }, it.rank],
-                ...(it.image ? [['img', { src: it.image, alt: '', class: 'cnx-aff-roundup-img' }]] : []),
+                imgCell,
                 [
                     'div',
-                    { class: 'cnx-aff-roundup-core' },
+                    { class: 'cnx-aff-roundup-product-col' },
                     ...(it.itemBadge ? [['div', { class: 'cnx-aff-roundup-item-badge' }, it.itemBadge]] : []),
                     ['h3', { class: 'cnx-aff-roundup-item-title' }, it.title],
                     ...(it.score ? [['div', { class: 'cnx-aff-roundup-item-score' }, `Nota ${it.score}`]] : []),
-                    ...(feats.length ? [['ul', {}, ...feats]] : []),
-                    ...(ctas.length ? [['div', { class: 'cnx-aff-roundup-ctas' }, ...ctas]] : []),
                 ],
+                ['div', { class: 'cnx-aff-roundup-features-col' }, ...(feats.length ? [['ul', {}, ...feats]] : [])],
+                ['div', { class: 'cnx-aff-roundup-cta-col' }, ['div', { class: 'cnx-aff-roundup-ctas' }, ...ctas]],
             ];
         });
         return [
@@ -970,6 +1001,7 @@ export const AffiliateRoundupExtension = Node.create({
                     'data-cnx-roundup': JSON.stringify(list),
                 },
             ),
+            headRow,
             ...children,
         ] as any;
     },

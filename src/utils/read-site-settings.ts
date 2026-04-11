@@ -85,7 +85,7 @@ export function ensureApexSiteOrigin(url: string): string {
 
 /**
  * Path para &lt;link rel="canonical"&gt; e sitemap.
- * Raiz = "/"; demais rotas **com** barra final — alinhado a `trailingSlash: 'always'`.
+ * Raiz = "/"; demais rotas **com** barra final (canonical / sitemap; Astro `trailingSlash: 'ignore'`).
  */
 export function canonicalPathname(pathname: string): string {
     const raw = (pathname || '/').trim();
@@ -119,7 +119,7 @@ export function buildCanonicalPageUrl(siteBaseOrigin: string, pathname: string):
 }
 
 /**
- * URLs absolutas no JSON-LD com barra final em páginas (`trailingSlash: 'always'`).
+ * URLs absolutas no JSON-LD com barra final em páginas.
  * Não altera URLs de arquivo (último segmento com extensão).
  */
 export function schemaPageUrl(url: string): string {

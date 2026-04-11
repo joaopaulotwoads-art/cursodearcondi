@@ -9,43 +9,43 @@ interface Props {
 
 const { siteName, nav, logoSrc } = Astro.props;
 ---
-<header class="bg-[var(--color-bg)] border-b border-[var(--color-border)] sticky top-0 z-50">
-  <div class="max-w-4xl mx-auto px-4 py-4 sm:py-5 flex items-center justify-between gap-4 md:gap-6">
-    <a href="/" class="flex items-center min-h-[44px] shrink-0" aria-label={siteName}>
+<header class="bg-[#faf7f5] border-b border-stone-200/90 sticky top-0 z-50 shadow-[0_1px_0_rgba(0,0,0,0.04)]">
+  <div class="max-w-4xl mx-auto px-4 py-2.5 sm:py-3 flex items-center justify-between gap-3 md:gap-5">
+    <a href="/" class="flex items-center min-h-[40px] shrink-0" aria-label={siteName}>
       {logoSrc ? (
         <img
           src={logoSrc}
           alt=""
           width="480"
           height="108"
-          class="h-14 w-auto sm:h-[4.5rem] md:h-20 lg:h-[5.5rem] max-w-[min(92vw,28rem)] sm:max-w-[min(90vw,32rem)] md:max-w-none object-contain object-left"
+          class="h-9 w-auto sm:h-10 md:h-11 max-w-[min(88vw,20rem)] sm:max-w-[min(85vw,22rem)] object-contain object-left"
           decoding="async"
           fetchpriority="low"
         />
       ) : (
-        <span class="text-lg font-semibold text-[var(--color-heading)]">{siteName}</span>
+        <span class="text-base font-semibold text-stone-800">{siteName}</span>
       )}
     </a>
-    <nav class="hidden md:flex items-center gap-6" aria-label="Navegação">
+    <nav class="hidden md:flex items-center gap-0.5" aria-label="Navegação">
       {nav.map((item) => (
         <a
           href={item.href}
-          class="text-sm font-medium text-[var(--color-text)] no-underline hover:text-[var(--color-link)] hover:underline min-h-[44px] flex items-center"
+          class="text-sm font-semibold text-stone-700 no-underline hover:bg-stone-200/60 rounded-md px-3 min-h-[40px] flex items-center"
         >
           {item.label}
         </a>
       ))}
     </nav>
-    <button type="button" id="bem-mobile-menu-btn" class="md:hidden p-2 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Abrir menu">
+    <button type="button" id="bem-mobile-menu-btn" class="md:hidden p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-stone-800 rounded-md hover:bg-stone-200/50" aria-label="Abrir menu">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
     </button>
   </div>
-  <div id="bem-mobile-menu" class="md:hidden hidden border-t border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-4">
-    <nav class="flex flex-col gap-2">
+  <div id="bem-mobile-menu" class="md:hidden hidden border-t border-stone-200 bg-[#f5f0ed] px-4 py-3">
+    <nav class="flex flex-col gap-1">
       {nav.map((item) => (
         <a
           href={item.href}
-          class="bem-mobile-nav-link py-3 min-h-[44px] flex items-center text-sm font-medium text-[var(--color-text)] no-underline hover:text-[var(--color-link)] hover:underline"
+          class="bem-mobile-nav-link py-2.5 min-h-[44px] flex items-center text-sm font-semibold text-stone-800 no-underline hover:bg-stone-200/70 rounded-md px-2"
         >
           {item.label}
         </a>

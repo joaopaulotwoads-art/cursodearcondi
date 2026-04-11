@@ -26,6 +26,8 @@ const posts = defineCollection({
          * blogPosting = artigo informativo; articleItemList = ranking/review; none = desliga.
          */
         seoSchema: z.enum(['auto', 'blogPosting', 'articleItemList', 'none']).optional(),
+        /** Layout editorial: reviewRoundup = artigo tipo ranking (fundo rosado, CTAs amarelos, blocos de review). */
+        articleLayout: z.enum(['default', 'reviewRoundup']).optional(),
     }),
 });
 
