@@ -5,7 +5,7 @@
  * Inclui extensões avançadas, slash commands e interface moderna.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useEditor, EditorContent, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react';
 import { Node, mergeAttributes } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
@@ -13,8 +13,40 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
+import Heading from '@tiptap/extension-heading';
 import MediaLibrary from './MediaLibrary';
 import { affiliateBlockExtensions, affiliateBlockDefaults } from './AffiliateBlocksTipTap';
+import {
+    PreservedHtmlExtension,
+    preprocessHtmlForTipTap,
+    expandPreservedHtmlBlocks,
+} from './preserved-html-tiptap';
+
+/** Headings com `class` preservada no HTML (ex.: `.review-section-label` nos reviews Bem Mãe). */
+const HeadingWithClass = Heading.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            class: {
+                default: null,
+                parseHTML: (element) => element.getAttribute('class'),
+                renderHTML: (attributes) => {
+                    if (!attributes.class) return {};
+                    return { class: attributes.class as string };
+                },
+            },
+        };
+    },
+    parseHTML() {
+        return this.options.levels.map((level: number) => ({
+            tag: `h${level}`,
+            getAttrs: (element: HTMLElement) => ({
+                level,
+                class: element.getAttribute('class'),
+            }),
+        }));
+    },
+}).configure({ levels: [1, 2, 3, 4] });
 
 // ── Product Review Node View (renderiza no editor) ───────────────────────────
 function ProductReviewNodeView({ node, updateAttributes, deleteNode }: { node: any; updateAttributes: (attrs: Record<string, any>) => void; deleteNode: () => void }) {
@@ -44,7 +76,7 @@ function ProductReviewNodeView({ node, updateAttributes, deleteNode }: { node: a
     const inputSmCls = 'flex-1 px-3 py-1.5 rounded-lg bg-[#0d0d0d] border border-[rgba(255,255,255,0.08)] text-[#e5e5e5] placeholder-[#555] focus:outline-none focus:border-[rgba(255,255,255,0.2)] text-xs';
 
     return (
-        <NodeViewWrapper>
+        <NodeViewWrapper className="not-prose">
             <div className="product-review" contentEditable={false} style={{ userSelect: 'none', position: 'relative' }}>
                 {/* Botões de ação no canto superior direito */}
                 <div style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', display: 'flex', gap: '0.25rem' }}>
@@ -332,19 +364,24 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
         cons: [''],
     });
 
+    /**
+     * Evita reaplicar o mesmo `value` ao editor (e alinha com o que o pai já tem após onChange).
+     */
+    const lastSyncedFromParentRef = useRef<string | undefined>(undefined);
+
     const editor = useEditor({
         immediatelyRender: false,
         extensions: [
             StarterKit.configure({
-                heading: {
-                    levels: [1, 2, 3, 4],
-                },
+                heading: false,
                 codeBlock: {
                     HTMLAttributes: {
                         class: 'bg-[#1a1a1a] border border-[rgba(255,255,255,0.08)] rounded-lg p-4 font-mono text-sm',
                     },
                 },
             }),
+            HeadingWithClass,
+            PreservedHtmlExtension,
             Placeholder.configure({
                 placeholder,
             }),
@@ -372,10 +409,12 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
             ProductReviewExtension,
             ...affiliateBlockExtensions,
         ],
-        content: value || '',
+        // Conteúdo real vem do useEffect — evita 1.º onUpdate a chamar onChange() com doc vazio/truncado.
+        content: '<p></p>',
         editorProps: {
             attributes: {
                 class: 'prose prose-invert max-w-none focus:outline-none min-h-[400px] p-6 text-[#e5e5e5]',
+                style: 'color: rgb(229 231 235);',
             },
             handleKeyDown: (view, event) => {
                 // Slash command - digite "/" para menu de blocos
@@ -395,16 +434,20 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
             },
         },
         onUpdate: ({ editor }) => {
-            const html = editor.getHTML();
-            onChange(html);
+            const expanded = expandPreservedHtmlBlocks(editor.getHTML());
+            lastSyncedFromParentRef.current = expanded;
+            onChange(expanded);
         },
     });
 
-    // Atualizar conteúdo quando value mudar externamente
     useEffect(() => {
-        if (editor && value !== editor.getHTML()) {
-            editor.commands.setContent(value || '');
-        }
+        if (!editor) return;
+        const v = value ?? '';
+        if (lastSyncedFromParentRef.current === v) return;
+        lastSyncedFromParentRef.current = v;
+        const parsed = preprocessHtmlForTipTap(v);
+        // emitUpdate: false → não dispara onUpdate; evita sobrescrever o estado do post com HTML a meio.
+        editor.commands.setContent(parsed || '<p></p>', { emitUpdate: false });
     }, [value, editor]);
 
     const insertImage = () => {
@@ -511,264 +554,202 @@ export default function WYSIWYGEditor({ value, onChange, placeholder = 'Digite "
         );
     }
 
+    /** Evita perder seleção ao clicar na toolbar (TipTap). */
+    const tpHold = (fn: () => void) => (e: MouseEvent) => {
+        e.preventDefault();
+        fn();
+    };
+
+    const runReviewHeading = () => {
+        const h = editor.getAttributes('heading');
+        const isReviewH2 = editor.isActive('heading', { level: 2 }) && h.class === 'review-section-label';
+        if (isReviewH2) {
+            editor.chain().focus().updateAttributes('heading', { class: null }).run();
+            return;
+        }
+        if (editor.isActive('heading', { level: 2 })) {
+            editor.chain().focus().updateAttributes('heading', { class: 'review-section-label' }).run();
+            return;
+        }
+        if (editor.isActive('heading')) {
+            editor.chain().focus().setHeading({ level: 2, class: 'review-section-label' }).run();
+            return;
+        }
+        editor
+            .chain()
+            .focus()
+            .insertContent({
+                type: 'heading',
+                attrs: { level: 2, class: 'review-section-label' },
+                content: [{ type: 'text', text: 'Título da seção ou do produto' }],
+            })
+            .run();
+    };
+
+    const pill = (active: boolean) =>
+        `rounded-full px-2.5 py-1 text-xs font-medium transition-colors border ${
+            active
+                ? 'border-teal-400/60 bg-teal-950/50 text-teal-100'
+                : 'border-white/10 bg-black/30 text-neutral-400 hover:border-teal-500/30 hover:text-neutral-200'
+        }`;
+
+    const menuPanel = 'absolute left-0 top-full z-[60] mt-1 min-w-[16rem] max-w-[min(100vw-2rem,28rem)] rounded-xl border border-violet-500/20 bg-[#12121a] p-2 shadow-[0_12px_40px_rgba(0,0,0,0.55)]';
+
     return (
         <div className="h-full w-full flex flex-col bg-[#0a0a0a] border border-[rgba(255,255,255,0.08)] rounded-lg overflow-hidden">
-            {/* Toolbar Melhorada */}
-            <div className="flex items-center gap-1 p-3 border-b border-[rgba(255,255,255,0.08)] flex-wrap bg-[#111111]">
-                {/* Text Formatting */}
-                <div className="flex items-center gap-1">
-                    <button
-                        onClick={() => editor.chain().focus().toggleBold().run()}
-                        disabled={!editor.can().chain().focus().toggleBold().run()}
-                        className={`px-3 py-1.5 rounded text-sm font-semibold transition-colors ${
-                            editor.isActive('bold')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Negrito (Ctrl+B)"
-                    >
-                        <strong>B</strong>
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().toggleItalic().run()}
-                        disabled={!editor.can().chain().focus().toggleItalic().run()}
-                        className={`px-3 py-1.5 rounded text-sm font-semibold transition-colors ${
-                            editor.isActive('italic')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Itálico (Ctrl+I)"
-                    >
-                        <em>I</em>
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().toggleStrike().run()}
-                        disabled={!editor.can().chain().focus().toggleStrike().run()}
-                        className={`px-3 py-1.5 rounded text-sm font-semibold transition-colors ${
-                            editor.isActive('strike')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Riscado"
-                    >
-                        <s>S</s>
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().toggleCode().run()}
-                        disabled={!editor.can().chain().focus().toggleCode().run()}
-                        className={`px-3 py-1.5 rounded text-sm transition-colors ${
-                            editor.isActive('code')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Código inline"
-                    >
-                        {'</>'}
-                    </button>
-                </div>
+            {/* Painel novo: menus suspensos + etiqueta visível (confirma deploy do bundle) */}
+            <div className="flex flex-wrap items-center gap-2 p-2.5 border-b border-violet-500/25 bg-gradient-to-r from-[#0a0a12] via-[#0c0c14] to-[#0a1014] shrink-0 max-w-full">
+                <span
+                    className="select-none rounded-md border border-teal-500/40 bg-teal-950/40 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-teal-200"
+                    title="Se vês isto, o JS novo carregou"
+                >
+                    Editor · 2026
+                </span>
 
-                <div className="w-px h-6 bg-[rgba(255,255,255,0.08)] mx-1" />
-
-                {/* Headings */}
-                <div className="flex items-center gap-1">
-                    <button
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-                        className={`px-3 py-1.5 rounded text-sm font-semibold transition-colors ${
-                            editor.isActive('heading', { level: 1 })
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Título 1"
-                    >
-                        H1
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-                        className={`px-3 py-1.5 rounded text-sm font-semibold transition-colors ${
-                            editor.isActive('heading', { level: 2 })
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Título 2"
-                    >
-                        H2
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-                        className={`px-3 py-1.5 rounded text-sm font-semibold transition-colors ${
-                            editor.isActive('heading', { level: 3 })
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Título 3"
-                    >
-                        H3
-                    </button>
-                </div>
-
-                <div className="w-px h-6 bg-[rgba(255,255,255,0.08)] mx-1" />
-
-                {/* Lists */}
-                <div className="flex items-center gap-1">
-                    <button
-                        onClick={() => editor.chain().focus().toggleBulletList().run()}
-                        className={`px-3 py-1.5 rounded text-sm transition-colors ${
-                            editor.isActive('bulletList')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Lista com marcadores"
-                    >
-                        • Lista
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-                        className={`px-3 py-1.5 rounded text-sm transition-colors ${
-                            editor.isActive('orderedList')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Lista numerada"
-                    >
-                        1. Lista
-                    </button>
-                </div>
-
-                <div className="w-px h-6 bg-[rgba(255,255,255,0.08)] mx-1" />
-
-                {/* Blocks */}
-                <div className="flex items-center gap-1">
-                    <button
-                        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-                        className={`px-3 py-1.5 rounded text-sm transition-colors ${
-                            editor.isActive('blockquote')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Citação"
-                    >
-                        "
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-                        className={`px-3 py-1.5 rounded text-sm transition-colors ${
-                            editor.isActive('codeBlock')
-                                ? 'bg-[#1a1a1a] text-[#e5e5e5]'
-                                : 'text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]'
-                        }`}
-                        title="Bloco de código"
-                    >
-                        {'</>'}
-                    </button>
-                    <button
-                        onClick={() => editor.chain().focus().setHorizontalRule().run()}
-                        className="px-3 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Linha horizontal"
-                    >
-                        ─
-                    </button>
-                    <button
-                        onClick={() => setShowReviewModal(true)}
-                        className="px-3 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Inserir bloco de review de produto"
-                    >
-                        ⭐ Review
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.productCard).run()}
-                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Card de produto único"
-                    >
-                        📦 Produto
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.roundup).run()}
-                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Lista / roundup de produtos"
-                    >
-                        📋 Lista
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.compare).run()}
-                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Tabela comparativa"
-                    >
-                        ⊞ Tabela
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.prosCons).run()}
-                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Só prós e contras"
-                    >
-                        ± Prós/Contras
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.versus).run()}
-                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Versus: dois produtos"
-                    >
-                        ⚔ Versus
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => editor.chain().focus().insertContent(affiliateBlockDefaults.techSheet).run()}
-                        className="px-2 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Ficha técnica (especificações)"
-                    >
-                        🧾 Ficha
-                    </button>
-                </div>
-
-                <div className="w-px h-6 bg-[rgba(255,255,255,0.08)] mx-1" />
-
-                {/* Media & Links */}
-                <div className="flex items-center gap-1">
-                    {editor.isActive('link') ? (
-                        <>
-                            <button
-                                onClick={insertLink}
-                                className="px-3 py-1.5 rounded text-sm transition-colors bg-[#1a1a1a] text-[#e5e5e5]"
-                                title="Editar link"
-                            >
-                                🔗 Editar Link
+                <details className="group relative">
+                    <summary className="flex cursor-pointer list-none items-center gap-1 rounded-lg border border-violet-500/30 bg-violet-950/25 px-3 py-2 text-xs font-semibold text-violet-100 hover:bg-violet-950/40 [&::-webkit-details-marker]:hidden">
+                        Formatação
+                        <span className="text-violet-400/80" aria-hidden>
+                            ▾
+                        </span>
+                    </summary>
+                    <div className={menuPanel} onMouseDown={(e) => e.preventDefault()}>
+                        <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Estilo</p>
+                        <div className="flex flex-wrap gap-1">
+                            <button type="button" className={pill(editor.isActive('bold'))} onMouseDown={tpHold(() => editor.chain().focus().toggleBold().run())} disabled={!editor.can().chain().focus().toggleBold().run()}>
+                                <strong>Negrito</strong>
+                            </button>
+                            <button type="button" className={pill(editor.isActive('italic'))} onMouseDown={tpHold(() => editor.chain().focus().toggleItalic().run())} disabled={!editor.can().chain().focus().toggleItalic().run()}>
+                                <em>Itálico</em>
+                            </button>
+                            <button type="button" className={pill(editor.isActive('strike'))} onMouseDown={tpHold(() => editor.chain().focus().toggleStrike().run())} disabled={!editor.can().chain().focus().toggleStrike().run()}>
+                                <s>Riscado</s>
+                            </button>
+                            <button type="button" className={pill(editor.isActive('code'))} onMouseDown={tpHold(() => editor.chain().focus().toggleCode().run())} disabled={!editor.can().chain().focus().toggleCode().run()}>
+                                Código
+                            </button>
+                        </div>
+                        <p className="mb-1.5 mt-3 px-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Títulos</p>
+                        <div className="flex flex-wrap gap-1">
+                            <button type="button" className={pill(editor.isActive('heading', { level: 1 }))} onMouseDown={tpHold(() => editor.chain().focus().toggleHeading({ level: 1 }).run())}>
+                                Seção 1
                             </button>
                             <button
-                                onClick={removeLink}
-                                className="px-3 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                                title="Remover link"
+                                type="button"
+                                className={pill(editor.isActive('heading', { level: 2 }) && !editor.getAttributes('heading').class)}
+                                onMouseDown={tpHold(() => editor.chain().focus().toggleHeading({ level: 2 }).run())}
                             >
-                                🔗❌
+                                Seção 2
                             </button>
-                        </>
-                    ) : (
-                        <button
-                            onClick={insertLink}
-                            className="px-3 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                            title="Inserir link"
-                        >
-                            🔗 Link
-                        </button>
-                    )}
-                    <button
-                        onClick={() => { setMediaLibraryTarget('post'); setShowMediaLibrary(true); }}
-                        className="px-3 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Biblioteca de mídia"
-                    >
-                        🖼️ Biblioteca
-                    </button>
-                    <button
-                        onClick={() => setShowImageModal(true)}
-                        className="px-3 py-1.5 rounded text-sm transition-colors text-[#a3a3a3] hover:text-[#e5e5e5] hover:bg-[#1a1a1a]"
-                        title="Inserir imagem por URL"
-                    >
-                        📎 URL
-                    </button>
-                </div>
+                            <button type="button" className={pill(editor.isActive('heading', { level: 3 }))} onMouseDown={tpHold(() => editor.chain().focus().toggleHeading({ level: 3 }).run())}>
+                                Seção 3
+                            </button>
+                            <button
+                                type="button"
+                                className={pill(editor.isActive('heading', { level: 2 }) && editor.getAttributes('heading').class === 'review-section-label')}
+                                onMouseDown={tpHold(runReviewHeading)}
+                            >
+                                H2 review
+                            </button>
+                        </div>
+                        <p className="mb-1.5 mt-3 px-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Listas</p>
+                        <div className="flex flex-wrap gap-1">
+                            <button type="button" className={pill(editor.isActive('bulletList'))} onMouseDown={tpHold(() => editor.chain().focus().toggleBulletList().run())}>
+                                Marcadores
+                            </button>
+                            <button type="button" className={pill(editor.isActive('orderedList'))} onMouseDown={tpHold(() => editor.chain().focus().toggleOrderedList().run())}>
+                                Numerada
+                            </button>
+                        </div>
+                    </div>
+                </details>
+
+                <details className="group relative">
+                    <summary className="flex cursor-pointer list-none items-center gap-1 rounded-lg border border-amber-500/35 bg-amber-950/20 px-3 py-2 text-xs font-semibold text-amber-100 hover:bg-amber-950/35 [&::-webkit-details-marker]:hidden">
+                        Blocos de artigo
+                        <span className="text-amber-400/80" aria-hidden>
+                            ▾
+                        </span>
+                    </summary>
+                    <div className={menuPanel} onMouseDown={(e) => e.preventDefault()}>
+                        <p className="mb-1.5 px-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Base</p>
+                        <div className="flex flex-wrap gap-1">
+                            <button type="button" className={pill(editor.isActive('blockquote'))} onMouseDown={tpHold(() => editor.chain().focus().toggleBlockquote().run())}>
+                                Citação
+                            </button>
+                            <button type="button" className={pill(editor.isActive('codeBlock'))} onMouseDown={tpHold(() => editor.chain().focus().toggleCodeBlock().run())}>
+                                Código bloco
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => editor.chain().focus().setHorizontalRule().run())}>
+                                Divisor
+                            </button>
+                        </div>
+                        <p className="mb-1.5 mt-3 px-1 text-[10px] font-semibold uppercase tracking-wider text-neutral-500">Afiliados / review</p>
+                        <div className="flex flex-wrap gap-1">
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => setShowReviewModal(true))}>
+                                Caixa review
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => editor.chain().focus().insertContent(affiliateBlockDefaults.productCard).run())}>
+                                Card produto
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => editor.chain().focus().insertContent(affiliateBlockDefaults.roundup).run())}>
+                                Ranking
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => editor.chain().focus().insertContent(affiliateBlockDefaults.compare).run())}>
+                                Comparativo
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => editor.chain().focus().insertContent(affiliateBlockDefaults.prosCons).run())}>
+                                Prós / contras
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => editor.chain().focus().insertContent(affiliateBlockDefaults.versus).run())}>
+                                Versus
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => editor.chain().focus().insertContent(affiliateBlockDefaults.techSheet).run())}>
+                                Ficha técnica
+                            </button>
+                        </div>
+                    </div>
+                </details>
+
+                <details className="group relative">
+                    <summary className="flex cursor-pointer list-none items-center gap-1 rounded-lg border border-sky-500/35 bg-sky-950/20 px-3 py-2 text-xs font-semibold text-sky-100 hover:bg-sky-950/35 [&::-webkit-details-marker]:hidden">
+                        Ligações e mídia
+                        <span className="text-sky-400/80" aria-hidden>
+                            ▾
+                        </span>
+                    </summary>
+                    <div className={menuPanel} onMouseDown={(e) => e.preventDefault()}>
+                        <div className="flex flex-wrap gap-1">
+                            {editor.isActive('link') ? (
+                                <>
+                                    <button type="button" className={pill(true)} onMouseDown={tpHold(insertLink)}>
+                                        Editar ligação
+                                    </button>
+                                    <button type="button" className={pill(false)} onMouseDown={tpHold(removeLink)}>
+                                        Remover ligação
+                                    </button>
+                                </>
+                            ) : (
+                                <button type="button" className={pill(false)} onMouseDown={tpHold(insertLink)}>
+                                    Inserir ligação
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                className={pill(false)}
+                                onMouseDown={tpHold(() => {
+                                    setMediaLibraryTarget('post');
+                                    setShowMediaLibrary(true);
+                                })}
+                            >
+                                Galeria
+                            </button>
+                            <button type="button" className={pill(false)} onMouseDown={tpHold(() => setShowImageModal(true))}>
+                                Imagem por URL
+                            </button>
+                        </div>
+                    </div>
+                </details>
             </div>
 
             {/* Editor Content */}

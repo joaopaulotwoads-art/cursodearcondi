@@ -56,12 +56,20 @@ if (isReviewRoundup && postHtmlBody) {
   reviewTocItems = tocResult.toc;
   reviewBodySplit = splitHtmlAfterReviewHeroPicks(postHtmlBody);
 }
+
+/**
+ * Cartão de produto, prós/contras e títulos de review usam CSS em article-review-roundup.css
+ * sob o ancestral `.article-review-roundup`. Antes só existia em posts com layout "reviewRoundup",
+ * por isso o mesmo HTML no layout default parecia "versão antiga" (só o ranking parecia certo).
+ */
+const applyRoundupArticleScope =
+  isReviewRoundup || (!!postHtmlBody && /\bcnx-aff-/.test(postHtmlBody));
 ---
 <article
   class:list={[
     'mx-auto py-10 sm:py-12',
-    isReviewRoundup ? 'px-4 sm:px-5 max-w-4xl article-review-roundup' : 'px-4 sm:px-5',
-    !isReviewRoundup && (htmlContent ? 'max-w-3xl' : 'max-w-2xl'),
+    applyRoundupArticleScope ? 'px-4 sm:px-5 max-w-4xl article-review-roundup' : 'px-4 sm:px-5',
+    !applyRoundupArticleScope && (htmlContent ? 'max-w-3xl' : 'max-w-2xl'),
   ]}
 >
   <header class:list={[isReviewRoundup ? 'mb-5 md:mb-6' : 'mb-8 md:mb-10']}>

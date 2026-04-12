@@ -461,3 +461,61 @@ html.light {
     background: var(--admin-surface-hover);
     color: var(--admin-text-muted);
 }
+
+/* Preview dos blocos Bem Mãe no editor (cartão claro como no artigo público) */
+.admin-editor-live-preview.article-review-roundup {
+    margin: 0.5rem 0;
+    padding: 0.65rem 0.65rem 0.75rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%);
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-editor-live-preview .cnx-aff-product.cnx-aff-block-wrap {
+    margin: 0;
+}
+
+/*
+ * TipTap usa .prose + affiliate-blocks.css (CTA bege com !important).
+ * O preview do card está em .not-prose > .article-review-roundup (classes em nós diferentes).
+ * Reforço no editor com ancestral .ProseMirror (amarelo Bem Mãe, igual ao artigo público):
+ */
+.ProseMirror .article-review-roundup.admin-editor-live-preview .cnx-aff-product-cta a {
+    background: #ffc107 !important;
+    color: #1a1a1a !important;
+    border: 1px solid #e0a800 !important;
+    font-weight: 800 !important;
+    max-width: none !important;
+    width: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0.5rem !important;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+.ProseMirror .article-review-roundup.admin-editor-live-preview .cnx-aff-product-cta a:hover {
+    background: #ffca28 !important;
+    filter: none !important;
+}
+
+/* Prós/contras no editor: mesmo CTA amarelo que no artigo */
+.ProseMirror .article-review-roundup.admin-editor-live-preview .cnx-aff-pros-cons-cta a {
+    background: #ffc107 !important;
+    color: #1a1a1a !important;
+    border: 1px solid #e0a800 !important;
+    font-weight: 800 !important;
+}
+
+/* Evita seta dupla se o CSS global também injetar ::after (o JSX já traz → no preview) */
+.ProseMirror .article-review-roundup.admin-editor-live-preview .cnx-aff-product-cta a::after {
+    content: none !important;
+}
+
+/* H2 “Título review” (.review-section-label): no artigo é escuro sobre fundo claro; no editor .prose-invert precisa contraste */
+.ProseMirror.prose h2.review-section-label,
+.ProseMirror .prose h2.review-section-label {
+    color: #f9fafb !important;
+    border-bottom-color: rgba(251, 191, 36, 0.55) !important;
+}

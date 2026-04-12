@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+    /** Tipografia do editor: classes usadas nos node views do TipTap */
+    safelist: ['not-prose', 'prose'],
     theme: {
         extend: {
             fontFamily: {

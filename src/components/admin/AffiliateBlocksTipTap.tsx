@@ -3,12 +3,56 @@
  * HTML estável + classes cnx-aff-* para Turndown preservar no .mdoc.
  */
 
+import '../../styles/article-review-roundup.css';
+import type { CSSProperties } from 'react';
 import { useEffect, useState } from 'react';
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer, NodeViewWrapper } from '@tiptap/react';
 
 const inputCls =
     'w-full px-3 py-2 rounded-lg bg-[#0d0d0d] border border-[rgba(255,255,255,0.08)] text-[#e5e5e5] placeholder-[#555] focus:outline-none focus:border-[rgba(255,255,255,0.25)] text-sm';
+
+/** Igual ao artigo público — inline para não perder para .prose / ordem de CSS no admin */
+const BEMMAE_PRODUCT_CARD_STYLE: CSSProperties = {
+    position: 'relative',
+    background: '#ffffff',
+    border: '1px solid #d1d5db',
+    borderRadius: '1rem',
+    boxShadow: '0 2px 14px rgba(15, 23, 42, 0.06)',
+    padding: '1.25rem 1.15rem 1.35rem',
+    overflow: 'visible',
+    margin: 0,
+};
+
+/** CTA padrão Bem Mãe (amarelo + texto escuro) — igual ao artigo público */
+const BEMMAE_CTA_STYLE: CSSProperties = {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '0.5rem',
+    background: '#ffc107',
+    color: '#1a1a1a',
+    border: '1px solid #e0a800',
+    fontWeight: 800,
+    borderRadius: '0.45rem',
+    padding: '0.6rem 0.95rem',
+    fontSize: '0.875rem',
+    textDecoration: 'none',
+    width: '100%',
+    maxWidth: '100%',
+    boxSizing: 'border-box',
+    boxShadow: '0 1px 0 rgba(0, 0, 0, 0.06)',
+};
+
+const BEMMAE_TITLE_STYLE: CSSProperties = {
+    fontSize: '1.125rem',
+    fontWeight: 700,
+    lineHeight: 1.35,
+    margin: 0,
+    color: '#2563eb',
+    textDecoration: 'underline',
+    textUnderlineOffset: '3px',
+};
 
 function BlockChrome({
     children,
@@ -20,7 +64,8 @@ function BlockChrome({
     onDelete: () => void;
 }) {
     return (
-        <NodeViewWrapper>
+        <NodeViewWrapper className="not-prose">
+            {/* not-prose: senão .prose do TipTap sobrescreve CTA/títulos dos cards (fica “versão antiga” bege) */}
             <div style={{ position: 'relative' }} contentEditable={false}>
                 <div
                     style={{
@@ -77,8 +122,10 @@ function productAttrsFromNode(attrs: Record<string, unknown>) {
     return {
         badge: String(attrs.badge ?? ''),
         productName: String(attrs.productName ?? ''),
+        productDesc: String(attrs.productDesc ?? ''),
         subtitle: String(attrs.subtitle ?? ''),
         productImage: String(attrs.productImage ?? ''),
+        imgSource: String(attrs.imgSource ?? ''),
         rating: String(attrs.rating ?? ''),
         features: [...features],
         ctaText: String(attrs.ctaText ?? ''),
@@ -116,36 +163,67 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
             }}
             onDelete={deleteNode}
         >
-            <div className="cnx-aff-product cnx-aff-block-wrap">
-                {a.badge && <div className="cnx-aff-product-badge">{a.badge}</div>}
-                <div className="cnx-aff-product-body">
-                    {a.productImage && (
-                        <img src={a.productImage} alt="" className="cnx-aff-product-img" />
-                    )}
-                    <div className="cnx-aff-product-main">
-                        <div className="cnx-aff-product-title" data-product-name={a.productName || ''}>
-                            {a.productName || 'Produto'}
-                        </div>
-                        {a.subtitle && <p className="cnx-aff-product-sub">{a.subtitle}</p>}
-                        {a.rating && <div className="cnx-aff-product-score">Nota {a.rating}</div>}
-                        {features.length > 0 && (
-                            <ul className="cnx-aff-product-features">
-                                {features.map((f, i) => (
-                                    <li key={i}>{f}</li>
-                                ))}
-                            </ul>
-                        )}
-                        {a.ctaText && a.ctaUrl && (
-                            <div className="cnx-aff-product-cta">
-                                <a
-                                    href={a.ctaUrl}
-                                    target="_blank"
-                                    rel={a.ctaNofollow ? 'nofollow sponsored noopener noreferrer' : 'noopener noreferrer'}
+            {/* key: força o React a repor o preview quando os attrs TipTap mudam */}
+            {/* Mesmo contexto visual do artigo no site (roundup + tema claro do card) */}
+            <div
+                key={attrsSerialized}
+                className="not-prose article-review-roundup admin-editor-live-preview bemmae-post-html"
+            >
+                <div className="cnx-aff-product cnx-aff-block-wrap" style={BEMMAE_PRODUCT_CARD_STYLE}>
+                    {a.badge && <div className="cnx-aff-product-badge">{a.badge}</div>}
+                    <div className="cnx-aff-product-body">
+                        <div className="cnx-aff-product-media">
+                            {a.productImage ? (
+                                <img src={a.productImage} alt="" className="cnx-aff-product-img" />
+                            ) : (
+                                <div
+                                    className="cnx-aff-product-img flex items-center justify-center bg-gray-100 text-gray-400 text-xs"
+                                    style={{ aspectRatio: '1 / 1', border: '1px solid #e5e7eb', borderRadius: '0.5rem' }}
                                 >
-                                    {a.ctaText}
-                                </a>
+                                    Sem imagem
+                                </div>
+                            )}
+                            {a.productImage && (a.imgSource || 'Fonte: Amazon.com.br') && (
+                                <p className="cnx-aff-img-source">{a.imgSource || 'Fonte: Amazon.com.br'}</p>
+                            )}
+                        </div>
+                        <div className="cnx-aff-product-main">
+                            <div className="cnx-aff-product-meta">
+                                <span className="cnx-aff-product-pill">Recomendado</span>
                             </div>
-                        )}
+                            <h2
+                                className="cnx-aff-product-title"
+                                style={BEMMAE_TITLE_STYLE}
+                                data-product-name={a.productName || ''}
+                            >
+                                {a.productName || 'Produto'}
+                            </h2>
+                            {a.productDesc && <p className="cnx-aff-product-desc">{a.productDesc}</p>}
+                            {a.subtitle && <p className="cnx-aff-product-sub">{a.subtitle}</p>}
+                            {a.rating && <div className="cnx-aff-product-score">Nota {a.rating}</div>}
+                            {features.length > 0 && (
+                                <ul className="cnx-aff-product-features">
+                                    {features.map((f, i) => (
+                                        <li key={i}>{f}</li>
+                                    ))}
+                                </ul>
+                            )}
+                            {a.ctaText && a.ctaUrl && (
+                                <div className="cnx-aff-product-cta">
+                                    <a
+                                        href={a.ctaUrl}
+                                        target="_blank"
+                                        rel={a.ctaNofollow ? 'nofollow sponsored noopener noreferrer' : 'noopener noreferrer'}
+                                        style={BEMMAE_CTA_STYLE}
+                                    >
+                                        {a.ctaText}
+                                        <span aria-hidden="true" style={{ fontSize: '1.05rem', opacity: 0.88 }}>
+                                            →
+                                        </span>
+                                    </a>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,8 +236,20 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                         <h3 className="text-sm font-semibold text-[#e5e5e5]">Produto (card)</h3>
                         <input className={inputCls} placeholder="Selo opcional (ex.: Destaque)" value={d.badge} onChange={(e) => setD({ ...d, badge: e.target.value })} />
                         <input className={inputCls} placeholder="Nome do produto *" value={d.productName} onChange={(e) => setD({ ...d, productName: e.target.value })} />
-                        <input className={inputCls} placeholder="Subtítulo curto" value={d.subtitle} onChange={(e) => setD({ ...d, subtitle: e.target.value })} />
+                        <input
+                            className={inputCls}
+                            placeholder="Frase curta (ex.: Confira os detalhes na Amazon)"
+                            value={d.productDesc}
+                            onChange={(e) => setD({ ...d, productDesc: e.target.value })}
+                        />
+                        <input className={inputCls} placeholder="Linha de specs (ex.: Chassi alumínio | 7,2 kg)" value={d.subtitle} onChange={(e) => setD({ ...d, subtitle: e.target.value })} />
                         <input className={inputCls} placeholder="URL da imagem" value={d.productImage} onChange={(e) => setD({ ...d, productImage: e.target.value })} />
+                        <input
+                            className={inputCls}
+                            placeholder="Legenda da imagem (vazio = “Fonte: Amazon.com.br”)"
+                            value={d.imgSource}
+                            onChange={(e) => setD({ ...d, imgSource: e.target.value })}
+                        />
                         <input className={inputCls} placeholder="Nota (ex.: 9,2)" value={d.rating} onChange={(e) => setD({ ...d, rating: e.target.value })} />
                         <textarea
                             className={inputCls}
@@ -216,6 +306,10 @@ export const AffiliateProductCardExtension = Node.create({
                     return t === 'Produto' ? '' : t;
                 },
             },
+            productDesc: {
+                default: '',
+                parseHTML: (el) => (el.querySelector('.cnx-aff-product-desc')?.textContent || '').trim(),
+            },
             subtitle: {
                 default: '',
                 parseHTML: (el) => (el.querySelector('.cnx-aff-product-sub')?.textContent || '').trim(),
@@ -225,6 +319,10 @@ export const AffiliateProductCardExtension = Node.create({
                 parseHTML: (el) =>
                     (el.querySelector('img.cnx-aff-product-img') as HTMLImageElement | null)?.getAttribute('src')?.trim() ||
                     '',
+            },
+            imgSource: {
+                default: '',
+                parseHTML: (el) => (el.querySelector('.cnx-aff-img-source')?.textContent || '').trim(),
             },
             rating: {
                 default: '',
@@ -240,7 +338,10 @@ export const AffiliateProductCardExtension = Node.create({
             },
             ctaText: {
                 default: '',
-                parseHTML: (el) => (el.querySelector('.cnx-aff-product-cta a')?.textContent || '').trim(),
+                parseHTML: (el) => {
+                    const raw = (el.querySelector('.cnx-aff-product-cta a')?.textContent || '').trim();
+                    return raw.replace(/\s*[→↗]\s*$/u, '').trim();
+                },
             },
             ctaUrl: {
                 default: '',
@@ -263,11 +364,17 @@ export const AffiliateProductCardExtension = Node.create({
         return [{ tag: 'div.cnx-aff-product.cnx-aff-block-wrap' }];
     },
     renderHTML({ node }) {
-        const { badge, productName, subtitle, productImage, rating, features, ctaText, ctaUrl, ctaNofollow } = node.attrs;
+        const { badge, productName, productDesc, subtitle, productImage, imgSource, rating, features, ctaText, ctaUrl, ctaNofollow } =
+            node.attrs;
         const feats = Array.isArray(features) ? features : [];
         const li = feats.map((t: string) => ['li', {}, t]);
-        const img = productImage ? [['img', { src: productImage, alt: '', class: 'cnx-aff-product-img' }]] : [];
+        const mediaInner: any[] = [];
+        if (productImage) {
+            mediaInner.push(['img', { src: productImage, alt: '', class: 'cnx-aff-product-img' }]);
+            mediaInner.push(['p', { class: 'cnx-aff-img-source' }, imgSource || 'Fonte: Amazon.com.br']);
+        }
         const badgeEl = badge ? [['div', { class: 'cnx-aff-product-badge' }, badge]] : [];
+        const desc = productDesc ? [['p', { class: 'cnx-aff-product-desc' }, productDesc]] : [];
         const sub = subtitle ? [['p', { class: 'cnx-aff-product-sub' }, subtitle]] : [];
         const score = rating ? [['div', { class: 'cnx-aff-product-score' }, `Nota ${rating}`]] : [];
         const featBlock = li.length ? [['ul', { class: 'cnx-aff-product-features' }, ...li]] : [];
@@ -277,10 +384,34 @@ export const AffiliateProductCardExtension = Node.create({
                       [
                           'div',
                           { class: 'cnx-aff-product-cta' },
-                          ['a', { href: ctaUrl, target: '_blank', rel: ctaNofollow !== false ? 'nofollow sponsored noopener noreferrer' : 'noopener noreferrer' }, ctaText],
+                          [
+                              'a',
+                              {
+                                  href: ctaUrl,
+                                  target: '_blank',
+                                  rel: ctaNofollow !== false ? 'nofollow sponsored noopener noreferrer' : 'noopener noreferrer',
+                              },
+                              ctaText,
+                          ],
                       ],
                   ]
                 : [];
+        const mainInner = [
+            ['div', { class: 'cnx-aff-product-meta' }, ['span', { class: 'cnx-aff-product-pill' }, 'Recomendado']],
+            [
+                'h2',
+                {
+                    class: 'cnx-aff-product-title',
+                    'data-product-name': productName || '',
+                },
+                productName || 'Produto',
+            ],
+            ...desc,
+            ...sub,
+            ...score,
+            ...featBlock,
+            ...cta,
+        ];
         return [
             'div',
             { class: 'cnx-aff-product cnx-aff-block-wrap' },
@@ -288,23 +419,8 @@ export const AffiliateProductCardExtension = Node.create({
             [
                 'div',
                 { class: 'cnx-aff-product-body' },
-                ...img,
-                [
-                    'div',
-                    { class: 'cnx-aff-product-main' },
-                    [
-                        'div',
-                        {
-                            class: 'cnx-aff-product-title',
-                            'data-product-name': productName || '',
-                        },
-                        productName || 'Produto',
-                    ],
-                    ...sub,
-                    ...score,
-                    ...featBlock,
-                    ...cta,
-                ],
+                ['div', { class: 'cnx-aff-product-media' }, ...mediaInner],
+                ['div', { class: 'cnx-aff-product-main' }, ...mainInner],
             ],
         ] as any;
     },
@@ -333,32 +449,34 @@ function ProsConsView({ node, updateAttributes, deleteNode }: any) {
             }}
             onDelete={deleteNode}
         >
-            <div className="cnx-aff-pros-cons cnx-aff-block-wrap">
-                <div className="cnx-aff-pros-cons-sections">
-                    <section className="cnx-aff-pros-section">
-                        <h3 className="cnx-aff-pros-title">Prós</h3>
-                        <ul className="cnx-aff-pros-list">
-                            {pros.map((p, i) => (
-                                <li key={i}>{p}</li>
-                            ))}
-                        </ul>
-                    </section>
-                    <section className="cnx-aff-cons-section">
-                        <h3 className="cnx-aff-cons-title">Contras</h3>
-                        <ul className="cnx-aff-cons-list">
-                            {cons.map((c, i) => (
-                                <li key={i}>{c}</li>
-                            ))}
-                        </ul>
-                    </section>
-                </div>
-                {node.attrs.ctaUrl && (
-                    <div className="cnx-aff-pros-cons-cta">
-                        <a href={node.attrs.ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
-                            Ver Preço na Amazon
-                        </a>
+            <div className="not-prose article-review-roundup admin-editor-live-preview">
+                <div className="cnx-aff-pros-cons cnx-aff-block-wrap">
+                    <div className="cnx-aff-pros-cons-sections">
+                        <section className="cnx-aff-pros-section">
+                            <h3 className="cnx-aff-pros-title">Prós</h3>
+                            <ul className="cnx-aff-pros-list">
+                                {pros.map((p, i) => (
+                                    <li key={i}>{p}</li>
+                                ))}
+                            </ul>
+                        </section>
+                        <section className="cnx-aff-cons-section">
+                            <h3 className="cnx-aff-cons-title">Contras</h3>
+                            <ul className="cnx-aff-cons-list">
+                                {cons.map((c, i) => (
+                                    <li key={i}>{c}</li>
+                                ))}
+                            </ul>
+                        </section>
                     </div>
-                )}
+                    {node.attrs.ctaUrl && (
+                        <div className="cnx-aff-pros-cons-cta">
+                            <a href={node.attrs.ctaUrl} target="_blank" rel="nofollow sponsored noopener noreferrer">
+                                Ver na Amazon
+                            </a>
+                        </div>
+                    )}
+                </div>
             </div>
             {open && (
                 <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" onClick={() => setOpen(false)}>
@@ -442,7 +560,7 @@ export const AffiliateProsConsExtension = Node.create({
             ? [[
                 'div',
                 { class: 'cnx-aff-pros-cons-cta' },
-                ['a', { href: node.attrs.ctaUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, 'Ver Preço na Amazon'],
+                ['a', { href: node.attrs.ctaUrl, target: '_blank', rel: 'nofollow sponsored noopener noreferrer' }, 'Ver na Amazon'],
             ]]
             : [];
 
@@ -720,7 +838,7 @@ function defaultRoundup(): RoundupItem[] {
         {
             rank: '1',
             itemBadge: '',
-            title: 'Produto 1',
+            title: 'Novo produto — edite o título',
             image: '',
             score: '',
             features: [''],
@@ -1373,12 +1491,18 @@ export const affiliateBlockDefaults = {
     productCard: {
         type: 'affiliateProductCard',
         attrs: {
-            badge: 'Destaque',
-            productName: 'Nome do produto',
-            subtitle: 'Uma linha sobre o produto',
+            badge: 'MAIOR DESEMPENHO',
+            productName: 'Burigotto Zap Metal Cobre',
+            productDesc: 'Confira os detalhes completos e o preço atual diretamente na Amazon.',
+            subtitle: 'Chassi alumínio | 7,2 kg | até 15 kg',
             productImage: '',
-            rating: '9,0',
-            features: ['Destaque 1', 'Destaque 2', 'Destaque 3'],
+            imgSource: 'Fonte: Amazon.com.br',
+            rating: '',
+            features: [
+                'Fechamento compacto e alça tipo mala',
+                'Cinto 5 pontos e capota com visor',
+                'Trava para bebê conforto Touring X opcional',
+            ],
             ctaText: 'Ver na Amazon',
             ctaUrl: 'https://',
             ctaNofollow: true,
@@ -1387,8 +1511,14 @@ export const affiliateBlockDefaults = {
     prosCons: {
         type: 'affiliateProsCons',
         attrs: {
-            pros: ['Ponto positivo 1', 'Ponto positivo 2'],
-            cons: ['Ponto negativo 1'],
+            pros: [
+                'Estrutura leve com chassi em alumínio',
+                'Compacto quando fechado',
+                'Alça retrátil para transporte tipo mala',
+                'Encosto com múltiplas posições de regulagem',
+                'Capota extensível com visor',
+            ],
+            cons: ['Cadeira Touring X vendida separadamente'],
             ctaUrl: '',
         },
     },

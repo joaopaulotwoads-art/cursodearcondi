@@ -438,9 +438,10 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                             <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">
                                 Conteúdo
                             </label>
-                            <div className="h-[500px] rounded-lg overflow-hidden">
-                                <WYSIWYGEditor 
-                                    value={content} 
+                            <div className="h-[500px] rounded-lg overflow-hidden bg-[#0a0a0a]">
+                                <WYSIWYGEditor
+                                    key={post?.slug ?? 'new-post-draft'}
+                                    value={content}
                                     onChange={setContent}
                                     placeholder="Comece a escrever seu post aqui..."
                                 />
