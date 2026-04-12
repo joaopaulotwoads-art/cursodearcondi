@@ -5,6 +5,8 @@ interface PixelData {
     googleAnalyticsId: string;
     googleAnalyticsPropertyId: string;
     googleServiceAccount: string;
+    /** Opcional: JSON só para Search Console; vazio = reutiliza googleServiceAccount */
+    googleSearchConsoleServiceAccount: string;
     facebookPixelId: string;
 }
 
@@ -12,6 +14,7 @@ const EMPTY: PixelData = {
     googleAnalyticsId: '',
     googleAnalyticsPropertyId: '',
     googleServiceAccount: '',
+    googleSearchConsoleServiceAccount: '',
     facebookPixelId: '',
 };
 
@@ -23,6 +26,8 @@ export default function PixelEditor({ themeId = 'classic' }: Props) {
     const [data, setData] = useState<PixelData>(EMPTY);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [gscJsonVisible, setGscJsonVisible] = useState(true);
+    const [gscVerifying, setGscVerifying] = useState(false);
     const { toasts, showToast, removeToast } = useToast();
 
     useEffect(() => {
@@ -34,6 +39,7 @@ export default function PixelEditor({ themeId = 'classic' }: Props) {
                         googleAnalyticsId: res.data.googleAnalyticsId || '',
                         googleAnalyticsPropertyId: res.data.googleAnalyticsPropertyId || '',
                         googleServiceAccount: res.data.googleServiceAccount || '',
+                        googleSearchConsoleServiceAccount: res.data.googleSearchConsoleServiceAccount || '',
                         facebookPixelId: res.data.facebookPixelId || '',
                     });
                 }
@@ -45,7 +51,11 @@ export default function PixelEditor({ themeId = 'classic' }: Props) {
     const handleSave = async () => {
         if (data.googleServiceAccount) {
             try { JSON.parse(data.googleServiceAccount); }
-            catch { showToast('error', 'JSON inválido', 'O conteúdo da Conta de Serviço não é um JSON válido.'); return; }
+            catch { showToast('error', 'JSON inválido', 'O conteúdo da Conta de Serviço (Analytics) não é um JSON válido.'); return; }
+        }
+        if (data.googleSearchConsoleServiceAccount) {
+            try { JSON.parse(data.googleSearchConsoleServiceAccount); }
+            catch { showToast('error', 'JSON inválido', 'O JSON do Search Console não é válido.'); return; }
         }
         setSaving(true);
         try {
@@ -171,6 +181,135 @@ export default function PixelEditor({ themeId = 'classic' }: Props) {
                                 <li>Cole o JSON baixado no campo acima e salve</li>
                             </ol>
                         </div>
+                    </div>
+                </div>
+
+                {/* ── Google Search Console API (passo 3 — conta de serviço) ── */}
+                <div className="admin-card p-6 bg-white/[0.02] border border-[rgba(168,85,247,0.15)]">
+                    <div className="flex items-start justify-between gap-4 mb-5">
+                        <div className="flex items-start gap-3">
+                            <div
+                                className="w-9 h-9 rounded-full bg-[#a855f7] text-white text-sm font-extrabold flex items-center justify-center shrink-0 shadow-[0_0_0_3px_rgba(168,85,247,0.25)]"
+                                aria-hidden
+                            >
+                                3
+                            </div>
+                            <div>
+                                <h2 className="text-lg font-bold text-[#e5e5e5]">Service Account (Google Cloud)</h2>
+                                <p className="text-sm text-[#737373] mt-0.5">
+                                    Liga o painel à API do Search Console (leitura) com o mesmo tipo de JSON.
+                                </p>
+                            </div>
+                        </div>
+                        <a
+                            href="https://console.cloud.google.com/apis/library/searchconsole.googleapis.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="shrink-0 text-sm font-semibold text-[#a855f7] hover:text-[#c084fc] inline-flex items-center gap-1"
+                        >
+                            Google Cloud Console
+                            <span aria-hidden>↗</span>
+                        </a>
+                    </div>
+
+                    <div className="rounded-xl bg-[#141414] border border-[rgba(255,255,255,0.06)] p-4 mb-5">
+                        <p className="text-xs font-semibold text-[#a3a3a3] mb-2">Como obter o JSON:</p>
+                        <ol className="text-xs text-[#737373] space-y-2 list-decimal list-inside leading-relaxed">
+                            <li>No Google Cloud, crie um projeto (ou use um existente).</li>
+                            <li>
+                                Ative a API{' '}
+                                <strong className="text-[#a3a3a3]">Google Search Console API</strong>{' '}
+                                <a
+                                    className="text-[#a855f7] hover:underline"
+                                    href="https://console.cloud.google.com/apis/library/searchconsole.googleapis.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    (ativar)
+                                </a>
+                                .
+                            </li>
+                            <li>
+                                Crie um <strong className="text-[#a3a3a3]">Service Account</strong> → gere uma chave{' '}
+                                <strong className="text-[#a3a3a3]">JSON</strong> → baixe o ficheiro.
+                            </li>
+                            <li>
+                                No Search Console, adicione o <strong className="text-[#a3a3a3]">e-mail</strong> da conta
+                                de serviço como utilizador com permissão de <strong className="text-[#a3a3a3]">leitura</strong>{' '}
+                                (Propriedade → Definições → Utilizadores e permissões).
+                            </li>
+                            <li>
+                                Cole o conteúdo do JSON abaixo — ou deixe vazio e use <strong className="text-[#a3a3a3]">só</strong>{' '}
+                                o JSON do Analytics, desde que a mesma conta tenha a API Search Console ativa e acesso no GSC.
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between gap-2">
+                            <label className="block text-xs font-bold uppercase tracking-wider text-[#e5e5e5]">
+                                JSON do Service Account
+                            </label>
+                            <button
+                                type="button"
+                                onClick={() => setGscJsonVisible((v) => !v)}
+                                className="text-xs text-[#a855f7] hover:text-[#c084fc] inline-flex items-center gap-1.5"
+                            >
+                                <span aria-hidden>{gscJsonVisible ? '🙈' : '👁'}</span>
+                                {gscJsonVisible ? 'Ocultar' : 'Mostrar'}
+                            </button>
+                        </div>
+                        <div className="relative">
+                            <textarea
+                                value={data.googleSearchConsoleServiceAccount}
+                                onChange={(e) => field('googleSearchConsoleServiceAccount', e.target.value)}
+                                placeholder={`{\n  "type": "service_account",\n  "project_id": "...",\n  "private_key": "...",\n  "client_email": "..."\n}`}
+                                rows={8}
+                                spellCheck={false}
+                                className={`admin-input w-full font-mono text-xs resize-y pr-14 ${!gscJsonVisible && data.googleSearchConsoleServiceAccount ? 'blur-sm select-none' : ''}`}
+                            />
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    setGscVerifying(true);
+                                    try {
+                                        const r = await fetch(
+                                            `/api/admin/search-console-verify?themeId=${encodeURIComponent(themeId)}`
+                                        );
+                                        const j = await r.json();
+                                        if (j.success) {
+                                            const list = Array.isArray(j.sites) ? j.sites : [];
+                                            showToast(
+                                                'success',
+                                                'Search Console OK',
+                                                j.siteCount
+                                                    ? `${j.siteCount} propriedade(s): ${list.slice(0, 3).join(', ')}${list.length > 3 ? '…' : ''}`
+                                                    : 'Token válido (sem sites listados ou lista vazia).'
+                                            );
+                                        } else {
+                                            showToast('error', 'Não foi possível validar', j.error || 'Erro');
+                                        }
+                                    } catch {
+                                        showToast('error', 'Erro de rede', 'Tente novamente.');
+                                    } finally {
+                                        setGscVerifying(false);
+                                    }
+                                }}
+                                disabled={gscVerifying}
+                                className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-orange-500 hover:bg-orange-400 text-white flex items-center justify-center shadow-lg disabled:opacity-50"
+                                title="Testar ligação à API"
+                            >
+                                {gscVerifying ? (
+                                    <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                                ) : (
+                                    <span className="text-lg leading-none">↑</span>
+                                )}
+                            </button>
+                        </div>
+                        <p className="text-xs text-[#525252]">
+                            O botão laranja testa o token e lista propriedades no GSC (usa este campo; se estiver vazio, usa o
+                            JSON do Analytics).
+                        </p>
                     </div>
                 </div>
 
