@@ -380,7 +380,7 @@ function getCategoryName(categorySlug: string | undefined) {
             }
 
             try {
-                const response = await fetch(`/api/admin/posts/${currentSlug}`, {
+                const response = await fetch(`/api/admin/posts/${encodeURIComponent(currentSlug)}/`, {
                     method: 'DELETE',
                 });
 
@@ -418,7 +418,7 @@ function getCategoryName(categorySlug: string | undefined) {
                 button.textContent = 'Duplicando...';
             }
             try {
-                const res = await fetch('/api/admin/posts/duplicate', {
+                const res = await fetch('/api/admin/posts/duplicate/', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ slug }),

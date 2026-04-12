@@ -109,6 +109,21 @@ export function shouldRedirectAddTrailingSlash(pathname: string): boolean {
     return true;
 }
 
+/**
+ * Com `trailingSlash: 'always'`, rotas em `src/pages/api/**` passam a existir com barra final.
+ * Chamadas `fetch('/api/...')` sem barra geram 404; redirecionar com 308 preserva PUT/POST/DELETE.
+ */
+export function shouldRedirectAddTrailingSlashApi(pathname: string): boolean {
+    if (!pathname || pathname === '/') return false;
+    if (!pathname.startsWith('/api')) return false;
+    if (pathname.endsWith('/')) return false;
+    if (pathname.startsWith('/_')) return false;
+    const segments = pathname.split('/').filter(Boolean);
+    const last = segments[segments.length - 1] ?? '';
+    if (last.includes('.') && /\.[a-z0-9]{1,12}$/i.test(last)) return false;
+    return true;
+}
+
 /** URL canônica (apex + path com barra final nas páginas internas). */
 export function buildCanonicalPageUrl(siteBaseOrigin: string, pathname: string): string {
     const origin = ensureApexSiteOrigin(siteBaseOrigin);

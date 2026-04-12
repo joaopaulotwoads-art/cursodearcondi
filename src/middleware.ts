@@ -4,6 +4,7 @@ import {
     readSiteSettings,
     canonicalPathname,
     shouldRedirectAddTrailingSlash,
+    shouldRedirectAddTrailingSlashApi,
 } from './utils/read-site-settings';
 
 const ADMIN_ONLY_PATHS = [
@@ -26,6 +27,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
             dest.hostname = hostname.slice(4);
             return context.redirect(dest.toString(), 301);
         }
+    }
+
+    // 308: /api/rota → /api/rota/ (Astro trailingSlash: 'always'). Preserva método em fetch com body.
+    if (shouldRedirectAddTrailingSlashApi(pathname)) {
+        const u = new URL(context.url.href);
+        u.pathname = canonicalPathname(pathname);
+        return context.redirect(u.toString(), 308);
     }
 
     // Modo blog: /servicos → home em um passo (antes de forçar barra em /servicos/)

@@ -226,7 +226,7 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
             };
             
             const apiSlug = post?.slug ? encodeURIComponent(post.slug) : '';
-            const url = post ? `/api/admin/posts/${apiSlug}` : '/api/admin/posts';
+            const url = post ? `/api/admin/posts/${apiSlug}/` : '/api/admin/posts/';
             const method = post ? 'PUT' : 'POST';
             
             const response = await fetch(url, {
