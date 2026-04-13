@@ -190,6 +190,13 @@ export async function writePost(
             lineWidth: -1, noRefs: true, quotingType: '"',
         });
         const fileContent = `---\n${frontmatter}---\n\n${content || ''}`;
+        if (fileContent.includes('\uFFFD')) {
+            return {
+                ok: false,
+                error:
+                    'O arquivo teria caracteres corrompidos (substituição Unicode). Não salve: use UTF-8 no editor, recarregue o post e evite colar de fontes que quebram acentos (PDF/Word sem colar como texto simples).',
+            };
+        }
         let filename = slugToFilename(slug);
         for (const ext of ['.mdoc', '.md']) {
             const fp = path.join(POSTS_DIR, `${slug}${ext}`);

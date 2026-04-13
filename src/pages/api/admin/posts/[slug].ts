@@ -31,7 +31,7 @@ export const GET: APIRoute = async ({ params }) => {
                 error: 'Slug é obrigatório',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -43,7 +43,7 @@ export const GET: APIRoute = async ({ params }) => {
                 error: 'Post não encontrado',
             }), {
                 status: 404,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -52,7 +52,7 @@ export const GET: APIRoute = async ({ params }) => {
             post,
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao ler post:', error);
@@ -61,7 +61,7 @@ export const GET: APIRoute = async ({ params }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     }
 };
@@ -75,7 +75,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
                     'Ambiente Vercel: configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO (Settings → Environment Variables) e faça redeploy para salvar posts pelo painel.',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
 
@@ -92,7 +92,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
                 error: 'Slug é obrigatório',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -105,7 +105,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
                     error: 'Um post com este slug já existe',
                 }), {
                     status: 400,
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 });
             }
         }
@@ -142,7 +142,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
                 error: wrote.error || 'Erro ao atualizar post',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -152,7 +152,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
             slug: finalSlug,
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao atualizar post:', error);
@@ -161,7 +161,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     }
 };
@@ -176,7 +176,7 @@ export const DELETE: APIRoute = async ({ params }) => {
                 error: 'Slug é obrigatório',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -188,7 +188,7 @@ export const DELETE: APIRoute = async ({ params }) => {
                 error: 'Erro ao deletar post',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -197,7 +197,7 @@ export const DELETE: APIRoute = async ({ params }) => {
             message: 'Post deletado com sucesso',
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao deletar post:', error);
@@ -206,7 +206,7 @@ export const DELETE: APIRoute = async ({ params }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     }
 };

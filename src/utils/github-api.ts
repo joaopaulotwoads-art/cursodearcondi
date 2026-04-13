@@ -39,7 +39,7 @@ function apiUrl(path: string) {
 const headers = () => ({
     Authorization: `Bearer ${TOKEN}`,
     Accept: 'application/vnd.github+json',
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset=utf-8',
     'X-GitHub-Api-Version': '2022-11-28',
 });
 

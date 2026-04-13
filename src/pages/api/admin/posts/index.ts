@@ -36,7 +36,7 @@ export const GET: APIRoute = async () => {
             count: sortedPosts.length,
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao listar posts:', error);
@@ -45,7 +45,7 @@ export const GET: APIRoute = async () => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     }
 };
@@ -59,7 +59,7 @@ export const POST: APIRoute = async ({ request }) => {
                     'Ambiente Vercel: configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO (Settings → Environment Variables) e faça redeploy para salvar posts pelo painel.',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
 
@@ -74,7 +74,7 @@ export const POST: APIRoute = async ({ request }) => {
                 error: 'Título e slug são obrigatórios',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -86,7 +86,7 @@ export const POST: APIRoute = async ({ request }) => {
                 error: 'Um post com este slug já existe',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -112,7 +112,7 @@ export const POST: APIRoute = async ({ request }) => {
                 error: wrote.error || 'Erro ao criar post',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
             });
         }
         
@@ -122,7 +122,7 @@ export const POST: APIRoute = async ({ request }) => {
             slug: normalizedSlug,
         }), {
             status: 201,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao criar post:', error);
@@ -131,7 +131,7 @@ export const POST: APIRoute = async ({ request }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json; charset=utf-8' },
         });
     }
 };

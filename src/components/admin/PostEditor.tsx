@@ -232,7 +232,7 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
             const response = await fetch(url, {
                 method,
                 credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 body: JSON.stringify({
                     ...postData,
                     newSlug: postData.slug !== post?.slug ? postData.slug : undefined,

@@ -1,0 +1,16 @@
+# Normaliza fim de linha e trata conteúdo como texto UTF-8 no Git
+* text=auto eol=lf
+
+*.mdoc text eol=lf
+*.md text eol=lf
+*.mdx text eol=lf
+
+# Binários explícitos
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
