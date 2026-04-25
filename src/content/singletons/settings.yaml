@@ -5,7 +5,7 @@ siteMode: blog
 aiProvider: openai
 canonicalUrl: https://cursodearcondicionado.com.br
 companyPhone: ""
-companyWhatsapp: ""
+companyWhatsapp: "14996973456"
 generateSitemap: true
 generateRobots: true
 robotsDisallow:

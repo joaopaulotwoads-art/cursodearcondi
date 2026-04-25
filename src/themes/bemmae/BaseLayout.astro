@@ -59,7 +59,7 @@ const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
 });
 ---
 <!DOCTYPE html>
-<html lang="pt-BR" class="bemmae-root">
+<html lang="pt-BR" class="bemmae-root overflow-x-hidden">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -90,9 +90,9 @@ const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
   {ogImageAbs && <meta name="twitter:image" content={ogImageAbs} />}
   <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
 </head>
-<body class="bemmae-scope bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
+<body class="bemmae-scope min-w-0 overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
   <Header siteName={siteName} logoSrc={logoSrc} nav={nav} />
-  <main><slot /></main>
+  <main class="min-w-0"><slot /></main>
   <Footer siteName={siteName} logoSrc={logoSrc} footerNav={footerNav} contentThemeId={contentThemeId} />
 </body>
 </html>

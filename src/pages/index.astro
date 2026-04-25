@@ -7,9 +7,11 @@ import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 import { totalLessonCount } from '../data/curriculum-cursodear';
 import CurriculumAccordion from '../components/cursodear/CurriculumAccordion.astro';
 
-const pageTitle = 'Formação Técnica em Ar Condicionado | Matrículas Abertas';
+// Meta SEO (SERP): palavras-chave fortes no título e na descrição.
+const pageTitle =
+  'Curso de Ar Condicionado Online | Instalação, Split, Inverter e Certificado';
 const pageDescription =
-  'Capacitação técnica EAD em instalação, manutenção e limpeza de ar condicionado, com tecnologia Inverter, certificado e suporte.';
+  'Instalação e manutenção de ar condicionado split, Inverter e refrigeração. Curso online, certificado, +160 aulas em vídeo, EAD e acesso vitalício.';
 const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
@@ -34,14 +36,14 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
   footerNav={beFootNav}
   contentThemeId="bemmae"
 >
-    <main class="bg-slate-50 text-slate-900 antialiased">
-      <section class="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-        <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-12">
-          <div>
-            <p class="inline-flex rounded-full border border-slate-300 bg-slate-100 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
+    <div class="min-w-0 bg-slate-50 text-slate-900 antialiased">
+      <section class="bg-white px-3 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-20">
+        <div class="mx-auto grid min-w-0 max-w-7xl items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
+          <div class="min-w-0">
+            <p class="inline-flex max-w-full flex-wrap rounded-full border border-slate-300 bg-slate-100 px-3 py-1.5 text-left text-[0.65rem] font-semibold uppercase leading-snug tracking-wide text-slate-700 sm:px-4 sm:text-xs">
               Formação Técnica Profissional · Ensino a Distância
             </p>
-            <h1 class="mt-5 text-balance text-3xl font-black leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
+            <h1 class="mt-5 break-words text-balance text-3xl font-black leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
               Formação Completa em Manutenção e Instalação de Ar Condicionado
             </h1>
             <p class="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
@@ -52,7 +54,7 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
               desejam atualização técnica e melhor posicionamento no mercado.
             </p>
 
-            <dl class="mt-8 grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm sm:grid-cols-3">
+            <dl class="mt-8 grid min-w-0 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm sm:grid-cols-3 sm:p-5">
               <div>
                 <dt class="text-slate-500">Modalidade</dt>
                 <dd class="mt-1 font-bold text-slate-900">100% Online (EAD)</dd>
@@ -72,17 +74,17 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
               target="_blank"
               rel="nofollow noopener noreferrer"
               aria-label="Fazer matrícula agora no curso (abre a página de pagamento na Hotmart em nova aba)"
-              class="mt-8 inline-flex min-h-[52px] items-center justify-center rounded-lg bg-blue-900 px-8 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800"
+              class="mt-8 flex min-h-[52px] w-full max-w-full items-center justify-center rounded-lg bg-blue-900 px-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800 sm:inline-flex sm:w-auto sm:px-8"
             >
               Fazer Matrícula Agora
             </a>
           </div>
 
-          <div class="rounded-2xl border border-slate-200 bg-slate-100 p-4 shadow-sm">
+          <div class="min-w-0 rounded-2xl border border-slate-200 bg-slate-100 p-3 shadow-sm sm:p-4">
             <img
               src="/images/lp/inverter-board.png"
               alt="Técnico realizando manutenção em ar-condicionado"
-              class="aspect-[4/3] w-full rounded-xl object-cover"
+              class="aspect-[4/3] h-auto w-full max-w-full rounded-xl object-cover"
               loading="eager"
               decoding="async"
             />
@@ -90,10 +92,10 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
         </div>
       </section>
 
-      <section class="border-y border-slate-200 bg-slate-100/70 px-4 py-14 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-7xl">
-          <div class="grid gap-10 lg:grid-cols-2">
-            <div>
+      <section class="border-y border-slate-200 bg-slate-100/70 px-3 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <div class="mx-auto min-w-0 max-w-7xl">
+          <div class="grid min-w-0 gap-8 sm:gap-10 lg:grid-cols-2">
+            <div class="min-w-0">
               <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Corpo docente e metodologia</h2>
               <p class="mt-4 text-slate-700 leading-relaxed">
                 Nossa metodologia foi estruturada para combinar base conceitual sólida com execução prática passo a
@@ -105,7 +107,7 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
                 respeitando o ritmo de quem está iniciando e de quem busca atualização profissional.
               </p>
             </div>
-            <div class="rounded-xl border border-slate-200 bg-white p-6">
+            <div class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-6">
               <img
                 src="/images/lp/eletrica-aplicada.png"
                 alt="Instrumentos de medição elétrica aplicados à refrigeração"
@@ -127,9 +129,9 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
         </div>
       </section>
 
-      <section class="bg-white px-4 py-16 sm:px-6 lg:px-8">
-        <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
-          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+      <section class="bg-white px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div class="mx-auto grid min-w-0 max-w-7xl gap-8 sm:gap-10 lg:grid-cols-2">
+          <div class="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
             <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Quem é o professor</h2>
             <p class="mt-4 text-slate-700 leading-relaxed">
               <strong>Professor Leandro Moraes</strong> atua há mais de 20 anos como técnico em refrigeração. É
@@ -141,7 +143,7 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
               compartilhando dicas e macetes na área de refrigeração.
             </p>
           </div>
-          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <div class="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
             <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Benefícios do curso</h2>
             <ul class="mt-4 space-y-3 text-sm text-slate-700">
               <li class="flex gap-2"><span class="text-blue-700">•</span><span>Acesso vitalício com pagamento único.</span></li>
@@ -155,8 +157,8 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
         </div>
       </section>
 
-      <section id="grade-curricular" class="scroll-mt-24 bg-white px-4 py-16 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-4xl">
+      <section id="grade-curricular" class="scroll-mt-24 bg-white px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div class="mx-auto min-w-0 max-w-4xl">
           <h2 class="text-center text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Grade curricular</h2>
           <p class="mx-auto mt-4 max-w-3xl text-center text-slate-700">
             15 módulos com aulas em vídeo — conteúdo alinhado ao que você acompanha na plataforma, do básico à tecnologia
@@ -172,9 +174,9 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
         </div>
       </section>
 
-      <section id="certificacao" class="scroll-mt-24 border-y border-slate-200 bg-slate-100 px-4 py-16 sm:px-6 lg:px-8">
-        <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2">
-          <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <section id="certificacao" class="scroll-mt-24 border-y border-slate-200 bg-slate-100 px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div class="mx-auto grid min-w-0 max-w-7xl items-center gap-8 sm:gap-10 lg:grid-cols-2">
+          <div class="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
             <img
               src="/images/lp/certificado.png"
               alt="Exemplo de certificado digital do curso"
@@ -183,8 +185,8 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
               decoding="async"
             />
           </div>
-          <div>
-            <h2 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Avaliação e Certificação</h2>
+          <div class="min-w-0">
+            <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">Avaliação e Certificação</h2>
             <p class="mt-5 text-slate-700 leading-relaxed">
               Ao concluir a grade curricular, o aluno recebe a certificação técnica com validade nacional, fundamental para atuação no mercado e assinatura de serviços.
             </p>
@@ -196,19 +198,19 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
         </div>
       </section>
 
-      <section class="bg-white px-4 py-14 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-7xl">
+      <section class="bg-white px-3 py-12 sm:px-6 sm:py-14 lg:px-8">
+        <div class="mx-auto min-w-0 max-w-7xl">
           <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Bônus e suporte acadêmico</h2>
-          <div class="mt-6 grid gap-5 md:grid-cols-3">
-            <article class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+          <div class="mt-6 grid min-w-0 grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3">
+            <article class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
               <h3 class="font-bold text-slate-900">Curso extra de Split Inverter</h3>
               <p class="mt-2 text-sm text-slate-700">Conteúdo adicional para aprofundar tecnologia Inverter sem custo extra.</p>
             </article>
-            <article class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+            <article class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
               <h3 class="font-bold text-slate-900">Grupo de alunos</h3>
               <p class="mt-2 text-sm text-slate-700">Comunidade para troca de experiências, networking técnico e apoio entre alunos.</p>
             </article>
-            <article class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+            <article class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
               <img
                 src="/images/lp/whatsapp-suporte.png"
                 alt="Suporte acadêmico via WhatsApp"
@@ -223,40 +225,40 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
         </div>
       </section>
 
-      <section id="matricula" class="scroll-mt-24 bg-white px-4 py-16 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-5xl">
-          <h2 class="text-center text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Investimento e Matrícula</h2>
+      <section id="matricula" class="scroll-mt-24 bg-white px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div class="mx-auto min-w-0 max-w-5xl">
+          <h2 class="text-center text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">Investimento e Matrícula</h2>
           <p class="mx-auto mt-4 max-w-3xl text-center text-slate-700">
             Estrutura financeira transparente, com opção de pagamento parcelado.
           </p>
 
-          <div class="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
-            <div class="grid gap-0 md:grid-cols-3">
-              <div class="border-b border-slate-200 p-6 md:border-b-0 md:border-r">
+          <div class="mt-10 min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
+            <div class="grid min-w-0 gap-0 md:grid-cols-3">
+              <div class="min-w-0 border-b border-slate-200 p-4 sm:p-6 md:border-b-0 md:border-r">
                 <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Taxa única de matrícula</p>
                 <p class="mt-3 text-2xl font-black text-slate-900">R$ 0,00</p>
                 <p class="mt-2 text-sm text-slate-600">Valor aplicado no ato da inscrição.</p>
               </div>
-              <div class="border-b border-slate-200 p-6 md:border-b-0 md:border-r">
+              <div class="min-w-0 border-b border-slate-200 p-4 sm:p-6 md:border-b-0 md:border-r">
                 <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Mensalidades</p>
                 <p class="mt-1 text-sm text-slate-500 line-through">De R$ 597,00</p>
-                <p class="mt-2 text-2xl font-black text-slate-900">12x de R$ 20,37</p>
+                <p class="mt-2 break-words text-xl font-black text-slate-900 sm:text-2xl">12x de R$ 20,37</p>
                 <p class="mt-1 text-sm font-semibold text-slate-800">ou R$ 197,00 à vista</p>
                 <p class="mt-2 text-sm text-slate-600">Acesso vitalício, +160 aulas e certificado de 30h.</p>
               </div>
-              <div class="p-6">
+              <div class="min-w-0 p-4 sm:p-6">
                 <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Formas de pagamento</p>
                 <p class="mt-3 text-lg font-bold text-slate-900">Pix, Cartão e Boleto</p>
                 <p class="mt-2 text-sm text-slate-600">Processamento seguro em ambiente criptografado.</p>
               </div>
             </div>
-            <div class="border-t border-slate-200 bg-white p-6 text-center">
+            <div class="border-t border-slate-200 bg-white p-4 text-center sm:p-6">
               <a
                 href={hotmartAffiliateUrl}
                 target="_blank"
                 rel="nofollow noopener noreferrer"
                 aria-label="Realizar matrícula no curso (abre a página de pagamento na Hotmart em nova aba)"
-                class="inline-flex min-h-[52px] items-center justify-center rounded-lg bg-blue-900 px-8 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800"
+                class="flex min-h-[52px] w-full max-w-full items-center justify-center rounded-lg bg-blue-900 px-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800 sm:inline-flex sm:w-auto sm:px-8"
               >
                 Realizar Matrícula
               </a>
@@ -275,28 +277,28 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
         </div>
       </section>
 
-      <section class="border-t border-slate-200 bg-slate-100/70 px-4 py-16 sm:px-6 lg:px-8">
-        <div class="mx-auto max-w-7xl">
+      <section class="border-t border-slate-200 bg-slate-100/70 px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
+        <div class="mx-auto min-w-0 max-w-7xl">
           <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Dúvidas recorrentes</h2>
-          <div class="mt-6 grid gap-4 md:grid-cols-2">
-            <details class="rounded-xl border border-slate-200 bg-white p-5" open>
-              <summary class="cursor-pointer list-none font-bold text-slate-900">O curso é online?</summary>
+          <div class="mt-6 grid min-w-0 grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
+            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5" open>
+              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">O curso é online?</summary>
               <p class="mt-2 text-sm text-slate-700">Sim. O curso é 100% online e pode ser assistido pelo celular ou computador.</p>
             </details>
-            <details class="rounded-xl border border-slate-200 bg-white p-5">
-              <summary class="cursor-pointer list-none font-bold text-slate-900">Como recebo o acesso?</summary>
+            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">Como recebo o acesso?</summary>
               <p class="mt-2 text-sm text-slate-700">Após o pagamento, o acesso é enviado por e-mail na plataforma Hotmart.</p>
             </details>
-            <details class="rounded-xl border border-slate-200 bg-white p-5">
-              <summary class="cursor-pointer list-none font-bold text-slate-900">Por quanto tempo terei acesso?</summary>
+            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">Por quanto tempo terei acesso?</summary>
               <p class="mt-2 text-sm text-slate-700">O acesso é vitalício para revisar as aulas quando desejar.</p>
             </details>
-            <details class="rounded-xl border border-slate-200 bg-white p-5">
-              <summary class="cursor-pointer list-none font-bold text-slate-900">Existe suporte técnico durante o curso?</summary>
+            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">Existe suporte técnico durante o curso?</summary>
               <p class="mt-2 text-sm text-slate-700">Sim. Há canal de suporte para acompanhamento e resolução de dúvidas.</p>
             </details>
           </div>
         </div>
       </section>
-    </main>
+    </div>
 </BaseLayoutBemmae>

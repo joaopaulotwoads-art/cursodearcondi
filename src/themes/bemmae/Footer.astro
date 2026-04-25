@@ -35,6 +35,7 @@ const city = String(footer.city || '').trim();
 const state = String(footer.state || '').trim();
 const postalCode = String(footer.postalCode || '').trim();
 const country = String(footer.country || 'Brasil').trim();
+const openingHours = String((footer as Record<string, string>).openingHours || '').trim();
 
 const email =
   String(
@@ -62,6 +63,7 @@ const orgJsonLd: Record<string, unknown> = {
 
 if (email) (orgJsonLd as any).email = email;
 if (phoneDigits) (orgJsonLd as any).telephone = `+55${phoneDigits}`;
+else if (waDigits) (orgJsonLd as any).telephone = `+55${waDigits}`;
 
 if (hasPostalAddress) {
   (orgJsonLd as any).address = {
@@ -78,10 +80,10 @@ const sameAsUrls = socialLinks.map((s) => String(s.url || '').trim()).filter(Boo
 if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
 ---
 
-<footer class="border-t border-[var(--color-border)] mt-16 bg-[var(--color-bg)]">
-  <div class="max-w-5xl mx-auto px-4 py-12">
-    <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
-      <div class="lg:col-span-1">
+<footer class="mt-16 min-w-0 overflow-x-hidden border-t border-[var(--color-border)] bg-[var(--color-bg)]">
+  <div class="mx-auto max-w-5xl px-3 py-10 sm:px-4 sm:py-12">
+    <div class="grid min-w-0 grid-cols-1 gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-4">
+      <div class="min-w-0 lg:col-span-1">
         {logoSrc ? (
           <a href="/" class="inline-flex items-center mb-2 w-full max-w-2xl" aria-label={siteName}>
             <img
@@ -126,7 +128,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
         )}
       </div>
 
-      <div>
+      <div class="min-w-0">
         <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-4">Navegação</div>
         <nav class="flex flex-col gap-2" aria-label="Links do rodapé">
           {footerNav.map((item) => (
@@ -140,7 +142,7 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
         </nav>
       </div>
 
-      <div>
+      <div class="min-w-0">
         <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-4">Legal</div>
         <nav class="flex flex-col gap-2" aria-label="Políticas e termos">
           {legalLinks.length > 0 ? (
@@ -158,9 +160,9 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
         </nav>
       </div>
 
-      <div>
+      <div class="min-w-0">
         <div class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-4">Contato</div>
-        <address class="not-italic text-sm text-[var(--color-muted)] space-y-2">
+        <address class="not-italic space-y-2 break-words text-sm text-[var(--color-muted)]">
           {orgLegalName && <p class="text-[var(--color-text)] font-medium">{orgLegalName}</p>}
           {(streetAddress || addressLocality || postalCode) && (
             <p class="leading-relaxed">
@@ -175,21 +177,6 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
               {country}
             </p>
           )}
-          {phoneDisplay && (
-            <p>
-              <a href={telHref} class="font-medium text-[var(--color-link)] hover:underline">
-                {phoneDisplay}
-              </a>
-            </p>
-          )}
-          {waDisplay && waDigits !== phoneDigits && (
-            <p>
-              WhatsApp:{' '}
-              <a href={waHref} target="_blank" rel="noopener noreferrer" class="font-medium text-[var(--color-link)] hover:underline">
-                {waDisplay}
-              </a>
-            </p>
-          )}
           {email && (
             <p>
               <a href={`mailto:${email}`} class="font-medium text-[var(--color-link)] hover:underline break-all">
@@ -197,6 +184,22 @@ if (sameAsUrls.length) (orgJsonLd as any).sameAs = sameAsUrls;
               </a>
             </p>
           )}
+          {waDisplay && (
+            <p>
+              WhatsApp:{' '}
+              <a href={waHref} target="_blank" rel="noopener noreferrer" class="font-medium text-[var(--color-link)] hover:underline">
+                {waDisplay}
+              </a>
+            </p>
+          )}
+          {phoneDisplay && phoneDigits !== waDigits && (
+            <p>
+              <a href={telHref} class="font-medium text-[var(--color-link)] hover:underline">
+                {phoneDisplay}
+              </a>
+            </p>
+          )}
+          {openingHours && <p class="leading-relaxed">{openingHours}</p>}
           {!streetAddress && !phoneDisplay && !email && (
             <p class="text-xs">Preencha endereço e contato no rodapé (footer.yaml) e em Configurações → Contato.</p>
           )}

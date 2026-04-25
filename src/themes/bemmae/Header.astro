@@ -9,16 +9,16 @@ interface Props {
 
 const { siteName, nav, logoSrc } = Astro.props;
 ---
-<header class="bg-[#faf7f5] border-b border-stone-200/90 sticky top-0 z-50 shadow-[0_1px_0_rgba(0,0,0,0.04)]">
-  <div class="max-w-4xl mx-auto px-4 py-2.5 sm:py-3 flex items-center justify-between gap-3 md:gap-5">
-    <a href="/" class="flex items-center min-h-[40px] shrink-0" aria-label={siteName}>
+<header class="min-w-0 overflow-x-hidden bg-[#faf7f5] border-b border-stone-200/90 sticky top-0 z-50 shadow-[0_1px_0_rgba(0,0,0,0.04)]">
+  <div class="mx-auto flex min-w-0 max-w-4xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-5 sm:px-4 sm:py-3">
+    <a href="/" class="flex min-h-[40px] min-w-0 max-w-[72%] shrink items-center sm:max-w-none" aria-label={siteName}>
       {logoSrc ? (
         <img
           src={logoSrc}
           alt=""
           width="480"
           height="108"
-          class="h-9 w-auto sm:h-10 md:h-11 max-w-[min(88vw,20rem)] sm:max-w-[min(85vw,22rem)] object-contain object-left"
+          class="h-8 max-h-10 w-auto max-w-full object-contain object-left sm:h-10 md:h-11"
           decoding="async"
           fetchpriority="low"
         />
@@ -40,7 +40,7 @@ const { siteName, nav, logoSrc } = Astro.props;
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
     </button>
   </div>
-  <div id="bem-mobile-menu" class="md:hidden hidden border-t border-stone-200 bg-[#f5f0ed] px-4 py-3">
+  <div id="bem-mobile-menu" class="hidden border-t border-stone-200 bg-[#f5f0ed] px-3 py-3 md:hidden">
     <nav class="flex flex-col gap-1">
       {nav.map((item) => (
         <a
