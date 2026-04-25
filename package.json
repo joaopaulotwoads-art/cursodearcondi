@@ -6,12 +6,14 @@
     "dev": "ulimit -n 65536 2>/dev/null || true; bun run astro dev",
     "prebuild": "bun run scripts/ensure-workflow.ts",
     "build": "bun run astro build",
+    "build:force": "astro build --force",
     "preview": "bun run astro preview",
     "astro": "astro",
     "deploy": "vercel --prod",
     "import:bemmae-posts": "bun run scripts/import-bemmae-posts.mjs",
     "list:content-images": "bun run scripts/list-bemmae-content-images.mjs",
     "favicons": "node scripts/generate-favicons.mjs",
+    "favicons:cursodear": "node scripts/generate-cursodear-favicons.mjs",
     "logo:transparent": "node scripts/transparent-bemmae-logo.mjs"
   },
   "dependencies": {

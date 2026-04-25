@@ -1,44 +1,103 @@
-heroKicker: Bem-vinda
-heroTitle: Maternidade Real e com Leveza
-heroSubtitle: Um espaço para rotina, alimentação e saúde com simplicidade e afeto.
-metaTitle: "Bem Mãe Dicas Reais de Maternidade e Cuidados com o Bebê"
-metaDescription: "Bem Mãe O guia para facilitar sua rotina com o bebê. Dicas de alimentação, saúde, melhores produtos e cuidados práticos para mães que buscam o melhor."
-heroBgImage: /images/bemmae/hero-home.png
-heroCtaPrimaryText: Ver artigos
-heroCtaPrimaryHref: /blog
-heroCtaSecondaryText: Quem somos
-heroCtaSecondaryHref: /sobre
-aboutTitle: Sobre nós
+heroKicker: Curso online · cursodearcondicionado.com.br
+heroTitle: Domine instalação e manutenção de ar condicionado split
+heroSubtitle: Do essencial ao atendimento profissional — ferramentas, segurança, vácuo, linhas frigoríficas e diagnóstico — com linguagem clara para quem quer trabalhar na área ou abrir uma nova fonte de renda.
+metaTitle: "Curso de Ar Condicionado | Inscrições — cursodearcondicionado.com.br"
+metaDescription: "Curso de instalação e manutenção de ar condicionado split. Aprenda na prática com módulos objetivos. Inscreva-se em cursodearcondicionado.com.br"
+heroBgImage: https://images.unsplash.com/photo-1621905251918-48416bd8575a?auto=format&fit=crop&w=1600&q=80
+heroCtaPrimaryText: Quero me inscrever
+heroCtaPrimaryHref: "#oferta"
+heroCtaSecondaryText: Tirar dúvidas
+heroCtaSecondaryHref: /contato
+aboutTitle: Por que investir agora
 aboutText: |-
-  O Bem Mãe é um espaço feito para mães e famílias que buscam informação de verdade, sem julgamento e com linguagem acessível.
+  A busca por “curso de ar condicionado” só cresce: quem sabe instalar e manter split atende uma demanda constante em residências e comércios.
 
-  Falamos de rotina, alimentação, saúde e enxoval com o pé no chão, sempre lembrando que cada família tem o seu ritmo.
-aboutImage: https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=960&q=80
-aboutCtaText: Saiba mais sobre o projeto
-aboutCtaHref: /sobre
-categoriesSectionTitle: O que você encontra aqui
+  Este produto foi estruturado para você sair do zero com segurança e método — sem promessas milagrosas: exige estudo e prática. Ajuste este texto no painel com sua carga horária real, certificado e forma de acesso (plataforma, bônus, suporte).
+
+  Use o blog para SEO e remarketing; a home foca em converter visitantes do domínio exato em alunos.
+aboutImage: https://images.unsplash.com/photo-1581094794329-c8112c7e1679?auto=format&fit=crop&w=960&q=80
+aboutCtaText: Falar com a equipe
+aboutCtaHref: /contato
+categoriesSectionTitle: Três pilares do método
+categoriesSectionSubtitle: O que o aluno desenvolve ao longo do curso — alinhado ao que o mercado cobra de um técnico de ar condicionado.
 categoryCards:
-  - href: /blog
-    icon: ☀️
-    title: Rotina
-    description: Organização do dia a dia com os pequenos.
-  - href: /blog
-    icon: 🥗
-    title: Alimentação
-    description: Receitas e dicas para a família.
-  - href: /blog
-    icon: 💚
-    title: Saúde
-    description: Cuidados e bem-estar para mães e filhos.
-latestPostsTitle: Últimos artigos
-latestPostsSubtitle: Guias, comparativos e respostas para a rotina com o bebê, escolhidos para você.
-latestPostsCtaText: Ver todos os artigos
+  - href: "#oferta"
+    icon: 🔧
+    title: Instalação profissional
+    description: Linha de líquido e sucção, vácuo, eletroduto, dreno e boas práticas na montagem do split.
+  - href: "#oferta"
+    icon: ⚡
+    title: Manutenção e diagnóstico
+    description: Sintomas comuns, testes com multímetro, pressões e checklist para não “trocar peça à toa”.
+  - href: "#oferta"
+    icon: 🛡️
+    title: Segurança e mercado
+    description: Normas básicas, EPIs, conversa com cliente e caminho para prestar serviço com seriedade.
+showLatestPostsOnHome: nao
+showNewsletterOnHome: nao
+latestPostsTitle: Artigos do blog
+latestPostsSubtitle: Conteúdo gratuito para SEO e autoridade.
+latestPostsCtaText: Ver blog
 homeHighlights:
-  - Dicas práticas para o dia a dia
-  - Conteúdo pensado com calma
-  - Maternidade sem julgamento
-emptyLatestText: Nenhum artigo publicado ainda.
-newsletterTitle: Newsletter
-newsletterDescription: Receba dicas e novidades no seu e-mail, sem spam.
+  - Conteúdo gravado para assistir no seu ritmo
+  - Foco em split residencial e comercial leve
+  - Material organizado em módulos — do básico ao diagnóstico
+  - Substitua pelo seu certificado, carga horária e garantia reais
+emptyLatestText: Em breve artigos no blog.
+newsletterTitle: Receba novidades
+newsletterDescription: Quando ativar o newsletter no painel, o bloco aparece no final da home.
 newsletterPlaceholder: seu@email.com
-newsletterButtonText: Inscrever
+newsletterButtonText: Quero receber
+landingOfferBadge: Oferta · ajuste valores no painel
+landingOfferTitle: Garanta sua vaga no curso completo
+landingOfferSubtitle: Domínio exato no Google combina com uma página única de venda. Troque este texto pela sua promessa principal (ex.: acesso imediato, atualizações, grupo de alunos).
+landingPriceLine: "12x de R$ XX,XX — ou à vista por R$ XXX"
+landingOfferNote: Substitua pelos valores reais e pelo link do checkout (Hotmart, Kiwify, Eduzz) ou pelo WhatsApp abaixo. Você também pode fixar um número em Configurações → Contato.
+landingOfferCtaText: Quero me inscrever agora
+landingOfferCtaHref: https://wa.me/5511999999999?text=Quero%20me%20inscrever%20no%20curso%20de%20ar%20condicionado
+landingIncludedTitle: O que está incluso
+landingIncludedItems:
+  - icon: 🎬
+    title: Aulas em vídeo
+    text: Módulos organizados do fundamentos ao diagnóstico em campo.
+  - icon: 📄
+    title: Materiais de apoio
+    text: Listas, checklists e referências para consultar depois da aula.
+  - icon: 💬
+    title: Suporte por dúvidas
+    text: Ajuste aqui o que você oferece (grupo, e-mail, horário de plantão).
+  - icon: 🏅
+    title: Certificado
+    text: Descreva carga horária e modelo do certificado se aplicável.
+landingModulesTitle: Programa do curso
+landingModules:
+  - title: "Módulo 1 — Fundamentos e segurança"
+    text: |-
+      Conceitos de refrigeração, tipos de sistema, EPIs, ferramentas essenciais e cuidados com eletricidade.
+  - title: "Módulo 2 — Instalação do split"
+    text: |-
+      Escolha do ponto, furação, dreno, eletroduto, fixação, linhas e teste de estanqueidade.
+  - title: "Módulo 3 — Vácuo e partida"
+    text: |-
+      Bomba de vácuo, tempo mínimo, nitrogênio quando necessário, liberação de refrigerante e partida segura.
+  - title: "Módulo 4 — Manutenção e diagnóstico"
+    text: |-
+      Sintomas, superaquecimento, sub-resfriamento na prática, limpeza, recarga consciente e atendimento ao cliente.
+landingFaqTitle: Dúvidas frequentes
+landingFaq:
+  - q: Preciso ter experiência com elétrica ou refrigeração?
+    a: |-
+      O curso parte do básico, mas trabalhar com energia e ferramentas exige cuidado. Siga sempre normas e legislação da sua região.
+  - q: O certificado me habilita legalmente?
+    a: |-
+      Depende da legislação municipal/estadual e do tipo de serviço. Ajuste esta resposta com orientação jurídica adequada ao seu produto.
+  - q: Como recebo o acesso após pagar?
+    a: |-
+      Descreva seu fluxo (e-mail com login, liberação manual, plataforma etc.).
+  - q: Posso assistir no celular?
+    a: |-
+      Sim, na maioria das plataformas. Confirme conforme a ferramenta que você usa para hospedar as aulas.
+landingClosingTitle: Pronto para começar sua jornada técnica?
+landingClosingText: Clique abaixo e fale direto com a gente pelo WhatsApp — ou use o link do checkout quando configurar.
+landingClosingCtaText: Chamar no WhatsApp
+landingClosingCtaHref: https://wa.me/5511999999999?text=Quero%20o%20curso%20de%20ar%20condicionado

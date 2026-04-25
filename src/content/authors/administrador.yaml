@@ -1,0 +1,9 @@
+name: Administrador
+slug: administrador
+role: Curso de Ar Condicionado
+avatar: /images/bemmae/post-placeholder.svg
+bio: Equipe editorial do cursodearcondicionado.com.br. Edite perfil e senha no painel em Autores.
+email: admin@admin.com
+adminRole: admin
+# Senha inicial sugerida: admin123 (hash SHA-256 de "cnx:" + senha)
+adminPasswordHash: efe05eaaa707c5a137ed3572b683806d67d9693893e575eee8aeec22a490f5cd

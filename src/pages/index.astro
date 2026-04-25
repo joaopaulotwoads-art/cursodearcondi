@@ -1,88 +1,302 @@
 ---
-/**
- * index.astro — Página inicial
- *
- * Renderiza condicionalmente:
- *   siteMode === 'local' → LocalHome (modo rank-and-rent)
- *   siteMode === 'blog' + activeTheme bemmae → tema Bem Mãe
- *   siteMode === 'blog'  → ClassicHome
- */
-import { getCollection, getEntry } from 'astro:content';
-import { readSingleton } from '../utils/singleton-utils';
-import ClassicHome from '../themes/classic/Home.astro';
-import LocalHome   from '../themes/local/Home.astro';
+import { getEntry } from 'astro:content';
 import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
-import BemMaeHome from '../themes/bemmae/Home.astro';
+import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+import { totalLessonCount } from '../data/curriculum-cursodear';
+import CurriculumAccordion from '../components/cursodear/CurriculumAccordion.astro';
+
+const pageTitle = 'Formação Técnica em Ar Condicionado | Matrículas Abertas';
+const pageDescription =
+  'Capacitação técnica EAD em instalação, manutenção e limpeza de ar condicionado, com tecnologia Inverter, certificado e suporte.';
+const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
-const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
-
-const localData = siteMode === 'local'
-    ? await readSingleton('home', 'local') || {}
-    : null;
-
-const homeThemeId = siteMode !== 'local' ? (activeTheme === 'bemmae' ? 'bemmae' : 'classic') : 'classic';
-const home = siteMode !== 'local'
-    ? await readSingleton('home', homeThemeId) || {}
-    : null;
-
-const latestPosts = siteMode !== 'local'
-    ? await getCollection('posts').then((posts: any[]) =>
-        posts
-            .filter((p: any) => p.data.publishedDate)
-            .sort((a: any, b: any) => new Date(b.data.publishedDate).getTime() - new Date(a.data.publishedDate).getTime())
-            .slice(0, 9)
-      )
-    : [];
-
-const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as import('../utils/blog-permalink').BlogPermalinkStructure) || 'postname';
-const blogUrlPrefix = (settings?.data?.blogUrlPrefix as import('../utils/blog-permalink').BlogUrlPrefix) || 'blog';
-
-const siteName = settings?.data?.siteName || 'Site';
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
-const bemmaeMenu = activeTheme === 'bemmae' && siteMode !== 'local'
-    ? await readSingleton('menu', 'bemmae')
-    : null;
-const bemmaeFooter = activeTheme === 'bemmae' && siteMode !== 'local'
-    ? await readSingleton('footer', 'bemmae')
-    : null;
-const bemmaeNav = bemmaeMenu ? navFromMenu(bemmaeMenu) : [];
-const bemmaeFooterNav = bemmaeFooter ? footerNavFromSingleton(bemmaeFooter) : [];
-const homeRec = (home || {}) as Record<string, string>;
-const bemmaeHomeTitle =
-    String(homeRec.metaTitle || '').trim() ||
-    String(homeRec.heroTitle || '').trim() ||
-    siteName;
-const bemmaeHomeDescription =
-    String(homeRec.metaDescription || '').trim() ||
-    String(homeRec.heroSubtitle || '').trim() ||
-    '';
+const beMenu = (await readSingleton('menu', 'bemmae')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'bemmae')) as Record<string, unknown> | null;
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 ---
 
-{siteMode === 'local' ? (
-    <LocalHome homeData={localData} />
-) : activeTheme === 'bemmae' ? (
-    <BaseLayoutBemmae
-        title={bemmaeHomeTitle}
-        description={bemmaeHomeDescription}
-        siteName={(bemmaeMenu as any)?.logoText || siteName}
-        logoSrc={logoSrcFromMenu(bemmaeMenu as Record<string, unknown>)}
-        siteUrl={siteUrl}
-        nav={bemmaeNav}
-        footerNav={bemmaeFooterNav}
-        contentThemeId="bemmae"
-    >
-        <BemMaeHome
-            homeData={home || {}}
-            latestPosts={latestPosts}
-            blogPermalinkStructure={blogPermalinkStructure}
-            blogUrlPrefix={blogUrlPrefix}
-        />
-    </BaseLayoutBemmae>
-) : (
-    <ClassicHome homeData={home} themeId="classic" latestPosts={latestPosts} blogPermalinkStructure={blogPermalinkStructure} blogUrlPrefix={blogUrlPrefix} />
-)}
+<BaseLayoutBemmae
+  title={pageTitle}
+  description={pageDescription}
+  siteName={siteNameForLayout}
+  logoSrc={logoForLayout}
+  siteUrl={siteUrl}
+  nav={beNav}
+  footerNav={beFootNav}
+  contentThemeId="bemmae"
+>
+    <main class="bg-slate-50 text-slate-900 antialiased">
+      <section class="bg-white px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+        <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2 lg:gap-12">
+          <div>
+            <p class="inline-flex rounded-full border border-slate-300 bg-slate-100 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-slate-700">
+              Formação Técnica Profissional · Ensino a Distância
+            </p>
+            <h1 class="mt-5 text-balance text-3xl font-black leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
+              Formação Completa em Manutenção e Instalação de Ar Condicionado
+            </h1>
+            <p class="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
+              Capacitação técnica EAD do zero ao avançado. Inclui especialização em Tecnologia Inverter.
+            </p>
+            <p class="mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-slate-600 sm:text-base">
+              Aprenda manutenção, instalação e limpeza com metodologia prática para iniciantes e profissionais que
+              desejam atualização técnica e melhor posicionamento no mercado.
+            </p>
+
+            <dl class="mt-8 grid gap-3 rounded-xl border border-slate-200 bg-slate-50 p-5 text-sm sm:grid-cols-3">
+              <div>
+                <dt class="text-slate-500">Modalidade</dt>
+                <dd class="mt-1 font-bold text-slate-900">100% Online (EAD)</dd>
+              </div>
+              <div>
+                <dt class="text-slate-500">Carga Horária</dt>
+                <dd class="mt-1 font-bold text-slate-900">30 horas (+160 aulas)</dd>
+              </div>
+              <div>
+                <dt class="text-slate-500">Certificação</dt>
+                <dd class="mt-1 font-bold text-slate-900">Válida em todo o Brasil</dd>
+              </div>
+            </dl>
+
+            <a
+              href={hotmartAffiliateUrl}
+              target="_blank"
+              rel="nofollow noopener noreferrer"
+              aria-label="Fazer matrícula agora no curso (abre a página de pagamento na Hotmart em nova aba)"
+              class="mt-8 inline-flex min-h-[52px] items-center justify-center rounded-lg bg-blue-900 px-8 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800"
+            >
+              Fazer Matrícula Agora
+            </a>
+          </div>
+
+          <div class="rounded-2xl border border-slate-200 bg-slate-100 p-4 shadow-sm">
+            <img
+              src="/images/lp/inverter-board.png"
+              alt="Técnico realizando manutenção em ar-condicionado"
+              class="aspect-[4/3] w-full rounded-xl object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section class="border-y border-slate-200 bg-slate-100/70 px-4 py-14 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <div class="grid gap-10 lg:grid-cols-2">
+            <div>
+              <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Corpo docente e metodologia</h2>
+              <p class="mt-4 text-slate-700 leading-relaxed">
+                Nossa metodologia foi estruturada para combinar base conceitual sólida com execução prática passo a
+                passo. O aluno acompanha desde os fundamentos da refrigeração até protocolos de instalação,
+                diagnóstico e manutenção em cenários reais.
+              </p>
+              <p class="mt-4 text-slate-700 leading-relaxed">
+                Cada unidade é organizada com objetivos claros, checklist técnico e trilha progressiva de aprendizado,
+                respeitando o ritmo de quem está iniciando e de quem busca atualização profissional.
+              </p>
+            </div>
+            <div class="rounded-xl border border-slate-200 bg-white p-6">
+              <img
+                src="/images/lp/eletrica-aplicada.png"
+                alt="Instrumentos de medição elétrica aplicados à refrigeração"
+                class="mb-4 aspect-video w-full rounded-lg object-cover"
+                loading="lazy"
+                decoding="async"
+              />
+              <h3 class="text-lg font-bold text-slate-900">Diferenciais didáticos e público-alvo</h3>
+              <ul class="mt-4 space-y-3 text-sm text-slate-700">
+                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Aulas sequenciais com aplicação imediata em campo.</span></li>
+                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Conteúdo alinhado a práticas técnicas e segurança operacional.</span></li>
+                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Ênfase em tecnologia Inverter e diagnóstico de falhas.</span></li>
+                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Material de apoio para revisão e consolidação do aprendizado.</span></li>
+                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Indicado para iniciantes e técnicos em busca de atualização.</span></li>
+                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Estudo no próprio horário, com acesso vitalício.</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white px-4 py-16 sm:px-6 lg:px-8">
+        <div class="mx-auto grid max-w-7xl gap-10 lg:grid-cols-2">
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Quem é o professor</h2>
+            <p class="mt-4 text-slate-700 leading-relaxed">
+              <strong>Professor Leandro Moraes</strong> atua há mais de 20 anos como técnico em refrigeração. É
+              formado pelo SENAI (Taguatinga/DF), trabalhou em autorizadas de eletrodomésticos em Brasília e
+              atualmente é proprietário da Polo Norte Refrigeração e da Polo Norte Cursos.
+            </p>
+            <p class="mt-4 text-slate-700 leading-relaxed">
+              Também é criador do canal <strong>POLO NORTE CURSOS</strong>, com mais de 50.000 inscritos no YouTube,
+              compartilhando dicas e macetes na área de refrigeração.
+            </p>
+          </div>
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+            <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Benefícios do curso</h2>
+            <ul class="mt-4 space-y-3 text-sm text-slate-700">
+              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Acesso vitalício com pagamento único.</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Curso online com acesso por app ou site da Hotmart.</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Mais de 160 aulas em alta qualidade e grade de 30h.</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Aulas objetivas, organizadas e de fácil entendimento.</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Garantia de satisfação de 15 dias com reembolso integral.</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Certificado digital válido em todo território nacional.</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="grade-curricular" class="scroll-mt-24 bg-white px-4 py-16 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-4xl">
+          <h2 class="text-center text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Grade curricular</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-center text-slate-700">
+            15 módulos com aulas em vídeo — conteúdo alinhado ao que você acompanha na plataforma, do básico à tecnologia
+            Inverter, instalação de split, manutenção e encerramento do curso.
+            <span class="mt-2 block text-sm text-slate-600">
+              {totalLessonCount} títulos de aula listados abaixo (nomes conforme a trilha do treinamento).
+            </span>
+          </p>
+
+          <div class="mt-10">
+            <CurriculumAccordion openIndex={0} />
+          </div>
+        </div>
+      </section>
+
+      <section id="certificacao" class="scroll-mt-24 border-y border-slate-200 bg-slate-100 px-4 py-16 sm:px-6 lg:px-8">
+        <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2">
+          <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <img
+              src="/images/lp/certificado.png"
+              alt="Exemplo de certificado digital do curso"
+              class="aspect-[4/3] w-full rounded-lg object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div>
+            <h2 class="text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Avaliação e Certificação</h2>
+            <p class="mt-5 text-slate-700 leading-relaxed">
+              Ao concluir a grade curricular, o aluno recebe a certificação técnica com validade nacional, fundamental para atuação no mercado e assinatura de serviços.
+            </p>
+            <p class="mt-4 text-slate-700 leading-relaxed">
+              O certificado digital é emitido com registro, grade horária de 30h, nome do aluno, data de conclusão e
+              assinatura da instituição.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white px-4 py-14 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Bônus e suporte acadêmico</h2>
+          <div class="mt-6 grid gap-5 md:grid-cols-3">
+            <article class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+              <h3 class="font-bold text-slate-900">Curso extra de Split Inverter</h3>
+              <p class="mt-2 text-sm text-slate-700">Conteúdo adicional para aprofundar tecnologia Inverter sem custo extra.</p>
+            </article>
+            <article class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+              <h3 class="font-bold text-slate-900">Grupo de alunos</h3>
+              <p class="mt-2 text-sm text-slate-700">Comunidade para troca de experiências, networking técnico e apoio entre alunos.</p>
+            </article>
+            <article class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+              <img
+                src="/images/lp/whatsapp-suporte.png"
+                alt="Suporte acadêmico via WhatsApp"
+                class="mb-3 h-16 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+              <h3 class="font-bold text-slate-900">Suporte especializado</h3>
+              <p class="mt-2 text-sm text-slate-700">Canal de suporte para dúvidas técnicas e acompanhamento durante o estudo.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="matricula" class="scroll-mt-24 bg-white px-4 py-16 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-5xl">
+          <h2 class="text-center text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Investimento e Matrícula</h2>
+          <p class="mx-auto mt-4 max-w-3xl text-center text-slate-700">
+            Estrutura financeira transparente, com opção de pagamento parcelado.
+          </p>
+
+          <div class="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
+            <div class="grid gap-0 md:grid-cols-3">
+              <div class="border-b border-slate-200 p-6 md:border-b-0 md:border-r">
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Taxa única de matrícula</p>
+                <p class="mt-3 text-2xl font-black text-slate-900">R$ 0,00</p>
+                <p class="mt-2 text-sm text-slate-600">Valor aplicado no ato da inscrição.</p>
+              </div>
+              <div class="border-b border-slate-200 p-6 md:border-b-0 md:border-r">
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Mensalidades</p>
+                <p class="mt-1 text-sm text-slate-500 line-through">De R$ 597,00</p>
+                <p class="mt-2 text-2xl font-black text-slate-900">12x de R$ 20,37</p>
+                <p class="mt-1 text-sm font-semibold text-slate-800">ou R$ 197,00 à vista</p>
+                <p class="mt-2 text-sm text-slate-600">Acesso vitalício, +160 aulas e certificado de 30h.</p>
+              </div>
+              <div class="p-6">
+                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Formas de pagamento</p>
+                <p class="mt-3 text-lg font-bold text-slate-900">Pix, Cartão e Boleto</p>
+                <p class="mt-2 text-sm text-slate-600">Processamento seguro em ambiente criptografado.</p>
+              </div>
+            </div>
+            <div class="border-t border-slate-200 bg-white p-6 text-center">
+              <a
+                href={hotmartAffiliateUrl}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                aria-label="Realizar matrícula no curso (abre a página de pagamento na Hotmart em nova aba)"
+                class="inline-flex min-h-[52px] items-center justify-center rounded-lg bg-blue-900 px-8 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800"
+              >
+                Realizar Matrícula
+              </a>
+              <p class="mt-3 text-xs text-slate-600">
+                Garantia incondicional de 15 dias. Solicitações de reembolso sem burocracia.
+              </p>
+              <img
+                src="/images/lp/garantia-15-dias.png"
+                alt="Selo de garantia de reembolso em 15 dias"
+                class="mx-auto mt-4 h-20 w-auto"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="border-t border-slate-200 bg-slate-100/70 px-4 py-16 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Dúvidas recorrentes</h2>
+          <div class="mt-6 grid gap-4 md:grid-cols-2">
+            <details class="rounded-xl border border-slate-200 bg-white p-5" open>
+              <summary class="cursor-pointer list-none font-bold text-slate-900">O curso é online?</summary>
+              <p class="mt-2 text-sm text-slate-700">Sim. O curso é 100% online e pode ser assistido pelo celular ou computador.</p>
+            </details>
+            <details class="rounded-xl border border-slate-200 bg-white p-5">
+              <summary class="cursor-pointer list-none font-bold text-slate-900">Como recebo o acesso?</summary>
+              <p class="mt-2 text-sm text-slate-700">Após o pagamento, o acesso é enviado por e-mail na plataforma Hotmart.</p>
+            </details>
+            <details class="rounded-xl border border-slate-200 bg-white p-5">
+              <summary class="cursor-pointer list-none font-bold text-slate-900">Por quanto tempo terei acesso?</summary>
+              <p class="mt-2 text-sm text-slate-700">O acesso é vitalício para revisar as aulas quando desejar.</p>
+            </details>
+            <details class="rounded-xl border border-slate-200 bg-white p-5">
+              <summary class="cursor-pointer list-none font-bold text-slate-900">Existe suporte técnico durante o curso?</summary>
+              <p class="mt-2 text-sm text-slate-700">Sim. Há canal de suporte para acompanhamento e resolução de dúvidas.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+</BaseLayoutBemmae>

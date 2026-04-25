@@ -10,8 +10,9 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import { isGitHubConfigured, githubWriteFile } from './github-api';
 import { readSiteSettings } from './read-site-settings';
+import { getSingletonsBaseDir } from './repo-paths';
 
-const SINGLETONS_BASE_DIR = path.resolve('./src/content/singletons');
+const SINGLETONS_BASE_DIR = getSingletonsBaseDir(import.meta.url);
 
 const KNOWN_THEMES = new Set(['classic', 'bemmae', '8links-test2', 'local']);
 

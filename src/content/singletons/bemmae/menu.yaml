@@ -1,12 +1,18 @@
 logoType: image
-logoText: Bem Mãe
-logoImage: /bemmae-logo.png
+logoText: Curso de Ar Condicionado
+logoImage: /images/cursodear/logo.png
 items:
   - label: Início
     href: /
     target: _self
-  - label: Carrinhos de bebê
-    href: /carrinhos-de-bebe
+  - label: Nossos Cursos
+    href: /nossos-cursos
+    target: _self
+  - label: Certificação
+    href: /#certificacao
+    target: _self
+  - label: Matrícula
+    href: /#matricula
     target: _self
   - label: Sobre
     href: /sobre

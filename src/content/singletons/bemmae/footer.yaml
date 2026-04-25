@@ -1,26 +1,26 @@
-siteName: Bem Mãe
+siteName: Curso de Ar Condicionado
 copyright: ""
 copyrightNote: ""
 description: ""
-tagline: Maternidade, saúde e lifestyle, conteúdo informativo para famílias.
-organizationLegalName: Bem Mãe
-contactEmail: contato@bemmae.com.br
+tagline: Formação em instalação e manutenção de ar condicionado split — conteúdo claro para quem quer entrar ou evoluir no mercado.
+organizationLegalName: Curso de Ar Condicionado
+contactEmail: contato@cursodearcondicionado.com.br
 addressLine: ""
 city: ""
 state: ""
 postalCode: ""
 country: Brasil
 columns: []
-socialLinks:
-  - platform: YouTube
-    url: https://www.youtube.com/@bemmaeMV
-    icon: youtube
-  - platform: Pinterest
-    url: https://br.pinterest.com/bemmaeoficial/
-    icon: pinterest
+socialLinks: []
 footerNav:
   - label: Início
     href: /
+  - label: Nossos Cursos
+    href: /nossos-cursos
+  - label: Certificação
+    href: /#certificacao
+  - label: Matrícula
+    href: /#matricula
   - label: Sobre
     href: /sobre
   - label: Blog

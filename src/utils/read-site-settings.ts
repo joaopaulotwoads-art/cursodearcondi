@@ -10,8 +10,9 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import { isGitHubConfigured, githubReadFile } from './github-api';
+import { getSingletonsBaseDir } from './repo-paths';
 
-const SETTINGS_PATH    = path.resolve('./src/content/singletons/settings.yaml');
+const SETTINGS_PATH = path.join(getSingletonsBaseDir(import.meta.url), 'settings.yaml');
 const SETTINGS_GH_PATH = 'src/content/singletons/settings.yaml';
 
 const DEFAULTS: Record<string, unknown> = {
