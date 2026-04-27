@@ -35,6 +35,7 @@ export async function getStaticPaths() {
     'lp1',
     'curso-vendas',
     'nossos-cursos',
+    'automotivo',
     'setup',
     'cnx-blog-resolve',
   ]);
@@ -46,7 +47,7 @@ export async function getStaticPaths() {
 
   const posts = await getCollection('posts');
   const structure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
-  const slugReservedForStaticPages = new Set(['sobre', 'contato']);
+  const slugReservedForStaticPages = new Set(['sobre', 'contato', 'automotivo', 'nossos-cursos']);
 
   const postPaths = posts
     .filter((post) => !slugReservedForStaticPages.has(post.data.slug || post.id))

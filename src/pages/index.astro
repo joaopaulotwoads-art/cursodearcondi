@@ -2,16 +2,11 @@
 import { getEntry } from 'astro:content';
 import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
 import { readSingleton } from '../utils/singleton-utils';
-import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { logoSrcFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
-import { totalLessonCount } from '../data/curriculum-cursodear';
-import CurriculumAccordion from '../components/cursodear/CurriculumAccordion.astro';
 
-// Meta SEO (SERP): palavras-chave fortes no título e na descrição.
-const pageTitle =
-  'Curso de Ar Condicionado Online | Instalação, Split, Inverter e Certificado';
-const pageDescription =
-  'Instalação e manutenção de ar condicionado split, Inverter e refrigeração. Curso online, certificado, +160 aulas em vídeo, EAD e acesso vitalício.';
+const pageTitle = 'Curso de Ar Condicionado online | Formação Profissional 2026';
+const pageDescription = 'Curso de Ar Condicionado com acesso imediato, certificado e formação completa para instalação e manutenção.';
 const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
@@ -19,11 +14,96 @@ const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
 const beMenu = (await readSingleton('menu', 'bemmae')) as Record<string, unknown> | null;
-const beFoot = (await readSingleton('footer', 'bemmae')) as Record<string, unknown> | null;
-const beNav = beMenu ? navFromMenu(beMenu) : [];
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
 const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
+
+const heroBenefits = [
+  'Acesso imediato pela Hotmart',
+  '160 aulas · 30 horas de conteúdo',
+  'Certificado de conclusão',
+  'Acesso vitalício ao curso',
+  'Garantia incondicional de 15 dias',
+  'Bônus Inverter incluso',
+];
+
+const aprenderItems = [
+  'Instalação completa de ar-split residencial e comercial',
+  'Manutenção corretiva e preventiva passo a passo',
+  'Limpeza e higienização profissional',
+  'Diagnóstico de falhas elétricas e mecânicas',
+  'Uso do manifold e manômetro',
+  'Recolhimento e recarga de fluído refrigerante R410A',
+  'Teste e troca de capacitores',
+  'Teste e ligação de compressores',
+  'Diagnóstico e reparo de placas eletrônicas',
+  'Tecnologia Inverter (LG Dual Inverter e Consul Inverter)',
+  'Brasagem (solda) com nitrogênio passante',
+  'Dimensionamento de BTUs, cabos e disjuntores',
+  'Teste de estanqueidade e vácuo no sistema',
+  'Super aquecimento e teste Delta T (rendimento)',
+  'Teste de sensores e uso do app Refrigerant Slider',
+  'Como emitir certificado e acessar o curso pela Hotmart',
+];
+
+const aulas = [
+  { number: '01', title: 'Módulo 01 - Aulas Iniciais', count: '19 aulas', text: 'Apresentação, acesso à área do aluno, suporte, ferramentas (2 partes), PDF de ferramentas, tipos de ar, termodinâmica, condensadora (3) e desmontagem da evaporadora (3).' },
+  { number: '02', title: 'Módulo 02 - Eletricidade', count: '9 aulas', text: 'Grandezas elétricas, corrente alternada, resistência, potência, efeito nas cargas, problemas de corrente (2) e uso de alicate amperímetro e multímetro (2).' },
+  { number: '03', title: 'Módulo 03 - Capacitores', count: '4 aulas', text: 'Capacitor permanente, teste com multímetro e capacímetro e como escolher o capacitor correto para cada aplicação.' },
+  { number: '04', title: 'Módulo 04 - Motor Ventilador', count: '4 aulas', text: 'Cargas indutivas e capacitivas, ligação do motor ventilador em 3 partes e prática em bancada.' },
+  { number: '05', title: 'Módulo 05 - Manifold', count: '2 aulas', text: 'Apresentação do manifold e uso prático em duas aulas com leitura e interpretação de pressão.' },
+  { number: '06', title: 'Módulo 06 - Compressor', count: '15 aulas', text: 'Bobinas (3), testes de compressor e protetor (2), compressão (5), ligação na condensadora (2), motor ventilador, capacitor de 3 polos e troca de óleo.' },
+  { number: '07', title: 'Módulo 07 - Placa Evaporadora Convencional', count: '16 aulas', text: 'Teste completo da placa da evaporadora em 16 partes e teste do relé da placa.' },
+  { number: '08', title: 'Módulo 08 - Sensores', count: '3 aulas', text: 'Teste de sensor em 2 partes e uso do aplicativo ajuda técnico.' },
+  { number: '09', title: 'Módulo 09 - Instalação de Ar Split', count: '47 aulas', text: 'Tubulação, flange (3), alargamento para brasagem, BTUs, cabo/disjuntor, sifão, instalação evaporadora (12), condensadora (7), estanqueidade (4), vácuo (6) e ligação final.' },
+  { number: '10', title: 'Módulo 10 - Pós-instalação', count: '7 aulas', text: 'Teste de rendimento Delta T (3), super aquecimento (3), app Refrigerant Slider e aplicação prática do super aquecimento.' },
+  { number: '11', title: 'Módulo 11 - Brasagem', count: '3 aulas', text: 'Brasagem (solda) com nitrogênio passante em 3 partes.' },
+  { number: '12', title: 'Módulo 12 - Recolhimento do Fluído Refrigerante / R410A', count: '6 aulas', text: 'Recolhimento do R410A em 4 partes e funcionamento após recolhimento em 2 partes.' },
+  { number: '13', title: 'Módulo 13 - Tecnologia Inverter', count: '19 aulas', text: 'LG Dual Inverter, condensadora inverter, ligação elétrica (2), comunicação (3), placa LG (6), teste IPM, compressor inverter, diagnósticos, reator e sensor de descarga (2).' },
+  { number: '14', title: 'Módulo 14 - Consul Inverter', count: '4 aulas', text: 'Orientações iniciais, teste de tensão e sinal na evaporadora, checkup na condensadora e diagnóstico final.' },
+  { number: '15', title: 'Módulo 15 - Manutenção Corretiva e Preventiva', count: '10 aulas', text: 'Manutenção corretiva (5), recolhimento de fluído e diagnóstico, manutenção preventiva (3) e considerações finais.' },
+];
+
+const aprenderDetalhado = [
+  'Técnico em refrigeração iniciante',
+  'Instalador residencial autônomo',
+  'Eletricista que quer expandir serviços',
+  'Prestador de Serviços Autônomo',
+  'Profissional de manutenção predial',
+  'Mecânico que quer migrar de área',
+  'Técnico de assistência técnica',
+  'Empreendedor de climatização',
+  'Profissional de manutenção preventiva',
+  'Especialista em tecnologia Inverter',
+  'Técnico de atendimento comercial',
+  'Quem quer uma renda extra com serviços',
+  'Profissional que quer se certificar',
+  'Quem nunca teve experiência na área',
+  'Profissional que quer cobrar mais pelos serviços',
+  'Técnico que quer dominar o mercado de Inverter',
+  'Quem busca independência financeira',
+  'Qualquer pessoa com vontade de aprender',
+];
+
+const instrutorItens = [
+  'Mais de 20 anos de experiência em refrigeração',
+  'Especialista em tecnologia Inverter',
+  'Formação técnica e prática no campo',
+  'Treinador de técnicos em todo o Brasil',
+  'Mais de 11.900 alunos formados',
+  'Método validado pelo mercado',
+  'Certificação reconhecida nacionalmente',
+  'Didática clara e objetiva para iniciantes',
+];
+
+const faqItems = [
+  { q: 'O curso é totalmente online?', a: 'Sim. O acesso é feito pela plataforma Hotmart, podendo assistir pelo celular ou computador, a qualquer hora.' },
+  { q: 'Por quanto tempo tenho acesso?', a: 'O acesso é vitalício. O curso não expira e você pode assistir quantas vezes quiser.' },
+  { q: 'Recebo certificado?', a: 'Sim! Ao concluir você recebe certificado de conclusão para baixar direto pela Hotmart.' },
+  { q: 'Serve para iniciantes?', a: 'Sim! O curso começa do zero, sem exigir conhecimento prévio. Qualquer pessoa consegue aprender.' },
+  { q: 'Qual é a garantia?', a: 'Garantia incondicional de 15 dias. Se não gostar por qualquer motivo, basta solicitar o reembolso.' },
+  { q: 'Em quantas vezes posso parcelar?', a: 'Em até 12x de R$ 20,37 no cartão, ou R$ 197,00 à vista.' },
+  { q: 'Terei suporte durante o curso?', a: 'Sim! Há suporte disponível para dúvidas técnicas ao longo do curso.' },
+];
 ---
 
 <BaseLayoutBemmae
@@ -32,273 +112,585 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
   siteName={siteNameForLayout}
   logoSrc={logoForLayout}
   siteUrl={siteUrl}
-  nav={beNav}
-  footerNav={beFootNav}
+  nav={[]}
+  footerNav={[]}
   contentThemeId="bemmae"
 >
-    <div class="min-w-0 bg-slate-50 text-slate-900 antialiased">
-      <section class="bg-white px-3 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-20">
-        <div class="mx-auto grid min-w-0 max-w-7xl items-center gap-8 sm:gap-10 lg:grid-cols-2 lg:gap-12">
-          <div class="min-w-0">
-            <p class="inline-flex max-w-full flex-wrap rounded-full border border-slate-300 bg-slate-100 px-3 py-1.5 text-left text-[0.65rem] font-semibold uppercase leading-snug tracking-wide text-slate-700 sm:px-4 sm:text-xs">
-              Formação Técnica Profissional · Ensino a Distância
+  <div class="bg-white text-slate-900">
+    <!-- 2. HERO -->
+    <section
+      class="relative min-h-[650px] overflow-hidden"
+      style="background-image: url('/images/hero-bg.webp'); background-size: cover; background-position: center top;"
+    >
+      <!-- TODO: adicionar imagem de fundo real aqui -->
+      <div class="absolute inset-0 bg-black/60"></div>
+      <div class="mx-auto flex flex-col md:flex-row items-start gap-8 px-4 md:px-6 py-10 md:py-20 max-w-6xl relative">
+        <div class="grid w-full gap-8 md:grid-cols-[1.1fr,0.9fr]">
+          <div class="text-white">
+            <span class="bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded uppercase tracking-widest">
+              Melhor Curso de Ar Condicionado do Mercado
+            </span>
+            <h1 class="text-3xl md:text-6xl font-black text-white leading-tight mt-4">Curso de Ar Condicionado</h1>
+            <p class="text-gray-200 text-lg mt-4 max-w-lg leading-relaxed">
+              Domine instalação, manutenção e limpeza de ar condicionado com método direto ao ponto para gerar resultado rápido.
             </p>
-            <h1 class="mt-5 break-words text-balance text-3xl font-black leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-              Formação Completa em Manutenção e Instalação de Ar Condicionado
-            </h1>
-            <p class="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
-              Capacitação técnica EAD do zero ao avançado. Inclui especialização em Tecnologia Inverter.
-            </p>
-            <p class="mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-slate-600 sm:text-base">
-              Aprenda manutenção, instalação e limpeza com metodologia prática para iniciantes e profissionais que
-              desejam atualização técnica e melhor posicionamento no mercado.
-            </p>
-
-            <dl class="mt-8 grid min-w-0 gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-sm sm:grid-cols-3 sm:p-5">
-              <div>
-                <dt class="text-slate-500">Modalidade</dt>
-                <dd class="mt-1 font-bold text-slate-900">100% Online (EAD)</dd>
+            <div class="flex items-center gap-2 mt-6 text-white text-sm">
+              <span class="text-yellow-400">★★★★★</span>
+              <span class="font-bold">4.7</span>
+              <span class="text-gray-300">(189 avaliações)</span>
+              <span class="text-gray-400">·</span>
+              <span class="text-gray-300">+11.900 alunos</span>
+              <span class="text-gray-400">·</span>
+              <span class="text-gray-300">94% positivas</span>
+            </div>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
+              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>160 aulas e 30 horas de conteúdo</span></p>
+              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>Acesso vitalício ao curso</span></p>
+              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>Certificado de conclusão</span></p>
+              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>Garantia de 15 dias</span></p>
+            </div>
+          </div>
+          <aside class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl overflow-hidden">
+            <div class="mb-4 rounded-xl bg-slate-800 p-4">
+              <p class="text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-orange-300">OFERTA ESPECIAL DE MATRÍCULA</p>
+              <div class="mt-3 flex items-center justify-between gap-2">
+                <div class="text-center">
+                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
+                    <p id="countdown-days" class="text-xl md:text-3xl font-black text-white">00</p>
+                    <p class="text-xs uppercase text-gray-400">DIAS</p>
+                  </div>
+                </div>
+                <span class="text-xl text-white">:</span>
+                <div class="text-center">
+                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
+                    <p id="countdown-hours" class="text-xl md:text-3xl font-black text-white">00</p>
+                    <p class="text-xs uppercase text-gray-400">HRS</p>
+                  </div>
+                </div>
+                <span class="text-xl text-white">:</span>
+                <div class="text-center">
+                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
+                    <p id="countdown-minutes" class="text-xl md:text-3xl font-black text-white">00</p>
+                    <p class="text-xs uppercase text-gray-400">MIN</p>
+                  </div>
+                </div>
+                <span class="text-xl text-white">:</span>
+                <div class="text-center">
+                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
+                    <p id="countdown-seconds" class="text-xl md:text-3xl font-black text-white">00</p>
+                    <p class="text-xs uppercase text-gray-400">SEG</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <dt class="text-slate-500">Carga Horária</dt>
-                <dd class="mt-1 font-bold text-slate-900">30 horas (+160 aulas)</dd>
-              </div>
-              <div>
-                <dt class="text-slate-500">Certificação</dt>
-                <dd class="mt-1 font-bold text-slate-900">Válida em todo o Brasil</dd>
-              </div>
-            </dl>
-
+            </div>
+            <div class="flex justify-center mb-2">
+              <span class="bg-red-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">MAIS VENDIDO</span>
+            </div>
+            <p class="text-gray-400 text-sm line-through text-center mt-3">De R$ 297,00</p>
+            <p class="text-orange-500 font-black text-4xl md:text-5xl text-center leading-none">R$ 197,00</p>
+            <p class="text-gray-500 text-sm text-center mt-1">ou 12x de R$ 20,37 no cartão</p>
             <a
               href={hotmartAffiliateUrl}
               target="_blank"
               rel="nofollow noopener noreferrer"
-              aria-label="Fazer matrícula agora no curso (abre a página de pagamento na Hotmart em nova aba)"
-              class="mt-8 flex min-h-[52px] w-full max-w-full items-center justify-center rounded-lg bg-blue-900 px-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800 sm:inline-flex sm:w-auto sm:px-8"
+              class="mt-4 w-full block bg-green-500 hover:bg-green-600 text-white font-black py-4 rounded-xl text-center text-lg uppercase tracking-wide transition"
             >
-              Fazer Matrícula Agora
+              QUERO ME INSCREVER AGORA
             </a>
-          </div>
+            <p class="text-center text-gray-400 text-xs mt-2">🔒 Compra 100% segura pela Hotmart</p>
+            <ul class="mt-4 border-t pt-4">
+              {heroBenefits.map((item) => (
+                <li class="flex items-center gap-2 text-gray-700 text-sm py-1"><span class="text-orange-500 font-bold">✓</span><span>{item}</span></li>
+              ))}
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
 
-          <div class="min-w-0 rounded-2xl border border-slate-200 bg-slate-100 p-3 shadow-sm sm:p-4">
+    <!-- 3. APRENDIZADO -->
+    <section class="bg-white py-16 md:py-24" id="o-que-aprender">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <h2 class="text-center text-3xl font-bold text-[#1e293b]">O QUE VOCÊ VAI APRENDER NO CURSO DE AR CONDICIONADO</h2>
+        <div class="w-16 h-1 bg-orange-500 mx-auto mt-3 mb-6 rounded"></div>
+        <p class="mx-auto mt-3 max-w-3xl text-center text-sm text-gray-500">Aprenda do zero ao avançado com aulas práticas, suporte e método validado por milhares de alunos.</p>
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-3">
+          {aprenderItems.map((item) => (
+            <p class="flex items-start gap-2 rounded-lg border border-transparent p-2 text-sm text-[#374151] transition hover:border-orange-200 hover:bg-orange-50">
+              <span class="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center text-xs flex-shrink-0">✓</span>
+              <span>{item}</span>
+            </p>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CONTEÚDO DO CURSO -->
+    <section class="bg-[#f8fafc] py-16 md:py-24" id="modulos">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <h2 class="text-3xl font-bold text-[#1e293b]">Conteúdo do Curso de Ar Condicionado</h2>
+        <div class="mt-6">
+          {aulas.map((aula) => (
+            <details class="group mb-3 overflow-hidden rounded-xl border border-gray-200 shadow-sm">
+              <summary class="flex cursor-pointer list-none items-center justify-between bg-white px-4 md:px-5 py-4 font-semibold text-gray-800 transition-colors hover:bg-orange-50 [&::-webkit-details-marker]:hidden">
+                <div class="flex items-center gap-3">
+                  <span class="w-8 h-8 rounded-full bg-orange-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">{aula.number}</span>
+                  <span class="text-sm md:text-base">{aula.title}</span>
+                </div>
+                <div class="flex items-center gap-3">
+                  <span class="bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded-full">{aula.count}</span>
+                  <span class="text-gray-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
+                </div>
+              </summary>
+              <p class="border-t border-orange-100 bg-orange-50 px-4 md:px-5 py-4 text-sm leading-relaxed text-gray-600">{aula.text}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. APRENDIZADO DETALHADO -->
+    <section class="py-16 md:py-24" id="instrutor">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <h2 class="text-3xl font-bold text-slate-900">PARA QUEM É ESTE CURSO</h2>
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 text-sm text-slate-700">
+          {aprenderDetalhado.map((item) => (
+            <p class="px-4">• {item}</p>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. DESCRIÇÃO DO CURSO -->
+    <section class="py-16 md:py-24" id="descricao-curso">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <h2 class="text-3xl font-bold text-slate-900">Descrição do Curso de Ar Condicionado</h2>
+        <div class="mt-6 space-y-4 text-sm leading-relaxed text-slate-700">
+          <p>O Curso de Ar Condicionado é uma formação completa para quem quer entrar no mercado de climatização com autoridade, executar serviços com qualidade e criar faturamento recorrente com instalações e manutenções. Com 160 aulas e 30 horas de conteúdo, você aprende do zero até a tecnologia Inverter.</p>
+          <p>O curso cobre desde o funcionamento básico de um ar-condicionado split, eletricidade aplicada, capacitores, compressores e placas eletrônicas, até a instalação completa com tubulação, vácuo, teste de estanqueidade e recarga de gás R410A. Você aprende fazendo, com aulas gravadas na prática.</p>
+          <p>Além disso, você vai dominar a tecnologia Inverter com os modelos LG Dual Inverter e Consul Inverter, aprender brasagem com nitrogênio passante, manutenção corretiva e preventiva — tudo o que o mercado exige de um técnico qualificado.</p>
+          <p>+11.900 alunos já transformaram suas carreiras com esse método. Com certificado reconhecido, acesso vitalício e garantia de 15 dias, você não tem nada a perder. Comece hoje e saia cobrando pelo seu serviço.</p>
+        </div>
+        <div class="mt-8 grid grid-cols-2 md:grid-cols-4 overflow-hidden rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900">
+          <article class="border-b border-slate-700 px-4 py-6 text-center md:border-b-0 md:border-r">
+            <p class="text-2xl">👥</p>
+            <p class="mt-1 text-3xl md:text-4xl font-black text-orange-500">+11.900</p>
+            <p class="mt-1 text-sm uppercase tracking-wider text-gray-400">Alunos formados</p>
+          </article>
+          <article class="border-b border-slate-700 px-4 py-6 text-center md:border-b-0 md:border-r">
+            <p class="text-2xl">🎬</p>
+            <p class="mt-1 text-3xl md:text-4xl font-black text-orange-500">160</p>
+            <p class="mt-1 text-sm uppercase tracking-wider text-gray-400">Aulas gravadas</p>
+          </article>
+          <article class="border-b border-slate-700 px-4 py-6 text-center md:border-b-0 md:border-r">
+            <p class="text-2xl">⏱️</p>
+            <p class="mt-1 text-3xl md:text-4xl font-black text-orange-500">30h</p>
+            <p class="mt-1 text-sm uppercase tracking-wider text-gray-400">De conteúdo</p>
+          </article>
+          <article class="px-4 py-6 text-center">
+            <p class="text-2xl">⭐</p>
+            <p class="mt-1 text-3xl md:text-4xl font-black text-orange-500">4.7⭐</p>
+            <p class="mt-1 text-sm uppercase tracking-wider text-gray-400">Avaliação média</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. INSTRUTOR -->
+    <section class="py-16 md:py-24">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <p class="mb-2 text-sm font-bold uppercase tracking-[0.18em] text-orange-500">INSTRUTOR</p>
+        <article class="rounded-2xl border border-gray-200 bg-white p-8 shadow-md">
+          <div class="flex flex-col md:flex-row items-start gap-8">
             <img
-              src="/images/lp/inverter-board.png"
-              alt="Técnico realizando manutenção em ar-condicionado"
-              class="aspect-[4/3] h-auto w-full max-w-full rounded-xl object-cover"
-              loading="eager"
+              src="/images/leandro.webp"
+              alt="Instrutor Leandro Moraes"
+              class="w-40 h-40 rounded-full object-cover object-top border-4 border-orange-500 shadow-lg flex-shrink-0 mx-auto md:mx-0"
+              loading="lazy"
               decoding="async"
             />
-          </div>
-        </div>
-      </section>
-
-      <section class="border-y border-slate-200 bg-slate-100/70 px-3 py-12 sm:px-6 sm:py-14 lg:px-8">
-        <div class="mx-auto min-w-0 max-w-7xl">
-          <div class="grid min-w-0 gap-8 sm:gap-10 lg:grid-cols-2">
-            <div class="min-w-0">
-              <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Corpo docente e metodologia</h2>
-              <p class="mt-4 text-slate-700 leading-relaxed">
-                Nossa metodologia foi estruturada para combinar base conceitual sólida com execução prática passo a
-                passo. O aluno acompanha desde os fundamentos da refrigeração até protocolos de instalação,
-                diagnóstico e manutenção em cenários reais.
-              </p>
-              <p class="mt-4 text-slate-700 leading-relaxed">
-                Cada unidade é organizada com objetivos claros, checklist técnico e trilha progressiva de aprendizado,
-                respeitando o ritmo de quem está iniciando e de quem busca atualização profissional.
-              </p>
-            </div>
-            <div class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-6">
-              <img
-                src="/images/lp/eletrica-aplicada.png"
-                alt="Instrumentos de medição elétrica aplicados à refrigeração"
-                class="mb-4 aspect-video w-full rounded-lg object-cover"
-                loading="lazy"
-                decoding="async"
-              />
-              <h3 class="text-lg font-bold text-slate-900">Diferenciais didáticos e público-alvo</h3>
-              <ul class="mt-4 space-y-3 text-sm text-slate-700">
-                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Aulas sequenciais com aplicação imediata em campo.</span></li>
-                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Conteúdo alinhado a práticas técnicas e segurança operacional.</span></li>
-                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Ênfase em tecnologia Inverter e diagnóstico de falhas.</span></li>
-                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Material de apoio para revisão e consolidação do aprendizado.</span></li>
-                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Indicado para iniciantes e técnicos em busca de atualização.</span></li>
-                <li class="flex gap-2"><span class="text-blue-700">•</span><span>Estudo no próprio horário, com acesso vitalício.</span></li>
+            <div class="flex-1 text-center md:text-left">
+              <h3 class="text-2xl font-black uppercase text-slate-800">INSTRUTOR LEANDRO MORAES</h3>
+              <p class="mb-4 text-sm font-semibold text-orange-500">Especialista em Refrigeração e Climatização</p>
+              <ul class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700">
+                {instrutorItens.map((item) => (
+                  <li class="flex gap-2 text-sm text-gray-700"><span class="font-bold text-orange-500">✓</span><span>{item}</span></li>
+                ))}
               </ul>
+              <p class="mt-4 text-sm leading-relaxed text-slate-700">Profissional com mais de 20 anos de experiência no mercado de refrigeração e climatização. Já formou mais de 11.900 alunos em todo o Brasil com método prático e direto ao ponto.</p>
             </div>
           </div>
-        </div>
-      </section>
+        </article>
+      </div>
+    </section>
 
-      <section class="bg-white px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div class="mx-auto grid min-w-0 max-w-7xl gap-8 sm:gap-10 lg:grid-cols-2">
-          <div class="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
-            <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Quem é o professor</h2>
-            <p class="mt-4 text-slate-700 leading-relaxed">
-              <strong>Professor Leandro Moraes</strong> atua há mais de 20 anos como técnico em refrigeração. É
-              formado pelo SENAI (Taguatinga/DF), trabalhou em autorizadas de eletrodomésticos em Brasília e
-              atualmente é proprietário da Polo Norte Refrigeração e da Polo Norte Cursos.
-            </p>
-            <p class="mt-4 text-slate-700 leading-relaxed">
-              Também é criador do canal <strong>POLO NORTE CURSOS</strong>, com mais de 50.000 inscritos no YouTube,
-              compartilhando dicas e macetes na área de refrigeração.
-            </p>
-          </div>
-          <div class="min-w-0 rounded-2xl border border-slate-200 bg-slate-50 p-4 sm:p-6">
-            <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Benefícios do curso</h2>
-            <ul class="mt-4 space-y-3 text-sm text-slate-700">
-              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Acesso vitalício com pagamento único.</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Curso online com acesso por app ou site da Hotmart.</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Mais de 160 aulas em alta qualidade e grade de 30h.</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Aulas objetivas, organizadas e de fácil entendimento.</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Garantia de satisfação de 15 dias com reembolso integral.</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">•</span><span>Certificado digital válido em todo território nacional.</span></li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section id="grade-curricular" class="scroll-mt-24 bg-white px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div class="mx-auto min-w-0 max-w-4xl">
-          <h2 class="text-center text-3xl font-black tracking-tight text-slate-900 sm:text-4xl">Grade curricular</h2>
-          <p class="mx-auto mt-4 max-w-3xl text-center text-slate-700">
-            15 módulos com aulas em vídeo — conteúdo alinhado ao que você acompanha na plataforma, do básico à tecnologia
-            Inverter, instalação de split, manutenção e encerramento do curso.
-            <span class="mt-2 block text-sm text-slate-600">
-              {totalLessonCount} títulos de aula listados abaixo (nomes conforme a trilha do treinamento).
-            </span>
-          </p>
-
-          <div class="mt-10">
-            <CurriculumAccordion openIndex={0} />
-          </div>
-        </div>
-      </section>
-
-      <section id="certificacao" class="scroll-mt-24 border-y border-slate-200 bg-slate-100 px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div class="mx-auto grid min-w-0 max-w-7xl items-center gap-8 sm:gap-10 lg:grid-cols-2">
-          <div class="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+    <!-- 8. CERTIFICAÇÃO -->
+    <section class="py-16 md:py-24">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <div class="grid items-start gap-6 md:grid-cols-2">
+            <div class="flex items-start gap-4">
+              <span class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#F97316] text-2xl font-bold text-white">✓</span>
+              <div>
+                <h2 class="text-2xl font-bold text-slate-900">NOSSA CERTIFICAÇÃO É RECONHECIDA EM TODO O BRASIL</h2>
+                <p class="mt-3 text-sm leading-relaxed text-slate-700">
+                  Ao concluir o curso, você recebe certificado de conclusão pela plataforma Hotmart. O documento comprova sua participação e reforça sua credibilidade profissional para atuar no mercado de climatização.
+                </p>
+              </div>
+            </div>
             <img
-              src="/images/lp/certificado.png"
-              alt="Exemplo de certificado digital do curso"
-              class="aspect-[4/3] w-full rounded-lg object-cover"
+              src="/images/certificado_curso.webp"
+              alt="Certificado do Curso de Ar Condicionado"
+              class="rounded-xl shadow-lg w-full max-w-sm mx-auto border border-gray-200"
               loading="lazy"
               decoding="async"
             />
           </div>
-          <div class="min-w-0">
-            <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">Avaliação e Certificação</h2>
-            <p class="mt-5 text-slate-700 leading-relaxed">
-              Ao concluir a grade curricular, o aluno recebe a certificação técnica com validade nacional, fundamental para atuação no mercado e assinatura de serviços.
-            </p>
-            <p class="mt-4 text-slate-700 leading-relaxed">
-              O certificado digital é emitido com registro, grade horária de 30h, nome do aluno, data de conclusão e
-              assinatura da instituição.
-            </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. BÔNUS -->
+    <section class="bg-white">
+      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 py-16">
+        <div class="flex-1">
+          <span class="text-sm font-black uppercase tracking-widest text-orange-500">BÔNUS 01</span>
+          <h3 class="mt-2 mb-4 text-2xl font-black text-slate-800">Bônus de Ar Condicionado Inverter</h3>
+          <p class="text-gray-600 leading-relaxed">Módulo completo e exclusivo sobre tecnologia Inverter: LG Dual Inverter, Consul Inverter, diagnósticos avançados, teste de IPM, compressor inverter e muito mais. Conteúdo que a maioria dos cursos cobra separado.</p>
+          <ul class="mt-4 space-y-2">
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Tecnologia LG Dual Inverter completa</span></li>
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Consul Inverter passo a passo</span></li>
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Diagnóstico e reparo de compressor Inverter</span></li>
+          </ul>
+          <div class="mt-6 inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2">
+            <span class="text-sm font-bold text-orange-500">Valor: R$ 97,00</span>
+            <span class="text-sm text-gray-400">→</span>
+            <span class="text-sm font-bold text-green-600">GRÁTIS para alunos</span>
           </div>
         </div>
-      </section>
+        <div class="w-full flex-shrink-0 md:w-[420px]">
+          <img src="/images/bonus_1.webp" alt="Bônus Curso Tecnologia Inverter" class="rounded-2xl shadow-xl w-full object-contain" loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </section>
 
-      <section class="bg-white px-3 py-12 sm:px-6 sm:py-14 lg:px-8">
-        <div class="mx-auto min-w-0 max-w-7xl">
-          <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Bônus e suporte acadêmico</h2>
-          <div class="mt-6 grid min-w-0 grid-cols-1 gap-4 sm:gap-5 md:grid-cols-3">
-            <article class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-              <h3 class="font-bold text-slate-900">Curso extra de Split Inverter</h3>
-              <p class="mt-2 text-sm text-slate-700">Conteúdo adicional para aprofundar tecnologia Inverter sem custo extra.</p>
-            </article>
-            <article class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-              <h3 class="font-bold text-slate-900">Grupo de alunos</h3>
-              <p class="mt-2 text-sm text-slate-700">Comunidade para troca de experiências, networking técnico e apoio entre alunos.</p>
-            </article>
-            <article class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-              <img
-                src="/images/lp/whatsapp-suporte.png"
-                alt="Suporte acadêmico via WhatsApp"
-                class="mb-3 h-16 w-auto"
-                loading="lazy"
-                decoding="async"
-              />
-              <h3 class="font-bold text-slate-900">Suporte especializado</h3>
-              <p class="mt-2 text-sm text-slate-700">Canal de suporte para dúvidas técnicas e acompanhamento durante o estudo.</p>
-            </article>
+    <section class="bg-[#f8fafc]">
+      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 py-16">
+        <div class="w-full flex-shrink-0 md:w-[420px] order-2 md:order-1">
+          <div class="flex justify-center">
+            <img src="/images/bonus_2.webp" alt="Bônus Checklist" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
           </div>
         </div>
-      </section>
+        <div class="flex-1 order-1 md:order-2">
+          <span class="text-sm font-black uppercase tracking-widest text-orange-500">BÔNUS 02</span>
+          <h3 class="mt-2 mb-4 text-2xl font-black text-slate-800">Checklist de Ferramentas e Bancada</h3>
+          <p class="text-gray-600 leading-relaxed">Lista completa com todas as ferramentas essenciais para montar sua bancada profissional e atender clientes residenciais e comerciais com segurança e qualidade.</p>
+          <ul class="mt-4 space-y-2">
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Lista de ferramentas essenciais para iniciantes</span></li>
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Ferramentas para diagnóstico avançado</span></li>
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Onde comprar com melhor custo-benefício</span></li>
+          </ul>
+          <div class="mt-6 inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2">
+            <span class="text-sm font-bold text-orange-500">Valor: R$ 47,00</span>
+            <span class="text-sm text-gray-400">→</span>
+            <span class="text-sm font-bold text-green-600">GRÁTIS para alunos</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <section id="matricula" class="scroll-mt-24 bg-white px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div class="mx-auto min-w-0 max-w-5xl">
-          <h2 class="text-center text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">Investimento e Matrícula</h2>
-          <p class="mx-auto mt-4 max-w-3xl text-center text-slate-700">
-            Estrutura financeira transparente, com opção de pagamento parcelado.
-          </p>
+    <section class="bg-white">
+      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 py-16">
+        <div class="flex-1">
+          <span class="text-sm font-black uppercase tracking-widest text-orange-500">BÔNUS 03</span>
+          <h3 class="mt-2 mb-4 text-2xl font-black text-slate-800">Guia de Atendimento e Pós-Serviço</h3>
+          <p class="text-gray-600 leading-relaxed">Script completo para atender clientes, fechar orçamentos com confiança e criar uma carteira fidelizada de clientes recorrentes.</p>
+          <ul class="mt-4 space-y-2">
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Script de proposta e fechamento de contrato</span></li>
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Como precificar seus serviços corretamente</span></li>
+            <li class="flex gap-2 text-sm text-gray-700"><span class="text-orange-500">✓</span><span>Estratégia para gerar indicações e recorrência</span></li>
+          </ul>
+          <div class="mt-6 inline-flex items-center gap-2 rounded-lg border border-orange-200 bg-orange-50 px-4 py-2">
+            <span class="text-sm font-bold text-orange-500">Valor: R$ 67,00</span>
+            <span class="text-sm text-gray-400">→</span>
+            <span class="text-sm font-bold text-green-600">GRÁTIS para alunos</span>
+          </div>
+        </div>
+        <div class="w-full flex-shrink-0 md:w-[420px]">
+          <div class="flex justify-center">
+            <img src="/images/bonus_3.webp" alt="Bônus Guia de Atendimento" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
+          </div>
+        </div>
+      </div>
+      <p class="mt-8 flex items-center justify-center gap-2 text-center text-sm text-gray-500"><span>⬇️</span><span>Os bônus são liberados automaticamente após a compra</span></p>
+    </section>
 
-          <div class="mt-10 min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-sm">
-            <div class="grid min-w-0 gap-0 md:grid-cols-3">
-              <div class="min-w-0 border-b border-slate-200 p-4 sm:p-6 md:border-b-0 md:border-r">
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Taxa única de matrícula</p>
-                <p class="mt-3 text-2xl font-black text-slate-900">R$ 0,00</p>
-                <p class="mt-2 text-sm text-slate-600">Valor aplicado no ato da inscrição.</p>
-              </div>
-              <div class="min-w-0 border-b border-slate-200 p-4 sm:p-6 md:border-b-0 md:border-r">
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Mensalidades</p>
-                <p class="mt-1 text-sm text-slate-500 line-through">De R$ 597,00</p>
-                <p class="mt-2 break-words text-xl font-black text-slate-900 sm:text-2xl">12x de R$ 20,37</p>
-                <p class="mt-1 text-sm font-semibold text-slate-800">ou R$ 197,00 à vista</p>
-                <p class="mt-2 text-sm text-slate-600">Acesso vitalício, +160 aulas e certificado de 30h.</p>
-              </div>
-              <div class="min-w-0 p-4 sm:p-6">
-                <p class="text-xs font-bold uppercase tracking-wide text-slate-500">Formas de pagamento</p>
-                <p class="mt-3 text-lg font-bold text-slate-900">Pix, Cartão e Boleto</p>
-                <p class="mt-2 text-sm text-slate-600">Processamento seguro em ambiente criptografado.</p>
-              </div>
+    <!-- 10. DEPOIMENTOS -->
+    <section class="bg-orange-500 py-16 md:py-24" id="depoimentos">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <h2 class="text-center text-3xl font-bold text-white">Veja o que dizem nossos alunos</h2>
+        <p class="mb-10 mt-2 text-center text-sm text-orange-100">Alunos que seguiram o método e começaram a fechar serviços em poucas semanas.</p>
+
+        <h3 class="mb-6 text-center text-2xl font-bold text-white">O que nossos alunos dizem</h3>
+        <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <img src="/images/comentario-aluno-jose.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
+            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
+              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
             </div>
-            <div class="border-t border-slate-200 bg-white p-4 text-center sm:p-6">
-              <a
-                href={hotmartAffiliateUrl}
-                target="_blank"
-                rel="nofollow noopener noreferrer"
-                aria-label="Realizar matrícula no curso (abre a página de pagamento na Hotmart em nova aba)"
-                class="flex min-h-[52px] w-full max-w-full items-center justify-center rounded-lg bg-blue-900 px-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800 sm:inline-flex sm:w-auto sm:px-8"
-              >
-                Realizar Matrícula
-              </a>
-              <p class="mt-3 text-xs text-slate-600">
-                Garantia incondicional de 15 dias. Solicitações de reembolso sem burocracia.
-              </p>
-              <img
-                src="/images/lp/garantia-15-dias.png"
-                alt="Selo de garantia de reembolso em 15 dias"
-                class="mx-auto mt-4 h-20 w-auto"
-                loading="lazy"
-                decoding="async"
-              />
+          </div>
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <img src="/images/comentario-aluno-marcos-1.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
+            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
+              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <img src="/images/comentario-de-aluno-curso.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
+            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
+              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <img src="/images/comentario-de-aluno-edmar-curso.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
+            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
+              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
+              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
             </div>
           </div>
         </div>
-      </section>
 
-      <section class="border-t border-slate-200 bg-slate-100/70 px-3 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div class="mx-auto min-w-0 max-w-7xl">
-          <h2 class="text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">Dúvidas recorrentes</h2>
-          <div class="mt-6 grid min-w-0 grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
-            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5" open>
-              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">O curso é online?</summary>
-              <p class="mt-2 text-sm text-slate-700">Sim. O curso é 100% online e pode ser assistido pelo celular ou computador.</p>
-            </details>
-            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">Como recebo o acesso?</summary>
-              <p class="mt-2 text-sm text-slate-700">Após o pagamento, o acesso é enviado por e-mail na plataforma Hotmart.</p>
-            </details>
-            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">Por quanto tempo terei acesso?</summary>
-              <p class="mt-2 text-sm text-slate-700">O acesso é vitalício para revisar as aulas quando desejar.</p>
-            </details>
-            <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
-              <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900">Existe suporte técnico durante o curso?</summary>
-              <p class="mt-2 text-sm text-slate-700">Sim. Há canal de suporte para acompanhamento e resolução de dúvidas.</p>
-            </details>
+        <h3 class="mt-12 text-center text-2xl font-bold text-white">Veja o que nossos alunos falam em vídeo</h3>
+        <p class="mb-6 mt-2 text-center text-sm text-orange-100">Resultados reais de alunos que aplicaram o método</p>
+        <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <div class="relative">
+              <iframe src="https://www.youtube.com/embed/re2MUygH5AY" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
+          </div>
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <div class="relative">
+              <iframe src="https://www.youtube.com/embed/JDCCY-RaeAM" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
+          </div>
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <div class="relative">
+              <iframe src="https://www.youtube.com/embed/hVK9NHrQBxQ" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
+          </div>
+          <div class="bg-white rounded-2xl overflow-hidden shadow-lg">
+            <div class="relative">
+              <iframe src="https://www.youtube.com/embed/50xBKEi5Gag" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <!-- 11. FAQ -->
+    <section class="bg-white py-16 md:py-24" id="faq">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <h2 class="text-center text-3xl font-black uppercase text-slate-900">PERGUNTAS FREQUENTES</h2>
+        <div class="mx-auto mt-2 h-1 w-24 rounded-full bg-orange-500"></div>
+        <div class="mx-auto mt-6 max-w-full md:max-w-3xl px-4 md:px-0">
+          <details class="border border-gray-200 rounded-xl mb-3 overflow-hidden shadow-sm">
+            <summary class="flex justify-between items-center px-5 py-4 bg-white font-semibold text-sm md:text-base text-gray-800 cursor-pointer hover:bg-orange-50 transition-colors list-none">
+              O curso é totalmente online?
+              <span class="text-gray-400 text-lg">+</span>
+            </summary>
+            <div class="px-5 pb-5 pt-4 text-gray-600 text-sm leading-relaxed bg-orange-50 border-t border-orange-100">
+              Sim. O acesso é feito pela plataforma Hotmart, podendo assistir pelo celular ou computador, a qualquer hora e em qualquer lugar.
+            </div>
+          </details>
+
+          <details class="border border-gray-200 rounded-xl mb-3 overflow-hidden shadow-sm">
+            <summary class="flex justify-between items-center px-5 py-4 bg-white font-semibold text-sm md:text-base text-gray-800 cursor-pointer hover:bg-orange-50 transition-colors list-none">
+              Por quanto tempo tenho acesso?
+              <span class="text-gray-400 text-lg">+</span>
+            </summary>
+            <div class="px-5 pb-5 pt-4 text-gray-600 text-sm leading-relaxed bg-orange-50 border-t border-orange-100">
+              O acesso é vitalício. O curso não expira e você pode assistir quantas vezes quiser, para sempre.
+            </div>
+          </details>
+
+          <details class="border border-gray-200 rounded-xl mb-3 overflow-hidden shadow-sm">
+            <summary class="flex justify-between items-center px-5 py-4 bg-white font-semibold text-sm md:text-base text-gray-800 cursor-pointer hover:bg-orange-50 transition-colors list-none">
+              Recebo certificado?
+              <span class="text-gray-400 text-lg">+</span>
+            </summary>
+            <div class="px-5 pb-5 pt-4 text-gray-600 text-sm leading-relaxed bg-orange-50 border-t border-orange-100">
+              Sim! Ao concluir o curso você recebe um certificado de conclusão que pode ser baixado direto pela plataforma Hotmart.
+            </div>
+          </details>
+
+          <details class="border border-gray-200 rounded-xl mb-3 overflow-hidden shadow-sm">
+            <summary class="flex justify-between items-center px-5 py-4 bg-white font-semibold text-sm md:text-base text-gray-800 cursor-pointer hover:bg-orange-50 transition-colors list-none">
+              Serve para iniciantes?
+              <span class="text-gray-400 text-lg">+</span>
+            </summary>
+            <div class="px-5 pb-5 pt-4 text-gray-600 text-sm leading-relaxed bg-orange-50 border-t border-orange-100">
+              Sim! O curso foi desenvolvido do zero, sem exigir conhecimento prévio. Qualquer pessoa consegue aprender e começar a prestar serviços.
+            </div>
+          </details>
+
+          <details class="border border-gray-200 rounded-xl mb-3 overflow-hidden shadow-sm">
+            <summary class="flex justify-between items-center px-5 py-4 bg-white font-semibold text-sm md:text-base text-gray-800 cursor-pointer hover:bg-orange-50 transition-colors list-none">
+              Qual é a garantia?
+              <span class="text-gray-400 text-lg">+</span>
+            </summary>
+            <div class="px-5 pb-5 pt-4 text-gray-600 text-sm leading-relaxed bg-orange-50 border-t border-orange-100">
+              Garantia incondicional de 15 dias. Se não gostar por qualquer motivo, basta solicitar o reembolso e devolvemos 100% do valor pago.
+            </div>
+          </details>
+
+          <details class="border border-gray-200 rounded-xl mb-3 overflow-hidden shadow-sm">
+            <summary class="flex justify-between items-center px-5 py-4 bg-white font-semibold text-sm md:text-base text-gray-800 cursor-pointer hover:bg-orange-50 transition-colors list-none">
+              Em quantas vezes posso parcelar?
+              <span class="text-gray-400 text-lg">+</span>
+            </summary>
+            <div class="px-5 pb-5 pt-4 text-gray-600 text-sm leading-relaxed bg-orange-50 border-t border-orange-100">
+              Em até 12x de R$ 20,37 no cartão de crédito, ou R$ 197,00 à vista com desconto.
+            </div>
+          </details>
+
+          <details class="border border-gray-200 rounded-xl mb-3 overflow-hidden shadow-sm">
+            <summary class="flex justify-between items-center px-5 py-4 bg-white font-semibold text-sm md:text-base text-gray-800 cursor-pointer hover:bg-orange-50 transition-colors list-none">
+              Terei suporte durante o curso?
+              <span class="text-gray-400 text-lg">+</span>
+            </summary>
+            <div class="px-5 pb-5 pt-4 text-gray-600 text-sm leading-relaxed bg-orange-50 border-t border-orange-100">
+              Sim! Há suporte disponível para dúvidas técnicas ao longo de todo o curso.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-gradient-to-br from-slate-900 to-slate-800 py-16 md:py-24">
+      <div class="mx-auto max-w-6xl px-4 md:px-0 text-center">
+        <div class="w-24 h-1 bg-orange-500 mx-auto mb-8 rounded"></div>
+        <h2 class="text-2xl md:text-4xl font-black text-white">Garanta sua vaga agora</h2>
+        <p class="mt-3 mb-8 text-gray-400">+11.900 alunos já estão no mercado. Sua vez.</p>
+        <a
+          href={hotmartAffiliateUrl}
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          class="w-full md:w-auto bg-orange-500 hover:bg-orange-400 text-white font-black py-5 px-12 rounded-2xl text-base md:text-xl uppercase tracking-wide transition transform hover:scale-105 shadow-lg shadow-orange-500/30"
+        >
+          QUERO ME INSCREVER AGORA
+        </a>
+        <div class="flex flex-col md:flex-row items-center justify-center gap-6 mt-6 text-gray-400 text-sm">
+          <span>🔒 Pagamento seguro</span>
+          <span>⚡ Acesso imediato</span>
+          <span>↩️ Garantia 15 dias</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="h-1 w-full bg-orange-500"></div>
+    <!-- 12. FOOTER -->
+    <footer id="rodape-lp" class="border-t border-gray-200 bg-[#f8fafc] py-16">
+      <div class="mx-auto grid grid-cols-1 md:grid-cols-4 max-w-6xl gap-8 px-4 md:px-0">
+        <div class="mb-8 md:mb-0 text-center md:text-left">
+          <img src={logoForLayout} alt={siteNameForLayout} class="h-12 w-auto object-contain mx-auto md:mx-0" />
+          <div class="mt-4 flex justify-center gap-2 text-white md:justify-start">
+            <a href="https://facebook.com/cursodear" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M13.5 8H16V5h-2.5C10.5 5 9 6.8 9 9.4V11H7v3h2v5h3v-5h2.6l.4-3H12V9.6c0-1 .3-1.6 1.5-1.6z"/></svg>
+            </a>
+            <a href="https://instagram.com/cursodear" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zm5.75-3.25a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25z"/></svg>
+            </a>
+            <a href="https://youtube.com/cursodear" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M23.5 7.2a3 3 0 0 0-2.1-2.1C19.5 4.5 12 4.5 12 4.5s-7.5 0-9.4.6A3 3 0 0 0 .5 7.2C0 9.1 0 12 0 12s0 2.9.5 4.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-4.8.5-4.8s0-2.9-.5-4.8zM9.6 15.2V8.8l6 3.2-6 3.2z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div class="mb-8 md:mb-0">
+          <h3 class="text-sm font-bold uppercase text-slate-900">FORMAÇÕES</h3>
+          <ul class="mt-3 space-y-2 text-sm text-gray-600">
+            <li><a href="#o-que-aprender" class="hover:text-orange-500">Curso de Ar Condicionado</a></li>
+            <li><a href="#modulos" class="hover:text-orange-500">Instalação Split</a></li>
+            <li><a href="#modulos" class="hover:text-orange-500">Manutenção Preventiva</a></li>
+          </ul>
+        </div>
+        <div class="mb-8 md:mb-0">
+          <h3 class="text-sm font-bold uppercase text-slate-900">CURSOS COMPLEMENTARES</h3>
+          <ul class="mt-3 space-y-2 text-sm text-gray-600">
+            <li><a href="#" class="hover:text-orange-500">Refrigeração Comercial</a></li>
+            <li><a href="#" class="hover:text-orange-500">Elétrica Aplicada</a></li>
+            <li><a href="#" class="hover:text-orange-500">Atendimento Técnico</a></li>
+          </ul>
+        </div>
+        <div class="mb-8 md:mb-0">
+          <h3 class="text-sm font-bold uppercase text-slate-900">BETA</h3>
+          <ul class="mt-3 space-y-2 text-sm text-gray-600">
+            <li><a href="#" class="hover:text-orange-500">Termos de Uso</a></li>
+            <li><a href="#" class="hover:text-orange-500">Política de Privacidade</a></li>
+            <li><a href="#" class="hover:text-orange-500">Contato</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="mx-auto mt-8 max-w-6xl border-t border-gray-200 px-4 pt-4 text-center text-xs text-gray-400 md:px-0">
+        © {new Date().getFullYear()} {siteNameForLayout}. Todos os direitos reservados.
+      </div>
+    </footer>
+
+    <a
+      href="https://wa.me/5514996973456"
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Chat de suporte"
+      class="fixed bottom-6 right-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 text-xl text-white shadow-xl"
+    >
+      💬
+    </a>
+  </div>
+
+  <script>
+    (() => {
+      const dayEl = document.getElementById('countdown-days');
+      const hourEl = document.getElementById('countdown-hours');
+      const minEl = document.getElementById('countdown-minutes');
+      const secEl = document.getElementById('countdown-seconds');
+      if (!dayEl || !hourEl || !minEl || !secEl) return;
+
+      const targetDate = new Date();
+      targetDate.setDate(targetDate.getDate() + 7);
+
+      function updateCountdown() {
+        const now = new Date();
+        const diff = targetDate - now;
+        if (diff <= 0) return;
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        dayEl.textContent = String(days).padStart(2, '0');
+        hourEl.textContent = String(hours).padStart(2, '0');
+        minEl.textContent = String(minutes).padStart(2, '0');
+        secEl.textContent = String(seconds).padStart(2, '0');
+      }
+
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    })();
+  </script>
+
+  <style>
+    :global(html) {
+      scroll-padding-top: 80px;
+    }
+    :global(body > footer) {
+      display: none !important;
+    }
+  </style>
 </BaseLayoutBemmae>

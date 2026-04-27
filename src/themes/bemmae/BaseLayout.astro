@@ -89,6 +89,11 @@ const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
   <meta name="twitter:description" content={fullDescription} />
   {ogImageAbs && <meta name="twitter:image" content={ogImageAbs} />}
   <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
+  <style is:global>
+    html {
+      scroll-padding-top: 80px;
+    }
+  </style>
 </head>
 <body class="bemmae-scope min-w-0 overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
   <Header siteName={siteName} logoSrc={logoSrc} nav={nav} />

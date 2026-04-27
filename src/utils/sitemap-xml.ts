@@ -109,6 +109,8 @@ ${stylesheet}
                 'servicos',
                 'lp1',
                 'curso-vendas',
+                'nossos-cursos',
+                'automotivo',
                 'setup',
             ]);
             const postSlugSet = new Set(

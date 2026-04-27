@@ -1,0 +1,345 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+
+const pageTitle = 'Curso de Ar Condicionado Automotivo Online | Instalação e Diagnóstico';
+const pageDescription =
+  'Climatização veicular: circuito, compressor, diagnóstico e segurança com refrigerante. Curso online, aulas práticas e certificado.';
+
+const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
+
+const beMenu = (await readSingleton('menu', 'bemmae')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'bemmae')) as Record<string, unknown> | null;
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
+
+const learnItems = [
+  { t: 'Circuito de climatização', d: 'Como o ar frio circula no veículo, troca de calor e integração com a ventilação da cabine.' },
+  { t: 'Compressor e acionamento', d: 'Tipos de compressor, correia, embreagem e sinais de desgaste ou falha.' },
+  { t: 'Condensador e radiador', d: 'Limpeza, obstruções e impacto na eficiência do sistema em dias quentes.' },
+  { t: 'Evaporador e drenos', d: 'Umidade, odores, entupimento do dreno e cuidados na desmontagem.' },
+  { t: 'Diagnóstico de vazamentos', d: 'Métodos seguros de inspeção e boas práticas antes da recarga.' },
+  { t: 'Segurança com refrigerante', d: 'EPI, normas básicas e cuidados com pressão e temperatura no automotivo.' },
+];
+
+const checklist = [
+  'Diferenças entre ar automotivo e split residencial',
+  'Leitura de pressões e interpretação em linha com o fabricante',
+  'Testes elétricos em ventiladores, relés e sensores',
+  'Manutenção preventiva em concessionárias e oficinas independentes',
+  'Atendimento ao cliente e orçamento técnico',
+  'Documentação do serviço e garantia',
+  'Atualização para quem já trabalha com elétrica veicular',
+  'Preparação para atuar com veículos leves e utilitários',
+];
+
+const modules = [
+  { id: '01', title: 'Introdução ao ar condicionado automotivo', items: ['História e evolução no Brasil', 'Visão geral dos componentes', 'Ferramentas e EPIs básicos'] },
+  { id: '02', title: 'Elétrica e comandos', items: ['Relés, fusíveis e chicote', 'Comandos no painel', 'Leitura de esquemas simplificados'] },
+  { id: '03', title: 'Compressor e transmissão', items: ['Tipos de compressor', 'Correia e tensão', 'Ruídos e vibrações anormais'] },
+  { id: '04', title: 'Troca de calor e ventilação', items: ['Condensador e fluxo de ar', 'Evaporador e filtro de cabine', 'Dreno e higienização'] },
+  { id: '05', title: 'Diagnóstico e recarga', items: ['Indícios de baixa carga', 'Teste de estanqueidade conceitual', 'Boas práticas na recarga'] },
+  { id: '06', title: 'Encerramento', items: ['Checklist final de entrega', 'Próximos passos na carreira', 'Indicações de aprofundamento'] },
+];
+---
+
+<BaseLayoutBemmae
+  title={pageTitle}
+  description={pageDescription}
+  siteName={siteNameForLayout}
+  logoSrc={logoForLayout}
+  siteUrl={siteUrl}
+  nav={beNav}
+  footerNav={beFootNav}
+  contentThemeId="bemmae"
+>
+  <div class="min-w-0 bg-slate-50 text-slate-900 antialiased">
+    <!-- Hero + oferta (modelo landing, cores slate + blue-900 do site) -->
+    <section class="scroll-mt-24 border-b border-slate-200 bg-white px-3 py-10 sm:px-6 sm:py-14 lg:py-16">
+      <div class="mx-auto grid min-w-0 max-w-7xl gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+        <div class="min-w-0">
+          <p class="inline-flex max-w-full flex-wrap rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-slate-600 sm:text-xs">
+            Curso online · Ar condicionado automotivo
+          </p>
+          <h1 class="mt-4 break-words text-balance text-3xl font-black leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
+            Curso de Ar Condicionado Automotivo
+          </h1>
+          <p class="mt-4 max-w-xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
+            Do básico ao diagnóstico em veículos: circuito, componentes, segurança com refrigerante e rotina de oficina.
+          </p>
+          <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm">
+            <img
+              src="/images/lp/eletrica-aplicada.png"
+              alt="Instrumentação e diagnóstico em sistema automotivo"
+              class="aspect-[4/3] h-auto w-full max-w-full object-cover"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+        </div>
+
+        <aside class="min-w-0 lg:justify-self-end lg:w-full lg:max-w-md" aria-label="Resumo da oferta">
+          <div class="rounded-2xl border-2 border-blue-900/20 bg-white p-5 shadow-lg sm:p-6">
+            <p class="rounded-lg bg-blue-900 px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-white">
+              Acesso imediato após a confirmação do pagamento
+            </p>
+            <p class="mt-4 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">Investimento</p>
+            <p class="mt-1 text-center text-3xl font-black text-slate-900 sm:text-4xl">12x de R$ 20,37</p>
+            <p class="mt-1 text-center text-sm font-semibold text-slate-700">ou R$ 197,00 à vista</p>
+            <ul class="mt-5 space-y-2.5 border-t border-slate-200 pt-5 text-sm text-slate-700">
+              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Certificado ao concluir a carga horária</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Aulas em vídeo — assista quando quiser</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Conteúdo focado no mercado automotivo</span></li>
+              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Suporte e comunidade de alunos (conforme regras do curso)</span></li>
+            </ul>
+            <a
+              href={hotmartAffiliateUrl}
+              target="_blank"
+              rel="nofollow noopener noreferrer"
+              aria-label="Comprar curso de ar condicionado automotivo na Hotmart"
+              class="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-lg bg-blue-900 px-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800"
+            >
+              Comprar agora
+            </a>
+            <p class="mt-3 text-center text-xs text-slate-500">Pagamento seguro · Hotmart</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- O que você vai aprender -->
+    <section class="border-b border-slate-200 bg-white px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="aprender-heading">
+      <div class="mx-auto min-w-0 max-w-6xl">
+        <h2 id="aprender-heading" class="text-center text-2xl font-black text-slate-900 sm:text-3xl">
+          O que você vai aprender no curso
+        </h2>
+        <p class="mx-auto mt-3 max-w-2xl text-center text-sm text-slate-600 sm:text-base">
+          Módulos pensados para aplicar na oficina, com linguagem clara e foco em segurança.
+        </p>
+        <div class="mt-10 grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {learnItems.map((item) => (
+            <article class="flex min-w-0 gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-900 text-lg text-white" aria-hidden="true">◎</span>
+              <div class="min-w-0">
+                <h3 class="font-bold text-slate-900">{item.t}</h3>
+                <p class="mt-1 text-sm leading-relaxed text-slate-600">{item.d}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Conteúdo do curso (acordeão) -->
+    <section class="px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="conteudo-heading">
+      <div class="mx-auto min-w-0 max-w-3xl">
+        <h2 id="conteudo-heading" class="text-center text-2xl font-black uppercase tracking-tight text-slate-900 sm:text-3xl">
+          Conteúdo do curso
+        </h2>
+        <ol class="mt-8 list-none space-y-3 p-0">
+          {modules.map((mod, i) => (
+            <li>
+              <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-0 shadow-sm open:border-blue-200" open={i === 0}>
+                <summary class="cursor-pointer list-none border-b border-transparent px-4 py-4 [&::-webkit-details-marker]:hidden sm:px-5">
+                  <h3 class="text-base font-bold text-slate-900 sm:text-lg">
+                    <span class="text-blue-800">Módulo {mod.id}</span>
+                    {' — '}
+                    {mod.title}
+                  </h3>
+                </summary>
+                <ul class="space-y-2 border-t border-slate-100 px-4 py-4 text-sm text-slate-700 sm:px-5">
+                  {mod.items.map((line) => (
+                    <li class="flex gap-2 pl-0">
+                      <span class="text-blue-600">•</span>
+                      <span class="min-w-0">{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <!-- Checklist em duas colunas -->
+    <section class="border-y border-slate-200 bg-white px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="checklist-heading">
+      <div class="mx-auto min-w-0 max-w-5xl">
+        <h2 id="checklist-heading" class="text-center text-2xl font-black text-slate-900 sm:text-3xl">
+          Tópicos que você leva para o dia a dia
+        </h2>
+        <ul class="mt-8 grid min-w-0 grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
+          {checklist.map((line) => (
+            <li class="flex min-w-0 gap-2 text-sm text-slate-700 sm:text-base">
+              <span class="mt-0.5 shrink-0 text-blue-700" aria-hidden="true">✓</span>
+              <span class="min-w-0">{line}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Descrição -->
+    <section class="px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="desc-heading">
+      <div class="mx-auto min-w-0 max-w-3xl">
+        <h2 id="desc-heading" class="text-2xl font-black text-slate-900 sm:text-3xl">Descrição do curso</h2>
+        <div class="mt-6 space-y-4 text-sm leading-relaxed text-slate-700 sm:text-base">
+          <p>
+            O curso de <strong>ar condicionado automotivo</strong> foi montado para quem precisa de segurança na execução e
+            clareza na conversa com o cliente: você entende o que cada componente faz, onde costuma falhar e como
+            organizar o serviço sem atalhos perigosos.
+          </p>
+          <p>
+            As aulas combinam fundamentos com situações típicas de oficina — pressão, ventilação, odores, ruído no
+            compressor e dúvidas na recarga — sempre com ênfase em <strong>normas de segurança</strong> e responsabilidade
+            ambiental.
+          </p>
+          <p>
+            Ao final, você estará mais preparado para integrar a climatização ao seu portfólio, seja em mecânica geral,
+            elétrica veicular ou refrigeração com foco em veículos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Professor -->
+    <section class="border-y border-slate-200 bg-slate-100/80 px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="prof-heading">
+      <div class="mx-auto min-w-0 max-w-4xl rounded-2xl border border-slate-200 bg-white p-5 sm:p-8">
+        <h2 id="prof-heading" class="text-2xl font-black text-slate-900 sm:text-3xl">Professor</h2>
+        <div class="mt-6 grid min-w-0 gap-8 md:grid-cols-[auto,1fr] md:items-start">
+          <div class="flex justify-center md:justify-start">
+            <div
+              class="flex h-28 w-28 shrink-0 items-center justify-center rounded-full border-4 border-slate-200 bg-blue-900 text-2xl font-black text-white md:h-32 md:w-32"
+              aria-hidden="true"
+            >
+              LM
+            </div>
+          </div>
+          <div class="min-w-0">
+            <p class="text-xl font-bold text-slate-900">Professor Leandro Moraes</p>
+            <p class="mt-2 text-sm leading-relaxed text-slate-700 sm:text-base">
+              Técnico em refrigeração há mais de 20 anos, formado pelo SENAI (Taguatinga/DF), com experiência em
+              autorizadas e na Polo Norte Refrigeração / Polo Norte Cursos. Canal <strong>POLO NORTE CURSOS</strong> no
+              YouTube com dezenas de milhares de inscritos.
+            </p>
+            <ul class="mt-4 grid gap-2 text-sm text-slate-700 sm:grid-cols-2">
+              <li class="flex gap-2"><span class="text-blue-700">✓</span> Didática objetiva</li>
+              <li class="flex gap-2"><span class="text-blue-700">✓</span> Experiência em campo e em sala</li>
+              <li class="flex gap-2"><span class="text-blue-700">✓</span> Conteúdo alinhado ao mercado</li>
+              <li class="flex gap-2"><span class="text-blue-700">✓</span> Referência em cursos online na área</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bônus (3 blocos) -->
+    <section class="px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="bonus-heading">
+      <div class="mx-auto min-w-0 max-w-6xl">
+        <h2 id="bonus-heading" class="text-center text-2xl font-black text-slate-900 sm:text-3xl">Bônus exclusivos</h2>
+        <div class="mt-10 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3">
+          <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+            <div class="bg-slate-200/80 px-4 py-3">
+              <p class="text-xs font-bold uppercase tracking-wide text-blue-900">Bônus 01</p>
+              <h3 class="mt-1 font-bold text-slate-900">Material de apoio em PDF</h3>
+            </div>
+            <div class="p-4">
+              <img src="/images/lp/inverter-board.png" alt="" class="aspect-video w-full rounded-lg object-cover" loading="lazy" decoding="async" />
+              <p class="mt-3 text-sm text-slate-600">Resumos e checklists para levar à oficina.</p>
+            </div>
+          </article>
+          <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+            <div class="bg-slate-200/80 px-4 py-3">
+              <p class="text-xs font-bold uppercase tracking-wide text-blue-900">Bônus 02</p>
+              <h3 class="mt-1 font-bold text-slate-900">Certificado digital</h3>
+            </div>
+            <div class="p-4">
+              <img src="/images/lp/certificado.png" alt="Certificado do curso" class="aspect-video w-full rounded-lg object-cover" loading="lazy" decoding="async" />
+              <p class="mt-3 text-sm text-slate-600">Conclusão com registro e carga horária (conforme regras da plataforma).</p>
+            </div>
+          </article>
+          <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+            <div class="bg-slate-200/80 px-4 py-3">
+              <p class="text-xs font-bold uppercase tracking-wide text-blue-900">Bônus 03</p>
+              <h3 class="mt-1 font-bold text-slate-900">Canal de dúvidas</h3>
+            </div>
+            <div class="p-4">
+              <img src="/images/lp/whatsapp-suporte.png" alt="Suporte" class="mx-auto h-24 w-auto object-contain" loading="lazy" decoding="async" />
+              <p class="mt-3 text-sm text-slate-600">Orientações para acompanhar o curso e tirar dúvidas (conforme disponibilidade divulgada na compra).</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="bg-slate-900 px-3 py-12 text-white sm:px-6 sm:py-16" aria-labelledby="depo-heading">
+      <div class="mx-auto min-w-0 max-w-6xl">
+        <h2 id="depo-heading" class="text-center text-2xl font-black sm:text-3xl">O que dizem nossos alunos</h2>
+        <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-slate-300">
+          Resultados podem variar conforme dedicação e experiência prévia. Depoimentos ilustrativos da linha de cursos da Polo Norte.
+        </p>
+        <div class="mt-10 grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {['Conteúdo direto ao ponto.', 'Consegui aplicar na oficina no mesmo mês.', 'Professor explica sem enrolação.', 'Recomendo para quem quer entrar na área.', 'Ótimo custo-benefício.', 'Voltei para revisar as aulas várias vezes.'].map((txt) => (
+            <figure class="min-w-0 rounded-xl border border-slate-700 bg-slate-800/80 p-4">
+              <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-slate-600 text-xs font-bold text-slate-200" aria-hidden="true">Aluno</div>
+              <blockquote class="text-center text-sm leading-relaxed text-slate-200">“{txt}”</blockquote>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="border-t border-slate-200 bg-white px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="faq-heading">
+      <div class="mx-auto min-w-0 max-w-3xl">
+        <h2 id="faq-heading" class="text-center text-2xl font-black uppercase tracking-tight text-slate-900 sm:text-3xl">
+          Perguntas frequentes
+        </h2>
+        <div class="mt-8 space-y-3">
+          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5" open>
+            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">O curso é só para automotivo?</summary>
+            <p class="mt-2 text-sm leading-relaxed text-slate-700">Sim. Esta página descreve a trilha com foco em climatização veicular; o curso de split residencial está em Nossos Cursos.</p>
+          </details>
+          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">Preciso de ferramentas caras para começar?</summary>
+            <p class="mt-2 text-sm leading-relaxed text-slate-700">O curso orienta o uso de equipamentos comuns em oficina; evolução de ferramentas depende do tipo de serviço que você pretende oferecer.</p>
+          </details>
+          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">Recebo certificado?</summary>
+            <p class="mt-2 text-sm leading-relaxed text-slate-700">Sim, após concluir os requisitos da plataforma (Hotmart), conforme regras exibidas na página de compra.</p>
+          </details>
+          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
+            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">Posso ver as aulas no celular?</summary>
+            <p class="mt-2 text-sm leading-relaxed text-slate-700">Sim. O acesso é pelo app ou site da Hotmart, com qualidade de áudio e vídeo compatível com conexão estável.</p>
+          </details>
+        </div>
+        <p class="mt-10 text-center">
+          <a
+            href={hotmartAffiliateUrl}
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            aria-label="Garantir vaga no curso automotivo"
+            class="inline-flex min-h-[48px] w-full max-w-md items-center justify-center rounded-lg bg-blue-900 px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800 sm:w-auto"
+          >
+            Quero começar agora
+          </a>
+        </p>
+        <p class="mt-6 text-center text-sm text-slate-600">
+          <a class="font-semibold text-blue-800 underline decoration-blue-200 underline-offset-2 hover:text-blue-700" href="/nossos-cursos">Curso split residencial</a>
+          {' · '}
+          <a class="font-semibold text-blue-800 underline decoration-blue-200 underline-offset-2 hover:text-blue-700" href="/">Início</a>
+        </p>
+      </div>
+    </section>
+  </div>
+</BaseLayoutBemmae>

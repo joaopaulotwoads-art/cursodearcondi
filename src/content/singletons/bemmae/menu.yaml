@@ -8,6 +8,9 @@ items:
   - label: Nossos Cursos
     href: /nossos-cursos
     target: _self
+  - label: Automotivo
+    href: /automotivo
+    target: _self
   - label: Certificação
     href: /#certificacao
     target: _self

@@ -9,47 +9,35 @@ interface Props {
 
 const { siteName, nav, logoSrc } = Astro.props;
 ---
-<header class="min-w-0 overflow-x-hidden bg-[#faf7f5] border-b border-stone-200/90 sticky top-0 z-50 shadow-[0_1px_0_rgba(0,0,0,0.04)]">
-  <div class="mx-auto flex min-w-0 max-w-4xl items-center justify-between gap-2 px-3 py-2.5 sm:gap-5 sm:px-4 sm:py-3">
-    <a href="/" class="flex min-h-[40px] min-w-0 max-w-[72%] shrink items-center sm:max-w-none" aria-label={siteName}>
-      {logoSrc ? (
-        <img
-          src={logoSrc}
-          alt=""
-          width="480"
-          height="108"
-          class="h-8 max-h-10 w-auto max-w-full object-contain object-left sm:h-10 md:h-11"
-          decoding="async"
-          fetchpriority="low"
-        />
-      ) : (
-        <span class="text-base font-semibold text-stone-800">{siteName}</span>
-      )}
-    </a>
-    <nav class="hidden md:flex items-center gap-0.5" aria-label="Navegação">
-      {nav.map((item) => (
-        <a
-          href={item.href}
-          class="text-sm font-semibold text-stone-700 no-underline hover:bg-stone-200/60 rounded-md px-3 min-h-[40px] flex items-center"
-        >
-          {item.label}
-        </a>
-      ))}
+<header class="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur-sm">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+    <div class="flex items-center gap-3">
+      <img src={logoSrc || '/logo.png'} alt="Polo Norte Cursos" class="h-10 w-auto object-contain" />
+      <div class="hidden md:block">
+        <p class="text-sm font-black leading-tight text-slate-800">POLO NORTE CURSOS</p>
+        <p class="text-xs font-medium text-orange-500">Formação Profissional em Climatização</p>
+      </div>
+    </div>
+
+    <nav class="hidden items-center gap-8 md:flex" aria-label="Navegação institucional">
+      <a href="/" class="text-sm font-medium text-gray-600 transition-colors hover:text-orange-500">Início</a>
+      <a href="/cursos" class="text-sm font-medium text-gray-600 transition-colors hover:text-orange-500">Nossos Cursos</a>
+      <a href="/sobre" class="text-sm font-medium text-gray-600 transition-colors hover:text-orange-500">Sobre</a>
+      <a href="/blog" class="text-sm font-medium text-gray-600 transition-colors hover:text-orange-500">Blog</a>
+      <a href="/contato" class="text-sm font-medium text-gray-600 transition-colors hover:text-orange-500">Contato</a>
     </nav>
-    <button type="button" id="bem-mobile-menu-btn" class="md:hidden p-2 min-h-[40px] min-w-[40px] flex items-center justify-center text-stone-800 rounded-md hover:bg-stone-200/50" aria-label="Abrir menu">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" /></svg>
+
+    <button type="button" id="bem-mobile-menu-btn" class="p-2 text-gray-600 md:hidden" aria-label="Abrir menu">
+      ☰
     </button>
   </div>
-  <div id="bem-mobile-menu" class="hidden border-t border-stone-200 bg-[#f5f0ed] px-3 py-3 md:hidden">
-    <nav class="flex flex-col gap-1">
-      {nav.map((item) => (
-        <a
-          href={item.href}
-          class="bem-mobile-nav-link py-2.5 min-h-[44px] flex items-center text-sm font-semibold text-stone-800 no-underline hover:bg-stone-200/70 rounded-md px-2"
-        >
-          {item.label}
-        </a>
-      ))}
+  <div id="bem-mobile-menu" class="absolute left-0 right-0 top-16 hidden border-b border-gray-200 bg-white px-6 py-4 shadow-lg md:hidden">
+    <nav class="flex flex-col gap-4">
+      <a href="/" class="bem-mobile-nav-link border-b border-gray-100 py-2 font-medium text-gray-700">Início</a>
+      <a href="/cursos" class="bem-mobile-nav-link border-b border-gray-100 py-2 font-medium text-gray-700">Nossos Cursos</a>
+      <a href="/sobre" class="bem-mobile-nav-link border-b border-gray-100 py-2 font-medium text-gray-700">Sobre</a>
+      <a href="/blog" class="bem-mobile-nav-link border-b border-gray-100 py-2 font-medium text-gray-700">Blog</a>
+      <a href="/contato" class="bem-mobile-nav-link border-b border-gray-100 py-2 font-medium text-gray-700">Contato</a>
     </nav>
   </div>
 </header>
