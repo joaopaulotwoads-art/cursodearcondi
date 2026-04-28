@@ -6,16 +6,16 @@ import { canonicalPathname, schemaPageUrl } from './read-site-settings';
 
 export type PostSeoSchema = 'auto' | 'blogPosting' | 'articleItemList' | 'none';
 
-const BEMMAE_CARD_H3 =
-    /<div[^>]*class="[^"]*\bbemmae-card\b[^"]*"[^>]*>[\s\S]*?<div[^>]*class="[^"]*\bbemmae-text\b[^"]*"[^>]*>[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>/gi;
+const cursodear_CARD_H3 =
+    /<div[^>]*class="[^"]*\bcursodear-card\b[^"]*"[^>]*>[\s\S]*?<div[^>]*class="[^"]*\bcursodear-text\b[^"]*"[^>]*>[\s\S]*?<h3[^>]*>([\s\S]*?)<\/h3>/gi;
 
 const DEFAULT_IMAGE_WIDTH = 1200;
 const DEFAULT_IMAGE_HEIGHT = 630;
 
-export function extractBemmaeRankedProductNames(html: string | null | undefined): string[] {
+export function extractcursodearRankedProductNames(html: string | null | undefined): string[] {
     if (!html) return [];
     const names: string[] = [];
-    for (const m of html.matchAll(BEMMAE_CARD_H3)) {
+    for (const m of html.matchAll(cursodear_CARD_H3)) {
         const name = m[1].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
         if (name && !/^ficha t[eé]cnica/i.test(name)) names.push(name);
     }
@@ -68,7 +68,7 @@ export function buildBlogSearchUrlTemplate(siteUrl: string): string {
 /**
  * Graph mínimo (home, listagens): WebSite + Organization + SearchAction + inLanguage.
  */
-export function buildBemmaeDefaultSiteJsonLd(opts: {
+export function buildcursodearDefaultSiteJsonLd(opts: {
     siteUrl: string;
     siteName: string;
     description?: string;
@@ -138,7 +138,7 @@ export function buildPostJsonLd(opts: {
     categoryPath?: string;
 }): Record<string, unknown> | null {
     let mode: PostSeoSchema = opts.seoSchema || 'auto';
-    const items = extractBemmaeRankedProductNames(opts.htmlContent);
+    const items = extractcursodearRankedProductNames(opts.htmlContent);
 
     if (mode === 'auto') {
         mode = items.length >= 2 ? 'articleItemList' : 'blogPosting';

@@ -22,7 +22,7 @@ const posts = defineCollection({
         /** `html` = corpo guardado como HTML (ex.: import Ghost); render com set:html. */
         contentFormat: z.enum(['markdown', 'html']).optional(),
         /**
-         * JSON-LD do post: auto = detecta cards Bem Mãe (ItemList) ou BlogPosting;
+         * JSON-LD do post: auto = detecta cards Curso de Ar Condicionado�e (ItemList) ou BlogPosting;
          * blogPosting = artigo informativo; articleItemList = ranking/review; none = desliga.
          */
         seoSchema: z.enum(['auto', 'blogPosting', 'articleItemList', 'none']).optional(),
@@ -127,7 +127,7 @@ const siteSettings = defineCollection({
     schema: z.object({
         siteName: z.string(),
         /** Tema visual do site público (pastas em src/themes/ e singletons). */
-        activeTheme: z.string().default('bemmae'),
+        activeTheme: z.string().default('cursodear'),
         colorScheme: z.enum(['dark', 'light']).default('dark'),
         siteMode: z.enum(['blog', 'local']).default('blog'),
         aiProvider: z.enum(['openai', 'gemini']).default('gemini').optional(),

@@ -1,8 +1,8 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import MainLayout from '../../layouts/MainLayout.astro';
-import BaseLayoutBemmae from '../../themes/bemmae/BaseLayout.astro';
-import BemMaeAuthorPage from '../../themes/bemmae/AuthorPage.astro';
+import BaseLayoutcursodear from '../../themes/cursodear/BaseLayout.astro';
+import cursodearAuthorPage from '../../themes/cursodear/AuthorPage.astro';
 import { readSingleton } from '../../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../../utils/read-site-settings';
@@ -31,12 +31,12 @@ const blogUrlPrefix = (settings?.data?.blogUrlPrefix as import('../../utils/blog
 
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
 const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
-const useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
+const usecursodear = siteMode !== 'local' && activeTheme === 'cursodear';
 
 const siteName = settings?.data?.siteName || 'Site';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
-const beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
-const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
+const beMenu = usecursodear ? await readSingleton('menu', 'cursodear') : null;
+const beFoot = usecursodear ? await readSingleton('footer', 'cursodear') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const categories = await getCollection('categories');
@@ -46,8 +46,8 @@ const pageDescription =
   rawBio.length > 165 ? `${rawBio.slice(0, 162).trim()}…` : rawBio || `Artigos de ${author.data.name} no ${siteName}`;
 ---
 
-{useBemmae ? (
-  <BaseLayoutBemmae
+{usecursodear ? (
+  <BaseLayoutcursodear
     title={`${author.data.name} - ${siteName}`}
     description={pageDescription}
     siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
@@ -55,16 +55,16 @@ const pageDescription =
     siteUrl={siteUrl}
     nav={beNav}
     footerNav={beFootNav}
-    contentThemeId="bemmae"
+    contentThemeId="cursodear"
   >
-    <BemMaeAuthorPage
+    <cursodearAuthorPage
       author={author}
       posts={authorPosts}
       blogPermalinkStructure={blogPermalinkStructure}
       blogUrlPrefix={blogUrlPrefix}
       categories={categories}
     />
-  </BaseLayoutBemmae>
+  </BaseLayoutcursodear>
 ) : (
   <MainLayout title={`${author.data.name} - Autor`}>
     <div class="max-w-6xl mx-auto px-4 py-20">

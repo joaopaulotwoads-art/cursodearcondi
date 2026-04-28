@@ -1,8 +1,8 @@
 /**
- * Lista caminhos únicos /content/images/... referenciados nos posts (markdown + HTML embutido).
+ * Lista caminhos unicos /content/images/... referenciados nos posts (markdown + HTML embutido).
  * Copie esses ficheiros para public/content/images/... (mesma estrutura de pastas) a partir do backup Ghost ou export.
  *
- * Uso: bun run scripts/list-bemmae-content-images.mjs
+ * Uso: bun run scripts/list-cursodear-content-images.mjs
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -32,17 +32,17 @@ function walk(dir) {
 }
 
 if (!fs.existsSync(postsDir)) {
-    console.error('Pasta não encontrada:', postsDir);
+    console.error('Pasta nao encontrada:', postsDir);
     process.exit(1);
 }
 
 walk(postsDir);
 
 const sorted = [...found].sort();
-console.log(`Total: ${sorted.length} ficheiros únicos (relativos ao site)\n`);
+console.log(`Total: ${sorted.length} ficheiros unicos (relativos ao site)\n`);
 for (const rel of sorted) {
     const local = path.join('public', rel.replace(/^\//, ''));
     console.log(rel);
-    console.log(`  → copiar para ${local}`);
+    console.log(`  -> copiar para ${local}`);
 }
-console.log('\nSem esses ficheiros em public/, o browser recebe 404 (não é falha de deploy).');
+console.log('\nSem esses ficheiros em public/, o browser recebe 404 (nao e falha de deploy).');

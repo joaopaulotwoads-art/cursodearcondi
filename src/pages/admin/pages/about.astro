@@ -3,14 +3,14 @@
  * admin/pages/about.astro
  *
  * Página de edição do Sobre (singleton).
- * No Modo Local: local/about.yaml. Modo Blog: activeTheme (classic, bemmae, …).
+ * No Modo Local: local/about.yaml. Modo Blog: activeTheme (classic, cursodear, …).
  */
 
 import { getEntry } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import AboutEditor from '../../../components/admin/AboutEditor.tsx';
 import SingletonEditor from '../../../components/admin/SingletonEditor.tsx';
-import { BEMMAE_ABOUT_FIELDS } from '../../../components/admin/bemmae-editor-fields';
+import { cursodear_ABOUT_FIELDS } from '../../../components/admin/cursodear-editor-fields';
 import { readSingleton } from '../../../utils/singleton-utils';
 import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
 
@@ -58,14 +58,14 @@ if (isLocal && !initialData) {
 
 <AdminLayout title="Sobre Nós - CNX Agency Admin">
     <div id="about-editor-wrapper" class="min-h-[400px]">
-        {!isLocal && activeBlogTheme === 'bemmae' ? (
+        {!isLocal && activeBlogTheme === 'cursodear' ? (
             <SingletonEditor
                 client:only="react"
                 name="about"
-                title="Sobre (tema Bem Mãe)"
-                fields={BEMMAE_ABOUT_FIELDS}
+                title="Sobre (tema Curso de Ar Condicionado�e)"
+                fields={cursodear_ABOUT_FIELDS}
                 initialData={initialData ?? {}}
-                themeId="bemmae"
+                themeId="cursodear"
             />
         ) : (
             <AboutEditor

@@ -1,6 +1,6 @@
 /**
  * Blocos editoriais para posts (afiliados / comparações).
- * Tema claro (Bem Mãe): cores neutras.
+ * Tema claro (Curso de Ar Condicionado�e): cores neutras.
  * Tema escuro (classic + editor): .prose-invert .cnx-aff-block-wrap
  */
 
@@ -33,7 +33,7 @@ html.dark .cnx-aff-block-wrap {
   --aff-red: #f87171;
 }
 
-.bemmae-post-html .cnx-aff-block-wrap {
+.cursodear-post-html .cnx-aff-block-wrap {
   --aff-border: var(--color-border, #e5e7eb);
   --aff-bg: #ffffff;
   --aff-text: var(--color-text, #1f2937);
@@ -633,7 +633,7 @@ html.dark .cnx-aff-block-wrap {
   box-shadow: inset 4px 0 0 0 rgba(37, 99, 235, 0.35);
 }
 
-.bemmae-post-html .cnx-aff-versus-side--featured {
+.cursodear-post-html .cnx-aff-versus-side--featured {
   box-shadow: inset 4px 0 0 0 rgba(196, 167, 125, 0.85);
 }
 

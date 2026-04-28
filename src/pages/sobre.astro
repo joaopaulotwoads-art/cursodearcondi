@@ -10,8 +10,8 @@
 import { getEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import LocalSobre from '../themes/local/Sobre.astro';
-import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
-import BemMaeSobre from '../themes/bemmae/Sobre.astro';
+import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
+import cursodearSobre from '../themes/cursodear/Sobre.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
@@ -61,8 +61,8 @@ if (isLocal) {
     }
 } else {
     data =
-        activeTheme === 'bemmae'
-            ? await readSingleton('about', 'bemmae')
+        activeTheme === 'cursodear'
+            ? await readSingleton('about', 'cursodear')
             : await readSingleton('about', 'classic');
 }
 
@@ -70,8 +70,8 @@ const siteName = isLocal
     ? ((await readSingleton('home', 'local'))?.companyName || settings?.data?.siteName || 'Site')
     : (settings?.data?.siteName || 'Site');
 
-const beMenu = !isLocal && activeTheme === 'bemmae' ? await readSingleton('menu', 'bemmae') : null;
-const beFoot = !isLocal && activeTheme === 'bemmae' ? await readSingleton('footer', 'bemmae') : null;
+const beMenu = !isLocal && activeTheme === 'cursodear' ? await readSingleton('menu', 'cursodear') : null;
+const beFoot = !isLocal && activeTheme === 'cursodear' ? await readSingleton('footer', 'cursodear') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
@@ -79,8 +79,8 @@ const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | un
 
 {isLocal ? (
     <LocalSobre data={data || {}} siteName={siteName} />
-) : activeTheme === 'bemmae' ? (
-<BaseLayoutBemmae
+) : activeTheme === 'cursodear' ? (
+<BaseLayoutcursodear
     title={`${(data as any)?.heroTitle || 'Sobre'} - ${siteName}`}
     description={(data as any)?.heroSubtitle || ''}
     siteName={(beMenu as any)?.logoText || siteName}
@@ -88,10 +88,10 @@ const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | un
     siteUrl={siteUrl}
     nav={beNav}
     footerNav={beFootNav}
-    contentThemeId="bemmae"
+    contentThemeId="cursodear"
 >
-    <BemMaeSobre data={data || {}} />
-</BaseLayoutBemmae>
+    <cursodearSobre data={data || {}} />
+</BaseLayoutcursodear>
 ) : (
 <MainLayout title={`${data?.heroTitle || 'Sobre Nós'} - ${siteName}`}>
     

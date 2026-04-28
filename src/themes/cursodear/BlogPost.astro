@@ -1,7 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
-import { resolveBemmaeMediaUrl, rewriteBemmaeContentImagesInHtml } from '../../utils/media-url';
+import { resolvecursodearMediaUrl, rewritecursodearContentImagesInHtml } from '../../utils/media-url';
 import { demoteBodyH1ToH2, replaceProductBoxTitleH2WithDiv } from '../../utils/post-html-sanitize';
 import { splitReviewRoundupBodyParagraphs } from '../../utils/review-paragraph-split';
 import { injectH2IdsAndBuildToc, splitHtmlAfterReviewHeroPicks } from '../../utils/review-article-toc';
@@ -32,10 +32,10 @@ const relatedPosts = relatedPostsProp ?? [];
 const date = post.data.publishedDate;
 const layoutVariant = post.data.articleLayout ?? 'default';
 const isReviewRoundup = layoutVariant === 'reviewRoundup';
-const heroImage = resolveBemmaeMediaUrl(post.data.thumbnail || post.data.metaImage);
+const heroImage = resolvecursodearMediaUrl(post.data.thumbnail || post.data.metaImage);
 const htmlBody = htmlContent
   ? (() => {
-      let html = demoteBodyH1ToH2(rewriteBemmaeContentImagesInHtml(htmlContent));
+      let html = demoteBodyH1ToH2(rewritecursodearContentImagesInHtml(htmlContent));
       html = replaceProductBoxTitleH2WithDiv(html);
       if (isReviewRoundup) html = splitReviewRoundupBodyParagraphs(html);
       return html;
@@ -114,7 +114,7 @@ const applyRoundupArticleScope =
         <>
           {author.data.avatar ? (
             <img
-              src={resolveBemmaeMediaUrl(author.data.avatar)}
+              src={resolvecursodearMediaUrl(author.data.avatar)}
               alt=""
               width="48"
               height="48"
@@ -161,7 +161,7 @@ const applyRoundupArticleScope =
     {postHtmlBody ? (
       isReviewRoundup && reviewBodySplit ? (
         <>
-          {reviewBodySplit.head ? <div class="bemmae-post-html post-content" set:html={reviewBodySplit.head} /> : null}
+          {reviewBodySplit.head ? <div class="cursodear-post-html post-content" set:html={reviewBodySplit.head} /> : null}
           {reviewTocItems.length > 0 && (
             <details class="review-article-toc">
               <summary class="review-article-toc-summary">
@@ -185,10 +185,10 @@ const applyRoundupArticleScope =
               </nav>
             </details>
           )}
-          <div class="bemmae-post-html post-content" set:html={reviewBodySplit.tail} />
+          <div class="cursodear-post-html post-content" set:html={reviewBodySplit.tail} />
         </>
       ) : (
-        <div class="bemmae-post-html post-content" set:html={postHtmlBody} />
+        <div class="cursodear-post-html post-content" set:html={postHtmlBody} />
       )
     ) : (
       Content && <Content />
@@ -201,7 +201,7 @@ const applyRoundupArticleScope =
         <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
           {author.data.avatar ? (
             <img
-              src={resolveBemmaeMediaUrl(author.data.avatar)}
+              src={resolvecursodearMediaUrl(author.data.avatar)}
               alt={author.data.name}
               width="96"
               height="96"
@@ -260,7 +260,7 @@ const applyRoundupArticleScope =
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {relatedPosts.map((rp) => {
           const url = getPostUrl(rp, blogPermalinkStructure, blogUrlPrefix);
-          const thumb = resolveBemmaeMediaUrl(rp.data.thumbnail || rp.data.metaImage);
+          const thumb = resolvecursodearMediaUrl(rp.data.thumbnail || rp.data.metaImage);
           const rDate = rp.data.publishedDate;
           return (
             <a

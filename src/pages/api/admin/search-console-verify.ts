@@ -1,5 +1,5 @@
 /**
- * GET /api/admin/search-console-verify?themeId=bemmae
+ * GET /api/admin/search-console-verify?themeId=cursodear
  * Valida JSON da conta de serviço e lista propriedades no Search Console (API v3).
  */
 import type { APIRoute } from 'astro';

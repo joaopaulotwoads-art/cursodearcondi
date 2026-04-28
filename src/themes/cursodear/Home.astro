@@ -1,10 +1,10 @@
 ---
 /**
- * Home Bem Mãe — conteúdo principal; layout (head/header/footer) vem da página.
+ * Home principal — conteudo principal; layout (head/header/footer) vem da pagina.
  */
 import { getCollection } from 'astro:content';
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
-import { resolveBemmaeMediaUrl } from '../../utils/media-url';
+import { resolvecursodearMediaUrl } from '../../utils/media-url';
 interface Props {
   homeData: Record<string, any>;
   latestPosts: any[];
@@ -26,7 +26,7 @@ const categoryLabel = (slug: string | undefined) => {
   return c?.data.name || slug;
 };
 
-const heroBg = h.heroBgImage || '/images/bemmae/hero-home.png';
+const heroBg = h.heroBgImage || '/images/cursodear/hero-home.png';
 const categoryCards = Array.isArray(h.categoryCards) ? h.categoryCards : [];
 const homeHighlights = Array.isArray(h.homeHighlights) ? h.homeHighlights.filter(Boolean) : [];
 const aboutText = String(h.aboutText || '').trim();
@@ -42,7 +42,7 @@ const aboutParagraphs = aboutText
   .map((p) => p.trim())
   .filter(Boolean);
 
-const PLACEHOLDER_THUMB = '/images/bemmae/post-placeholder.svg';
+const PLACEHOLDER_THUMB = '/images/cursodear/post-placeholder.svg';
 
 function formatPostDate(iso: string | undefined) {
   if (!iso) return '';
@@ -74,7 +74,7 @@ const landingCloseShow =
   String(h.landingClosingText || '').trim() ||
   String(h.landingClosingCtaHref || '').trim();
 ---
-<article class="bemmae-home">
+<article class="cursodear-home">
   <section
     class="relative min-h-[72vh] flex flex-col items-center justify-center bg-cover bg-center pt-20 pb-0 md:pt-28"
     style={`background-image: url('${heroBg}');`}
@@ -227,7 +227,7 @@ const landingCloseShow =
           {categoryCards.map((c: any) => (
             <a
               href={c.href || '/blog'}
-              class="group bemmae-home-cat-card block p-6 md:p-7 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 hover:border-[var(--color-accent)]/40 transition-all duration-300"
+              class="group cursodear-home-cat-card block p-6 md:p-7 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 hover:border-[var(--color-accent)]/40 transition-all duration-300"
             >
               <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-accent)]/5 mb-5 flex items-center justify-center text-[var(--color-heading)] text-3xl ring-1 ring-[var(--color-accent)]/10">
                 {c.icon || '✨'}
@@ -319,13 +319,13 @@ const landingCloseShow =
           <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
             {latestPosts.map((post) => {
               const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
-              const thumb = resolveBemmaeMediaUrl(post.data.thumbnail || post.data.metaImage);
+              const thumb = resolvecursodearMediaUrl(post.data.thumbnail || post.data.metaImage);
               const dateStr = formatPostDate(post.data.publishedDate);
               const catStr = categoryLabel(post.data.category);
               return (
                 <a
                   href={url}
-                  class="group bemmae-home-post-card flex flex-col rounded-2xl border border-[var(--color-border)] bg-white overflow-hidden shadow-sm hover:shadow-xl hover:border-[var(--color-link)]/35 transition-all duration-300"
+                  class="group cursodear-home-post-card flex flex-col rounded-2xl border border-[var(--color-border)] bg-white overflow-hidden shadow-sm hover:shadow-xl hover:border-[var(--color-link)]/35 transition-all duration-300"
                 >
                   <div class="relative aspect-[4/3] overflow-hidden bg-[var(--color-surface)]">
                     {thumb ? (

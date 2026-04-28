@@ -10,25 +10,27 @@ import '@fontsource/open-sans/700.css';
 import '@fontsource/open-sans/800.css';
 import './global.css';
 import { buildCanonicalPageUrl, ensureApexSiteOrigin } from '../../utils/read-site-settings';
-import { buildBemmaeDefaultSiteJsonLd } from '../../utils/post-json-ld';
+import { buildcursodearDefaultSiteJsonLd } from '../../utils/post-json-ld';
 import FaviconLinks from '../../components/FaviconLinks.astro';
 
 interface Props {
   title: string;
   description?: string;
   siteName: string;
-  /** Caminho público do logo (ex.: /bemmae-logo.png) quando definido no singleton Menu. */
+  /** Caminho público do logo (ex.: /cursodear-logo.png) quando definido no singleton Menu. */
   logoSrc?: string;
   siteUrl: string;
   nav: NavItem[];
   footerNav: NavItem[];
-  /** Singletons do rodapé (ex.: bemmae) */
+  /** Singletons do rodapé (ex.: cursodear) */
   contentThemeId?: string;
   ogType?: 'website' | 'article';
   ogImageAbs?: string;
   articlePublishedTime?: string;
   articleModifiedTime?: string;
   extraJsonLd?: Record<string, unknown> | null;
+  canonicalOverride?: string;
+  showFooter?: boolean;
 }
 
 const {
@@ -39,27 +41,29 @@ const {
   siteUrl,
   nav,
   footerNav,
-  contentThemeId = 'bemmae',
+  contentThemeId = 'cursodear',
   ogType = 'website',
   ogImageAbs,
   articlePublishedTime,
   articleModifiedTime,
   extraJsonLd,
+  canonicalOverride,
+  showFooter = true,
 } = Astro.props;
 /** Título do documento: o que cada página passa em `title` (sem sufixo automático | marca). */
 const fullTitle = title;
 const fullDescription = description || '';
 const siteOrigin = ensureApexSiteOrigin(siteUrl);
-const canonicalPageUrl = buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
+const canonicalPageUrl = canonicalOverride || buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
 /** Um único JSON-LD: post traz @graph completo; demais páginas usam WebSite + Organization + SearchAction */
-const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
+const jsonLdGraph = extraJsonLd ?? buildcursodearDefaultSiteJsonLd({
     siteUrl: siteOrigin || siteUrl,
     siteName,
     description: fullDescription || undefined,
 });
 ---
 <!DOCTYPE html>
-<html lang="pt-BR" class="bemmae-root overflow-x-hidden">
+<html lang="pt-BR" class="cursodear-root overflow-x-hidden">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -95,9 +99,9 @@ const jsonLdGraph = extraJsonLd ?? buildBemmaeDefaultSiteJsonLd({
     }
   </style>
 </head>
-<body class="bemmae-scope min-w-0 overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
+<body class="cursodear-scope min-w-0 overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
   <Header siteName={siteName} logoSrc={logoSrc} nav={nav} />
   <main class="min-w-0"><slot /></main>
-  <Footer siteName={siteName} logoSrc={logoSrc} footerNav={footerNav} contentThemeId={contentThemeId} />
+  {showFooter && <Footer siteName={siteName} logoSrc={logoSrc} footerNav={footerNav} contentThemeId={contentThemeId} />}
 </body>
 </html>

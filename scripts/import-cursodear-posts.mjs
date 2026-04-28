@@ -1,7 +1,7 @@
 /**
- * Importa posts do Bem Mãe (Ghost JSON) para src/content/posts/*.md
- * Mantém HTML + <style> dos cards (como no site na Vercel); remove só scripts e comentários kg-card.
- * Uso: bun run scripts/import-bemmae-posts.mjs
+ * Importa posts do export Ghost (JSON) para src/content/posts/*.md
+ * Mantem HTML + <style> dos cards; remove apenas scripts e comentarios kg-card.
+ * Uso: bun run scripts/import-cursodear-posts.mjs
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -9,15 +9,15 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
-const jsonPath = path.join(root, 'reference', 'bemmae-src', 'src', 'data', 'posts-from-ghost.json');
+const jsonPath = path.join(root, 'reference', 'cursodear-src', 'src', 'data', 'posts-from-ghost.json');
 const outDir = path.join(root, 'src', 'content', 'posts');
 
-/** Base do Ghost no export (placeholder __GHOST_URL__). Ajuste via env GHOST_IMAGE_BASE se mudar o domínio. */
-const GHOST_IMAGE_BASE = (process.env.GHOST_IMAGE_BASE || 'https://bemmae.com.br').replace(/\/+$/, '');
+/** Base do Ghost no export (placeholder __GHOST_URL__). Ajuste via env GHOST_IMAGE_BASE se mudar o dominio. */
+const GHOST_IMAGE_BASE = (process.env.GHOST_IMAGE_BASE || 'https://cursodearcondicionado.com.br').replace(/\/+$/, '');
 
 if (!fs.existsSync(jsonPath)) {
-    console.error('Falta o clone de referência:', jsonPath);
-    console.error('Execute: git clone https://github.com/joaopaulotwoads-art/bemmae.git reference/bemmae-src');
+    console.error('Falta o clone de referencia:', jsonPath);
+    console.error('Execute: git clone <repo> reference/cursodear-src');
     process.exit(1);
 }
 
@@ -27,7 +27,6 @@ function ghostUrls(s) {
     return String(s || '').replace(/__GHOST_URL__/g, GHOST_IMAGE_BASE);
 }
 
-/** Preserva <style> e markup dos cards; remove scripts e wrappers kg-card. */
 function sanitizeGhostHtml(html) {
     let s = ghostUrls(html);
     s = s.replace(/<script[\s\S]*?<\/script>/gi, '');
@@ -36,7 +35,6 @@ function sanitizeGhostHtml(html) {
     return s.trim();
 }
 
-/** Junta frases ou cláusulas em parágrafos até ~max caracteres. */
 function packParts(parts, max) {
     const chunks = [];
     let buf = '';
@@ -53,13 +51,7 @@ function packParts(parts, max) {
     return chunks;
 }
 
-/**
- * Quebra <p> só texto (sem tags internas) em blocos menores.
- * 1) Por frases (. ! ?)  2) Se ainda longo, por vírgulas (texto PT corrido).
- * <p> com <strong> etc. não são alterados.
- */
 function splitLongPlainParagraphs(html) {
-    /* ~3–4 linhas em mobile (coluna estreita) ≈ até ~210 caracteres por <p> */
     const MAX_CHARS = 210;
     return html.replace(/<p(\s[^>]*)?>([^<]+)<\/p>/gi, (full, attrs, inner) => {
         const text = inner.replace(/\s+/g, ' ').trim();
@@ -117,7 +109,7 @@ for (const p of posts) {
     if (!slug) continue;
 
     const body = splitLongPlainParagraphs(sanitizeGhostHtml(p.html || ''));
-    const safeBody = body || '<p><em>Sem conteúdo.</em></p>';
+    const safeBody = body || '<p><em>Sem conteudo.</em></p>';
 
     const publishedDate = p.published_at || p.created_at || new Date().toISOString();
     const dateOnly = publishedDate.slice(0, 10);
@@ -147,4 +139,4 @@ for (const p of posts) {
     console.log('OK', slug);
 }
 
-console.log('Total:', posts.length, '→', outDir, '| imagens:', GHOST_IMAGE_BASE);
+console.log('Total:', posts.length, '->', outDir, '| imagens:', GHOST_IMAGE_BASE);

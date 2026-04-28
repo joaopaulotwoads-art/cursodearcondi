@@ -1,7 +1,7 @@
 @import '../../styles/affiliate-blocks.css';
 @import '../../styles/article-review-roundup.css';
 
-/* Tema Bem Mãe — fundo #fff6f6, texto #333, Open Sans, entrelinha editorial ~1.6 */
+/* Tema Curso de Ar Condicionado�e — fundo #fff6f6, texto #333, Open Sans, entrelinha editorial ~1.6 */
 :root {
   --color-bg: #fff6f6;
   --color-text: #333333;
@@ -19,15 +19,15 @@
   /* Links no corpo: azul sóbrio */
   --color-link: #2563eb;
   --color-link-hover: #1d4ed8;
-  --bemmae-font-sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  --font-body: var(--bemmae-font-sans);
-  --font-heading: "Open Sans", var(--bemmae-font-sans);
-  --bemmae-post-font: var(--font-body);
-  --bemmae-post-line: 1.6;
-  --bemmae-post-p-space: 1.25em;
+  --cursodear-font-sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-body: var(--cursodear-font-sans);
+  --font-heading: "Open Sans", var(--cursodear-font-sans);
+  --cursodear-post-font: var(--font-body);
+  --cursodear-post-line: 1.6;
+  --cursodear-post-p-space: 1.25em;
 }
 
-.bemmae-scope body {
+.cursodear-scope body {
   font-family: var(--font-body);
   background-color: var(--color-bg);
   color: var(--color-dark);
@@ -74,13 +74,13 @@
  * conforto visual (entrelinha, margens, largura ótima ~65–72 caracteres).
  */
 /**
- * Conteúdo do artigo: `.bemmae-post-html` e `.post-content` (mesmo bloco no BlogPost).
+ * Conteúdo do artigo: `.cursodear-post-html` e `.post-content` (mesmo bloco no BlogPost).
  * Hierarquia h1–h6 explícita; corpo com --font-body e títulos com --font-heading.
  */
-.bemmae-post-html {
-  font-family: var(--bemmae-post-font);
+.cursodear-post-html {
+  font-family: var(--cursodear-post-font);
   font-size: 1.125rem; /* 18px — corpo editorial */
-  line-height: var(--bemmae-post-line);
+  line-height: var(--cursodear-post-line);
   letter-spacing: 0;
   font-weight: 400;
   color: var(--color-dark);
@@ -88,19 +88,19 @@
   text-rendering: optimizeLegibility;
 }
 
-/* Introdução e parágrafos “solto” (fora dos cards .bemmae-container) */
-.bemmae-post-html > p {
-  margin: 0 0 var(--bemmae-post-p-space);
+/* Introdução e parágrafos “solto” (fora dos cards .cursodear-container) */
+.cursodear-post-html > p {
+  margin: 0 0 var(--cursodear-post-p-space);
   max-width: 72ch;
-  line-height: var(--bemmae-post-line);
+  line-height: var(--cursodear-post-line);
 }
 
-.bemmae-post-html > p:last-child {
+.cursodear-post-html > p:last-child {
   margin-bottom: 0;
 }
 
 /* Títulos no fluxo do artigo: escala alinhada a text-3xl … text-sm */
-.bemmae-post-html :where(h1, h2, h3, h4, h5, h6) {
+.cursodear-post-html :where(h1, h2, h3, h4, h5, h6) {
   font-family: var(--font-heading);
   line-height: 1.25;
   color: var(--color-heading);
@@ -109,40 +109,40 @@
   margin-bottom: 0.75rem;
 }
 
-.bemmae-post-html :where(h1, h2, h3, h4, h5, h6):first-child {
+.cursodear-post-html :where(h1, h2, h3, h4, h5, h6):first-child {
   margin-top: 0;
 }
 
-.bemmae-post-html :where(h1) {
+.cursodear-post-html :where(h1) {
   font-size: 1.875rem; /* ~text-3xl */
   font-weight: 700;
   letter-spacing: -0.025em;
 }
 
-.bemmae-post-html :where(h2) {
+.cursodear-post-html :where(h2) {
   font-size: 1.5rem; /* text-2xl */
   font-weight: 700;
   letter-spacing: -0.025em;
 }
 
-.bemmae-post-html :where(h3) {
+.cursodear-post-html :where(h3) {
   font-size: 1.25rem; /* text-xl */
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
-.bemmae-post-html :where(h4) {
+.cursodear-post-html :where(h4) {
   font-size: 1.125rem; /* text-lg */
   font-weight: 700;
 }
 
-.bemmae-post-html :where(h5) {
+.cursodear-post-html :where(h5) {
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: -0.015em;
 }
 
-.bemmae-post-html :where(h6) {
+.cursodear-post-html :where(h6) {
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.06em;
@@ -150,31 +150,31 @@
   color: #64748b;
 }
 
-.bemmae-post-html strong,
-.bemmae-post-html b {
+.cursodear-post-html strong,
+.cursodear-post-html b {
   font-weight: 600;
   color: var(--color-heading);
 }
 
-.bemmae-post-html > ul,
-.bemmae-post-html > ol {
+.cursodear-post-html > ul,
+.cursodear-post-html > ol {
   margin: 0.5em 0 1.35em;
   padding-left: 1.35rem;
   max-width: 72ch;
   line-height: 1.75;
 }
 
-.bemmae-post-html > ul > li,
-.bemmae-post-html > ol > li {
+.cursodear-post-html > ul > li,
+.cursodear-post-html > ol > li {
   margin-bottom: 0.55em;
 }
 
-.bemmae-post-html > ul > li:last-child,
-.bemmae-post-html > ol > li:last-child {
+.cursodear-post-html > ul > li:last-child,
+.cursodear-post-html > ol > li:last-child {
   margin-bottom: 0;
 }
 
-.bemmae-post-html a {
+.cursodear-post-html a {
   color: var(--color-link);
   font-weight: 500;
   text-decoration: underline;
@@ -182,11 +182,11 @@
   text-decoration-thickness: 1px;
 }
 
-.bemmae-post-html a:hover {
+.cursodear-post-html a:hover {
   color: var(--color-link-hover);
 }
 
-.bemmae-post-html > blockquote {
+.cursodear-post-html > blockquote {
   margin: 1.35em 0;
   padding: 0.85em 1em 0.85em 1.15em;
   border-left: 4px solid #e5e7eb;
@@ -196,15 +196,15 @@
   line-height: 1.75;
 }
 
-.bemmae-post-html blockquote p {
+.cursodear-post-html blockquote p {
   margin: 0 0 0.75em;
 }
 
-.bemmae-post-html blockquote p:last-child {
+.cursodear-post-html blockquote p:last-child {
   margin-bottom: 0;
 }
 
-.bemmae-post-html :not(pre) > code {
+.cursodear-post-html :not(pre) > code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.9em;
   background: var(--color-nude);
@@ -213,7 +213,7 @@
   border: 1px solid var(--color-border);
 }
 
-.bemmae-post-html pre {
+.cursodear-post-html pre {
   margin: 1.35em 0;
   padding: 1rem 1.15rem;
   border-radius: 0.5rem;
@@ -224,7 +224,7 @@
   line-height: 1.6;
 }
 
-.bemmae-post-html pre code {
+.cursodear-post-html pre code {
   font-family: inherit;
   font-size: inherit;
   background: transparent;
@@ -233,34 +233,34 @@
   color: inherit;
 }
 
-.bemmae-post-html > img,
-.bemmae-post-html > figure {
+.cursodear-post-html > img,
+.cursodear-post-html > figure {
   margin: 1.5em 0;
   max-width: 100%;
 }
 
-.bemmae-post-html img {
+.cursodear-post-html img {
   max-width: 100%;
   height: auto;
   border-radius: 0.5rem;
 }
 
-.bemmae-post-html > figure img {
+.cursodear-post-html > figure img {
   border-radius: 0.5rem;
 }
 
 /* Separar bloco editorial do grid de cards */
-.bemmae-post-html > .bemmae-container {
+.cursodear-post-html > .cursodear-container {
   margin-top: 2rem;
 }
 
-.bemmae-cta-wrapper {
+.cursodear-cta-wrapper {
   margin: 24px auto;
   max-width: 480px;
 }
 
-.bemmae-cta-wrapper a,
-.bemmae-cta-wrapper button {
+.cursodear-cta-wrapper a,
+.cursodear-cta-wrapper button {
   width: 100% !important;
   max-width: 100% !important;
   padding: 12px 18px !important;
@@ -270,11 +270,11 @@
 
 /* ── Product Review (bloco “⭐ Review” dentro do post) ──────────────────────
  * O styling original existia em src/styles/global.css (layout "global"),
- * mas o tema Bem Mãe não importa esse arquivo. Então carregamos aqui
+ * mas o tema Curso de Ar Condicionado�e não importa esse arquivo. Então carregamos aqui
  * para o review não ficar com aparência “pobre”.
  */
 
-.bemmae-post-html .product-review {
+.cursodear-post-html .product-review {
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   padding: 1.25rem;
@@ -283,14 +283,14 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
 }
 
-.bemmae-post-html .product-review-header {
+.cursodear-post-html .product-review-header {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-.bemmae-post-html .product-review-image {
+.cursodear-post-html .product-review-image {
   width: 120px;
   height: 120px;
   object-fit: cover;
@@ -299,36 +299,36 @@
   margin: 0 !important;
 }
 
-.bemmae-post-html .product-review-info {
+.cursodear-post-html .product-review-info {
   flex: 1;
 }
 
-.bemmae-post-html .product-review-name {
+.cursodear-post-html .product-review-name {
   font-size: 1.125rem !important;
   font-weight: 700 !important;
   color: var(--color-text) !important;
   margin: 0 0 0.5rem 0 !important;
 }
 
-.bemmae-post-html .product-review-description {
+.cursodear-post-html .product-review-description {
   color: var(--color-muted) !important;
   margin: 0 0 0.6rem 0 !important;
   font-size: 0.9rem !important;
   line-height: 1.7 !important;
 }
 
-.bemmae-post-html .product-review-description:last-of-type {
+.cursodear-post-html .product-review-description:last-of-type {
   margin-bottom: 0 !important;
 }
 
-.bemmae-post-html .product-review-table {
+.cursodear-post-html .product-review-table {
   width: 100% !important;
   border-collapse: collapse !important;
   margin-top: 0.5rem !important;
 }
 
-.bemmae-post-html .product-review-pros-header,
-.bemmae-post-html .product-review-cons-header {
+.cursodear-post-html .product-review-pros-header,
+.cursodear-post-html .product-review-cons-header {
   width: 50% !important;
   padding: 0.5rem 0.75rem !important;
   font-size: 0.875rem !important;
@@ -338,56 +338,56 @@
   text-align: left !important;
 }
 
-.bemmae-post-html .product-review-pros-header {
+.cursodear-post-html .product-review-pros-header {
   color: #0f766e !important;
   background: rgba(13, 148, 136, 0.08) !important;
   border-bottom: 2px solid rgba(13, 148, 136, 0.28) !important;
 }
 
-.bemmae-post-html .product-review-cons-header {
+.cursodear-post-html .product-review-cons-header {
   color: #b45309 !important;
   background: rgba(194, 65, 12, 0.08) !important;
   border-bottom: 2px solid rgba(194, 65, 12, 0.28) !important;
 }
 
-.bemmae-post-html .product-review-pros-col,
-.bemmae-post-html .product-review-cons-col {
+.cursodear-post-html .product-review-pros-col,
+.cursodear-post-html .product-review-cons-col {
   width: 50% !important;
   padding: 0.75rem !important;
   vertical-align: top !important;
 }
 
-.bemmae-post-html .product-review-pros-col {
+.cursodear-post-html .product-review-pros-col {
   border-right: 1px solid var(--color-border) !important;
 }
 
-.bemmae-post-html .product-review-pros-col ul,
-.bemmae-post-html .product-review-cons-col ul {
+.cursodear-post-html .product-review-pros-col ul,
+.cursodear-post-html .product-review-cons-col ul {
   margin: 0 !important;
   padding-left: 1.25rem !important;
 }
 
-.bemmae-post-html .product-review-pros-col li,
-.bemmae-post-html .product-review-cons-col li {
+.cursodear-post-html .product-review-pros-col li,
+.cursodear-post-html .product-review-cons-col li {
   font-size: 0.875rem !important;
   margin: 0.3rem 0 !important;
   color: var(--color-text) !important;
 }
 
-.bemmae-post-html .product-review-pros-col li::marker {
+.cursodear-post-html .product-review-pros-col li::marker {
   color: #0d9488 !important;
 }
 
-.bemmae-post-html .product-review-cons-col li::marker {
+.cursodear-post-html .product-review-cons-col li::marker {
   color: #c2410c !important;
 }
 
-.bemmae-post-html .product-review-cta {
+.cursodear-post-html .product-review-cta {
   margin-top: 1rem !important;
   text-align: center !important;
 }
 
-.bemmae-post-html .product-review-cta-btn {
+.cursodear-post-html .product-review-cta-btn {
   display: inline-block !important;
   padding: 0.625rem 1.75rem !important;
   color: #ffffff !important;
@@ -399,36 +399,36 @@
   transition: filter 0.2s !important;
 }
 
-.bemmae-post-html .product-review-cta-btn:hover {
+.cursodear-post-html .product-review-cta-btn:hover {
   filter: brightness(1.1) !important;
 }
 
 @media (max-width: 640px) {
-  .bemmae-post-html .product-review-header {
+  .cursodear-post-html .product-review-header {
     flex-direction: column;
   }
 
-  .bemmae-post-html .product-review-image {
+  .cursodear-post-html .product-review-image {
     width: 100%;
     height: 200px;
   }
 
-  .bemmae-post-html .product-review-table,
-  .bemmae-post-html .product-review-table thead,
-  .bemmae-post-html .product-review-table tbody,
-  .bemmae-post-html .product-review-table tr {
+  .cursodear-post-html .product-review-table,
+  .cursodear-post-html .product-review-table thead,
+  .cursodear-post-html .product-review-table tbody,
+  .cursodear-post-html .product-review-table tr {
     display: block !important;
   }
 
-  .bemmae-post-html .product-review-pros-header,
-  .bemmae-post-html .product-review-cons-header,
-  .bemmae-post-html .product-review-pros-col,
-  .bemmae-post-html .product-review-cons-col {
+  .cursodear-post-html .product-review-pros-header,
+  .cursodear-post-html .product-review-cons-header,
+  .cursodear-post-html .product-review-pros-col,
+  .cursodear-post-html .product-review-cons-col {
     width: 100% !important;
     display: block !important;
   }
 
-  .bemmae-post-html .product-review-pros-col {
+  .cursodear-post-html .product-review-pros-col {
     border-right: none !important;
     border-bottom: 1px solid var(--color-border) !important;
     padding-bottom: 0.75rem !important;
@@ -436,28 +436,28 @@
   }
 }
 
-html.dark .bemmae-post-html .product-review {
+html.dark .cursodear-post-html .product-review {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
 }
 
-html.dark .bemmae-post-html .product-review-description,
-html.dark .bemmae-post-html .product-review-name,
-html.dark .bemmae-post-html .product-review-pros-col li,
-html.dark .bemmae-post-html .product-review-cons-col li {
+html.dark .cursodear-post-html .product-review-description,
+html.dark .cursodear-post-html .product-review-name,
+html.dark .cursodear-post-html .product-review-pros-col li,
+html.dark .cursodear-post-html .product-review-cons-col li {
   color: #e5e7eb !important;
 }
 
 /* Tabela comparativa (ex.: regras de companhias aéreas) — estilos no CSS para não depender de <style> no HTML */
-.bemmae-post-html .bemmae-travel-container {
+.cursodear-post-html .cursodear-travel-container {
   margin: 1.5rem 0;
   max-width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-.bemmae-post-html .bemmae-travel-table {
+.cursodear-post-html .cursodear-travel-table {
   width: 100%;
   min-width: 560px;
   border-collapse: collapse;
@@ -468,12 +468,12 @@ html.dark .bemmae-post-html .product-review-cons-col li {
   border: 1px solid var(--color-border);
 }
 
-.bemmae-post-html .bemmae-travel-table thead {
+.cursodear-post-html .cursodear-travel-table thead {
   background: var(--color-heading);
   color: #fff;
 }
 
-.bemmae-post-html .bemmae-travel-table th {
+.cursodear-post-html .cursodear-travel-table th {
   padding: 0.85rem 1rem;
   text-align: left;
   font-size: 0.8125rem;
@@ -482,7 +482,7 @@ html.dark .bemmae-post-html .product-review-cons-col li {
   letter-spacing: 0.04em;
 }
 
-.bemmae-post-html .bemmae-travel-table td {
+.cursodear-post-html .cursodear-travel-table td {
   padding: 1rem;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
@@ -491,31 +491,31 @@ html.dark .bemmae-post-html .product-review-cons-col li {
   vertical-align: top;
 }
 
-.bemmae-post-html .bemmae-travel-table tbody tr:last-child td {
+.cursodear-post-html .cursodear-travel-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-.bemmae-post-html .bemmae-travel-table .comp-name {
+.cursodear-post-html .cursodear-travel-table .comp-name {
   font-weight: 800;
   color: var(--color-link);
   font-size: 1.0625rem;
 }
 
 @media (max-width: 768px) {
-  .bemmae-post-html .bemmae-travel-table,
-  .bemmae-post-html .bemmae-travel-table thead,
-  .bemmae-post-html .bemmae-travel-table tbody,
-  .bemmae-post-html .bemmae-travel-table th,
-  .bemmae-post-html .bemmae-travel-table td,
-  .bemmae-post-html .bemmae-travel-table tr {
+  .cursodear-post-html .cursodear-travel-table,
+  .cursodear-post-html .cursodear-travel-table thead,
+  .cursodear-post-html .cursodear-travel-table tbody,
+  .cursodear-post-html .cursodear-travel-table th,
+  .cursodear-post-html .cursodear-travel-table td,
+  .cursodear-post-html .cursodear-travel-table tr {
     display: block;
   }
 
-  .bemmae-post-html .bemmae-travel-table {
+  .cursodear-post-html .cursodear-travel-table {
     min-width: 0;
   }
 
-  .bemmae-post-html .bemmae-travel-table thead tr {
+  .cursodear-post-html .cursodear-travel-table thead tr {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -527,7 +527,7 @@ html.dark .bemmae-post-html .product-review-cons-col li {
     border: 0;
   }
 
-  .bemmae-post-html .bemmae-travel-table tr {
+  .cursodear-post-html .cursodear-travel-table tr {
     border: 1px solid var(--color-border);
     margin-bottom: 1rem;
     border-radius: 12px;
@@ -535,7 +535,7 @@ html.dark .bemmae-post-html .product-review-cons-col li {
     background: #fff;
   }
 
-  .bemmae-post-html .bemmae-travel-table td {
+  .cursodear-post-html .cursodear-travel-table td {
     border: none;
     position: relative;
     padding: 0.65rem 0.65rem 0.65rem 44% !important;
@@ -543,7 +543,7 @@ html.dark .bemmae-post-html .product-review-cons-col li {
     min-height: 2rem;
   }
 
-  .bemmae-post-html .bemmae-travel-table td::before {
+  .cursodear-post-html .cursodear-travel-table td::before {
     content: attr(data-label);
     position: absolute;
     left: 0.75rem;
@@ -556,43 +556,43 @@ html.dark .bemmae-post-html .product-review-cons-col li {
     line-height: 1.3;
   }
 
-  .bemmae-post-html .bemmae-travel-table td.comp-cell {
+  .cursodear-post-html .cursodear-travel-table td.comp-cell {
     padding: 0.75rem !important;
     background: var(--color-surface);
     border-radius: 8px;
     margin-bottom: 0.5rem;
   }
 
-  .bemmae-post-html .bemmae-travel-table td.comp-cell::before {
+  .cursodear-post-html .cursodear-travel-table td.comp-cell::before {
     display: none;
   }
 
-  .bemmae-post-html .bemmae-travel-table .comp-name {
+  .cursodear-post-html .cursodear-travel-table .comp-name {
     font-size: 1.125rem;
   }
 }
 
-html.dark .bemmae-post-html .bemmae-travel-table {
+html.dark .cursodear-post-html .cursodear-travel-table {
   background: rgba(255, 255, 255, 0.04);
   border-color: rgba(255, 255, 255, 0.12);
 }
 
-html.dark .bemmae-post-html .bemmae-travel-table td {
+html.dark .cursodear-post-html .cursodear-travel-table td {
   color: #e5e7eb;
   border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
-html.dark .bemmae-post-html .bemmae-travel-table tbody tr:last-child td {
+html.dark .cursodear-post-html .cursodear-travel-table tbody tr:last-child td {
   border-bottom: none;
 }
 
 @media (max-width: 768px) {
-  html.dark .bemmae-post-html .bemmae-travel-table tr {
+  html.dark .cursodear-post-html .cursodear-travel-table tr {
     background: rgba(255, 255, 255, 0.04);
     border-color: rgba(255, 255, 255, 0.12);
   }
 
-  html.dark .bemmae-post-html .bemmae-travel-table td.comp-cell {
+  html.dark .cursodear-post-html .cursodear-travel-table td.comp-cell {
     background: rgba(255, 255, 255, 0.06);
   }
 }

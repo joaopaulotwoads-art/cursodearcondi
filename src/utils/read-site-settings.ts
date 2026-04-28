@@ -16,8 +16,8 @@ const SETTINGS_PATH = path.join(getSingletonsBaseDir(import.meta.url), 'settings
 const SETTINGS_GH_PATH = 'src/content/singletons/settings.yaml';
 
 const DEFAULTS: Record<string, unknown> = {
-    activeTheme: 'bemmae',
-    siteName: 'Bem MÃ£e',
+    activeTheme: 'cursodear',
+    siteName: 'Curso de Ar Condicionado£e',
     colorScheme: 'light',
     siteMode: 'blog',
     generateSitemap: true,

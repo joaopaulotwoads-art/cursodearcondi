@@ -22,7 +22,7 @@ import {
     expandPreservedHtmlBlocks,
 } from './preserved-html-tiptap';
 
-/** Headings com `class` preservada no HTML (ex.: `.review-section-label` nos reviews Bem MÃ£e). */
+/** Headings com `class` preservada no HTML (ex.: `.review-section-label` nos reviews Curso de Ar Condicionado£e). */
 const HeadingWithClass = Heading.extend({
     addAttributes() {
         return {

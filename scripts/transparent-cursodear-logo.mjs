@@ -1,6 +1,6 @@
 /**
- * Remove fundo branco / halo rosado claro do logo Bem Mãe (PNG → alpha).
- * Flood-fill a partir das bordas: só o que está ligado à margem vira transparente.
+ * Remove fundo claro do logo (PNG -> alpha).
+ * Flood-fill a partir das bordas: so o que esta ligado a margem vira transparente.
  */
 import sharp from 'sharp';
 import fs from 'node:fs/promises';
@@ -8,8 +8,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const inputPath = path.join(root, 'public', 'bemmae-logo.png');
-const outPath = path.join(root, 'public', 'bemmae-logo.png');
+const inputPath = path.join(root, 'public', 'images', 'cursodear', 'logo.png');
+const outPath = path.join(root, 'public', 'images', 'cursodear', 'logo.png');
 
 function luminance(r, g, b) {
     return 0.299 * r + 0.587 * g + 0.114 * b;
@@ -21,7 +21,6 @@ function saturation(r, g, b) {
     return mx < 1 ? 0 : (mx - mn) / mx;
 }
 
-/** Pixels de fundo: branco, quase branco, rosa muito pálido atrás do texto */
 function isBackgroundPixel(r, g, b) {
     const L = luminance(r, g, b);
     const S = saturation(r, g, b);

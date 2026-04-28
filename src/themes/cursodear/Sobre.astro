@@ -1,5 +1,5 @@
 ---
-import { resolveBemmaeMediaUrl } from '../../utils/media-url';
+import { resolvecursodearMediaUrl } from '../../utils/media-url';
 
 interface Props {
   data: Record<string, any>;
@@ -47,7 +47,7 @@ const singleAuthor = team.length === 1;
         >
           {team[0].photo?.trim() ? (
             <img
-              src={resolveBemmaeMediaUrl(team[0].photo.trim()) || team[0].photo.trim()}
+              src={resolvecursodearMediaUrl(team[0].photo.trim()) || team[0].photo.trim()}
               alt={team[0].name || ''}
               width="128"
               height="128"
@@ -79,7 +79,7 @@ const singleAuthor = team.length === 1;
             <div class="p-6 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm">
               {m.photo?.trim() ? (
                 <img
-                  src={resolveBemmaeMediaUrl(m.photo.trim()) || m.photo.trim()}
+                  src={resolvecursodearMediaUrl(m.photo.trim()) || m.photo.trim()}
                   alt={m.name || ''}
                   width="120"
                   height="120"

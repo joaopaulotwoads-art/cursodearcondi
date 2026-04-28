@@ -7,9 +7,9 @@
 import type { CollectionEntry } from 'astro:content';
 import BlogPost from '../../themes/classic/BlogPost.astro';
 import BlogList from '../../themes/classic/BlogList.astro';
-import BaseLayoutBemmae from '../../themes/bemmae/BaseLayout.astro';
-import BemMaeBlogPost from '../../themes/bemmae/BlogPost.astro';
-import BemMaeBlogList from '../../themes/bemmae/BlogList.astro';
+import BaseLayoutcursodear from '../../themes/cursodear/BaseLayout.astro';
+import cursodearBlogPost from '../../themes/cursodear/BlogPost.astro';
+import cursodearBlogList from '../../themes/cursodear/BlogList.astro';
 import { logoSrcFromMenu } from '../../utils/theme-nav';
 import { resolveBlogRootSegment } from '../../utils/blog-root-segment';
 import { loadBlogPageData } from '../../utils/load-blog-page-data';
@@ -31,7 +31,7 @@ const publicPath = `/${slug}/`;
 const d = await loadBlogPageData(props, publicPath, Astro.url.origin);
 
 const {
-  useBemmae,
+  usecursodear,
   layoutType,
   siteName,
   beMenu,
@@ -60,8 +60,8 @@ const {
 
 {
   props.kind === 'post' && post ? (
-    useBemmae ? (
-      <BaseLayoutBemmae
+    usecursodear ? (
+      <BaseLayoutcursodear
         title={documentTitle}
         description={post.data.metaDescription || ''}
         siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
@@ -69,14 +69,14 @@ const {
         siteUrl={publicSiteUrl}
         nav={beNav}
         footerNav={beFootNav}
-        contentThemeId="bemmae"
+        contentThemeId="cursodear"
         ogType="article"
         ogImageAbs={ogImageAbs}
         articlePublishedTime={articleIso}
         articleModifiedTime={articleIso}
         extraJsonLd={postJsonLd}
       >
-        <BemMaeBlogPost
+        <cursodearBlogPost
           post={post}
           author={author}
           Content={Content}
@@ -85,7 +85,7 @@ const {
           blogPermalinkStructure={blogPermalinkStructureResolved}
           blogUrlPrefix={blogUrlPrefixResolved}
         />
-      </BaseLayoutBemmae>
+      </BaseLayoutcursodear>
     ) : (
       <BlogPost
         post={post}
@@ -101,8 +101,8 @@ const {
 
 {
   props.kind === 'category' && category ? (
-    useBemmae ? (
-      <BaseLayoutBemmae
+    usecursodear ? (
+      <BaseLayoutcursodear
         title={`${category.data.name} - ${siteName}`}
         description={pageDesc}
         siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
@@ -110,9 +110,9 @@ const {
         siteUrl={publicSiteUrl}
         nav={beNav}
         footerNav={beFootNav}
-        contentThemeId="bemmae"
+        contentThemeId="cursodear"
       >
-        <BemMaeBlogList
+        <cursodearBlogList
           posts={publishedPosts}
           blogData={beBlog}
           blogPermalinkStructure={blogPermalinkStructure}
@@ -120,7 +120,7 @@ const {
           categoryName={category.data.name}
           categoryFilterActive={true}
         />
-      </BaseLayoutBemmae>
+      </BaseLayoutcursodear>
     ) : (
       <BlogList
         posts={publishedPosts}

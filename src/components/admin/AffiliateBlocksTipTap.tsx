@@ -13,7 +13,7 @@ const inputCls =
     'w-full px-3 py-2 rounded-lg bg-[#0d0d0d] border border-[rgba(255,255,255,0.08)] text-[#e5e5e5] placeholder-[#555] focus:outline-none focus:border-[rgba(255,255,255,0.25)] text-sm';
 
 /** Igual ao artigo público — inline para não perder para .prose / ordem de CSS no admin */
-const BEMMAE_PRODUCT_CARD_STYLE: CSSProperties = {
+const cursodear_PRODUCT_CARD_STYLE: CSSProperties = {
     position: 'relative',
     background: '#ffffff',
     border: '1px solid #d1d5db',
@@ -24,8 +24,8 @@ const BEMMAE_PRODUCT_CARD_STYLE: CSSProperties = {
     margin: 0,
 };
 
-/** CTA padrão Bem Mãe (amarelo + texto escuro) — igual ao artigo público */
-const BEMMAE_CTA_STYLE: CSSProperties = {
+/** CTA padrão Curso de Ar Condicionado�e (amarelo + texto escuro) — igual ao artigo público */
+const cursodear_CTA_STYLE: CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -44,7 +44,7 @@ const BEMMAE_CTA_STYLE: CSSProperties = {
     boxShadow: '0 1px 0 rgba(0, 0, 0, 0.06)',
 };
 
-const BEMMAE_TITLE_STYLE: CSSProperties = {
+const cursodear_TITLE_STYLE: CSSProperties = {
     fontSize: '1.125rem',
     fontWeight: 700,
     lineHeight: 1.35,
@@ -167,9 +167,9 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
             {/* Mesmo contexto visual do artigo no site (roundup + tema claro do card) */}
             <div
                 key={attrsSerialized}
-                className="not-prose article-review-roundup admin-editor-live-preview bemmae-post-html"
+                className="not-prose article-review-roundup admin-editor-live-preview cursodear-post-html"
             >
-                <div className="cnx-aff-product cnx-aff-block-wrap" style={BEMMAE_PRODUCT_CARD_STYLE}>
+                <div className="cnx-aff-product cnx-aff-block-wrap" style={cursodear_PRODUCT_CARD_STYLE}>
                     {a.badge && <div className="cnx-aff-product-badge">{a.badge}</div>}
                     <div className="cnx-aff-product-body">
                         <div className="cnx-aff-product-media">
@@ -193,7 +193,7 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                             </div>
                             <h2
                                 className="cnx-aff-product-title"
-                                style={BEMMAE_TITLE_STYLE}
+                                style={cursodear_TITLE_STYLE}
                                 data-product-name={a.productName || ''}
                             >
                                 {a.productName || 'Produto'}
@@ -214,7 +214,7 @@ function ProductCardView({ node, updateAttributes, deleteNode }: any) {
                                         href={a.ctaUrl}
                                         target="_blank"
                                         rel={a.ctaNofollow ? 'nofollow sponsored noopener noreferrer' : 'noopener noreferrer'}
-                                        style={BEMMAE_CTA_STYLE}
+                                        style={cursodear_CTA_STYLE}
                                     >
                                         {a.ctaText}
                                         <span aria-hidden="true" style={{ fontSize: '1.05rem', opacity: 0.88 }}>

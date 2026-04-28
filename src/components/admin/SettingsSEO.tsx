@@ -27,7 +27,7 @@ export default function SettingsSEO() {
     const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [loaded, setLoaded] = useState(false);
 
-    /** Domínio canônico apex (sem www), ex.: bemmae.com.br → https://bemmae.com.br */
+    /** Domínio canônico apex (sem www), ex.: cursodear.com.br → https://cursodear.com.br */
     function toFullUrl(domain: string): string {
         const t = domain.trim().toLowerCase();
         if (!t) return '';

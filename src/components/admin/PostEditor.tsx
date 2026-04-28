@@ -73,7 +73,7 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
             const isInternal =
                 href.startsWith('/') ||
                 href.startsWith('#') ||
-                href.includes('bemmae.com.br');
+                href.includes('cursodear.com.br');
             if (!isInternal) return full;
 
             const relMatch = attrs.match(/\brel\s*=\s*["']([^"']*)["']/i);
@@ -578,7 +578,7 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                                         onChange={(e) => setSeoSchema(e.target.value as NonNullable<PostData['seoSchema']>)}
                                         className="admin-input"
                                     >
-                                        <option value="auto">Automático — detecta lista de produtos (cards Bem Mãe) ou artigo</option>
+                                        <option value="auto">Automático — detecta lista de produtos (cards Curso de Ar Condicionado�e) ou artigo</option>
                                         <option value="blogPosting">Artigo / post informativo (BlogPosting)</option>
                                         <option value="articleItemList">Ranking ou review (Article + ItemList)</option>
                                         <option value="none">Sem schema extra (só WebSite no layout)</option>

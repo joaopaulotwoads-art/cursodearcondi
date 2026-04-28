@@ -1,6 +1,6 @@
-/** Campos do SingletonEditor para o tema Bem Mãe (home). */
+/** Campos do SingletonEditor para o tema Curso de Ar Condicionado�e (home). */
 
-export const BEMMAE_HOME_FIELDS = [
+export const cursodear_HOME_FIELDS = [
     { key: 'heroKicker', type: 'text', label: 'Selo acima do título (hero)' },
     { key: 'heroTitle', type: 'text', label: 'Título principal' },
     { key: 'heroSubtitle', type: 'text', label: 'Subtítulo', multiline: true, rows: 3 },
@@ -160,7 +160,7 @@ export const BEMMAE_HOME_FIELDS = [
     { key: 'landingClosingCtaHref', type: 'text', label: 'Landing — faixa final — link do botão' },
 ];
 
-export const BEMMAE_ABOUT_FIELDS = [
+export const cursodear_ABOUT_FIELDS = [
     { key: 'heroTitle', type: 'text', label: 'Título' },
     { key: 'heroSubtitle', type: 'text', label: 'Subtítulo', multiline: true, rows: 2 },
     { key: 'heroImage', type: 'text', label: 'URL da imagem (opcional)' },

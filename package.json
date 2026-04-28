@@ -1,5 +1,5 @@
 {
-  "name": "cnx",
+  "name": "cursodearcondicionado",
   "type": "module",
   "version": "1.0.21",
   "scripts": {
@@ -10,11 +10,11 @@
     "preview": "bun run astro preview",
     "astro": "astro",
     "deploy": "vercel --prod",
-    "import:bemmae-posts": "bun run scripts/import-bemmae-posts.mjs",
-    "list:content-images": "bun run scripts/list-bemmae-content-images.mjs",
+    "import:cursodear-posts": "bun run scripts/import-cursodear-posts.mjs",
+    "list:content-images": "bun run scripts/list-cursodear-content-images.mjs",
     "favicons": "node scripts/generate-favicons.mjs",
     "favicons:cursodear": "node scripts/generate-cursodear-favicons.mjs",
-    "logo:transparent": "node scripts/transparent-bemmae-logo.mjs"
+    "logo:transparent": "node scripts/transparent-cursodear-logo.mjs"
   },
   "dependencies": {
     "@astrojs/markdoc": "^0.15.10",

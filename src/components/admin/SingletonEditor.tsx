@@ -13,7 +13,7 @@ interface Props {
     title: string;
     fields: any;
     initialData?: any;
-    /** Tema dos singletons (ex.: bemmae). Se omitido, a API usa o tema ativo em settings. */
+    /** Tema dos singletons (ex.: cursodear). Se omitido, a API usa o tema ativo em settings. */
     themeId?: string;
 }
 

@@ -15,7 +15,7 @@ import {
   toAbsoluteUrl,
   toIsoDateTime,
 } from './post-json-ld';
-import { resolveBemmaeMediaUrl } from './media-url';
+import { resolvecursodearMediaUrl } from './media-url';
 import { pickRelatedPosts } from './related-posts';
 
 type Props =
@@ -23,7 +23,7 @@ type Props =
   | { kind: 'category'; category: CollectionEntry<'categories'> };
 
 export type BlogPageData = {
-  useBemmae: boolean;
+  usecursodear: boolean;
   layoutType: 'main' | 'local';
   siteName: string;
   beMenu: Record<string, unknown> | null;
@@ -55,7 +55,7 @@ export async function loadBlogPageData(
   pathnameForCanonical: string,
   origin: string,
 ): Promise<BlogPageData> {
-  let useBemmae = false;
+  let usecursodear = false;
   let layoutType: 'main' | 'local' = 'main';
   let siteName = 'Site';
   let beMenu: Record<string, unknown> | null = null;
@@ -103,11 +103,11 @@ export async function loadBlogPageData(
     const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
     layoutType = siteMode === 'local' ? 'local' : 'main';
     const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
-    useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
+    usecursodear = siteMode !== 'local' && activeTheme === 'cursodear';
 
     siteName = settings?.data?.siteName || 'Site';
-    beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
-    const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
+    beMenu = usecursodear ? await readSingleton('menu', 'cursodear') : null;
+    const beFoot = usecursodear ? await readSingleton('footer', 'cursodear') : null;
     beNav = beMenu ? navFromMenu(beMenu) : [];
     beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
     {
@@ -120,7 +120,7 @@ export async function loadBlogPageData(
     pageUrl = buildCanonicalPageUrl(publicSiteUrl, pathnameForCanonical);
     {
       const rawImg = post.data.metaImage || post.data.thumbnail;
-      ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolveBemmaeMediaUrl(rawImg) || rawImg);
+      ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolvecursodearMediaUrl(rawImg) || rawImg);
     }
     articleIso = toIsoDateTime(post.data.publishedDate);
     let categoryName: string | undefined;
@@ -132,7 +132,7 @@ export async function loadBlogPageData(
         categoryPath = `/${cat.id}`;
       }
     }
-    postJsonLd = useBemmae
+    postJsonLd = usecursodear
       ? buildPostJsonLd({
           seoSchema: post.data.seoSchema,
           headline: post.data.title,
@@ -154,14 +154,14 @@ export async function loadBlogPageData(
       (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
     blogUrlPrefixResolved = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'blog';
     const allPostsForRelated = await getCollection('posts');
-    relatedPosts = useBemmae ? pickRelatedPosts(post, allPostsForRelated, 3) : [];
+    relatedPosts = usecursodear ? pickRelatedPosts(post, allPostsForRelated, 3) : [];
   } else {
     category = props.category;
     const settings = await getEntry('siteSettings', 'settings').catch(() => null);
     const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
     layoutType = siteMode === 'local' ? 'local' : 'main';
     const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
-    useBemmae = siteMode !== 'local' && activeTheme === 'bemmae';
+    usecursodear = siteMode !== 'local' && activeTheme === 'cursodear';
     blogPermalinkStructure =
       (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
     blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'blog';
@@ -176,9 +176,9 @@ export async function loadBlogPageData(
     publishedPosts = publishedPosts.filter((p) => p.data.category === category!.id);
 
     siteName = settings?.data?.siteName || 'Site';
-    beMenu = useBemmae ? await readSingleton('menu', 'bemmae') : null;
-    const beFoot = useBemmae ? await readSingleton('footer', 'bemmae') : null;
-    beBlog = useBemmae ? (await readSingleton('blog', 'bemmae')) || {} : {};
+    beMenu = usecursodear ? await readSingleton('menu', 'cursodear') : null;
+    const beFoot = usecursodear ? await readSingleton('footer', 'cursodear') : null;
+    beBlog = usecursodear ? (await readSingleton('blog', 'cursodear')) || {} : {};
     beNav = beMenu ? navFromMenu(beMenu) : [];
     beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 
@@ -190,7 +190,7 @@ export async function loadBlogPageData(
   }
 
   return {
-    useBemmae,
+    usecursodear,
     layoutType,
     siteName,
     beMenu,

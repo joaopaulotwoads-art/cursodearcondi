@@ -2,14 +2,14 @@
 /**
  * admin/pages/home.astro
  *
- * Edição da Home: tema classic → HomeEditor; tema bemmae → SingletonEditor (campos Bem Mãe).
+ * Edição da Home: tema classic → HomeEditor; tema cursodear → SingletonEditor (campos Curso de Ar Condicionado�e).
  */
 
 import { getEntry } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import HomeEditor from '../../../components/admin/HomeEditor.tsx';
 import SingletonEditor from '../../../components/admin/SingletonEditor.tsx';
-import { BEMMAE_HOME_FIELDS } from '../../../components/admin/bemmae-editor-fields';
+import { cursodear_HOME_FIELDS } from '../../../components/admin/cursodear-editor-fields';
 import { readSingleton } from '../../../utils/singleton-utils';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
@@ -19,14 +19,14 @@ const initialData = await readSingleton('home', activeThemeId);
 
 <AdminLayout title="Página Inicial - Admin">
     <div id="home-editor-wrapper" class="min-h-[400px]">
-        {activeThemeId === 'bemmae' ? (
+        {activeThemeId === 'cursodear' ? (
             <SingletonEditor
                 client:only="react"
                 name="home"
-                title="Página inicial (tema Bem Mãe)"
-                fields={BEMMAE_HOME_FIELDS}
+                title="Página inicial (tema Curso de Ar Condicionado�e)"
+                fields={cursodear_HOME_FIELDS}
                 initialData={initialData ?? {}}
-                themeId="bemmae"
+                themeId="cursodear"
             />
         ) : initialData !== null ? (
             <HomeEditor client:only="react" initialData={initialData} />

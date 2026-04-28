@@ -1,11 +1,11 @@
 ---
 /**
- * Política de Cookies — layout conforme tema (Bem Mãe / classic / local).
+ * Política de Cookies — layout conforme tema (Curso de Ar Condicionado�e / classic / local).
  */
 import { getEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
-import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
-import LegalPage from '../themes/bemmae/LegalPage.astro';
+import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
+import LegalPage from '../themes/cursodear/LegalPage.astro';
 import PoliticaCookiesContent from '../components/legal/PoliticaCookiesContent.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
@@ -19,13 +19,13 @@ const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
 const siteName = settings?.data?.siteName || 'Site';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
-const beMenu = !isLocal && activeTheme === 'bemmae' ? await readSingleton('menu', 'bemmae') : null;
-const beFoot = !isLocal && activeTheme === 'bemmae' ? await readSingleton('footer', 'bemmae') : null;
+const beMenu = !isLocal && activeTheme === 'cursodear' ? await readSingleton('menu', 'cursodear') : null;
+const beFoot = !isLocal && activeTheme === 'cursodear' ? await readSingleton('footer', 'cursodear') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 ---
 
-{isLocal || activeTheme !== 'bemmae' ? (
+{isLocal || activeTheme !== 'cursodear' ? (
     <MainLayout title={`Política de Cookies - ${siteName}`}>
         <section class="container mx-auto px-6 py-16 max-w-3xl">
             <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Política de Cookies</h1>
@@ -35,7 +35,7 @@ const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
         </section>
     </MainLayout>
 ) : (
-    <BaseLayoutBemmae
+    <BaseLayoutcursodear
         title={`Política de Cookies - ${siteName}`}
         description="Como utilizamos cookies e dados de navegação."
         siteName={(beMenu as Record<string, string>)?.logoText || siteName}
@@ -43,10 +43,10 @@ const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
         siteUrl={siteUrl}
         nav={beNav}
         footerNav={beFootNav}
-        contentThemeId="bemmae"
+        contentThemeId="cursodear"
     >
         <LegalPage title="Política de Cookies">
             <PoliticaCookiesContent />
         </LegalPage>
-    </BaseLayoutBemmae>
+    </BaseLayoutcursodear>
 )}

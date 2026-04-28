@@ -1,6 +1,6 @@
 /**
- * URLs de media do legado Ghost (bemmae.com.br) e do CMS atual.
- * - www ou apex → https://bemmae.com.br (canônico = apex, igual Vercel)
+ * URLs de media do legado Ghost (cursodear.com.br) e do CMS atual.
+ * - www ou apex → https://cursodear.com.br (canônico = apex, igual Vercel)
  * - Caminhos /content/images/... passam a ser relativos ao site, servidos por public/content/images/...
  */
 
@@ -9,8 +9,8 @@ import { shrinkAmazonImagesInHtml } from './amazon-image-url';
 export function alignThumbnailHost(url: string | undefined | null): string {
     if (!url || typeof url !== 'string') return '';
     let u = url.trim();
-    u = u.replace(/^http:\/\/(www\.)?bemmae\.com\.br\//i, 'https://bemmae.com.br/');
-    u = u.replace(/^https:\/\/www\.bemmae\.com\.br\//i, 'https://bemmae.com.br/');
+    u = u.replace(/^http:\/\/(www\.)?cursodear\.com\.br\//i, 'https://cursodear.com.br/');
+    u = u.replace(/^https:\/\/www\.cursodear\.com\.br\//i, 'https://cursodear.com.br/');
     return u;
 }
 
@@ -19,19 +19,19 @@ export function alignThumbnailHost(url: string | undefined | null): string {
  * (coloque os ficheiros em public/content/images/... no repo).
  * Outras URLs (Unsplash, etc.) mantém absolutas normalizadas.
  */
-export function resolveBemmaeMediaUrl(url: string | undefined | null): string {
+export function resolvecursodearMediaUrl(url: string | undefined | null): string {
     const aligned = alignThumbnailHost(url);
     if (!aligned) return '';
-    const m = aligned.match(/^https:\/\/bemmae\.com\.br\/(content\/images\/.+)$/i);
+    const m = aligned.match(/^https:\/\/cursodear\.com\.br\/(content\/images\/.+)$/i);
     if (m) return '/' + m[1];
     return aligned;
 }
 
 /** Substitui URLs absolutas do Ghost no HTML do post por caminhos relativos /content/images/... */
-export function rewriteBemmaeContentImagesInHtml(html: string | null | undefined): string {
+export function rewritecursodearContentImagesInHtml(html: string | null | undefined): string {
     if (!html) return '';
     let out = html.replace(
-        /https?:\/\/(?:www\.)?bemmae\.com\.br(\/content\/images\/[^"'<>\s]+)/gi,
+        /https?:\/\/(?:www\.)?cursodear\.com\.br(\/content\/images\/[^"'<>\s]+)/gi,
         '$1',
     );
     out = shrinkAmazonImagesInHtml(out);

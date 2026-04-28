@@ -1,6 +1,6 @@
 ---
 import { getEntry } from 'astro:content';
-import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
+import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import CurriculumModuleGrid from '../components/cursodear/CurriculumModuleGrid.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
@@ -18,15 +18,15 @@ const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
-const beMenu = (await readSingleton('menu', 'bemmae')) as Record<string, unknown> | null;
-const beFoot = (await readSingleton('footer', 'bemmae')) as Record<string, unknown> | null;
+const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
 const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 ---
 
-<BaseLayoutBemmae
+<BaseLayoutcursodear
   title={pageTitle}
   description={pageDescription}
   siteName={siteNameForLayout}
@@ -34,7 +34,7 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
   siteUrl={siteUrl}
   nav={beNav}
   footerNav={beFootNav}
-  contentThemeId="bemmae"
+  contentThemeId="cursodear"
 >
   <div class="min-w-0 bg-slate-50 text-slate-900 antialiased">
     <header class="border-b border-slate-200 bg-white px-3 py-10 sm:px-6 sm:py-12 lg:py-16">
@@ -80,4 +80,4 @@ const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim(
       </div>
     </section>
   </div>
-</BaseLayoutBemmae>
+</BaseLayoutcursodear>

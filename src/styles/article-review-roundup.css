@@ -101,15 +101,15 @@
 }
 
 /* Parágrafos do review: blocos mais curtos + respiro entre eles (legibilidade) */
-.article-review-roundup .bemmae-post-html > p {
+.article-review-roundup .cursodear-post-html > p {
   margin-bottom: 1.35em;
 }
 
-.article-review-roundup .bemmae-post-html > p:last-child {
+.article-review-roundup .cursodear-post-html > p:last-child {
   margin-bottom: 0;
 }
 
-.article-review-roundup .bemmae-post-html h2[id] {
+.article-review-roundup .cursodear-post-html h2[id] {
   scroll-margin-top: 5.5rem;
 }
 
@@ -663,11 +663,11 @@
 }
 
 /* Título acima da caixa: barra laranja + numeração automática (1. 2. …) */
-.article-review-roundup .bemmae-post-html {
+.article-review-roundup .cursodear-post-html {
   counter-reset: review-product;
 }
 
-.article-review-roundup .bemmae-post-html > h2:has(+ .cnx-aff-product.cnx-aff-block-wrap) {
+.article-review-roundup .cursodear-post-html > h2:has(+ .cnx-aff-product.cnx-aff-block-wrap) {
   counter-increment: review-product;
   margin-top: 2.35rem !important;
   margin-bottom: 0.65rem !important;
@@ -680,13 +680,13 @@
   text-decoration: none !important;
 }
 
-.article-review-roundup .bemmae-post-html > h2:has(+ .cnx-aff-product.cnx-aff-block-wrap)::before {
+.article-review-roundup .cursodear-post-html > h2:has(+ .cnx-aff-product.cnx-aff-block-wrap)::before {
   content: counter(review-product) '. ';
   font-weight: 800;
 }
 
 /* Outros h2 diretos no corpo (se existirem) */
-.article-review-roundup .bemmae-post-html > h2:not(:has(+ .cnx-aff-product.cnx-aff-block-wrap)) {
+.article-review-roundup .cursodear-post-html > h2:not(:has(+ .cnx-aff-product.cnx-aff-block-wrap)) {
   margin-top: 2.25rem !important;
   padding-top: 0.25rem;
   font-size: 1.35rem !important;

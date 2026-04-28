@@ -462,7 +462,7 @@ html.light {
     color: var(--admin-text-muted);
 }
 
-/* Preview dos blocos Bem Mãe no editor (cartão claro como no artigo público) */
+/* Preview dos blocos Curso de Ar Condicionado�e no editor (cartão claro como no artigo público) */
 .admin-editor-live-preview.article-review-roundup {
     margin: 0.5rem 0;
     padding: 0.65rem 0.65rem 0.75rem;
@@ -479,7 +479,7 @@ html.light {
 /*
  * TipTap usa .prose + affiliate-blocks.css (CTA bege com !important).
  * O preview do card está em .not-prose > .article-review-roundup (classes em nós diferentes).
- * Reforço no editor com ancestral .ProseMirror (amarelo Bem Mãe, igual ao artigo público):
+ * Reforço no editor com ancestral .ProseMirror (amarelo Curso de Ar Condicionado�e, igual ao artigo público):
  */
 .ProseMirror .article-review-roundup.admin-editor-live-preview .cnx-aff-product-cta a {
     background: #ffc107 !important;

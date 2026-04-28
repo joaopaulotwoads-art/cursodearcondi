@@ -1,8 +1,8 @@
 ---
 import { getEntry } from 'astro:content';
-import BaseLayoutBemmae from '../themes/bemmae/BaseLayout.astro';
+import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import { readSingleton } from '../utils/singleton-utils';
-import { logoSrcFromMenu } from '../utils/theme-nav';
+import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
 const pageTitle = 'Curso de Ar Condicionado online | Formação Profissional 2026';
@@ -12,19 +12,13 @@ const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
+const canonicalHomeUrl = 'https://cursodearcondicionado.com.br/';
 
-const beMenu = (await readSingleton('menu', 'bemmae')) as Record<string, unknown> | null;
+const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
 const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
-
-const heroBenefits = [
-  'Acesso imediato pela Hotmart',
-  '160 aulas · 30 horas de conteúdo',
-  'Certificado de conclusão',
-  'Acesso vitalício ao curso',
-  'Garantia incondicional de 15 dias',
-  'Bônus Inverter incluso',
-];
 
 const aprenderItems = [
   'Instalação completa de ar-split residencial e comercial',
@@ -63,38 +57,6 @@ const aulas = [
   { number: '15', title: 'Módulo 15 - Manutenção Corretiva e Preventiva', count: '10 aulas', text: 'Manutenção corretiva (5), recolhimento de fluído e diagnóstico, manutenção preventiva (3) e considerações finais.' },
 ];
 
-const aprenderDetalhado = [
-  'Técnico em refrigeração iniciante',
-  'Instalador residencial autônomo',
-  'Eletricista que quer expandir serviços',
-  'Prestador de Serviços Autônomo',
-  'Profissional de manutenção predial',
-  'Mecânico que quer migrar de área',
-  'Técnico de assistência técnica',
-  'Empreendedor de climatização',
-  'Profissional de manutenção preventiva',
-  'Especialista em tecnologia Inverter',
-  'Técnico de atendimento comercial',
-  'Quem quer uma renda extra com serviços',
-  'Profissional que quer se certificar',
-  'Quem nunca teve experiência na área',
-  'Profissional que quer cobrar mais pelos serviços',
-  'Técnico que quer dominar o mercado de Inverter',
-  'Quem busca independência financeira',
-  'Qualquer pessoa com vontade de aprender',
-];
-
-const instrutorItens = [
-  'Mais de 20 anos de experiência em refrigeração',
-  'Especialista em tecnologia Inverter',
-  'Formação técnica e prática no campo',
-  'Treinador de técnicos em todo o Brasil',
-  'Mais de 11.900 alunos formados',
-  'Método validado pelo mercado',
-  'Certificação reconhecida nacionalmente',
-  'Didática clara e objetiva para iniciantes',
-];
-
 const faqItems = [
   { q: 'O curso é totalmente online?', a: 'Sim. O acesso é feito pela plataforma Hotmart, podendo assistir pelo celular ou computador, a qualquer hora.' },
   { q: 'Por quanto tempo tenho acesso?', a: 'O acesso é vitalício. O curso não expira e você pode assistir quantas vezes quiser.' },
@@ -106,15 +68,16 @@ const faqItems = [
 ];
 ---
 
-<BaseLayoutBemmae
+<BaseLayoutcursodear
   title={pageTitle}
   description={pageDescription}
   siteName={siteNameForLayout}
   logoSrc={logoForLayout}
   siteUrl={siteUrl}
   nav={[]}
-  footerNav={[]}
-  contentThemeId="bemmae"
+  footerNav={beFootNav}
+  contentThemeId="cursodear"
+  canonicalOverride={canonicalHomeUrl}
 >
   <div class="bg-white text-slate-900">
     <!-- 2. HERO -->
@@ -198,11 +161,9 @@ const faqItems = [
               QUERO ME INSCREVER AGORA
             </a>
             <p class="text-center text-gray-400 text-xs mt-2">🔒 Compra 100% segura pela Hotmart</p>
-            <ul class="mt-4 border-t pt-4">
-              {heroBenefits.map((item) => (
-                <li class="flex items-center gap-2 text-gray-700 text-sm py-1"><span class="text-orange-500 font-bold">✓</span><span>{item}</span></li>
-              ))}
-            </ul>
+            <p class="mt-4 border-t pt-4 text-sm leading-relaxed text-gray-700">
+              Ao entrar hoje, você recebe acesso imediato a todo o treinamento com mais de 160 aulas, trilha completa de 30 horas, certificado de conclusão e suporte para dúvidas técnicas. O conteúdo foi montado para acelerar sua entrada no mercado de instalação e manutenção, com acesso vitalício para revisão e garantia incondicional de 15 dias.
+            </p>
           </aside>
         </div>
       </div>
@@ -253,10 +214,16 @@ const faqItems = [
     <section class="py-16 md:py-24" id="instrutor">
       <div class="mx-auto max-w-6xl px-4 md:px-0">
         <h2 class="text-3xl font-bold text-slate-900">PARA QUEM É ESTE CURSO</h2>
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-2 text-sm text-slate-700">
-          {aprenderDetalhado.map((item) => (
-            <p class="px-4">• {item}</p>
-          ))}
+        <div class="mt-6 space-y-4 text-sm leading-relaxed text-slate-700">
+          <p>
+            Este curso foi estruturado para profissionais em diferentes estágios da carreira: quem está começando do zero, quem já atende clientes no residencial, eletricistas que desejam expandir escopo de serviço e técnicos de manutenção predial que precisam elevar padrão técnico com mais segurança e produtividade.
+          </p>
+          <p>
+            Também é indicado para quem já atua como autônomo e quer organizar melhor o processo de orçamento, instalação, manutenção corretiva e preventiva, aumentando taxa de fechamento e margem por atendimento. A trilha contempla desde fundamentos até tecnologia Inverter para quem deseja se posicionar em nichos de maior valor.
+          </p>
+          <p>
+            Para profissionais que buscam transição de carreira, o treinamento entrega uma base prática e comercial para construir autoridade local, gerar indicações e transformar conhecimento técnico em renda recorrente com contratos de manutenção e atendimento de emergência.
+          </p>
         </div>
       </div>
     </section>
@@ -312,12 +279,12 @@ const faqItems = [
             <div class="flex-1 text-center md:text-left">
               <h3 class="text-2xl font-black uppercase text-slate-800">INSTRUTOR LEANDRO MORAES</h3>
               <p class="mb-4 text-sm font-semibold text-orange-500">Especialista em Refrigeração e Climatização</p>
-              <ul class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-slate-700">
-                {instrutorItens.map((item) => (
-                  <li class="flex gap-2 text-sm text-gray-700"><span class="font-bold text-orange-500">✓</span><span>{item}</span></li>
-                ))}
-              </ul>
-              <p class="mt-4 text-sm leading-relaxed text-slate-700">Profissional com mais de 20 anos de experiência no mercado de refrigeração e climatização. Já formou mais de 11.900 alunos em todo o Brasil com método prático e direto ao ponto.</p>
+              <p class="mt-4 text-sm leading-relaxed text-slate-700">
+                Com mais de 20 anos de experiência em refrigeração e climatização, Leandro reúne vivência de campo, rotina de atendimento real e prática de ensino voltada para resultado financeiro do aluno. Seu método combina explicação técnica clara, passo a passo de execução e foco em erros que mais geram retrabalho.
+              </p>
+              <p class="mt-3 text-sm leading-relaxed text-slate-700">
+                Ao longo da carreira, já treinou milhares de profissionais em todo o Brasil, com ênfase em instalação, manutenção e diagnóstico de equipamentos convencionais e Inverter. A proposta é transformar conhecimento em serviço com padrão profissional, reforçando autoridade, confiança do cliente e evolução de faturamento.
+              </p>
             </div>
           </div>
         </article>
@@ -495,6 +462,29 @@ const faqItems = [
     </section>
 
     <!-- 11. FAQ -->
+    <section class="bg-[#f8fafc] py-16 md:py-24" id="carreira-instalador-2026">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <h2 class="text-3xl font-black text-slate-900">Carreira de Instalador de Ar Condicionado em 2026</h2>
+        <div class="mt-6 space-y-5 text-sm leading-relaxed text-slate-700 md:text-base">
+          <p>
+            Em 2026, a carreira de instalador de ar-condicionado segue em forte crescimento no Brasil por causa da combinação entre aumento das temperaturas, expansão da construção civil e maior exigência de conforto térmico em ambientes residenciais, comerciais e corporativos. Isso significa que o técnico qualificado deixou de ser apenas um prestador de serviço eventual e passou a ser um profissional estratégico para famílias e empresas que não podem ficar sem climatização. Na prática, quem domina instalação correta, manutenção preventiva e diagnóstico rápido de falhas conquista espaço em um mercado com demanda contínua durante todo o ano.
+          </p>
+          <p>
+            O cenário também evoluiu em exigência técnica. Hoje o cliente não busca apenas “instalar um aparelho”, ele quer segurança elétrica, acabamento limpo, orientação de uso, eficiência energética e redução de risco de problemas futuros. Em ambientes comerciais, esse nível de exigência é ainda maior, porque qualquer falha no sistema impacta operação, equipe e faturamento do negócio. Por isso, o instalador moderno precisa unir conhecimento técnico com capacidade de comunicação e postura profissional. Quem entrega esse pacote completo tende a fidelizar clientes, receber indicações e construir receita recorrente com contratos de manutenção.
+          </p>
+          <p>
+            Outro ponto importante em 2026 é a consolidação da tecnologia Inverter e da eletrônica embarcada nos equipamentos. O técnico que entende sensores, placa, lógica de operação e procedimento correto de teste ganha vantagem competitiva evidente. Em vez de competir apenas por preço, ele compete por confiança e previsibilidade de resultado. Isso muda a percepção de valor do serviço e abre espaço para tickets maiores em instalação premium, higienização especializada e manutenção corretiva orientada por diagnóstico. Em termos de carreira, essa especialização é o que diferencia o profissional comum do profissional de referência na região.
+          </p>
+          <p>
+            Para quem está começando, o melhor caminho é seguir uma trilha estruturada: fundamentos de refrigeração, elétrica aplicada, instalação padronizada, procedimentos de vácuo e estanqueidade, manutenção preventiva e leitura de sintomas em campo. Esse tipo de formação reduz erros caros, melhora a experiência do cliente e acelera os primeiros fechamentos. Para quem já atua, o foco deve ser padronizar processo e elevar posicionamento comercial: proposta clara, checklist de entrega, pós-serviço e rotina de manutenção recorrente. O mercado recompensa profissionais que conseguem unir técnica, organização e consistência.
+          </p>
+          <p>
+            Em resumo, a carreira de instalador de ar-condicionado em 2026 é uma rota real de crescimento profissional para quem busca renda estável, autonomia e valorização de mercado. Com capacitação prática e atualização contínua, é possível construir autoridade local, aumentar margem por serviço e transformar conhecimento técnico em negócio sustentável. Oportunidade existe; o diferencial está em executar com método, segurança e compromisso com resultado para o cliente.
+          </p>
+        </div>
+      </div>
+    </section>
+
     <section class="bg-white py-16 md:py-24" id="faq">
       <div class="mx-auto max-w-6xl px-4 md:px-0">
         <h2 class="text-center text-3xl font-black uppercase text-slate-900">PERGUNTAS FREQUENTES</h2>
@@ -594,54 +584,6 @@ const faqItems = [
       </div>
     </section>
 
-    <div class="h-1 w-full bg-orange-500"></div>
-    <!-- 12. FOOTER -->
-    <footer id="rodape-lp" class="border-t border-gray-200 bg-[#f8fafc] py-16">
-      <div class="mx-auto grid grid-cols-1 md:grid-cols-4 max-w-6xl gap-8 px-4 md:px-0">
-        <div class="mb-8 md:mb-0 text-center md:text-left">
-          <img src={logoForLayout} alt={siteNameForLayout} class="h-12 w-auto object-contain mx-auto md:mx-0" />
-          <div class="mt-4 flex justify-center gap-2 text-white md:justify-start">
-            <a href="https://facebook.com/cursodear" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors" aria-label="Facebook">
-              <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M13.5 8H16V5h-2.5C10.5 5 9 6.8 9 9.4V11H7v3h2v5h3v-5h2.6l.4-3H12V9.6c0-1 .3-1.6 1.5-1.6z"/></svg>
-            </a>
-            <a href="https://instagram.com/cursodear" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors" aria-label="Instagram">
-              <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zm5.75-3.25a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25z"/></svg>
-            </a>
-            <a href="https://youtube.com/cursodear" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-colors" aria-label="YouTube">
-              <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M23.5 7.2a3 3 0 0 0-2.1-2.1C19.5 4.5 12 4.5 12 4.5s-7.5 0-9.4.6A3 3 0 0 0 .5 7.2C0 9.1 0 12 0 12s0 2.9.5 4.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-4.8.5-4.8s0-2.9-.5-4.8zM9.6 15.2V8.8l6 3.2-6 3.2z"/></svg>
-            </a>
-          </div>
-        </div>
-        <div class="mb-8 md:mb-0">
-          <h3 class="text-sm font-bold uppercase text-slate-900">FORMAÇÕES</h3>
-          <ul class="mt-3 space-y-2 text-sm text-gray-600">
-            <li><a href="#o-que-aprender" class="hover:text-orange-500">Curso de Ar Condicionado</a></li>
-            <li><a href="#modulos" class="hover:text-orange-500">Instalação Split</a></li>
-            <li><a href="#modulos" class="hover:text-orange-500">Manutenção Preventiva</a></li>
-          </ul>
-        </div>
-        <div class="mb-8 md:mb-0">
-          <h3 class="text-sm font-bold uppercase text-slate-900">CURSOS COMPLEMENTARES</h3>
-          <ul class="mt-3 space-y-2 text-sm text-gray-600">
-            <li><a href="#" class="hover:text-orange-500">Refrigeração Comercial</a></li>
-            <li><a href="#" class="hover:text-orange-500">Elétrica Aplicada</a></li>
-            <li><a href="#" class="hover:text-orange-500">Atendimento Técnico</a></li>
-          </ul>
-        </div>
-        <div class="mb-8 md:mb-0">
-          <h3 class="text-sm font-bold uppercase text-slate-900">BETA</h3>
-          <ul class="mt-3 space-y-2 text-sm text-gray-600">
-            <li><a href="#" class="hover:text-orange-500">Termos de Uso</a></li>
-            <li><a href="#" class="hover:text-orange-500">Política de Privacidade</a></li>
-            <li><a href="#" class="hover:text-orange-500">Contato</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="mx-auto mt-8 max-w-6xl border-t border-gray-200 px-4 pt-4 text-center text-xs text-gray-400 md:px-0">
-        © {new Date().getFullYear()} {siteNameForLayout}. Todos os direitos reservados.
-      </div>
-    </footer>
-
     <a
       href="https://wa.me/5514996973456"
       target="_blank"
@@ -689,8 +631,5 @@ const faqItems = [
     :global(html) {
       scroll-padding-top: 80px;
     }
-    :global(body > footer) {
-      display: none !important;
-    }
   </style>
-</BaseLayoutBemmae>
+</BaseLayoutcursodear>

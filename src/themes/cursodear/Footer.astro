@@ -6,11 +6,11 @@ interface Props {
   /** Mesmo logo do header (singleton Menu, modo imagem). */
   logoSrc?: string;
   footerNav: NavItem[];
-  /** Pasta de singletons (ex.: bemmae) */
+  /** Pasta de singletons (ex.: cursodear) */
   contentThemeId?: string;
 }
 
-const { siteName, logoSrc, footerNav, contentThemeId = 'bemmae' } = Astro.props;
+const { siteName, logoSrc, footerNav, contentThemeId = 'cursodear' } = Astro.props;
 ---
 
 <footer class="mt-16 min-w-0 overflow-x-hidden border-t border-gray-200 bg-[#f8fafc]">
