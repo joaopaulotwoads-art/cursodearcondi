@@ -9,7 +9,7 @@ import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
 import '@fontsource/open-sans/800.css';
 import './global.css';
-import { buildCanonicalPageUrl, ensureApexSiteOrigin } from '../../utils/read-site-settings';
+import { ensureApexSiteOrigin } from '../../utils/read-site-settings';
 import { buildcursodearDefaultSiteJsonLd } from '../../utils/post-json-ld';
 import FaviconLinks from '../../components/FaviconLinks.astro';
 
@@ -61,7 +61,10 @@ const fullTitle = title;
 const fullDescription = description || '';
 const metaKeywords = keywords || '';
 const siteOrigin = ensureApexSiteOrigin(siteUrl);
-const canonicalPageUrl = canonical || canonicalOverride || buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
+const path = Astro.url.pathname;
+const canonicalPath = path.endsWith('/') ? path : `${path}/`;
+const canonicalPageUrl =
+  canonical || canonicalOverride || `https://cursodearcondicionado.com.br${canonicalPath}`;
 /** Um único JSON-LD: post traz @graph completo; demais páginas usam WebSite + Organization + SearchAction */
 const jsonLdGraph = extraJsonLd ?? buildcursodearDefaultSiteJsonLd({
     siteUrl: siteOrigin || siteUrl,

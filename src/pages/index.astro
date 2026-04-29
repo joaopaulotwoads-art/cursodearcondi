@@ -72,23 +72,33 @@ const courseSchemaJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Course',
   name: 'Curso de Ar Condicionado',
+  url: 'https://cursodearcondicionado.com.br/',
   description:
-    'Curso completo de instalação e manutenção de ar condicionado split convencional e Inverter. 160 aulas, 30 horas, certificado reconhecido.',
+    'Curso completo de instalação e manutenção de ar condicionado split convencional e Inverter. 160 aulas, 30 horas, certificado reconhecido, +11.900 alunos formados.',
+  image: 'https://cursodearcondicionado.com.br/images/hero-bg.webp',
+  inLanguage: 'pt-BR',
+  courseMode: 'online',
+  educationalLevel: 'beginner',
+  timeRequired: 'PT30H',
   provider: {
     '@type': 'Organization',
     name: 'Curso de Ar Condicionado',
-    sameAs: 'https://cursodear.com.br',
+    url: 'https://cursodearcondicionado.com.br/',
+    sameAs: [
+      'https://cursodearcondicionado.com.br/',
+      'https://instagram.com/cursodearcondicionado/',
+      'https://youtube.com/@cursodearcondicionado/',
+      'https://facebook.com/cursodearcondicionado/',
+    ],
   },
-  courseMode: 'online',
-  educationalLevel: 'beginner',
-  inLanguage: 'pt-BR',
-  numberOfCredits: '30',
   hasCourseInstance: {
     '@type': 'CourseInstance',
     courseMode: 'online',
+    courseWorkload: 'PT30H',
     instructor: {
       '@type': 'Person',
       name: 'Leandro Moraes',
+      jobTitle: 'Especialista em Refrigeração e Climatização',
     },
   },
   offers: {
@@ -96,14 +106,17 @@ const courseSchemaJsonLd = {
     price: '197.00',
     priceCurrency: 'BRL',
     availability: 'https://schema.org/InStock',
-    validFrom: '2024-01-01',
+    validFrom: '2026-01-01',
+    url: 'https://cursodearcondicionado.com.br/',
   },
   aggregateRating: {
     '@type': 'AggregateRating',
     ratingValue: '4.7',
     reviewCount: '189',
     bestRating: '5',
+    worstRating: '1',
   },
+  totalHistoricalEnrollment: 11900,
 };
 ---
 
@@ -708,3 +721,4 @@ const courseSchemaJsonLd = {
     }
   </style>
 </BaseLayoutcursodear>
+

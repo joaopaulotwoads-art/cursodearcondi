@@ -8,11 +8,7 @@ import markdoc from '@astrojs/markdoc';
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
-    /**
-     * Aceita URLs com e sem barra final no mesmo caminho.
-     * Evita precisar digitar "/" manualmente em rotas como /sobre.
-     */
-    trailingSlash: 'ignore',
+    trailingSlash: 'always',
     adapter: vercel(),
     /** CSS inline no HTML → menos pedidos bloqueantes no caminho crítico (Lighthouse / LCP). */
     build: {
