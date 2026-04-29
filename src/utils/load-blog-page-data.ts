@@ -112,7 +112,7 @@ export async function loadBlogPageData(
     beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
     {
       const metaTitleTrim = post.data.metaTitle?.trim();
-      documentTitle = metaTitleTrim ? metaTitleTrim : `${post.data.title} - ${siteName}`;
+      documentTitle = metaTitleTrim ? metaTitleTrim : post.data.title;
     }
 
     const siteCfg = await readSiteSettings();
@@ -186,7 +186,7 @@ export async function loadBlogPageData(
     publicSiteUrl = resolvePublicSiteUrl(siteCfg.canonicalUrl as string | undefined, origin);
     pageDesc =
       (beBlog as { heroDescription?: string }).heroDescription ||
-      `Artigos em ${category!.data.name} no ${siteName}`;
+      `Colecao de artigos tecnicos da categoria ${category!.data.name}.`;
   }
 
   return {

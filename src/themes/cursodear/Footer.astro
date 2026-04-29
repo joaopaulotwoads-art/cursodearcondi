@@ -18,11 +18,30 @@ const { siteName, logoSrc, footerNav, contentThemeId = 'cursodear' } = Astro.pro
     <div class="grid min-w-0 grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
       <div class="min-w-0">
         <a href="/" class="inline-flex items-center" aria-label={siteName}>
-          <img src={logoSrc || '/logo.png'} alt="Polo Norte Cursos" class="h-12 w-auto object-contain" loading="lazy" decoding="async" />
+          <img src={logoSrc || '/logo.png'} alt="Curso de Ar Condicionado" class="h-12 w-auto object-contain" loading="lazy" decoding="async" />
         </a>
-        <p class="mt-2 max-w-[180px] text-xs leading-relaxed text-gray-500">
-          Formação profissional em instalação e manutenção de ar condicionado.
+        <p class="mt-2 text-sm font-black text-slate-800">Curso de Ar Condicionado</p>
+        <p class="mt-2 max-w-[220px] text-xs leading-relaxed text-gray-500">
+          Cursos profissionalizantes técnicos com foco em prática e resultado.
         </p>
+        <div class="text-xs text-gray-500 space-y-1 mt-3">
+          <p>📍 Av. Rodrigues Alves, 96</p>
+          <p>Jardim Redentor — Bauru/SP</p>
+          <a
+            href="https://wa.me/5514988034123"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-1 hover:text-orange-500 transition"
+          >
+            📞 (14) 98803-4123
+          </a>
+          <a
+            href="mailto:contato@cursodearcondicionado.com.br"
+            class="hover:text-orange-500 transition"
+          >
+            ✉️ contato@cursodearcondicionado.com.br
+          </a>
+        </div>
         <div class="mt-4 flex gap-2 text-white">
           <a href="https://facebook.com/cursodear" target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-white transition-colors hover:bg-orange-600" aria-label="Facebook">
             <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M13.5 8H16V5h-2.5C10.5 5 9 6.8 9 9.4V11H7v3h2v5h3v-5h2.6l.4-3H12V9.6c0-1 .3-1.6 1.5-1.6z"/></svg>
@@ -30,7 +49,7 @@ const { siteName, logoSrc, footerNav, contentThemeId = 'cursodear' } = Astro.pro
           <a href="https://instagram.com/cursodear" target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-white transition-colors hover:bg-orange-600" aria-label="Instagram">
             <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm0 2a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7zm5 3.5A5.5 5.5 0 1 1 6.5 13 5.5 5.5 0 0 1 12 7.5zm0 2A3.5 3.5 0 1 0 15.5 13 3.5 3.5 0 0 0 12 9.5zm5.75-3.25a1.25 1.25 0 1 1-1.25 1.25 1.25 1.25 0 0 1 1.25-1.25z"/></svg>
           </a>
-          <a href="https://youtube.com/cursodear" target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-white transition-colors hover:bg-orange-600" aria-label="YouTube">
+          <a href="https://youtube.com/@cursodear" target="_blank" rel="noopener noreferrer" class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-white transition-colors hover:bg-orange-600" aria-label="YouTube">
             <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true"><path d="M23.5 7.2a3 3 0 0 0-2.1-2.1C19.5 4.5 12 4.5 12 4.5s-7.5 0-9.4.6A3 3 0 0 0 .5 7.2C0 9.1 0 12 0 12s0 2.9.5 4.8a3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1c.5-1.9.5-4.8.5-4.8s0-2.9-.5-4.8zM9.6 15.2V8.8l6 3.2-6 3.2z"/></svg>
           </a>
         </div>
@@ -58,14 +77,15 @@ const { siteName, logoSrc, footerNav, contentThemeId = 'cursodear' } = Astro.pro
         <div class="mb-4 text-xs font-semibold uppercase tracking-wider text-gray-500">Legal</div>
         <nav class="flex flex-col gap-2" aria-label="Links legais">
           <a href="/politica-de-privacidade" class="text-sm font-medium text-gray-600 hover:text-orange-500">Política de Privacidade</a>
-          <a href="/termos-de-uso" class="text-sm font-medium text-gray-600 hover:text-orange-500">Termos de Uso</a>
+          <a href="/termos" class="text-sm font-medium text-gray-600 hover:text-orange-500">Termos de Uso</a>
+          <a href="/politica-de-cookies" class="text-sm font-medium text-gray-600 hover:text-orange-500">Política de Cookies</a>
           <a href="/contato" class="text-sm font-medium text-gray-600 hover:text-orange-500">Contato</a>
         </nav>
       </div>
     </div>
 
     <div class="mt-10 border-t border-gray-200 pt-6">
-      <p class="text-center text-sm text-gray-500">© 2026 Polo Norte Cursos. Todos os direitos reservados.</p>
+      <p class="text-center text-sm text-gray-500">© 2026 Curso de Ar Condicionado. Todos os direitos reservados.</p>
     </div>
   </div>
 </footer>

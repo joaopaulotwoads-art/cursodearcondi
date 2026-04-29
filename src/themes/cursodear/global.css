@@ -1,9 +1,9 @@
 @import '../../styles/affiliate-blocks.css';
 @import '../../styles/article-review-roundup.css';
 
-/* Tema Curso de Ar Condicionado£e â€” fundo #fff6f6, texto #333, Open Sans, entrelinha editorial ~1.6 */
+/* Tema Curso de Ar Condicionado£e â€” fundo neutro, texto #333, Open Sans, entrelinha editorial ~1.6 */
 :root {
-  --color-bg: #fff6f6;
+  --color-bg: #ffffff;
   --color-text: #333333;
   --color-heading: #1a1a1a;
   --color-muted: #6b7280;

@@ -43,12 +43,12 @@ const categories = await getCollection('categories');
 
 const rawBio = String(author.data.bio || '').trim();
 const pageDescription =
-  rawBio.length > 165 ? `${rawBio.slice(0, 162).trim()}…` : rawBio || `Artigos de ${author.data.name} no ${siteName}`;
+  rawBio.length > 165 ? `${rawBio.slice(0, 162).trim()}…` : rawBio || `Artigos tecnicos publicados por ${author.data.name}.`;
 ---
 
 {usecursodear ? (
   <BaseLayoutcursodear
-    title={`${author.data.name} - ${siteName}`}
+    title={author.data.name}
     description={pageDescription}
     siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
     logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
@@ -66,7 +66,7 @@ const pageDescription =
     />
   </BaseLayoutcursodear>
 ) : (
-  <MainLayout title={`${author.data.name} - Autor`}>
+  <MainLayout title={author.data.name} description={pageDescription}>
     <div class="max-w-6xl mx-auto px-4 py-20">
       <div class="relative mb-24">
         <div class="absolute inset-0 bg-gradient-to-r from-primary/20 to-purple-500/10 blur-3xl -z-10 rounded-full scale-110 opacity-50"></div>

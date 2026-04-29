@@ -1,0 +1,288 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+
+const pageTitle = 'Cursos Técnicos de Refrigeração e Climatização';
+const pageDescription =
+  'Formações profissionalizantes em refrigeração, climatização e manutenção de eletrodomésticos. Certificado reconhecido, acesso vitalício.';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
+
+const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
+
+const cursos = [
+  {
+    image: '/images/bonus_1.webp',
+    imageAlt: 'Curso de Ar Condicionado',
+    category: 'Climatização',
+    featured: true,
+    title: 'Curso de Ar Condicionado',
+    description:
+      'Domine instalação, manutenção corretiva e preventiva, tecnologia Inverter e recarga de gás R410A.',
+    aulas: '160',
+    horas: '30h',
+    rating: '4.7 (189)',
+    oldPrice: 'De R$ 297,00',
+    price: 'R$ 197,00',
+    installment: 'ou 12x de R$ 20,37',
+    href: '/',
+    cta: 'QUERO ME INSCREVER',
+    available: true,
+  },
+  {
+    image: 'https://placehold.co/600x340/1e293b/f97316?text=Curso+de+Geladeira',
+    imageAlt: 'Curso de manutenção de geladeira',
+    category: 'Refrigeração',
+    featured: false,
+    title: 'Curso de Manutenção de Geladeira',
+    description:
+      'Aprenda a diagnosticar e reparar geladeiras frost-free e duplex do zero ao avançado.',
+    aulas: 'Em breve',
+    horas: 'Em breve',
+    rating: '—',
+    oldPrice: '',
+    price: 'Em breve',
+    installment: '',
+    href: '#',
+    cta: 'EM BREVE',
+    available: false,
+  },
+  {
+    image: 'https://placehold.co/600x340/1e293b/f97316?text=Curso+de+Lavadora',
+    imageAlt: 'Curso de manutenção de lavadora',
+    category: 'Eletrodomésticos',
+    featured: false,
+    title: 'Curso de Manutenção de Lavadora',
+    description:
+      'Manutenção completa de máquinas de lavar automáticas e semiautomáticas, elétrica e mecânica.',
+    aulas: 'Em breve',
+    horas: 'Em breve',
+    rating: '—',
+    oldPrice: '',
+    price: 'Em breve',
+    installment: '',
+    href: '#',
+    cta: 'EM BREVE',
+    available: false,
+  },
+  {
+    image: 'https://placehold.co/600x340/1e293b/f97316?text=Curso+de+Eletrica',
+    imageAlt: 'Curso de elétrica residencial',
+    category: 'Elétrica',
+    featured: false,
+    title: 'Curso de Elétrica Residencial',
+    description:
+      'Fundamentos de elétrica residencial aplicados ao dia a dia do técnico em climatização.',
+    aulas: 'Em breve',
+    horas: 'Em breve',
+    rating: '—',
+    oldPrice: '',
+    price: 'Em breve',
+    installment: '',
+    href: '#',
+    cta: 'EM BREVE',
+    available: false,
+  },
+  {
+    image: 'https://placehold.co/600x340/1e293b/f97316?text=Ar+Automotivo',
+    imageAlt: 'Curso de ar condicionado automotivo',
+    category: 'Automotivo',
+    featured: false,
+    title: 'Curso de Ar Condicionado Automotivo',
+    description:
+      'Instalação e manutenção de ar condicionado veicular. Alta demanda e ticket elevado no mercado.',
+    aulas: 'Em breve',
+    horas: 'Em breve',
+    rating: '—',
+    oldPrice: '',
+    price: 'Em breve',
+    installment: '',
+    href: '#',
+    cta: 'EM BREVE',
+    available: false,
+  },
+];
+
+const beneficios = [
+  { icon: '🎓', title: 'Certificado Reconhecido', text: 'Certificado válido em todo o Brasil' },
+  { icon: '📱', title: 'Acesso em Qualquer Dispositivo', text: 'Estude pelo celular, tablet ou computador' },
+  { icon: '♾️', title: 'Acesso Vitalício', text: 'O curso não expira, estude no seu ritmo' },
+  { icon: '🛡️', title: 'Garantia de 15 dias', text: 'Reembolso integral se não gostar' },
+];
+---
+
+<BaseLayoutcursodear
+  title={pageTitle}
+  description={pageDescription}
+  siteName={siteNameForLayout}
+  logoSrc={logoForLayout}
+  siteUrl={siteUrl}
+  nav={beNav}
+  footerNav={beFootNav}
+  contentThemeId="cursodear"
+  canonicalOverride="https://cursodearcondicionado.com.br/cursos"
+>
+  <div class="bg-white text-slate-900">
+    <section class="bg-slate-800 py-16 text-center text-white">
+      <div class="mx-auto max-w-4xl px-6">
+        <span class="inline-flex rounded-full bg-orange-500 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white">
+          CURSO DE AR CONDICIONADO
+        </span>
+        <h1 class="mt-4 text-3xl font-black sm:text-4xl">Nossos Cursos Profissionalizantes</h1>
+        <p class="mt-4 text-sm text-slate-200 sm:text-base">
+          Formação completa para atuar no mercado de refrigeração e climatização com autoridade.
+        </p>
+      </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto px-6 py-16">
+      <div class="text-center">
+        <h2 class="text-3xl font-black text-slate-800">Escolha sua formação</h2>
+        <p class="mt-2 text-sm text-gray-500">Cursos práticos com certificado reconhecido</p>
+      </div>
+
+      <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {cursos.map((curso) => (
+          <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-md transition-shadow hover:shadow-xl">
+            <div class="relative">
+              <img src={curso.image} alt={curso.imageAlt} class="h-48 w-full object-cover" loading="lazy" decoding="async" />
+              <span class="absolute left-3 top-3 rounded-full bg-orange-500 px-3 py-1 text-xs font-bold uppercase text-white">
+                {curso.category}
+              </span>
+              {curso.featured && (
+                <span class="absolute right-3 top-3 rounded-full bg-red-500 px-3 py-1 text-xs font-bold uppercase text-white">
+                  MAIS VENDIDO
+                </span>
+              )}
+            </div>
+
+            <div class="flex flex-1 flex-col p-6">
+              <h3 class="mb-2 text-lg font-black leading-tight text-slate-800">{curso.title}</h3>
+              <p class="mb-4 flex-1 text-sm leading-relaxed text-gray-500">{curso.description}</p>
+
+              <div class="mb-4 flex items-center gap-4 text-xs text-gray-400">
+                <span>🎬 {curso.aulas} aulas</span>
+                <span>⏱️ {curso.horas} de conteúdo</span>
+                <span>📜 Certificado</span>
+              </div>
+
+              <div class="mb-4 flex items-center gap-1">
+                <span class="text-sm text-yellow-400">★★★★★</span>
+                <span class="text-xs text-gray-500">{curso.rating}</span>
+              </div>
+
+              <div class="border-t border-gray-100 pt-4">
+                {curso.oldPrice && <p class="text-xs text-gray-400 line-through">{curso.oldPrice}</p>}
+                <p class="text-2xl font-black text-orange-500">{curso.price}</p>
+                {curso.installment && <p class="mb-4 text-xs text-gray-400">{curso.installment}</p>}
+                {curso.available ? (
+                  <a
+                    href={curso.href}
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                    class="block w-full rounded-xl bg-orange-500 py-3 text-center text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-orange-600"
+                  >
+                    {curso.cta}
+                  </a>
+                ) : (
+                  <span class="block w-full cursor-not-allowed rounded-xl bg-gray-400 py-3 text-center text-sm font-bold uppercase tracking-wide text-white">
+                    {curso.cta}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="bg-orange-500 py-16 text-center">
+      <div class="mx-auto max-w-4xl px-6">
+        <h2 class="text-3xl font-black text-white">Faça parte da nossa comunidade</h2>
+        <p class="mt-3 text-sm text-orange-100">+11.900 alunos já estão se qualificando</p>
+        <a
+          href="/"
+          class="mt-8 inline-flex rounded-xl bg-white px-8 py-3 text-sm font-black uppercase tracking-wide text-orange-500 transition-colors hover:bg-orange-50"
+        >
+          VER CURSO DE AR CONDICIONADO
+        </a>
+      </div>
+    </section>
+
+    <section class="bg-white py-16">
+      <div class="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-6 md:grid-cols-4">
+        {beneficios.map((item) => (
+          <article class="p-6 text-center">
+            <p class="mb-3 text-4xl">{item.icon}</p>
+            <h3 class="mb-1 text-sm font-bold text-slate-800">{item.title}</h3>
+            <p class="text-xs text-gray-500">{item.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="bg-gray-50 py-16">
+      <div class="max-w-5xl mx-auto px-6 text-center">
+        <span class="text-orange-500 font-bold text-sm uppercase tracking-widest">
+          CURSO DE AR CONDICIONADO
+        </span>
+
+        <h2 class="text-3xl font-black text-slate-800 mt-2 mb-4">
+          Por que estudar com a gente?
+        </h2>
+
+        <p class="text-gray-500 text-base max-w-2xl mx-auto mb-12 leading-relaxed">
+          Somos uma plataforma de cursos
+          profissionalizantes focada em formação técnica
+          prática para o mercado de refrigeração,
+          climatização e manutenção de eletrodomésticos.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div class="text-4xl mb-3">🏆</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">
+              Instrutores Especialistas
+            </h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Cada curso é ministrado por profissionais
+              ativos no mercado.
+            </p>
+          </div>
+
+          <div class="text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div class="text-4xl mb-3">📜</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">
+              Certificado Reconhecido
+            </h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Certificados válidos em todo o Brasil
+              para alavancar sua carreira.
+            </p>
+          </div>
+
+          <div class="text-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div class="text-4xl mb-3">🎯</div>
+            <h3 class="font-bold text-slate-800 text-base mb-2">
+              Método Prático
+            </h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Conteúdo direto ao ponto, sem enrolação,
+              focado em resultado real.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayoutcursodear>

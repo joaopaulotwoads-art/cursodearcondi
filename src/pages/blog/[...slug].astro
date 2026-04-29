@@ -10,7 +10,7 @@
 import { getCollection, getEntry, render } from 'astro:content';
 import BlogPost from '../../themes/classic/BlogPost.astro';
 import BaseLayoutcursodear from '../../themes/cursodear/BaseLayout.astro';
-import cursodearBlogPost from '../../themes/cursodear/BlogPost.astro';
+import CursodearBlogPost from '../../themes/cursodear/BlogPost.astro';
 import { readSingleton } from '../../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
 import { readPost } from '../../utils/post-utils';
@@ -74,7 +74,7 @@ const beFoot = usecursodear ? await readSingleton('footer', 'cursodear') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const metaTitleTrim = post.data.metaTitle?.trim();
-const documentTitle = metaTitleTrim ? metaTitleTrim : `${post.data.title} - ${siteName}`;
+const documentTitle = metaTitleTrim ? metaTitleTrim : post.data.title;
 
 const siteCfg = await readSiteSettings();
 const publicSiteUrl = resolvePublicSiteUrl(siteCfg.canonicalUrl as string | undefined, Astro.url.origin);
@@ -131,7 +131,7 @@ const relatedPosts = usecursodear ? pickRelatedPosts(post, allPosts, 3) : [];
     articleModifiedTime={articleIso}
     extraJsonLd={postJsonLd}
 >
-    <cursodearBlogPost
+    <CursodearBlogPost
       post={post}
       author={author}
       Content={Content}

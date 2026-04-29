@@ -9,10 +9,10 @@ import markdoc from '@astrojs/markdoc';
 export default defineConfig({
     output: 'server',
     /**
-     * `always` = URLs canónicas com `/` no fim; alinhado ao sitemap e ao `vercel.json` (trailingSlash).
-     * Páginas pré-renderizadas na Vercel não passam pelo middleware Astro — a Vercel faz o 301.
+     * Aceita URLs com e sem barra final no mesmo caminho.
+     * Evita precisar digitar "/" manualmente em rotas como /sobre.
      */
-    trailingSlash: 'always',
+    trailingSlash: 'ignore',
     adapter: vercel(),
     /** CSS inline no HTML → menos pedidos bloqueantes no caminho crítico (Lighthouse / LCP). */
     build: {

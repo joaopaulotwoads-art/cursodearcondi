@@ -1,52 +1,143 @@
 ---
 /**
- * Termos de Uso ‚Äî layout conforme tema (Curso de Ar Condicionado£e / classic / local).
+ * Termos de Uso - tema cursodear (LGPD e Hotmart).
  */
 import { getEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
-import LegalPage from '../themes/cursodear/LegalPage.astro';
 import TermosDeUsoContent from '../components/legal/TermosDeUsoContent.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+
+const pageTitle = 'Termos de Uso | Curso de Ar Condicionado';
+const pageDescription =
+  'Leia os termos de uso da plataforma. CNPJ: 31.724.812/0001-02';
+
+const canonicalPage = 'https://cursodearcondicionado.com.br/termos';
+const schemaJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Termos de Uso',
+  url: canonicalPage,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Curso de Ar Condicionado',
+    url: 'https://cursodearcondicionado.com.br',
+  },
+};
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
 const isLocal = siteMode === 'local';
 const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
 
-const siteName = settings?.data?.siteName || 'Site';
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
 const beMenu = !isLocal && activeTheme === 'cursodear' ? await readSingleton('menu', 'cursodear') : null;
 const beFoot = !isLocal && activeTheme === 'cursodear' ? await readSingleton('footer', 'cursodear') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu as Record<string, unknown> | null) || '/images/cursodear/logo.png';
 ---
 
 {isLocal || activeTheme !== 'cursodear' ? (
-    <MainLayout title={`Termos de Uso - ${siteName}`}>
-        <section class="container mx-auto px-6 py-16 max-w-3xl">
-            <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Termos de Uso</h1>
-            <div class="text-slate-300 leading-relaxed space-y-4">
-                <TermosDeUsoContent />
-            </div>
-        </section>
-    </MainLayout>
+  <MainLayout title={pageTitle} description={pageDescription} robots="noindex, follow">
+    <section class="container mx-auto px-6 py-16 max-w-3xl">
+      <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Termos de Uso</h1>
+      <div class="text-slate-300 leading-relaxed space-y-4">
+        <TermosDeUsoContent />
+      </div>
+    </section>
+  </MainLayout>
 ) : (
-    <BaseLayoutcursodear
-        title={`Termos de Uso - ${siteName}`}
-        description="Termos e condi√ß√µes de uso deste site."
-        siteName={(beMenu as Record<string, string>)?.logoText || siteName}
-        logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
-        siteUrl={siteUrl}
-        nav={beNav}
-        footerNav={beFootNav}
-        contentThemeId="cursodear"
-    >
-        <LegalPage title="Termos de Uso">
-            <TermosDeUsoContent />
-        </LegalPage>
-    </BaseLayoutcursodear>
+  <BaseLayoutcursodear
+    title={pageTitle}
+    description={pageDescription}
+    siteName={(beMenu as Record<string, string>)?.logoText || siteName}
+    logoSrc={logoForLayout}
+    siteUrl={siteUrl}
+    nav={beNav}
+    footerNav={beFootNav}
+    contentThemeId="cursodear"
+    extraJsonLd={schemaJsonLd}
+    canonicalOverride={canonicalPage}
+    robots="noindex, follow"
+  >
+    <div class="bg-white text-slate-900">
+      <section class="bg-slate-800 py-12 text-center">
+        <h1 class="text-3xl font-black text-white md:text-4xl">Termos de Uso</h1>
+      </section>
+
+      <div class="mx-auto max-w-3xl px-6 py-16">
+        <p class="mb-8 inline-block rounded-full bg-gray-100 px-4 py-1.5 text-xs font-medium text-gray-600">
+          ùltima atualizaùùo: abril de 2026
+        </p>
+
+        <div class="prose prose-gray max-w-none text-gray-600">
+          <h2 class="mt-0 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">1. Aceitaùùo dos Termos</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Ao acessar e utilizar o site cursodearcondicionado.com.br, vocù concorda com os presentes Termos de Uso.
+            Caso nùo concorde, nùo utilize nossos serviùos.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">2. Sobre a Empresa</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Curso de Ar Condicionado, inscrita no CNPJ 31.724.812/0001-02, com sede na Av. Rodrigues Alves, 96 - Jardim
+            Redentor, Bauru - SP, ù responsùvel pelo site e pelos serviùos oferecidos nesta plataforma.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">3. Serviùos Oferecidos</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Oferecemos cursos online profissionalizantes nas ùreas de refrigeraùùo, climatizaùùo e manutenùùo de
+            eletrodomùsticos. O acesso aos cursos ù realizado mediante pagamento atravùs da plataforma Hotmart.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">4. Cadastro e Acesso</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            O aluno ù responsùvel por manter seus dados de acesso em sigilo. O compartilhamento de login ù proibido e
+            pode resultar no cancelamento do acesso sem reembolso.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">5. Pagamento e Reembolso</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Os pagamentos sùo processados pela plataforma Hotmart. Oferecemos garantia incondicional de 15 dias corridos
+            apùs a compra. Apùs esse prazo, nùo haverù reembolso.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">6. Propriedade Intelectual</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Todo o conteùdo disponibilizado (vùdeos, PDFs, materiais) ù protegido por direitos autorais. ù proibida a
+            reproduùùo, distribuiùùo ou comercializaùùo sem autorizaùùo expressa.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">7. Limitaùùo de Responsabilidade</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Nùo garantimos que os resultados obtidos pelos alunos serùo iguais aos apresentados em depoimentos. Os
+            resultados dependem do esforùo e dedicaùùo de cada aluno.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">8. Alteraùùes nos Termos</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Reservamo-nos o direito de alterar estes termos a qualquer momento. As alteraùùes entram em vigor na data de
+            publicaùùo.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">9. Contato</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Em caso de dùvidas:{' '}
+            <a href="mailto:contato@cursodearcondicionado.com.br" class="text-orange-600 hover:underline">
+              contato@cursodearcondicionado.com.br
+            </a>
+            <br />
+            WhatsApp:{' '}
+            <a href="https://wa.me/5514988034123" class="text-orange-600 hover:underline" target="_blank" rel="noopener noreferrer">
+              (14) 98803-4123
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </BaseLayoutcursodear>
 )}

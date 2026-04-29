@@ -1,52 +1,176 @@
 ---
 /**
- * Pol√≠tica de Privacidade ‚Äî layout conforme tema (Curso de Ar Condicionado£e / classic / local).
+ * Polùtica de Privacidade - LGPD e Hotmart.
  */
 import { getEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
-import LegalPage from '../themes/cursodear/LegalPage.astro';
 import PoliticaPrivacidadeContent from '../components/legal/PoliticaPrivacidadeContent.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+
+const pageTitle = 'Polùtica de Privacidade | LGPD';
+const pageDescription =
+  'Nossa polùtica de privacidade em conformidade com a LGPD. Saiba como tratamos seus dados pessoais.';
+
+const canonicalPage = 'https://cursodearcondicionado.com.br/politica-de-privacidade';
+const schemaJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Polùtica de Privacidade',
+  url: canonicalPage,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Curso de Ar Condicionado',
+    url: 'https://cursodearcondicionado.com.br',
+  },
+};
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
 const isLocal = siteMode === 'local';
 const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
 
-const siteName = settings?.data?.siteName || 'Site';
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
 const beMenu = !isLocal && activeTheme === 'cursodear' ? await readSingleton('menu', 'cursodear') : null;
 const beFoot = !isLocal && activeTheme === 'cursodear' ? await readSingleton('footer', 'cursodear') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu as Record<string, unknown> | null) || '/images/cursodear/logo.png';
 ---
 
 {isLocal || activeTheme !== 'cursodear' ? (
-    <MainLayout title={`Pol√≠tica de Privacidade - ${siteName}`}>
-        <section class="container mx-auto px-6 py-16 max-w-3xl">
-            <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Pol√≠tica de Privacidade</h1>
-            <div class="text-slate-300 leading-relaxed space-y-4">
-                <PoliticaPrivacidadeContent />
-            </div>
-        </section>
-    </MainLayout>
+  <MainLayout title={pageTitle} description={pageDescription} robots="noindex, follow">
+    <section class="container mx-auto px-6 py-16 max-w-3xl">
+      <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Polùtica de Privacidade</h1>
+      <div class="text-slate-300 leading-relaxed space-y-4">
+        <PoliticaPrivacidadeContent />
+      </div>
+    </section>
+  </MainLayout>
 ) : (
-    <BaseLayoutcursodear
-        title={`Pol√≠tica de Privacidade - ${siteName}`}
-        description="Como tratamos dados pessoais neste site."
-        siteName={(beMenu as Record<string, string>)?.logoText || siteName}
-        logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
-        siteUrl={siteUrl}
-        nav={beNav}
-        footerNav={beFootNav}
-        contentThemeId="cursodear"
-    >
-        <LegalPage title="Pol√≠tica de Privacidade">
-            <PoliticaPrivacidadeContent />
-        </LegalPage>
-    </BaseLayoutcursodear>
+  <BaseLayoutcursodear
+    title={pageTitle}
+    description={pageDescription}
+    siteName={(beMenu as Record<string, string>)?.logoText || siteName}
+    logoSrc={logoForLayout}
+    siteUrl={siteUrl}
+    nav={beNav}
+    footerNav={beFootNav}
+    contentThemeId="cursodear"
+    extraJsonLd={schemaJsonLd}
+    canonicalOverride={canonicalPage}
+    robots="noindex, follow"
+  >
+    <div class="bg-white text-slate-900">
+      <section class="bg-slate-800 py-12 text-center">
+        <h1 class="text-3xl font-black text-white md:text-4xl">Polùtica de Privacidade</h1>
+      </section>
+
+      <div class="mx-auto max-w-3xl px-6 py-16">
+        <p class="mb-8 inline-block rounded-full bg-gray-100 px-4 py-1.5 text-xs font-medium text-gray-600">
+          ùltima atualizaùùo: abril de 2026
+        </p>
+
+        <p class="mb-4 text-sm leading-relaxed text-gray-600">
+          Esta Polùtica de Privacidade foi elaborada em conformidade com a Lei Federal nù 13.709/2018 (LGPD).
+        </p>
+
+        <div class="prose prose-gray max-w-none text-gray-600">
+          <h2 class="mt-0 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">1. Controlador dos Dados</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Curso de Ar Condicionado
+            <br />
+            CNPJ: 31.724.812/0001-02
+            <br />
+            Av. Rodrigues Alves, 96 - Jardim Redentor, Bauru - SP
+            <br />
+            E-mail:{' '}
+            <a href="mailto:contato@cursodearcondicionado.com.br" class="text-orange-600 hover:underline">
+              contato@cursodearcondicionado.com.br
+            </a>
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">2. Dados Coletados</h2>
+          <p class="mb-2 text-sm leading-relaxed text-gray-600">Coletamos os seguintes dados pessoais:</p>
+          <ul class="mb-4 list-inside list-disc space-y-1 text-sm text-gray-600">
+            <li>Nome completo</li>
+            <li>Endereùo de e-mail</li>
+            <li>Telefone/WhatsApp</li>
+            <li>Dados de pagamento (processados pela Hotmart)</li>
+            <li>Dados de navegaùùo (cookies e logs de acesso)</li>
+          </ul>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">3. Finalidade do Tratamento</h2>
+          <p class="mb-2 text-sm leading-relaxed text-gray-600">Os dados sùo utilizados para:</p>
+          <ul class="mb-4 list-inside list-disc space-y-1 text-sm text-gray-600">
+            <li>Processar matrùculas e pagamentos</li>
+            <li>Enviar comunicaùùes sobre o curso</li>
+            <li>Prestar suporte ao aluno</li>
+            <li>Cumprir obrigaùùes legais</li>
+            <li>Melhorar nossos serviùos</li>
+          </ul>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">4. Base Legal (LGPD)</h2>
+          <p class="mb-2 text-sm leading-relaxed text-gray-600">O tratamento dos dados ocorre com base em:</p>
+          <ul class="mb-4 list-inside list-disc space-y-1 text-sm text-gray-600">
+            <li>Execuùùo de contrato (Art. 7ù, V)</li>
+            <li>Legùtimo interesse (Art. 7ù, IX)</li>
+            <li>Consentimento do titular (Art. 7ù, I)</li>
+          </ul>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">5. Compartilhamento de Dados</h2>
+          <p class="mb-2 text-sm leading-relaxed text-gray-600">Seus dados podem ser compartilhados com:</p>
+          <ul class="mb-4 list-inside list-disc space-y-1 text-sm text-gray-600">
+            <li>Hotmart (processamento de pagamentos)</li>
+            <li>Ferramentas de e-mail marketing</li>
+            <li>Google Analytics (dados anonimizados)</li>
+          </ul>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">Nùo vendemos seus dados a terceiros.</p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">6. Armazenamento e Seguranùa</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Os dados sùo armazenados em servidores seguros e mantidos pelo tempo necessùrio para as finalidades descritas
+            ou conforme exigido por lei.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">7. Direitos do Titular</h2>
+          <p class="mb-2 text-sm leading-relaxed text-gray-600">Vocù tem direito a:</p>
+          <ul class="mb-4 list-inside list-disc space-y-1 text-sm text-gray-600">
+            <li>Confirmar a existùncia de tratamento</li>
+            <li>Acessar seus dados</li>
+            <li>Corrigir dados incompletos ou incorretos</li>
+            <li>Solicitar anonimizaùùo ou exclusùo</li>
+            <li>Revogar o consentimento</li>
+          </ul>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Para exercer seus direitos:{' '}
+            <a href="mailto:contato@cursodearcondicionado.com.br" class="text-orange-600 hover:underline">
+              contato@cursodearcondicionado.com.br
+            </a>
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">8. Cookies</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Utilizamos cookies para melhorar sua experiùncia. Consulte nossa{' '}
+            <a href="/politica-de-cookies" class="text-orange-600 hover:underline">Polùtica de Cookies</a> para mais detalhes.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">9. Contato do Encarregado (DPO)</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            <a href="mailto:contato@cursodearcondicionado.com.br" class="text-orange-600 hover:underline">
+              contato@cursodearcondicionado.com.br
+            </a>
+            <br />
+            <a href="https://wa.me/5514988034123" class="text-orange-600 hover:underline" target="_blank" rel="noopener noreferrer">
+              (14) 98803-4123
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </BaseLayoutcursodear>
 )}

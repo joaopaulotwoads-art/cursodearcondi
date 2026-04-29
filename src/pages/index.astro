@@ -5,8 +5,9 @@ import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
-const pageTitle = 'Curso de Ar Condicionado online | Formação Profissional 2026';
+const pageTitle = 'Curso de Ar Condicionado Online 2026 | Formação Profissional';
 const pageDescription = 'Curso de Ar Condicionado com acesso imediato, certificado e formação completa para instalação e manutenção.';
+const pageKeywords = 'curso de ar condicionado, curso de instalação de ar condicionado, curso de manutenção de ar condicionado, curso split, curso inverter, técnico de ar condicionado, curso de refrigeração, curso de climatização, instalação split, manutenção preventiva ar condicionado, recarga de gás r410a, curso ar condicionado online';
 const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
@@ -66,11 +67,50 @@ const faqItems = [
   { q: 'Em quantas vezes posso parcelar?', a: 'Em até 12x de R$ 20,37 no cartão, ou R$ 197,00 à vista.' },
   { q: 'Terei suporte durante o curso?', a: 'Sim! Há suporte disponível para dúvidas técnicas ao longo do curso.' },
 ];
+
+const courseSchemaJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Course',
+  name: 'Curso de Ar Condicionado',
+  description:
+    'Curso completo de instalação e manutenção de ar condicionado split convencional e Inverter. 160 aulas, 30 horas, certificado reconhecido.',
+  provider: {
+    '@type': 'Organization',
+    name: 'Curso de Ar Condicionado',
+    sameAs: 'https://cursodear.com.br',
+  },
+  courseMode: 'online',
+  educationalLevel: 'beginner',
+  inLanguage: 'pt-BR',
+  numberOfCredits: '30',
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'online',
+    instructor: {
+      '@type': 'Person',
+      name: 'Leandro Moraes',
+    },
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '197.00',
+    priceCurrency: 'BRL',
+    availability: 'https://schema.org/InStock',
+    validFrom: '2024-01-01',
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.7',
+    reviewCount: '189',
+    bestRating: '5',
+  },
+};
 ---
 
 <BaseLayoutcursodear
   title={pageTitle}
   description={pageDescription}
+  keywords={pageKeywords}
   siteName={siteNameForLayout}
   logoSrc={logoForLayout}
   siteUrl={siteUrl}
@@ -78,6 +118,7 @@ const faqItems = [
   footerNav={beFootNav}
   contentThemeId="cursodear"
   canonicalOverride={canonicalHomeUrl}
+  extraJsonLd={courseSchemaJsonLd}
 >
   <div class="bg-white text-slate-900">
     <!-- 2. HERO -->
@@ -85,6 +126,7 @@ const faqItems = [
       class="relative min-h-[650px] overflow-hidden"
       style="background-image: url('/images/hero-bg.webp'); background-size: cover; background-position: center top;"
     >
+      <img src="/images/hero-bg.webp" alt="Técnico instalando ar condicionado split" class="sr-only" loading="eager" decoding="async" />
       <!-- TODO: adicionar imagem de fundo real aqui -->
       <div class="absolute inset-0 bg-black/60"></div>
       <div class="mx-auto flex flex-col md:flex-row items-start gap-8 px-4 md:px-6 py-10 md:py-20 max-w-6xl relative">
@@ -95,7 +137,7 @@ const faqItems = [
             </span>
             <h1 class="text-3xl md:text-6xl font-black text-white leading-tight mt-4">Curso de Ar Condicionado</h1>
             <p class="text-gray-200 text-lg mt-4 max-w-lg leading-relaxed">
-              Domine instalação, manutenção e limpeza de ar condicionado com método direto ao ponto para gerar resultado rápido.
+              Domine instalação, manutenção corretiva e preventiva de ar condicionado split convencional e Inverter com método prático e direto ao ponto.
             </p>
             <div class="flex items-center gap-2 mt-6 text-white text-sm">
               <span class="text-yellow-400">★★★★★</span>
@@ -172,7 +214,7 @@ const faqItems = [
     <!-- 3. APRENDIZADO -->
     <section class="bg-white py-16 md:py-24" id="o-que-aprender">
       <div class="mx-auto max-w-6xl px-4 md:px-0">
-        <h2 class="text-center text-3xl font-bold text-[#1e293b]">O QUE VOCÊ VAI APRENDER NO CURSO DE AR CONDICIONADO</h2>
+        <h2 class="text-center text-3xl font-bold text-[#1e293b]">O QUE VOCÊ VAI APRENDER NO CURSO DE INSTALAÇÃO E MANUTENÇÃO DE AR CONDICIONADO</h2>
         <div class="w-16 h-1 bg-orange-500 mx-auto mt-3 mb-6 rounded"></div>
         <p class="mx-auto mt-3 max-w-3xl text-center text-sm text-gray-500">Aprenda do zero ao avançado com aulas práticas, suporte e método validado por milhares de alunos.</p>
         <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -231,7 +273,7 @@ const faqItems = [
     <!-- 6. DESCRIÇÃO DO CURSO -->
     <section class="py-16 md:py-24" id="descricao-curso">
       <div class="mx-auto max-w-6xl px-4 md:px-0">
-        <h2 class="text-3xl font-bold text-slate-900">Descrição do Curso de Ar Condicionado</h2>
+        <h2 class="text-3xl font-bold text-slate-900">Curso de Ar Condicionado Online: Formação Completa em Instalação, Manutenção e Tecnologia Inverter</h2>
         <div class="mt-6 space-y-4 text-sm leading-relaxed text-slate-700">
           <p>O Curso de Ar Condicionado é uma formação completa para quem quer entrar no mercado de climatização com autoridade, executar serviços com qualidade e criar faturamento recorrente com instalações e manutenções. Com 160 aulas e 30 horas de conteúdo, você aprende do zero até a tecnologia Inverter.</p>
           <p>O curso cobre desde o funcionamento básico de um ar-condicionado split, eletricidade aplicada, capacitores, compressores e placas eletrônicas, até a instalação completa com tubulação, vácuo, teste de estanqueidade e recarga de gás R410A. Você aprende fazendo, com aulas gravadas na prática.</p>
@@ -271,7 +313,7 @@ const faqItems = [
           <div class="flex flex-col md:flex-row items-start gap-8">
             <img
               src="/images/leandro.webp"
-              alt="Instrutor Leandro Moraes"
+              alt="Instrutor Leandro Moraes - Professor do Curso de Ar Condicionado"
               class="w-40 h-40 rounded-full object-cover object-top border-4 border-orange-500 shadow-lg flex-shrink-0 mx-auto md:mx-0"
               loading="lazy"
               decoding="async"
@@ -307,7 +349,7 @@ const faqItems = [
             </div>
             <img
               src="/images/certificado_curso.webp"
-              alt="Certificado do Curso de Ar Condicionado"
+              alt="Certificado do Curso de Ar Condicionado - Curso de Ar Condicionado"
               class="rounded-xl shadow-lg w-full max-w-sm mx-auto border border-gray-200"
               loading="lazy"
               decoding="async"
@@ -336,7 +378,7 @@ const faqItems = [
           </div>
         </div>
         <div class="w-full flex-shrink-0 md:w-[420px]">
-          <img src="/images/bonus_1.webp" alt="Bônus Curso Tecnologia Inverter" class="rounded-2xl shadow-xl w-full object-contain" loading="lazy" decoding="async" />
+          <img src="/images/bonus_1.webp" alt="Bônus Curso de Tecnologia Inverter LG e Consul" class="rounded-2xl shadow-xl w-full object-contain" loading="lazy" decoding="async" />
         </div>
       </div>
     </section>
@@ -345,7 +387,7 @@ const faqItems = [
       <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 py-16">
         <div class="w-full flex-shrink-0 md:w-[420px] order-2 md:order-1">
           <div class="flex justify-center">
-            <img src="/images/bonus_2.webp" alt="Bônus Checklist" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
+            <img src="/images/bonus_2.webp" alt="Checklist de Ferramentas para Técnico de Ar Condicionado" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
           </div>
         </div>
         <div class="flex-1 order-1 md:order-2">
@@ -385,7 +427,7 @@ const faqItems = [
         </div>
         <div class="w-full flex-shrink-0 md:w-[420px]">
           <div class="flex justify-center">
-            <img src="/images/bonus_3.webp" alt="Bônus Guia de Atendimento" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
+            <img src="/images/bonus_3.webp" alt="Guia de Atendimento e Pós-Serviço para Instalador de Ar Condicionado" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
           </div>
         </div>
       </div>
@@ -462,24 +504,57 @@ const faqItems = [
     </section>
 
     <!-- 11. FAQ -->
-    <section class="bg-[#f8fafc] py-16 md:py-24" id="carreira-instalador-2026">
-      <div class="mx-auto max-w-6xl px-4 md:px-0">
-        <h2 class="text-3xl font-black text-slate-900">Carreira de Instalador de Ar Condicionado em 2026</h2>
-        <div class="mt-6 space-y-5 text-sm leading-relaxed text-slate-700 md:text-base">
+    <section id="sobre-o-curso" class="bg-gray-50 py-16">
+      <div class="max-w-4xl mx-auto px-6">
+        <h2 class="text-2xl font-black text-slate-800 mb-6">
+          Curso de Ar Condicionado: Tudo que Você Precisa Saber Antes de se Inscrever
+        </h2>
+
+        <div class="prose prose-gray max-w-none space-y-4 text-gray-600 text-sm leading-relaxed">
           <p>
-            Em 2026, a carreira de instalador de ar-condicionado segue em forte crescimento no Brasil por causa da combinação entre aumento das temperaturas, expansão da construção civil e maior exigência de conforto térmico em ambientes residenciais, comerciais e corporativos. Isso significa que o técnico qualificado deixou de ser apenas um prestador de serviço eventual e passou a ser um profissional estratégico para famílias e empresas que não podem ficar sem climatização. Na prática, quem domina instalação correta, manutenção preventiva e diagnóstico rápido de falhas conquista espaço em um mercado com demanda contínua durante todo o ano.
+            O <strong>curso de ar condicionado online</strong> da
+            Curso de Ar Condicionado é uma formação completa para quem
+            deseja atuar como <strong>técnico de ar condicionado</strong>,
+            instalador autônomo ou prestador de serviços de
+            climatização residencial e comercial.
           </p>
+
           <p>
-            O cenário também evoluiu em exigência técnica. Hoje o cliente não busca apenas “instalar um aparelho”, ele quer segurança elétrica, acabamento limpo, orientação de uso, eficiência energética e redução de risco de problemas futuros. Em ambientes comerciais, esse nível de exigência é ainda maior, porque qualquer falha no sistema impacta operação, equipe e faturamento do negócio. Por isso, o instalador moderno precisa unir conhecimento técnico com capacidade de comunicação e postura profissional. Quem entrega esse pacote completo tende a fidelizar clientes, receber indicações e construir receita recorrente com contratos de manutenção.
+            Com <strong>160 aulas e 30 horas de conteúdo</strong>,
+            você aprende desde o funcionamento básico até técnicas
+            avançadas de <strong>manutenção corretiva e preventiva</strong>,
+            passando por eletricidade aplicada, diagnóstico de
+            placas eletrônicas, <strong>instalação de ar split</strong>,
+            teste de estanqueidade, vácuo no sistema e
+            <strong>recarga de gás R410A</strong>.
           </p>
+
           <p>
-            Outro ponto importante em 2026 é a consolidação da tecnologia Inverter e da eletrônica embarcada nos equipamentos. O técnico que entende sensores, placa, lógica de operação e procedimento correto de teste ganha vantagem competitiva evidente. Em vez de competir apenas por preço, ele compete por confiança e previsibilidade de resultado. Isso muda a percepção de valor do serviço e abre espaço para tickets maiores em instalação premium, higienização especializada e manutenção corretiva orientada por diagnóstico. Em termos de carreira, essa especialização é o que diferencia o profissional comum do profissional de referência na região.
+            O curso abrange também a <strong>tecnologia Inverter</strong>,
+            incluindo LG Dual Inverter e Consul Inverter —
+            segmento de alta demanda no mercado atual.
+            Além disso, você aprende <strong>brasagem com
+            nitrogênio passante</strong>, dimensionamento de BTUs,
+            cabos e disjuntores, e uso profissional do manifold
+            e multímetro.
           </p>
+
           <p>
-            Para quem está começando, o melhor caminho é seguir uma trilha estruturada: fundamentos de refrigeração, elétrica aplicada, instalação padronizada, procedimentos de vácuo e estanqueidade, manutenção preventiva e leitura de sintomas em campo. Esse tipo de formação reduz erros caros, melhora a experiência do cliente e acelera os primeiros fechamentos. Para quem já atua, o foco deve ser padronizar processo e elevar posicionamento comercial: proposta clara, checklist de entrega, pós-serviço e rotina de manutenção recorrente. O mercado recompensa profissionais que conseguem unir técnica, organização e consistência.
+            O <strong>certificado de conclusão</strong> é emitido
+            pela plataforma Hotmart e reconhecido em todo o
+            Brasil, com carga horária de 30 horas. O acesso
+            é <strong>100% online e vitalício</strong>, permitindo
+            que você estude no seu ritmo pelo celular, tablet
+            ou computador.
           </p>
+
           <p>
-            Em resumo, a carreira de instalador de ar-condicionado em 2026 é uma rota real de crescimento profissional para quem busca renda estável, autonomia e valorização de mercado. Com capacitação prática e atualização contínua, é possível construir autoridade local, aumentar margem por serviço e transformar conhecimento técnico em negócio sustentável. Oportunidade existe; o diferencial está em executar com método, segurança e compromisso com resultado para o cliente.
+            Seja você um iniciante sem experiência ou um
+            profissional que quer se atualizar em
+            <strong>manutenção de ar condicionado split</strong>
+            e tecnologia Inverter, este curso foi desenvolvido
+            para levar você do zero à prestação de serviços
+            com qualidade e confiança.
           </p>
         </div>
       </div>

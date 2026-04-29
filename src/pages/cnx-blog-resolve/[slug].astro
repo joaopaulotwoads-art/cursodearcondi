@@ -8,8 +8,8 @@ import type { CollectionEntry } from 'astro:content';
 import BlogPost from '../../themes/classic/BlogPost.astro';
 import BlogList from '../../themes/classic/BlogList.astro';
 import BaseLayoutcursodear from '../../themes/cursodear/BaseLayout.astro';
-import cursodearBlogPost from '../../themes/cursodear/BlogPost.astro';
-import cursodearBlogList from '../../themes/cursodear/BlogList.astro';
+import CursodearBlogPost from '../../themes/cursodear/BlogPost.astro';
+import CursodearBlogList from '../../themes/cursodear/BlogList.astro';
 import { logoSrcFromMenu } from '../../utils/theme-nav';
 import { resolveBlogRootSegment } from '../../utils/blog-root-segment';
 import { loadBlogPageData } from '../../utils/load-blog-page-data';
@@ -76,7 +76,7 @@ const {
         articleModifiedTime={articleIso}
         extraJsonLd={postJsonLd}
       >
-        <cursodearBlogPost
+        <CursodearBlogPost
           post={post}
           author={author}
           Content={Content}
@@ -103,7 +103,7 @@ const {
   props.kind === 'category' && category ? (
     usecursodear ? (
       <BaseLayoutcursodear
-        title={`${category.data.name} - ${siteName}`}
+        title={category.data.name}
         description={pageDesc}
         siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
         logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
@@ -112,7 +112,7 @@ const {
         footerNav={beFootNav}
         contentThemeId="cursodear"
       >
-        <cursodearBlogList
+        <CursodearBlogList
           posts={publishedPosts}
           blogData={beBlog}
           blogPermalinkStructure={blogPermalinkStructure}
@@ -128,7 +128,7 @@ const {
         layoutType={layoutType}
         blogPermalinkStructure={blogPermalinkStructure}
         blogUrlPrefix={blogUrlPrefix}
-        listTitle={`${category.data.name} — ${siteName}`}
+        listTitle={category.data.name}
       />
     )
   ) : null

@@ -1,4 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "trailingSlash": true
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/nossos-cursos",
+      "destination": "/cursos",
+      "permanent": true
+    }
+  ]
 }

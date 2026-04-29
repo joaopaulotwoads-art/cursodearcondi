@@ -1,52 +1,118 @@
 ---
 /**
- * Pol√≠tica de Cookies ‚Äî layout conforme tema (Curso de Ar Condicionado£e / classic / local).
+ * Polùtica de Cookies.
  */
 import { getEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
-import LegalPage from '../themes/cursodear/LegalPage.astro';
 import PoliticaCookiesContent from '../components/legal/PoliticaCookiesContent.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+
+const pageTitle = 'Polùtica de Cookies';
+const pageDescription =
+  'Saiba como utilizamos cookies para melhorar sua experiùncia de navegaùùo.';
+
+const canonicalPage = 'https://cursodearcondicionado.com.br/politica-de-cookies';
+const schemaJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: 'Polùtica de Cookies',
+  url: canonicalPage,
+  publisher: {
+    '@type': 'Organization',
+    name: 'Curso de Ar Condicionado',
+    url: 'https://cursodearcondicionado.com.br',
+  },
+};
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
 const isLocal = siteMode === 'local';
 const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
 
-const siteName = settings?.data?.siteName || 'Site';
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
 const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
 const beMenu = !isLocal && activeTheme === 'cursodear' ? await readSingleton('menu', 'cursodear') : null;
 const beFoot = !isLocal && activeTheme === 'cursodear' ? await readSingleton('footer', 'cursodear') : null;
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu as Record<string, unknown> | null) || '/images/cursodear/logo.png';
 ---
 
 {isLocal || activeTheme !== 'cursodear' ? (
-    <MainLayout title={`Pol√≠tica de Cookies - ${siteName}`}>
-        <section class="container mx-auto px-6 py-16 max-w-3xl">
-            <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Pol√≠tica de Cookies</h1>
-            <div class="text-slate-300 leading-relaxed space-y-4">
-                <PoliticaCookiesContent />
-            </div>
-        </section>
-    </MainLayout>
+  <MainLayout title={pageTitle} description={pageDescription} robots="noindex, follow">
+    <section class="container mx-auto px-6 py-16 max-w-3xl">
+      <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Polùtica de Cookies</h1>
+      <div class="text-slate-300 leading-relaxed space-y-4">
+        <PoliticaCookiesContent />
+      </div>
+    </section>
+  </MainLayout>
 ) : (
-    <BaseLayoutcursodear
-        title={`Pol√≠tica de Cookies - ${siteName}`}
-        description="Como utilizamos cookies e dados de navega√ß√£o."
-        siteName={(beMenu as Record<string, string>)?.logoText || siteName}
-        logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
-        siteUrl={siteUrl}
-        nav={beNav}
-        footerNav={beFootNav}
-        contentThemeId="cursodear"
-    >
-        <LegalPage title="Pol√≠tica de Cookies">
-            <PoliticaCookiesContent />
-        </LegalPage>
-    </BaseLayoutcursodear>
+  <BaseLayoutcursodear
+    title={pageTitle}
+    description={pageDescription}
+    siteName={(beMenu as Record<string, string>)?.logoText || siteName}
+    logoSrc={logoForLayout}
+    siteUrl={siteUrl}
+    nav={beNav}
+    footerNav={beFootNav}
+    contentThemeId="cursodear"
+    extraJsonLd={schemaJsonLd}
+    canonicalOverride={canonicalPage}
+    robots="noindex, follow"
+  >
+    <div class="bg-white text-slate-900">
+      <section class="bg-slate-800 py-12 text-center">
+        <h1 class="text-3xl font-black text-white md:text-4xl">Polùtica de Cookies</h1>
+      </section>
+
+      <div class="mx-auto max-w-3xl px-6 py-16">
+        <p class="mb-8 inline-block rounded-full bg-gray-100 px-4 py-1.5 text-xs font-medium text-gray-600">
+          ùltima atualizaùùo: abril de 2026
+        </p>
+
+        <div class="prose prose-gray max-w-none text-gray-600">
+          <h2 class="mt-0 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">1. O que sùo Cookies?</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Cookies sùo pequenos arquivos de texto armazenados no seu dispositivo quando vocù acessa nosso site. Eles nos
+            ajudam a melhorar sua experiùncia de navegaùùo.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">2. Cookies que Utilizamos</h2>
+
+          <p class="mb-1 text-sm font-semibold text-slate-700">Cookies Essenciais</p>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Necessùrios para o funcionamento do site. Nùo podem ser desativados.
+          </p>
+
+          <p class="mb-1 text-sm font-semibold text-slate-700">Cookies de Desempenho</p>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Google Analytics ù analisam como os visitantes usam o site (dados anonimizados).
+          </p>
+
+          <p class="mb-1 text-sm font-semibold text-slate-700">Cookies de Marketing</p>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Utilizados para exibir anùncios relevantes em outras plataformas (Facebook Pixel, Google Ads).
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">3. Como Gerenciar Cookies</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Vocù pode desativar cookies nas configuraùùes do seu navegador. Isso pode afetar algumas funcionalidades do site.
+          </p>
+
+          <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">4. Contato</h2>
+          <p class="mb-4 text-sm leading-relaxed text-gray-600">
+            Em caso de dùvidas:{' '}
+            <a href="mailto:contato@cursodearcondicionado.com.br" class="text-orange-600 hover:underline">
+              contato@cursodearcondicionado.com.br
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </BaseLayoutcursodear>
 )}

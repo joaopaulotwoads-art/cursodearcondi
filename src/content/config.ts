@@ -13,8 +13,11 @@ const posts = defineCollection({
         title: z.string(),
         slug: z.string(),
         author: z.string().optional(),
+        /** Compatibilidade com posts antigos (date) e atuais (publishedDate). */
+        date: z.string().optional(),
         publishedDate: z.string().optional(),
         category: z.string().optional(),
+        tags: z.array(z.string()).optional(),
         thumbnail: z.string().optional(),
         metaTitle: z.string().optional(),
         metaDescription: z.string().optional(),
@@ -132,9 +135,9 @@ const siteSettings = defineCollection({
         siteMode: z.enum(['blog', 'local']).default('blog'),
         aiProvider: z.enum(['openai', 'gemini']).default('gemini').optional(),
         aiApiKey: z.string().optional(),
-        // Pexels API — imagens em posts gerados por IA (1 a cada ~400 palavras, máx 5)
+        // Pexels API �?? imagens em posts gerados por IA (1 a cada ~400 palavras, máx 5)
         pexelsApiKey: z.string().optional(),
-        // SEO Técnico — sempre apex https:// sem www (igual Vercel)
+        // SEO Técnico �?? sempre apex https:// sem www (igual Vercel)
         canonicalUrl: z
             .string()
             .optional()
@@ -148,7 +151,7 @@ const siteSettings = defineCollection({
         // Estrutura de permalink dos posts
         blogPermalinkStructure: z.enum(['postname', 'year_month', 'year_month_day']).default('postname'),
         blogUrlPrefix: z.enum(['blog', 'root']).default('blog'), // 'root' = sem /blog na URL
-        // Contato centralizado — usado em Header, Footer, páginas locais, schema JSON-LD
+        // Contato centralizado �?? usado em Header, Footer, páginas locais, schema JSON-LD
         companyPhone: z.string().optional(),
         companyWhatsapp: z.string().optional(),
         // Atualizações automáticas do template (workflow .github)

@@ -16,6 +16,8 @@ import FaviconLinks from '../../components/FaviconLinks.astro';
 interface Props {
   title: string;
   description?: string;
+  canonical?: string;
+  keywords?: string;
   siteName: string;
   /** Caminho público do logo (ex.: /cursodear-logo.png) quando definido no singleton Menu. */
   logoSrc?: string;
@@ -30,12 +32,15 @@ interface Props {
   articleModifiedTime?: string;
   extraJsonLd?: Record<string, unknown> | null;
   canonicalOverride?: string;
+  robots?: string;
   showFooter?: boolean;
 }
 
 const {
   title,
   description,
+  canonical,
+  keywords,
   siteName,
   logoSrc,
   siteUrl,
@@ -48,13 +53,15 @@ const {
   articleModifiedTime,
   extraJsonLd,
   canonicalOverride,
+  robots = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   showFooter = true,
 } = Astro.props;
 /** Título do documento: o que cada página passa em `title` (sem sufixo automático | marca). */
 const fullTitle = title;
 const fullDescription = description || '';
+const metaKeywords = keywords || '';
 const siteOrigin = ensureApexSiteOrigin(siteUrl);
-const canonicalPageUrl = canonicalOverride || buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
+const canonicalPageUrl = canonical || canonicalOverride || buildCanonicalPageUrl(siteUrl, Astro.url.pathname);
 /** Um único JSON-LD: post traz @graph completo; demais páginas usam WebSite + Organization + SearchAction */
 const jsonLdGraph = extraJsonLd ?? buildcursodearDefaultSiteJsonLd({
     siteUrl: siteOrigin || siteUrl,
@@ -74,7 +81,8 @@ const jsonLdGraph = extraJsonLd ?? buildcursodearDefaultSiteJsonLd({
   <meta name="theme-color" content="#faf7f5" />
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+  {metaKeywords && <meta name="keywords" content={metaKeywords} />}
+  <meta name="robots" content={robots} />
   <link rel="canonical" href={canonicalPageUrl} />
   <meta property="og:type" content={ogType} />
   <meta property="og:title" content={fullTitle} />

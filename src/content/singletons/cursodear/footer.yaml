@@ -2,10 +2,14 @@ siteName: Curso de Ar Condicionado
 copyright: ""
 copyrightNote: ""
 description: ""
-tagline: Formação em instalação e manutenção de ar condicionado split — conteúdo claro para quem quer entrar ou evoluir no mercado.
+tagline: Cursos Profissionalizantes Técnicos em refrigeração, climatização e manutenção.
 organizationLegalName: Curso de Ar Condicionado
 contactEmail: contato@cursodearcondicionado.com.br
-addressLine: "Av. Rodrigues Alves, 5-99"
+phone: "(14) 98803-4123"
+whatsapp: "https://wa.me/5514988034123"
+address: "Av. Rodrigues Alves, 96 - Jardim Redentor, Bauru - SP"
+mapsUrl: "https://maps.app.goo.gl/bAPz55ZAM24twfTo9"
+addressLine: "Av. Rodrigues Alves, 96 - Jardim Redentor, Bauru - SP"
 openingHours: "Segunda a Sexta, das 08:00 às 18:00."
 city: ""
 state: ""
@@ -17,13 +21,7 @@ footerNav:
   - label: Início
     href: /
   - label: Nossos Cursos
-    href: /nossos-cursos
-  - label: Automotivo
-    href: /automotivo
-  - label: Certificação
-    href: /#certificacao
-  - label: Matrícula
-    href: /#matricula
+    href: /cursos
   - label: Sobre
     href: /sobre
   - label: Blog

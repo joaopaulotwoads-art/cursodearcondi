@@ -3,14 +3,14 @@
  * blog/index.astro
  *
  * Listagem do blog - exibe posts publicados.
- * Usa layout conforme siteMode: local â†’ LocalLayout (header/footer do modo local), blog â†’ MainLayout.
- * Tema cursodear: layout Curso de Ar Condicionado£e (BaseLayout + BlogList).
+ * Usa layout conforme siteMode: local ? LocalLayout (header/footer do modo local), blog ? MainLayout.
+ * Tema cursodear: layout Curso de Ar Condicionadoe (BaseLayout + BlogList).
  */
 
 import { getCollection, getEntry } from 'astro:content';
 import BlogList from '../../themes/classic/BlogList.astro';
 import BaseLayoutcursodear from '../../themes/cursodear/BaseLayout.astro';
-import cursodearBlogList from '../../themes/cursodear/BlogList.astro';
+import CursodearBlogList from '../../themes/cursodear/BlogList.astro';
 import { readSingleton } from '../../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../../utils/read-site-settings';
@@ -32,8 +32,12 @@ const activeCategory = categoriaSlug
     : undefined;
 
 let publishedPosts = allPosts
-    .filter((post) => post.data.publishedDate)
-    .sort((a, b) => new Date(b.data.publishedDate!).getTime() - new Date(a.data.publishedDate!).getTime());
+    .filter((post) => post.data.publishedDate || post.data.date)
+    .sort((a, b) => {
+        const da = new Date((a.data.publishedDate || a.data.date) as string).getTime();
+        const db = new Date((b.data.publishedDate || b.data.date) as string).getTime();
+        return db - da;
+    });
 
 if (categoriaSlug) {
     publishedPosts = publishedPosts.filter((post) => post.data.category === categoriaSlug);
@@ -46,24 +50,28 @@ const beFoot = usecursodear ? await readSingleton('footer', 'cursodear') : null;
 const beBlog = usecursodear ? (await readSingleton('blog', 'cursodear')) || {} : {};
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const blogPageTitle = 'Blog de Refrigeração e Climatização | Dicas e Tutoriais Técnicos';
+const blogPageDescription =
+    'Artigos técnicos sobre instalação e manutenção de ar condicionado, refrigeração e climatização. Conteúdo prático para técnicos e iniciantes.';
 ---
 
 {usecursodear ? (
 <BaseLayoutcursodear
     title={
         activeCategory?.data?.name
-            ? `${activeCategory.data.name} - ${siteName}`
-            : `${(beBlog as any).pageTitle || 'Blog'} - ${siteName}`
+            ? activeCategory.data.name
+            : blogPageTitle
     }
-    description={(beBlog as any).heroDescription || ''}
+    description={activeCategory?.data?.name ? ((beBlog as any).heroDescription || '') : blogPageDescription}
     siteName={(beMenu as any)?.logoText || siteName}
     logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
     siteUrl={siteUrl}
     nav={beNav}
     footerNav={beFootNav}
     contentThemeId="cursodear"
+    canonicalOverride="https://cursodearcondicionado.com.br/blog"
 >
-    <cursodearBlogList
+    <CursodearBlogList
         posts={publishedPosts}
         blogData={beBlog}
         blogPermalinkStructure={blogPermalinkStructure}
@@ -81,7 +89,7 @@ const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
     blogUrlPrefix={blogUrlPrefix}
     listTitle={
         activeCategory?.data?.name
-            ? `${activeCategory.data.name} Â· ${siteName}`
+            ? `${activeCategory.data.name}`
             : undefined
     }
 />

@@ -21,12 +21,14 @@ interface Props {
     title?: string;
     description?: string;
     ogImage?: string;
+    robots?: string;
 }
 
 const { 
     title = "Meu Site",
     description = "Bem-vindo ao meu site",
     ogImage = "/images/og-default.png",
+    robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
 } = Astro.props;
 
 const siteSettings = await getEntry('siteSettings', 'settings').catch(() => null);
@@ -75,6 +77,7 @@ const secondaryRGB = hexToRgb(secondaryColor);
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="robots" content={robots} />
 
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
