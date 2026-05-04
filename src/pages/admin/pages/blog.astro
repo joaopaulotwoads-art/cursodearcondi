@@ -14,13 +14,8 @@ import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
-const activeBlogTheme = (settings?.data?.activeTheme || 'classic') as string;
-const themeId = siteMode === 'local' ? 'local' : activeBlogTheme;
-let initialData = await readSingleton('blog', themeId);
-if (!initialData && siteMode !== 'local') {
-    initialData = await readSingleton('blog', 'classic');
-}
-if (!initialData) initialData = {};
+const themeId = siteMode === 'local' ? 'local' : 'classic';
+const initialData = await readSingleton('blog', themeId) || await readSingleton('blog', 'classic');
 ---
 
 <AdminLayout title="Página de Blog - Admin">

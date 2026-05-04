@@ -13,11 +13,9 @@ interface Props {
     title: string;
     fields: any;
     initialData?: any;
-    /** Tema dos singletons (ex.: cursodear). Se omitido, a API usa o tema ativo em settings. */
-    themeId?: string;
 }
 
-export default function SingletonEditor({ name, title, fields, initialData, themeId }: Props) {
+export default function SingletonEditor({ name, title, fields, initialData }: Props) {
     const { toasts, showToast, removeToast } = useToast();
     const [data, setData] = useState(initialData || {});
     const [isSaving, setIsSaving] = useState(false);
@@ -34,16 +32,13 @@ export default function SingletonEditor({ name, title, fields, initialData, them
             const response = await fetch(`/api/admin/singletons/${name}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data, ...(themeId ? { themeId } : {}) }),
+                body: JSON.stringify({ data }),
             });
 
             const result = await response.json();
             if (result.success) {
                 showToast('success', 'Salvo com sucesso!');
-                const getUrl = themeId
-                    ? `/api/admin/singletons/${name}?themeId=${encodeURIComponent(themeId)}`
-                    : `/api/admin/singletons/${name}`;
-                const getResponse = await fetch(getUrl);
+                const getResponse = await fetch(`/api/admin/singletons/${name}`);
                 const getResult = await getResponse.json();
                 if (getResult.success) {
                     setData(getResult.data);

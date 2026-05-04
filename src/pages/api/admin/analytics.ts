@@ -1,7 +1,49 @@
 import type { APIRoute } from 'astro';
 import { getEntry } from 'astro:content';
 import { readSingleton } from '../../../utils/singleton-utils';
-import { getGoogleAccessTokenFromServiceAccountKey } from '../../../utils/google-service-account-token';
+import crypto from 'node:crypto';
+
+/**
+ * Assina um JWT RS256 usando a chave privada da conta de serviço.
+ */
+function base64url(str: string): string {
+    return Buffer.from(str).toString('base64url');
+}
+
+async function getGoogleAccessToken(serviceAccount: any): Promise<string> {
+    const now = Math.floor(Date.now() / 1000);
+
+    const header = base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+    const payload = base64url(JSON.stringify({
+        iss: serviceAccount.client_email,
+        scope: 'https://www.googleapis.com/auth/analytics.readonly',
+        aud: 'https://oauth2.googleapis.com/token',
+        iat: now,
+        exp: now + 3600,
+    }));
+
+    const signingInput = `${header}.${payload}`;
+    const sign = crypto.createSign('RSA-SHA256');
+    sign.update(signingInput);
+    const signature = sign.sign(serviceAccount.private_key).toString('base64url');
+
+    const jwt = `${signingInput}.${signature}`;
+
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+            assertion: jwt,
+        }),
+    });
+
+    const tokenData = await tokenRes.json();
+    if (!tokenData.access_token) {
+        throw new Error(tokenData.error_description || tokenData.error || 'Falha ao obter token de acesso');
+    }
+    return tokenData.access_token;
+}
 
 /**
  * Chama a GA4 Data API para obter um relatório.
@@ -48,7 +90,7 @@ export const GET: APIRoute = async ({ url }) => {
             return json({ success: false, error: 'Conta de serviço: JSON inválido.' }, 400);
         }
 
-        const accessToken = await getGoogleAccessTokenFromServiceAccountKey(serviceAccount, 'https://www.googleapis.com/auth/analytics.readonly');
+        const accessToken = await getGoogleAccessToken(serviceAccount);
         const propertyId = pixels.googleAnalyticsPropertyId;
 
         // Buscar métricas principais e top páginas em paralelo

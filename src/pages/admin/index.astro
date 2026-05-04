@@ -191,9 +191,9 @@ if (isLocalMode) {
         </>
     ) : (
         <div id="tour-stats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <StatCard title="Total de Posts"    value={posts.length}      icon="📝" link="/admin/posts"                   />
-            <StatCard title="Posts Publicados"  value={publishedPosts.length} icon="✅" link="/admin/posts?status=published" />
-            <StatCard title="Rascunhos"         value={draftPosts}        icon="📄" link="/admin/posts?status=draft"      />
+            <StatCard title="Total de Posts"    value={posts.length}      icon="📝" link="/admin/posts"      />
+            <StatCard title="Posts Publicados"  value={publishedPosts.length} icon="✅" link="/admin/posts"  />
+            <StatCard title="Rascunhos"         value={draftPosts}        icon="📄" link="/admin/posts"      />
             <StatCard title="Autores"           value={authors.length}    icon="👤" link="/admin/authors"    />
         </div>
     )}

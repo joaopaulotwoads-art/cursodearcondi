@@ -14,21 +14,9 @@ import path from 'node:path';
 import yaml from 'js-yaml';
 import { isGitHubConfigured, githubWriteFile, githubReadFile } from '../../../utils/github-api';
 import { SITE_MODE_COOKIE, SITE_MODE_COOKIE_MAX_AGE, SITE_MODE_COOKIE_PATH } from '../../../utils/admin-site-mode';
-import { normalizeCanonicalUrl } from '../../../utils/read-site-settings';
 
 const SETTINGS_PATH     = path.resolve('./src/content/singletons/settings.yaml');
 const SETTINGS_GH_PATH  = 'src/content/singletons/settings.yaml';
-
-/** GitHub bloqueia commits com estes campos (secret scanning). Não enviar ao repositório. */
-const SETTINGS_REPO_SECRET_KEYS = ['aiApiKey', 'pexelsApiKey'] as const;
-
-function removeSettingsRepoSecrets(data: Record<string, unknown>): Record<string, unknown> {
-    const o = { ...data };
-    for (const k of SETTINGS_REPO_SECRET_KEYS) {
-        delete o[k];
-    }
-    return o;
-}
 
 async function readSettings(): Promise<Record<string, unknown>> {
     const defaults = { siteName: 'CNX Agency', colorScheme: 'dark', siteMode: 'blog' };
@@ -50,17 +38,8 @@ async function readSettings(): Promise<Record<string, unknown>> {
     }
 }
 
-async function writeSettings(data: Record<string, unknown>): Promise<{
-    success: boolean;
-    error?: string;
-    /** true quando chaves foram omitidas do YAML por causa do GitHub / secret scanning */
-    secretsSkippedForRepo?: boolean;
-}> {
-    const persist =
-        isGitHubConfigured() ? removeSettingsRepoSecrets(data) : data;
-    const hadSecretInPayload =
-        SETTINGS_REPO_SECRET_KEYS.some((k) => String((data as Record<string, string>)[k] || '').trim() !== '');
-    const content = yaml.dump(persist, { lineWidth: -1, noRefs: true, quotingType: '"' });
+async function writeSettings(data: Record<string, unknown>): Promise<boolean> {
+    const content = yaml.dump(data, { lineWidth: -1, noRefs: true, quotingType: '"' });
 
     // Sempre tentar escrever localmente primeiro — assim o Astro content layer (getEntry)
     // vê a mudança ao recarregar a página. Sem isso, com GitHub configurado, só íamos
@@ -73,18 +52,9 @@ async function writeSettings(data: Record<string, unknown>): Promise<{
     }
 
     if (isGitHubConfigured()) {
-        const gh = await githubWriteFile(SETTINGS_GH_PATH, content, 'content: update site settings');
-        if (!gh.ok) {
-            return {
-                success: false,
-                error: gh.error || 'Não foi possível gravar settings.yaml no GitHub (verifique token e variáveis na Vercel).',
-            };
-        }
+        return githubWriteFile(SETTINGS_GH_PATH, content, 'content: update site settings');
     }
-    return {
-        success: true,
-        secretsSkippedForRepo: isGitHubConfigured() && hadSecretInPayload,
-    };
+    return true;
 }
 
 export const GET: APIRoute = async () => {
@@ -105,18 +75,6 @@ export const GET: APIRoute = async () => {
                 }
             } catch {}
         }
-
-        const provider = ((data.aiProvider as string) || 'gemini').toLowerCase();
-        const aiKeyInFile = !!(data.aiApiKey as string)?.trim();
-        const aiInEnv =
-            provider === 'openai'
-                ? !!(process.env.OPENAI_API_KEY || '').trim()
-                : !!(process.env.GEMINI_API_KEY || '').trim();
-        const pexelsInFile = !!(data.pexelsApiKey as string)?.trim();
-        const pexelsInEnv = !!(process.env.PEXELS_API_KEY || '').trim();
-        (data as Record<string, unknown>).aiApiKeyConfiguredInEnvironment = !aiKeyInFile && aiInEnv;
-        (data as Record<string, unknown>).pexelsApiKeyConfiguredInEnvironment = !pexelsInFile && pexelsInEnv;
-
         return new Response(JSON.stringify({ success: true, data }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
@@ -135,23 +93,13 @@ export const PUT: APIRoute = async ({ request }) => {
         const body = await request.json();
         const current = await readSettings();
         const updated = { ...current, ...body };
-        if (typeof body.canonicalUrl === 'string' && body.canonicalUrl.trim()) {
-            const norm = normalizeCanonicalUrl(body.canonicalUrl);
-            if (norm) (updated as Record<string, unknown>).canonicalUrl = norm;
-        }
 
-        const wrote = await writeSettings(updated);
-        if (!wrote.success) {
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    error: wrote.error || 'Erro ao salvar configurações',
-                }),
-                {
-                    status: 500,
-                    headers: { 'Content-Type': 'application/json' },
-                },
-            );
+        const ok = await writeSettings(updated);
+        if (!ok) {
+            return new Response(JSON.stringify({ success: false, error: 'Erro ao salvar configurações' }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
         }
 
         const headers: Record<string, string> = { 'Content-Type': 'application/json' };
@@ -160,17 +108,10 @@ export const PUT: APIRoute = async ({ request }) => {
             headers['Set-Cookie'] = `${SITE_MODE_COOKIE}=${body.siteMode}; Path=${SITE_MODE_COOKIE_PATH}; Max-Age=${SITE_MODE_COOKIE_MAX_AGE}; HttpOnly; SameSite=Lax${secure}`;
         }
 
-        return new Response(
-            JSON.stringify({
-                success: true,
-                data: updated,
-                secretsSkippedForRepo: wrote.secretsSkippedForRepo === true,
-            }),
-            {
-                status: 200,
-                headers,
-            },
-        );
+        return new Response(JSON.stringify({ success: true, data: updated }), {
+            status: 200,
+            headers,
+        });
     } catch (error: any) {
         console.error('❌ Erro ao atualizar site-settings:', error);
         return new Response(JSON.stringify({ success: false, error: error.message }), {

@@ -3,95 +3,29 @@
  * blog/index.astro
  *
  * Listagem do blog - exibe posts publicados.
- * Usa layout conforme siteMode: local ? LocalLayout (header/footer do modo local), blog ? MainLayout.
- * Tema cursodear: layout Curso de Ar Condicionadoe (BaseLayout + BlogList).
+ * Usa layout conforme siteMode: local â†’ LocalLayout (header/footer do modo local), blog â†’ MainLayout.
  */
 
 import { getCollection, getEntry } from 'astro:content';
 import BlogList from '../../themes/classic/BlogList.astro';
-import BaseLayoutcursodear from '../../themes/cursodear/BaseLayout.astro';
-import CursodearBlogList from '../../themes/cursodear/BlogList.astro';
-import { readSingleton } from '../../utils/singleton-utils';
-import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
-import { resolvePublicSiteUrl } from '../../utils/read-site-settings';
 import type { BlogPermalinkStructure, BlogUrlPrefix } from '../../utils/blog-permalink';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
 const layoutType = siteMode === 'local' ? 'local' : 'main';
-const activeTheme = (settings?.data?.activeTheme || 'classic') as string;
-const usecursodear = siteMode !== 'local' && activeTheme === 'cursodear';
 const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
 const blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'blog';
 
 const allPosts = await getCollection('posts');
-const categories = await getCollection('categories');
-const categoriaSlug = Astro.url.searchParams.get('categoria')?.trim() || '';
-const activeCategory = categoriaSlug
-    ? categories.find((c) => c.id === categoriaSlug || c.data.slug === categoriaSlug)
-    : undefined;
-
-let publishedPosts = allPosts
-    .filter((post) => post.data.publishedDate || post.data.date)
-    .sort((a, b) => {
-        const da = new Date((a.data.publishedDate || a.data.date) as string).getTime();
-        const db = new Date((b.data.publishedDate || b.data.date) as string).getTime();
-        return db - da;
-    });
-
-if (categoriaSlug) {
-    publishedPosts = publishedPosts.filter((post) => post.data.category === categoriaSlug);
-}
-
-const siteName = settings?.data?.siteName || 'Site';
-const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
-const beMenu = usecursodear ? await readSingleton('menu', 'cursodear') : null;
-const beFoot = usecursodear ? await readSingleton('footer', 'cursodear') : null;
-const beBlog = usecursodear ? (await readSingleton('blog', 'cursodear')) || {} : {};
-const beNav = beMenu ? navFromMenu(beMenu) : [];
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const blogPageTitle = 'Blog de Refrigeração e Climatização | Dicas e Tutoriais Técnicos';
-const blogPageDescription =
-    'Artigos técnicos sobre instalação e manutenção de ar condicionado, refrigeração e climatização. Conteúdo prático para técnicos e iniciantes.';
+const publishedPosts = allPosts
+    .filter(post => post.data.publishedDate)
+    .sort((a, b) => new Date(b.data.publishedDate!).getTime() - new Date(a.data.publishedDate!).getTime());
 ---
 
-{usecursodear ? (
-<BaseLayoutcursodear
-    title={
-        activeCategory?.data?.name
-            ? activeCategory.data.name
-            : blogPageTitle
-    }
-    description={activeCategory?.data?.name ? ((beBlog as any).heroDescription || '') : blogPageDescription}
-    siteName={(beMenu as any)?.logoText || siteName}
-    logoSrc={logoSrcFromMenu(beMenu as Record<string, unknown>)}
-    siteUrl={siteUrl}
-    nav={beNav}
-    footerNav={beFootNav}
-    contentThemeId="cursodear"
-    canonicalOverride="https://cursodearcondicionado.com.br/blog/"
->
-    <CursodearBlogList
-        posts={publishedPosts}
-        blogData={beBlog}
-        blogPermalinkStructure={blogPermalinkStructure}
-        blogUrlPrefix={blogUrlPrefix}
-        categoryName={activeCategory?.data?.name}
-        categoryFilterActive={Boolean(categoriaSlug)}
-    />
-</BaseLayoutcursodear>
-) : (
 <BlogList
     posts={publishedPosts}
     themeId="classic"
     layoutType={layoutType}
     blogPermalinkStructure={blogPermalinkStructure}
     blogUrlPrefix={blogUrlPrefix}
-    listTitle={
-        activeCategory?.data?.name
-            ? `${activeCategory.data.name}`
-            : undefined
-    }
 />
-)}
-

@@ -8,12 +8,7 @@ import markdoc from '@astrojs/markdoc';
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
-    trailingSlash: 'always',
     adapter: vercel(),
-    /** CSS inline no HTML → menos pedidos bloqueantes no caminho crítico (Lighthouse / LCP). */
-    build: {
-        inlineStylesheets: 'always',
-    },
     integrations: [
         react({
             // classic evita erro "jsxDEV is not a function" com client:only em dev

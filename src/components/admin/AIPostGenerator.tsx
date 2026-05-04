@@ -13,7 +13,7 @@
  * - Publicação automática do post
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useToast, ToastList } from './Toast';
 
 interface Author {
@@ -150,6 +150,33 @@ export default function AIPostGenerator({ authors, categories }: Props) {
         setCommercialItems(next);
     };
 
+    // Drag and drop
+    const dragIdx = useRef<number | null>(null);
+    const dragOverIdx = useRef<number | null>(null);
+    const handleDragStart = (i: number) => { dragIdx.current = i; };
+    const handleDragOver = (e: React.DragEvent, i: number) => { e.preventDefault(); dragOverIdx.current = i; };
+    const handleDropOutline = () => {
+        if (dragIdx.current === null || dragOverIdx.current === null || dragIdx.current === dragOverIdx.current) return;
+        const next = [...outlines];
+        const [moved] = next.splice(dragIdx.current, 1);
+        next.splice(dragOverIdx.current, 0, moved);
+        setOutlines(next);
+        dragIdx.current = null; dragOverIdx.current = null;
+    };
+
+    const dragCommIdx = useRef<number | null>(null);
+    const dragCommOverIdx = useRef<number | null>(null);
+    const handleCommDragStart = (i: number) => { dragCommIdx.current = i; };
+    const handleCommDragOver = (e: React.DragEvent, i: number) => { e.preventDefault(); dragCommOverIdx.current = i; };
+    const handleDropCommercial = () => {
+        if (dragCommIdx.current === null || dragCommOverIdx.current === null || dragCommIdx.current === dragCommOverIdx.current) return;
+        const next = [...commercialItems];
+        const [moved] = next.splice(dragCommIdx.current, 1);
+        next.splice(dragCommOverIdx.current, 0, moved);
+        setCommercialItems(next);
+        dragCommIdx.current = null; dragCommOverIdx.current = null;
+    };
+
     const handleGenerate = async () => {
         // Validações
         if (!title || !slug) {
@@ -187,7 +214,7 @@ export default function AIPostGenerator({ authors, categories }: Props) {
         setProgress('Conectando ao servidor...');
 
         try {
-            const response = await fetch('/api/admin/posts/ai/generate/', {
+            const response = await fetch('/api/admin/posts/ai/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -447,8 +474,16 @@ export default function AIPostGenerator({ authors, categories }: Props) {
                     {outlines.length > 0 ? (
                         <div className="space-y-3">
                             {outlines.map((outline, index) => (
-                                <div key={index} className="admin-card p-4">
-                                    <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-2 items-center w-full min-w-0">
+                                <div
+                                    key={index}
+                                    draggable
+                                    onDragStart={() => handleDragStart(index)}
+                                    onDragOver={(e) => handleDragOver(e, index)}
+                                    onDrop={handleDropOutline}
+                                    className="admin-card p-4 cursor-grab active:cursor-grabbing hover:border-primary/30 transition-colors"
+                                >
+                                    <div className="grid grid-cols-[auto_auto_1fr_auto_auto_auto] gap-2 items-center w-full min-w-0">
+                                        <span className="text-[#525252] cursor-grab" title="Arraste para reordenar">⠿</span>
                                         <span className={`px-3 py-1.5 rounded text-xs font-bold shrink-0 ${outline.level === 'h1' ? 'bg-primary/20 text-primary' : outline.level === 'h2' ? 'bg-blue-500/20 text-blue-400' : outline.level === 'h3' ? 'bg-green-500/20 text-green-400' : 'bg-purple-500/20 text-purple-400'}`}>
                                             {outline.level.toUpperCase()}
                                         </span>
@@ -488,7 +523,7 @@ export default function AIPostGenerator({ authors, categories }: Props) {
                         </div>
                     </div>
                     <p className="text-sm text-[#a3a3a3] mb-4">
-                        Adicione outlines (seções como metodologia, critérios) e produtos na ordem desejada. Use ↑/↓ para reordenar.
+                        Adicione outlines (seções como metodologia, critérios) e produtos na ordem desejada. Arraste ⠿ para reordenar.
                     </p>
                     <p className="text-xs text-[#737373] mb-4 flex items-center gap-2">
                         <span className="text-primary">ℹ</span>
@@ -497,8 +532,16 @@ export default function AIPostGenerator({ authors, categories }: Props) {
                     {commercialItems.length > 0 ? (
                         <div className="space-y-3">
                             {commercialItems.map((item, index) => (
-                                <div key={index} className="admin-card p-4">
-                                    <div className="grid grid-cols-[auto_1fr_auto_auto_auto] gap-2 items-center w-full min-w-0">
+                                <div
+                                    key={index}
+                                    draggable
+                                    onDragStart={() => handleCommDragStart(index)}
+                                    onDragOver={(e) => handleCommDragOver(e, index)}
+                                    onDrop={handleDropCommercial}
+                                    className="admin-card p-4 cursor-grab active:cursor-grabbing hover:border-primary/30 transition-colors"
+                                >
+                                    <div className="grid grid-cols-[auto_auto_1fr_auto_auto_auto] gap-2 items-center w-full min-w-0">
+                                        <span className="text-[#525252] cursor-grab" title="Arraste para reordenar">⠿</span>
                                         {item.type === 'outline' ? (
                                             <>
                                                 <select

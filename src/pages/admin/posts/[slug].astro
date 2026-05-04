@@ -5,11 +5,7 @@
  * Página de edição de um post específico.
  * Suporta criação de novos posts (quando slug = 'new') e edição de posts existentes.
  * Integra componente React PostEditor com todas as funcionalidades.
- *
- * readPost() lê do GitHub em produção quando o ficheiro ainda não existe no disco do serverless.
  */
-
-export const prerender = false;
 
 import { getCollection } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';
@@ -18,7 +14,6 @@ import { readPost } from '../../../utils/post-utils';
 
 const { slug } = Astro.params;
 const isNew = slug === 'new';
-const templateId = isNew ? Astro.url.searchParams.get('t') : null;
 
 // Buscar dados
 const authors = await getCollection('authors');
@@ -38,8 +33,6 @@ if (!isNew && slug) {
             metaTitle: postFile.data.metaTitle,
             metaDescription: postFile.data.metaDescription,
             metaImage: postFile.data.metaImage,
-            contentFormat: postFile.data.contentFormat,
-            seoSchema: postFile.data.seoSchema,
             content: postFile.content,
         };
     }
@@ -57,7 +50,6 @@ const categoriesList = categories.map(c => ({ id: c.id, name: c.data.name }));
             post={post || undefined}
             authors={authorsList}
             categories={categoriesList}
-            templateId={templateId || undefined}
         />
     </div>
     

@@ -3,23 +3,20 @@
  * admin/pages/about.astro
  *
  * Página de edição do Sobre (singleton).
- * No Modo Local: local/about.yaml. Modo Blog: activeTheme (classic, cursodear, …).
+ * No Modo Local, edita local/about.yaml. No Modo Blog, edita classic/about.yaml.
  */
 
 import { getEntry } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import AboutEditor from '../../../components/admin/AboutEditor.tsx';
-import SingletonEditor from '../../../components/admin/SingletonEditor.tsx';
-import { cursodear_ABOUT_FIELDS } from '../../../components/admin/cursodear-editor-fields';
 import { readSingleton } from '../../../utils/singleton-utils';
 import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
 const isLocal = siteMode === 'local';
-const activeBlogTheme = (settings?.data?.activeTheme || 'classic') as string;
 
-const themeId = isLocal ? 'local' : activeBlogTheme;
+const themeId = isLocal ? 'local' : 'classic';
 let initialData = await readSingleton('about', themeId);
 
 if (isLocal && !initialData) {
@@ -58,22 +55,11 @@ if (isLocal && !initialData) {
 
 <AdminLayout title="Sobre Nós - CNX Agency Admin">
     <div id="about-editor-wrapper" class="min-h-[400px]">
-        {!isLocal && activeBlogTheme === 'cursodear' ? (
-            <SingletonEditor
-                client:only="react"
-                name="about"
-                title="Sobre (tema Curso de Ar Condicionado�e)"
-                fields={cursodear_ABOUT_FIELDS}
-                initialData={initialData ?? {}}
-                themeId="cursodear"
-            />
-        ) : (
-            <AboutEditor
-                client:only="react"
-                initialData={initialData}
-                themeId={themeId}
-            />
-        )}
+        <AboutEditor
+            client:only="react"
+            initialData={initialData}
+            themeId={themeId}
+        />
     </div>
     <noscript>
         <div class="p-8 text-center">

@@ -1,7 +1,7 @@
 /**
  * SettingsSEO.tsx
  *
- * Componente React para configuração de SEO técnico: sitemap-index.xml e robots.txt.
+ * Componente React para configuração de SEO técnico: sitemap.xml e robots.txt.
  * Permite ao usuário:
  *   - Definir URL canônica do site (base para sitemap e robots)
  *   - Ativar/desativar geração automática de sitemap e robots.txt
@@ -27,21 +27,18 @@ export default function SettingsSEO() {
     const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
     const [loaded, setLoaded] = useState(false);
 
-    /** Domínio canônico apex (sem www), ex.: cursodear.com.br → https://cursodear.com.br */
+    /** Normaliza domínio: "meusite.com.br" → "https://meusite.com.br" */
     function toFullUrl(domain: string): string {
         const t = domain.trim().toLowerCase();
         if (!t) return '';
         let s = t.replace(/^https?:\/\//, '').replace(/\/+$/, '').split('/')[0];
-        if (s.startsWith('www.')) s = s.slice(4);
         return s ? `https://${s}` : '';
     }
-    /** Exibição sem protocolo nem www */
+    /** De full URL para exibição simples: "https://meusite.com.br" → "meusite.com.br" */
     function toDisplayDomain(url: string): string {
         const t = url.trim();
         if (!t) return '';
-        let host = t.replace(/^https?:\/\//, '').replace(/\/+$/, '').split('/')[0] || '';
-        if (host.startsWith('www.')) host = host.slice(4);
-        return host;
+        return t.replace(/^https?:\/\//, '').replace(/\/+$/, '').split('/')[0] || '';
     }
 
     useEffect(() => {
@@ -143,7 +140,7 @@ export default function SettingsSEO() {
                     }}
                 />
                 <p style={{ fontSize: '0.7rem', color: '#52525b', marginTop: '0.35rem' }}>
-                    Use o domínio principal sem www (ex.: meusite.com.br), alinhado ao domínio na Vercel. O https:// é adicionado ao salvar.
+                    Digite apenas o domínio (ex: meusite.com.br ou www.meusite.com.br). O https:// é adicionado automaticamente.
                 </p>
             </div>
 
@@ -428,7 +425,7 @@ export default function SettingsSEO() {
                             onChange={e => setGenerateSitemap(e.target.checked)}
                             style={{ width: '18px', height: '18px', accentColor: 'var(--primary, #6366f1)' }}
                         />
-                        Gerar sitemap (sitemap-index.xml) automaticamente
+                        Gerar sitemap.xml automaticamente
                     </label>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', cursor: 'pointer', fontSize: '0.9rem', color: '#e5e5e5' }}>
                         <input

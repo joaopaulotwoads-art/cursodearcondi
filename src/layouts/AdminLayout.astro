@@ -18,11 +18,8 @@ import AdminHeader from '../components/admin/Header.astro';
 import { verifySession, SESSION_COOKIE } from '../utils/auth-utils';
 import { getEffectiveSiteMode, themeSupportsBlogAndLocal } from '../utils/admin-site-mode';
 import { getEntry } from 'astro:content';
-import FaviconLinks from '../components/FaviconLinks.astro';
 import '../styles/global.css';
 import '../styles/admin.css';
-/** Preview fiel dos cards de produto/lista no editor (mesmas regras do artigo público). */
-import '../styles/article-review-roundup.css';
 import '@fontsource/inter';
 import '@fontsource/outfit';
 
@@ -77,7 +74,7 @@ const secondaryRGB = hexToRgb(secondaryColor);
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <FaviconLinks />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="generator" content={Astro.generator} />
         <title>{title}</title>
         <meta name="description" content={description} />

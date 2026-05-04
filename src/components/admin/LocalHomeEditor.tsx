@@ -54,6 +54,15 @@ interface LocalHomeData {
     ctaText?: string;
     ctaButtonText?: string;
     ctaWhatsappMessage?: string;
+    formTitle?: string;
+    formSubtitle?: string;
+    formNamePlaceholder?: string;
+    formPhonePlaceholder?: string;
+    formMessagePlaceholder?: string;
+    formButtonText?: string;
+    trustBadges?: string[];
+    ctaFooterTitle?: string;
+    ctaFooterSubtitle?: string;
 }
 
 interface AvailableService { title: string; slug: string; icon?: string; }
@@ -69,7 +78,7 @@ export default function LocalHomeEditor({ initialData, availableServices = [] }:
     const [isSaving, setIsSaving]     = useState(false);
     const [uploadingField, setUploadingField] = useState<string | null>(null);
     const [previewBlobByField, setPreviewBlobByField] = useState<Record<string, string>>({});
-    const [activeTab, setActiveTab]   = useState<'nap' | 'hero' | 'services' | 'about' | 'location' | 'cta'>('nap');
+    const [activeTab, setActiveTab]   = useState<'nap' | 'hero' | 'services' | 'about' | 'location' | 'cta' | 'form'>('nap');
 
     const [data, setData] = useState<LocalHomeData>({
         companyName: '', companyPhone: '', companyWhatsapp: '',
@@ -196,6 +205,7 @@ export default function LocalHomeEditor({ initialData, availableServices = [] }:
         { id: 'about',    label: '👥 Quem Somos' },
         { id: 'location', label: '📍 Localização' },
         { id: 'cta',      label: '💬 CTA' },
+        { id: 'form',     label: '📋 Formulário' },
     ] as const;
 
     // Componente reutilizável de upload de imagem
@@ -593,9 +603,9 @@ export default function LocalHomeEditor({ initialData, availableServices = [] }:
                                 className="text-xs admin-btn admin-btn-secondary py-1 px-3"
                             >+ Adicionar</button>
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-3">
                             {(data.aboutStats || []).map((stat, idx) => (
-                                <div key={idx} className="flex gap-2 items-center">
+                                <div key={idx} className="grid gap-2" style={{ gridTemplateColumns: '100px 1fr 30px' }}>
                                     <input
                                         type="text"
                                         value={stat.number}
@@ -604,7 +614,7 @@ export default function LocalHomeEditor({ initialData, availableServices = [] }:
                                             updated[idx] = { ...updated[idx], number: e.target.value };
                                             set('aboutStats', updated);
                                         }}
-                                        className="admin-input w-24 text-center font-bold"
+                                        className="admin-input text-center font-bold"
                                         placeholder="10+"
                                     />
                                     <input
@@ -615,15 +625,15 @@ export default function LocalHomeEditor({ initialData, availableServices = [] }:
                                             updated[idx] = { ...updated[idx], label: e.target.value };
                                             set('aboutStats', updated);
                                         }}
-                                        className="admin-input flex-1 text-sm"
+                                        className="admin-input text-sm"
                                         placeholder="Anos de experiência"
                                     />
-                                    {(data.aboutStats || []).length > 1 && (
+                                    {(data.aboutStats || []).length > 1 ? (
                                         <button
                                             onClick={() => set('aboutStats', (data.aboutStats || []).filter((_, i) => i !== idx))}
-                                            className="text-red-400 hover:text-red-300 text-lg"
+                                            className="text-red-400 hover:text-red-300 text-lg flex items-center justify-center"
                                         >×</button>
-                                    )}
+                                    ) : <span />}
                                 </div>
                             ))}
                         </div>
@@ -678,6 +688,86 @@ export default function LocalHomeEditor({ initialData, availableServices = [] }:
                     <div>
                         <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Mensagem WhatsApp do CTA</label>
                         <input type="text" value={data.ctaWhatsappMessage || ''} onChange={e => set('ctaWhatsappMessage', e.target.value)} className="admin-input w-full" placeholder="Olá! Preciso de ajuda. Podem me atender?" />
+                    </div>
+                    <hr className="border-[rgba(255,255,255,0.08)]" />
+                    <p className="text-xs text-[#a3a3a3]">Textos do rodapé CTA (seção final das páginas de serviço)</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Título CTA Rodapé</label>
+                            <input type="text" value={data.ctaFooterTitle || ''} onChange={e => set('ctaFooterTitle', e.target.value)} className="admin-input w-full" placeholder="Orçamento gratuito em" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Subtítulo CTA Rodapé</label>
+                            <input type="text" value={data.ctaFooterSubtitle || ''} onChange={e => set('ctaFooterSubtitle', e.target.value)} className="admin-input w-full" placeholder="Atendemos rápido. Resposta em minutos, sem compromisso." />
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ── Formulário & Selos ────────────────────────────── */}
+            {activeTab === 'form' && (
+                <div className="admin-card p-5 space-y-5">
+                    <p className="text-sm text-[#a3a3a3]">Textos do formulário de orçamento e selos de confiança exibidos na sidebar das páginas de serviço.</p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Título do Formulário</label>
+                            <input type="text" value={data.formTitle || ''} onChange={e => set('formTitle', e.target.value)} className="admin-input w-full" placeholder="Orçamento Gratuito" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Subtítulo do Formulário</label>
+                            <input type="text" value={data.formSubtitle || ''} onChange={e => set('formSubtitle', e.target.value)} className="admin-input w-full" placeholder="Resposta em minutos · Sem compromisso" />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Placeholder: Nome</label>
+                            <input type="text" value={data.formNamePlaceholder || ''} onChange={e => set('formNamePlaceholder', e.target.value)} className="admin-input w-full" placeholder="Seu nome" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Placeholder: Telefone</label>
+                            <input type="text" value={data.formPhonePlaceholder || ''} onChange={e => set('formPhonePlaceholder', e.target.value)} className="admin-input w-full" placeholder="Seu telefone / WhatsApp" />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Placeholder: Mensagem</label>
+                            <input type="text" value={data.formMessagePlaceholder || ''} onChange={e => set('formMessagePlaceholder', e.target.value)} className="admin-input w-full" placeholder="Descreva o que você precisa" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">Texto do Botão</label>
+                        <input type="text" value={data.formButtonText || ''} onChange={e => set('formButtonText', e.target.value)} className="admin-input w-full" placeholder="Enviar pelo WhatsApp" />
+                    </div>
+
+                    <hr className="border-[rgba(255,255,255,0.08)]" />
+
+                    <div>
+                        <div className="flex items-center justify-between mb-3">
+                            <label className="block text-sm font-semibold text-[#e5e5e5]">Selos de Confiança</label>
+                            <button type="button" onClick={() => set('trustBadges', [...(data.trustBadges || []), ''])} className="text-xs text-blue-400 hover:text-blue-300">+ Adicionar selo</button>
+                        </div>
+                        <p className="text-xs text-[#a3a3a3] mb-3">Use emojis no início para ícones visuais (ex: ✅ Orçamento gratuito)</p>
+                        <div className="space-y-2">
+                            {(data.trustBadges || ['✅ Orçamento gratuito', '⚡ Resposta rápida', '🔒 Sem spam', '⭐ Atendimento local']).map((badge, idx) => (
+                                <div key={idx} className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={badge}
+                                        onChange={e => {
+                                            const updated = [...(data.trustBadges || [])];
+                                            updated[idx] = e.target.value;
+                                            set('trustBadges', updated);
+                                        }}
+                                        className="admin-input flex-1"
+                                        placeholder="✅ Texto do selo"
+                                    />
+                                    {(data.trustBadges || []).length > 1 && (
+                                        <button type="button" onClick={() => set('trustBadges', (data.trustBadges || []).filter((_, i) => i !== idx))} className="text-red-400 hover:text-red-300 text-xs px-2">✕</button>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             )}

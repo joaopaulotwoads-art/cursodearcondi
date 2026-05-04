@@ -1,16 +1,12 @@
 import type { APIRoute } from 'astro';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { isGitHubConfigured, githubDeleteFile, githubGetBlobSha } from '../../../../utils/github-api';
 
 /**
  * api/admin/media/[filename].ts
  * 
  * API route para deletar uma imagem específica da biblioteca de mídia.
  * Aceita tipo na query string ou detecta automaticamente.
- *
- * Em Vercel o filesystem é read-only: com GitHub configurado, remove via API
- * (mesmo caminho que upload.ts — public/images/{tipo}/{ficheiro}).
  */
 
 const BASE_IMAGES_DIR = path.resolve('./public/images');
@@ -41,68 +37,11 @@ export const DELETE: APIRoute = async ({ params, url }) => {
         }
         
         console.log(`🔍 Tentando deletar: ${decodedFilename}`);
-
+        
+        // Tentar obter tipo da query string
         const typeFromQuery = url.searchParams.get('type');
         console.log(`📁 Tipo fornecido: ${typeFromQuery || 'não fornecido'}`);
-
-        if (isGitHubConfigured()) {
-            let ghPath: string | null = null;
-
-            if (typeFromQuery && MEDIA_TYPES.includes(typeFromQuery as (typeof MEDIA_TYPES)[number])) {
-                const p = `public/images/${typeFromQuery}/${decodedFilename}`;
-                if (await githubGetBlobSha(p)) ghPath = p;
-            }
-
-            if (!ghPath) {
-                for (const mediaType of MEDIA_TYPES) {
-                    const p = `public/images/${mediaType}/${decodedFilename}`;
-                    if (await githubGetBlobSha(p)) {
-                        ghPath = p;
-                        break;
-                    }
-                }
-            }
-
-            if (!ghPath) {
-                return new Response(JSON.stringify({
-                    success: false,
-                    error: `Arquivo "${decodedFilename}" não encontrado no repositório`,
-                }), {
-                    status: 404,
-                    headers: { 'Content-Type': 'application/json' },
-                });
-            }
-
-            const ok = await githubDeleteFile(ghPath, `media: delete "${decodedFilename}"`);
-            if (!ok) {
-                return new Response(JSON.stringify({
-                    success: false,
-                    error: 'Falha ao remover no GitHub (token, branch ou permissões).',
-                }), {
-                    status: 500,
-                    headers: { 'Content-Type': 'application/json' },
-                });
-            }
-
-            return new Response(JSON.stringify({
-                success: true,
-                message: 'Imagem deletada com sucesso',
-            }), {
-                status: 200,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-
-        if (process.env.VERCEL === '1') {
-            return new Response(JSON.stringify({
-                success: false,
-                error: 'Na Vercel o filesystem é só leitura. Configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO (e branch) no projeto para apagar mídia via GitHub.',
-            }), {
-                status: 503,
-                headers: { 'Content-Type': 'application/json' },
-            });
-        }
-
+        
         let filePath: string | null = null;
         
         // Se tipo foi fornecido, usar diretamente

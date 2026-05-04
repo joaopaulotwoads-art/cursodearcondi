@@ -1,7 +1,6 @@
 ---
 import { verifySession, SESSION_COOKIE } from '../../utils/auth-utils';
 import { listAuthors } from '../../utils/author-utils';
-import FaviconLinks from '../../components/FaviconLinks.astro';
 import '../../styles/global.css';
 import '../../styles/admin.css';
 import '@fontsource/inter';
@@ -31,7 +30,6 @@ const errorMessages: Record<string, string> = {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <FaviconLinks />
     <title>Login — Admin</title>
     <style>
         body { background: #0a0a0a; }

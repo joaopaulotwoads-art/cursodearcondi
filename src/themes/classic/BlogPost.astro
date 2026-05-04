@@ -8,21 +8,19 @@
 
 import MainLayout from '../../layouts/MainLayout.astro';
 import LocalLayout from '../../layouts/LocalLayout.astro';
-import { demoteBodyH1ToH2 } from '../../utils/post-html-sanitize';
 
 interface Props {
     post: any;
     author: any;
-    Content?: any;
-    htmlContent?: string | null;
+    Content: any;
     themeId: string;
     layoutType?: 'main' | 'local';
+    readingTimeMinutes?: number;
 }
 
-const { post, author, Content, htmlContent, themeId, layoutType = 'main' } = Astro.props;
+const { post, author, Content, themeId, layoutType = 'main', readingTimeMinutes } = Astro.props;
 const Layout = layoutType === 'local' ? LocalLayout : MainLayout;
 const pageTitle = post.data.metaTitle || post.data.title;
-const htmlBody = htmlContent ? demoteBodyH1ToH2(htmlContent) : null;
 ---
 
 <Layout title={pageTitle}>
@@ -56,6 +54,12 @@ const htmlBody = htmlContent ? demoteBodyH1ToH2(htmlContent) : null;
                     {post.data.title}
                 </h1>
                 
+                {post.data.metaDescription && (
+                    <p class="text-lg md:text-xl max-w-3xl mx-auto mb-8 leading-relaxed" style="color: var(--blog-text-muted);">
+                        {post.data.metaDescription}
+                    </p>
+                )}
+                
                 <div class="flex items-center justify-center gap-4 flex-wrap">
                     {author && (
                         <div class="flex items-center gap-4">
@@ -72,15 +76,22 @@ const htmlBody = htmlContent ? demoteBodyH1ToH2(htmlContent) : null;
                             </div>
                         </div>
                     )}
-                    {post.data.publishedDate && (
+                    {(post.data.publishedDate || readingTimeMinutes) && (
                         <div class="flex items-center gap-4">
-                            <span class="text-sm" style="color: var(--blog-text-subtle);">
-                                {new Date(post.data.publishedDate).toLocaleDateString('pt-BR', {
-                                    day: '2-digit',
-                                    month: 'long',
-                                    year: 'numeric'
-                                })}
-                            </span>
+                            {post.data.publishedDate && (
+                                <span class="text-sm" style="color: var(--blog-text-subtle);">
+                                    {new Date(post.data.publishedDate).toLocaleDateString('pt-BR', {
+                                        day: '2-digit',
+                                        month: 'long',
+                                        year: 'numeric'
+                                    })}
+                                </span>
+                            )}
+                            {readingTimeMinutes && readingTimeMinutes > 0 && (
+                                <span class="text-sm" style="color: var(--blog-text-subtle);">
+                                    ⏱ {readingTimeMinutes} min de leitura
+                                </span>
+                            )}
                         </div>
                     )}
                 </div>
@@ -105,15 +116,8 @@ const htmlBody = htmlContent ? demoteBodyH1ToH2(htmlContent) : null;
                     </div>
                 )}
                 
-                <article
-                    class:list={[
-                        'max-w-none prose-img:rounded-2xl prose-img:my-8',
-                        htmlBody
-                            ? 'cursodear-post-html text-[var(--blog-text)] [&_a]:text-primary [&_a:hover]:underline'
-                            : 'prose prose-invert prose-lg prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-a:no-underline hover:prose-a:underline',
-                    ]}
-                >
-                    {htmlBody ? <div class="contents" set:html={htmlBody} /> : Content && <Content />}
+                <article class="prose prose-invert prose-lg max-w-none prose-headings:font-heading prose-headings:font-bold prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-img:rounded-2xl prose-img:my-8">
+                    <Content />
                 </article>
             </div>
         </div>
@@ -138,7 +142,9 @@ const htmlBody = htmlContent ? demoteBodyH1ToH2(htmlContent) : null;
                                 {author.data.role && (
                                     <p class="text-primary mb-4 font-semibold">{author.data.role}</p>
                                 )}
-                                <p class="text-lg mb-6 italic leading-relaxed" style="color: var(--blog-text-muted);">"{author.data.bio}"</p>
+                                {author.data.bio && (
+                                    <p class="text-lg mb-6 italic leading-relaxed" style="color: var(--blog-text-muted);">"{author.data.bio}"</p>
+                                )}
                                 <a 
                                     href={`/authors/${author.id}`} 
                                     class="inline-flex items-center gap-2 px-6 py-3 bg-primary/20 text-primary border border-primary/30 rounded-xl font-bold hover:bg-primary hover:text-white transition-all"

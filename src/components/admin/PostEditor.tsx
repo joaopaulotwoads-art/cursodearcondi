@@ -12,8 +12,7 @@
  * - onPublish: Callback quando publicar
  */
 
-import { useState, useEffect, useRef } from 'react';
-import { getArticleTemplate } from '../../utils/article-templates';
+import { useState, useEffect } from 'react';
 import WYSIWYGEditor from './WYSIWYGEditor';
 import TurndownService from 'turndown';
 import { marked } from 'marked';
@@ -40,9 +39,6 @@ interface PostData {
     metaTitle?: string;
     metaDescription?: string;
     metaImage?: string;
-    /** `html` = salvar corpo como HTML (sem Turndown). */
-    contentFormat?: 'markdown' | 'html';
-    seoSchema?: 'auto' | 'blogPosting' | 'articleItemList' | 'none';
     content: string;
 }
 
@@ -50,54 +46,13 @@ interface Props {
     post?: PostData;
     authors: Author[];
     categories: Category[];
-    /** Query ?t= do assistente /admin/posts/criar — aplica modelo uma vez no novo post */
-    templateId?: string;
 }
 
-export default function PostEditor({ post, authors, categories, templateId }: Props) {
-    const normalizeSlug = (value: string): string =>
-        (value || '')
-            .toLowerCase()
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '');
-
-    const normalizeInternalLinksToFollow = (html: string): string => {
-        if (!html || !html.includes('<a')) return html;
-        // Para links internos do próprio site, removemos nofollow/sponsored.
-        return html.replace(/<a\b([^>]*?)>/gi, (full, attrs) => {
-            const hrefMatch = attrs.match(/\bhref\s*=\s*["']([^"']+)["']/i);
-            if (!hrefMatch) return full;
-            const href = hrefMatch[1];
-            const isInternal =
-                href.startsWith('/') ||
-                href.startsWith('#') ||
-                href.includes('cursodear.com.br');
-            if (!isInternal) return full;
-
-            const relMatch = attrs.match(/\brel\s*=\s*["']([^"']*)["']/i);
-            if (!relMatch) return full;
-            const cleanedRel = relMatch[1]
-                .split(/\s+/)
-                .filter(Boolean)
-                .filter((token) => {
-                    const t = token.toLowerCase();
-                    return t !== 'nofollow' && t !== 'sponsored';
-                })
-                .join(' ');
-
-            const updatedAttrs = cleanedRel
-                ? attrs.replace(relMatch[0], `rel="${cleanedRel}"`)
-                : attrs.replace(/\s*\brel\s*=\s*["'][^"']*["']/i, '');
-            return `<a${updatedAttrs}>`;
-        });
-    };
-
+export default function PostEditor({ post, authors, categories }: Props) {
     const { toasts, showToast, removeToast } = useToast();
     const [isMounted, setIsMounted] = useState(false);
     const [title, setTitle] = useState(post?.title || '');
-    const [slug, setSlug] = useState(normalizeSlug(post?.slug || ''));
+    const [slug, setSlug] = useState(post?.slug || '');
     const [author, setAuthor] = useState(post?.author || '');
     const [category, setCategory] = useState(post?.category || '');
     const [publishedDate, setPublishedDate] = useState(post?.publishedDate || new Date().toISOString().split('T')[0]);
@@ -110,13 +65,8 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
     // Converter Markdown para HTML para o editor WYSIWYG
     const getInitialContent = () => {
         if (!post?.content) return '';
-        const trimmed = post.content.trim();
         // Se já é HTML, retorna direto
-        if (trimmed.startsWith('<')) return post.content;
-        // Se contém blocos HTML ricos (ex.: review dentro do body),
-        // também devolvemos como HTML para não passar por marked.parse
-        // e acabar "desmontando" a estrutura ao recarregar.
-        if (trimmed.includes('cnx-aff-') || trimmed.includes('product-review')) return post.content;
+        if (post.content.trim().startsWith('<')) return post.content;
         // Se é Markdown, converte para HTML
         try {
             return marked.parse(post.content) as string;
@@ -126,8 +76,6 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
     };
     
     const [content, setContent] = useState(getInitialContent());
-    const [contentFormatHtml, setContentFormatHtml] = useState(post?.contentFormat === 'html');
-    const [seoSchema, setSeoSchema] = useState<NonNullable<PostData['seoSchema']>>(post?.seoSchema || 'auto');
     const [isSaving, setIsSaving] = useState(false);
     const [showPreview, setShowPreview] = useState(false);
     
@@ -142,34 +90,22 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
         filter: (node) => node.nodeName === 'DIV' && (node as HTMLElement).classList.contains('product-review'),
         replacement: (_content: string, node: Node) => '\n\n' + (node as HTMLElement).outerHTML + '\n\n',
     });
-    turndownService.addRule('cnx-affiliate-blocks', {
-        filter: (node) =>
-            node.nodeName === 'DIV' && (node as HTMLElement).classList.contains('cnx-aff-block-wrap'),
-        replacement: (_content: string, node: Node) => '\n\n' + (node as HTMLElement).outerHTML + '\n\n',
-    });
     
     // Proteção contra problemas de hidratação
     useEffect(() => {
         setIsMounted(true);
     }, []);
 
-    const templateAppliedRef = useRef(false);
-    useEffect(() => {
-        if (post || templateAppliedRef.current || !templateId) return;
-        const tpl = getArticleTemplate(templateId);
-        if (!tpl) return;
-        templateAppliedRef.current = true;
-        setContent(tpl.content);
-        setContentFormatHtml(tpl.contentFormatHtml);
-        setSeoSchema(tpl.seoSchema);
-        setTitle((prev) => (prev.trim() ? prev : tpl.titleHint || prev));
-    }, [post, templateId]);
-
     // Gerar slug automaticamente do título
     useEffect(() => {
         if (!post && title && !slug) {
             try {
-                const generatedSlug = normalizeSlug(title);
+                const generatedSlug = title
+                    .toLowerCase()
+                    .normalize('NFD')
+                    .replace(/[\u0300-\u036f]/g, '')
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
                 if (generatedSlug) {
                     setSlug(generatedSlug);
                 }
@@ -187,32 +123,20 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
 
         setIsSaving(true);
         try {
-            const hasAffiliateBlocks = Boolean(content && content.includes('cnx-aff-'));
-            const hasProductReviewBlocks = Boolean(content && content.includes('product-review'));
-
-            // Estes blocos são HTML "rich" (tabelas, grid, classes).
-            // Converter para markdown pode destruir a estrutura e causar perda após reload.
-            // Então, se existir qualquer bloco cnx-aff ou product-review no HTML, salvamos como HTML.
-            const forceAffiliateBlocksHtml = !contentFormatHtml && hasAffiliateBlocks;
-            const forceProductReviewHtml = !contentFormatHtml && hasProductReviewBlocks;
-            let bodyContent = content;
-            let finalContentFormatHtml = contentFormatHtml || forceAffiliateBlocksHtml || forceProductReviewHtml;
-
-            if (!finalContentFormatHtml && content && content.trim().startsWith('<')) {
+            // Converter HTML do editor WYSIWYG para Markdown
+            let markdownContent = content;
+            if (content && content.trim().startsWith('<')) {
                 try {
-                    bodyContent = turndownService.turndown(content);
+                    markdownContent = turndownService.turndown(content);
                 } catch (error) {
                     console.error('❌ Erro ao converter HTML para Markdown:', error);
+                    // Se falhar, tenta salvar como está
                 }
             }
-
-            if (finalContentFormatHtml) {
-                bodyContent = normalizeInternalLinksToFollow(bodyContent);
-            }
-
+            
             const postData: PostData = {
                 title,
-                slug: normalizeSlug(slug),
+                slug,
                 author: author || undefined,
                 category: category || undefined,
                 publishedDate: isPublish ? (publishedDate || new Date().toISOString().split('T')[0]) : undefined,
@@ -220,42 +144,29 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                 metaTitle: metaTitle || undefined,
                 metaDescription: metaDescription || undefined,
                 metaImage: metaImage || undefined,
-                contentFormat: finalContentFormatHtml ? 'html' : undefined,
-                seoSchema,
-                content: bodyContent,
+                content: markdownContent,
             };
             
-            const apiSlug = post?.slug ? encodeURIComponent(post.slug) : '';
-            const url = post ? `/api/admin/posts/${apiSlug}/` : '/api/admin/posts/';
+            // Fazer requisição direta
+            const url = post ? `/api/admin/posts/${post.slug}` : '/api/admin/posts';
             const method = post ? 'PUT' : 'POST';
             
             const response = await fetch(url, {
                 method,
-                credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...postData,
                     newSlug: postData.slug !== post?.slug ? postData.slug : undefined,
                 }),
             });
-
-            const raw = await response.text();
-            let result: { success?: boolean; error?: string } = {};
-            try {
-                result = raw ? JSON.parse(raw) : {};
-            } catch {
-                result = {
-                    success: false,
-                    error: raw?.trim() || `Resposta inválida (HTTP ${response.status})`,
-                };
-            }
-
-            if (response.ok && result.success) {
+            
+            const result = await response.json();
+            
+            if (result.success) {
                 showToast('success', isPublish ? 'Post publicado!' : 'Rascunho salvo!');
                 setTimeout(() => { window.location.href = `/admin/posts/${postData.slug}`; }, 1000);
             } else {
-                const msg = result.error || `Falha ao salvar (HTTP ${response.status})`;
-                showToast('error', 'Erro ao salvar', msg);
+                showToast('error', 'Erro ao salvar', result.error);
             }
         } catch (error) {
             console.error('Erro ao salvar:', error);
@@ -337,7 +248,7 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
         };
         window.addEventListener('keydown', onKeyDown);
         return () => window.removeEventListener('keydown', onKeyDown);
-    }, [title, slug, content, contentFormatHtml, seoSchema, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, post]);
+    }, [title, slug, content, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, post]);
 
     // Proteção contra problemas de hidratação - só renderizar após montar
     if (!isMounted) {
@@ -427,7 +338,7 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                             <input
                                 type="text"
                                 value={slug}
-                                onChange={(e) => setSlug(normalizeSlug(e.target.value))}
+                                onChange={(e) => setSlug(e.target.value)}
                                 className="admin-input font-mono text-sm"
                                 placeholder="url-do-post"
                             />
@@ -438,10 +349,9 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                             <label className="block text-sm font-semibold text-[#e5e5e5] mb-2">
                                 Conteúdo
                             </label>
-                            <div className="h-[500px] rounded-lg overflow-hidden bg-[#0a0a0a]">
-                                <WYSIWYGEditor
-                                    key={post?.slug ?? 'new-post-draft'}
-                                    value={content}
+                            <div className="h-[500px] rounded-lg overflow-hidden">
+                                <WYSIWYGEditor 
+                                    value={content} 
                                     onChange={setContent}
                                     placeholder="Comece a escrever seu post aqui..."
                                 />
@@ -546,20 +456,6 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                                         ))}
                                     </select>
                                 </div>
-                                <label className="flex items-start gap-3 cursor-pointer rounded-lg border border-[rgba(255,255,255,0.08)] p-3 hover:bg-white/5">
-                                    <input
-                                        type="checkbox"
-                                        className="mt-1"
-                                        checked={contentFormatHtml}
-                                        onChange={(e) => setContentFormatHtml(e.target.checked)}
-                                    />
-                                    <span>
-                                        <span className="block text-sm font-semibold text-[#e5e5e5]">Corpo em HTML</span>
-                                        <span className="block text-xs text-[#737373] mt-1">
-                                            Mantém cards e estilos (import Ghost). Sem converter para Markdown ao salvar.
-                                        </span>
-                                    </span>
-                                </label>
                             </div>
                         </div>
 
@@ -569,24 +465,6 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                                 SEO
                             </h3>
                             <div className="space-y-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-[#a3a3a3] mb-2">
-                                        Schema JSON-LD (Google)
-                                    </label>
-                                    <select
-                                        value={seoSchema}
-                                        onChange={(e) => setSeoSchema(e.target.value as NonNullable<PostData['seoSchema']>)}
-                                        className="admin-input"
-                                    >
-                                        <option value="auto">Automático — detecta lista de produtos (cards Curso de Ar Condicionado�e) ou artigo</option>
-                                        <option value="blogPosting">Artigo / post informativo (BlogPosting)</option>
-                                        <option value="articleItemList">Ranking ou review (Article + ItemList)</option>
-                                        <option value="none">Sem schema extra (só WebSite no layout)</option>
-                                    </select>
-                                    <p className="text-xs text-[#737373] mt-1">
-                                        A meta description abaixo não aparece mais no corpo do post — só em meta tags e rich results.
-                                    </p>
-                                </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-[#a3a3a3] mb-2">
                                         Meta Title (opcional)

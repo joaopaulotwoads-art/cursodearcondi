@@ -10,19 +10,11 @@ import { isGitHubConfigured, githubWriteFileBuffer } from '../../../utils/github
  * - Em dev local → salva em public/images/
  */
 
-const MEDIA_UPLOAD_TYPES = ['posts', 'authors', 'themes', 'general'] as const;
-
-/** Limite seguro para a API Contents do GitHub (base64 no JSON); acima disso use Vercel Blob. */
-const GITHUB_CONTENTS_MAX_BYTES = 95 * 1024 * 1024;
-
 export const POST: APIRoute = async ({ request }) => {
     try {
         const formData = await request.formData();
         const file = formData.get('file') as File;
-        const rawType = (formData.get('type') as string) || 'general';
-        const type = MEDIA_UPLOAD_TYPES.includes(rawType as (typeof MEDIA_UPLOAD_TYPES)[number])
-            ? rawType
-            : 'general';
+        const type  = (formData.get('type') as string) || 'general';
 
         if (!file) {
             return json({ success: false, error: 'Nenhum arquivo enviado' }, 400);
@@ -50,33 +42,13 @@ export const POST: APIRoute = async ({ request }) => {
 
         // ── 2. GitHub API (fallback em produção sem Blob) ──────────────────
         if (isGitHubConfigured()) {
-            if (buffer.length > GITHUB_CONTENTS_MAX_BYTES) {
-                return json(
-                    {
-                        success: false,
-                        error:
-                            'Imagem demasiado grande para o GitHub via API. Reduza o ficheiro ou configure BLOB_READ_WRITE_TOKEN na Vercel (Vercel Blob).',
-                    },
-                    413,
-                );
-            }
             const githubPath = `public/images/${type}/${filename}`;
-            const result = await githubWriteFileBuffer(
+            const ok = await githubWriteFileBuffer(
                 githubPath,
                 buffer,
                 `media: upload image "${filename}"`,
             );
-            if (!result.ok) {
-                return json(
-                    {
-                        success: false,
-                        error:
-                            result.error ||
-                            'Erro ao commitar imagem. Verifique permissões do token (Contents: Read/Write) e o nome do repositório.',
-                    },
-                    502,
-                );
-            }
+            if (!ok) return json({ success: false, error: 'Erro ao commitar imagem' }, 500);
             return json({ success: true, url: `/images/${type}/${filename}`, filename, type });
         }
 
