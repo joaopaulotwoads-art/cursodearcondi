@@ -173,13 +173,6 @@ const courseSchemaJsonLd = {
               <div class="mt-3 flex items-center justify-between gap-2">
                 <div class="text-center">
                   <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
-                    <p id="countdown-days" class="text-xl md:text-3xl font-black text-white">00</p>
-                    <p class="text-xs uppercase text-gray-400">DIAS</p>
-                  </div>
-                </div>
-                <span class="text-xl text-white">:</span>
-                <div class="text-center">
-                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
                     <p id="countdown-hours" class="text-xl md:text-3xl font-black text-white">00</p>
                     <p class="text-xs uppercase text-gray-400">HRS</p>
                   </div>
@@ -836,26 +829,50 @@ const courseSchemaJsonLd = {
 
   <script>
     (() => {
-      const dayEl = document.getElementById('countdown-days');
       const hourEl = document.getElementById('countdown-hours');
       const minEl = document.getElementById('countdown-minutes');
       const secEl = document.getElementById('countdown-seconds');
-      if (!dayEl || !hourEl || !minEl || !secEl) return;
+      if (!hourEl || !minEl || !secEl) return;
 
-      const targetDate = new Date();
-      targetDate.setDate(targetDate.getDate() + 7);
+      const KEY = 'cursodear_offer_timer_ends_at';
+      const DURATION_MS = 45 * 60 * 1000;
+
+      function getOrCreateEndAt() {
+        try {
+          const raw = localStorage.getItem(KEY) || '';
+          const n = Number(raw);
+          if (Number.isFinite(n) && n > Date.now()) return n;
+        } catch {
+          // ignore
+        }
+        const endAt = Date.now() + DURATION_MS;
+        try {
+          localStorage.setItem(KEY, String(endAt));
+        } catch {
+          // ignore
+        }
+        return endAt;
+      }
+
+      let endAt = getOrCreateEndAt();
 
       function updateCountdown() {
-        const now = new Date();
-        const diff = targetDate - now;
-        if (diff <= 0) return;
+        const diff = endAt - Date.now();
+        if (diff <= 0) {
+          // Reinicia o ciclo para manter urgência por sessão/visita
+          endAt = Date.now() + DURATION_MS;
+          try {
+            localStorage.setItem(KEY, String(endAt));
+          } catch {
+            // ignore
+          }
+        }
 
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        const t = Math.max(0, endAt - Date.now());
+        const hours = Math.floor(t / (1000 * 60 * 60));
+        const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((t % (1000 * 60)) / 1000);
 
-        dayEl.textContent = String(days).padStart(2, '0');
         hourEl.textContent = String(hours).padStart(2, '0');
         minEl.textContent = String(minutes).padStart(2, '0');
         secEl.textContent = String(seconds).padStart(2, '0');
