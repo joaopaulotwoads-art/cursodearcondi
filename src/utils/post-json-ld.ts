@@ -3,6 +3,12 @@
  */
 
 import { canonicalPathname, schemaPageUrl } from './read-site-settings';
+import {
+    SEO_ORGANIZATION_NAME,
+    DEFAULT_ORG_LOGO_PATH,
+    ORG_SAME_AS,
+    absoluteUrl,
+} from './seo-meta';
 
 export type PostSeoSchema = 'auto' | 'blogPosting' | 'articleItemList' | 'none';
 
@@ -65,6 +71,67 @@ export function buildBlogSearchUrlTemplate(siteUrl: string): string {
     return `${root}${blogPath}?q={search_term_string}`;
 }
 
+export function buildOrganizationJsonLd(opts: {
+    siteUrl: string;
+    name?: string;
+    logoPath?: string;
+}): Record<string, unknown> {
+    const root = siteRootOnly(opts.siteUrl);
+    const orgId = idFragment(root, 'organization');
+    const name = opts.name?.trim() || SEO_ORGANIZATION_NAME;
+    const logoPath = opts.logoPath || DEFAULT_ORG_LOGO_PATH;
+
+    return {
+        '@type': 'Organization',
+        '@id': orgId,
+        name,
+        url: schemaPageUrl(`${root}/`),
+        logo: {
+            '@type': 'ImageObject',
+            url: absoluteUrl(root, logoPath),
+        },
+        telephone: '+55-14-98803-4123',
+        email: 'contato@cursodearcondicionado.com.br',
+        address: {
+            '@type': 'PostalAddress',
+            streetAddress: 'Av. Rodrigues Alves, 96',
+            addressLocality: 'Bauru',
+            addressRegion: 'SP',
+            addressCountry: 'BR',
+            postalCode: '17040-000',
+        },
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: -22.313512279677077,
+            longitude: -49.03531582470722,
+        },
+        hasMap: 'https://maps.app.goo.gl/bAPz55ZAM24twfTo9',
+        sameAs: ORG_SAME_AS.filter(Boolean),
+    };
+}
+
+/** Garante nó Organization no JSON-LD mesmo quando a página envia schema extra (ex.: Course). */
+export function mergeJsonLdWithOrganization(
+    base: Record<string, unknown>,
+    organization: Record<string, unknown>,
+): Record<string, unknown> {
+    const orgId = organization['@id'];
+    if (base['@graph'] && Array.isArray(base['@graph'])) {
+        const graph = base['@graph'] as Record<string, unknown>[];
+        const hasOrg = graph.some(
+            (n) =>
+                n['@type'] === 'Organization' ||
+                (orgId != null && n['@id'] === orgId),
+        );
+        return hasOrg ? base : { ...base, '@graph': [organization, ...graph] };
+    }
+    if (base['@type'] === 'Organization') return base;
+    return {
+        '@context': 'https://schema.org',
+        '@graph': [organization, base],
+    };
+}
+
 /**
  * Graph mínimo (home, listagens): WebSite + Organization + SearchAction + inLanguage.
  */
@@ -76,41 +143,16 @@ export function buildcursodearDefaultSiteJsonLd(opts: {
     const root = siteRootOnly(opts.siteUrl);
     const webSiteId = idFragment(root, 'website');
     const orgId = idFragment(root, 'organization');
+    const displayName = opts.siteName?.trim() || SEO_ORGANIZATION_NAME;
 
     return {
         '@context': 'https://schema.org',
         '@graph': [
-            {
-                '@type': 'Organization',
-                '@id': orgId,
-                name: opts.siteName,
-                url: schemaPageUrl(`${root}/`),
-                telephone: '+55-14-98803-4123',
-                email: 'contato@cursodearcondicionado.com.br',
-                address: {
-                    '@type': 'PostalAddress',
-                    streetAddress: 'Av. Rodrigues Alves, 96',
-                    addressLocality: 'Bauru',
-                    addressRegion: 'SP',
-                    addressCountry: 'BR',
-                    postalCode: '17040-000',
-                },
-                geo: {
-                    '@type': 'GeoCoordinates',
-                    latitude: -22.313512279677077,
-                    longitude: -49.03531582470722,
-                },
-                hasMap: 'https://maps.app.goo.gl/bAPz55ZAM24twfTo9',
-                sameAs: [
-                    'https://instagram.com/formatecnico',
-                    'https://youtube.com/@formatecnico',
-                    'https://facebook.com/formatecnico',
-                ],
-            },
+            buildOrganizationJsonLd({ siteUrl: opts.siteUrl, name: displayName }),
             {
                 '@type': 'WebSite',
                 '@id': webSiteId,
-                name: opts.siteName,
+                name: displayName,
                 url: schemaPageUrl(`${root}/`),
                 description: opts.description || undefined,
                 inLanguage: 'pt-BR',
@@ -285,37 +327,14 @@ export function buildPostJsonLd(opts: {
     }
 
     const graph: Record<string, unknown>[] = [
-        {
-            '@type': 'Organization',
-            '@id': orgId,
-            name: opts.siteName,
-            url: schemaPageUrl(`${root}/`),
-            telephone: '+55-14-98803-4123',
-            email: 'contato@cursodearcondicionado.com.br',
-            address: {
-                '@type': 'PostalAddress',
-                streetAddress: 'Av. Rodrigues Alves, 96',
-                addressLocality: 'Bauru',
-                addressRegion: 'SP',
-                addressCountry: 'BR',
-                postalCode: '17040-000',
-            },
-            geo: {
-                '@type': 'GeoCoordinates',
-                latitude: -22.313512279677077,
-                longitude: -49.03531582470722,
-            },
-            hasMap: 'https://maps.app.goo.gl/bAPz55ZAM24twfTo9',
-            sameAs: [
-                'https://instagram.com/formatecnico',
-                'https://youtube.com/@formatecnico',
-                'https://facebook.com/formatecnico',
-            ],
-        },
+        buildOrganizationJsonLd({
+            siteUrl: opts.siteUrl,
+            name: opts.siteName?.trim() || SEO_ORGANIZATION_NAME,
+        }),
         {
             '@type': 'WebSite',
             '@id': webSiteId,
-            name: opts.siteName,
+            name: opts.siteName?.trim() || SEO_ORGANIZATION_NAME,
             url: schemaPageUrl(`${root}/`),
             inLanguage: 'pt-BR',
             publisher: { '@id': orgId },

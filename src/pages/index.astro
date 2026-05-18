@@ -4,6 +4,7 @@ import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+import { SEO_ORGANIZATION_NAME, ORG_SAME_AS, absoluteUrl, DEFAULT_ORG_LOGO_PATH } from '../utils/seo-meta';
 
 const pageTitle = 'Curso de Ar Condicionado Online 2026 | Formação Profissional';
 const pageDescription = 'Curso de Ar Condicionado com acesso imediato, certificado e formação completa para instalação e manutenção.';
@@ -82,14 +83,10 @@ const courseSchemaJsonLd = {
   timeRequired: 'PT30H',
   provider: {
     '@type': 'Organization',
-    name: 'Curso de Ar Condicionado',
+    name: SEO_ORGANIZATION_NAME,
     url: 'https://cursodearcondicionado.com.br/',
-    sameAs: [
-      'https://cursodearcondicionado.com.br/',
-      'https://instagram.com/cursodearcondicionado/',
-      'https://youtube.com/@cursodearcondicionado/',
-      'https://facebook.com/cursodearcondicionado/',
-    ],
+    logo: absoluteUrl('https://cursodearcondicionado.com.br', DEFAULT_ORG_LOGO_PATH),
+    sameAs: ORG_SAME_AS,
   },
   hasCourseInstance: {
     '@type': 'CourseInstance',
