@@ -1,9 +1,11 @@
 ---
-import { getEntry } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+import { getPostUrl } from '../utils/blog-permalink';
+import type { BlogPermalinkStructure, BlogUrlPrefix } from '../utils/blog-permalink';
 import { SEO_ORGANIZATION_NAME, ORG_SAME_AS, absoluteUrl, DEFAULT_ORG_LOGO_PATH } from '../utils/seo-meta';
 
 const pageTitle = 'Curso de Ar Condicionado Online 2026 | Formação Profissional';
@@ -60,17 +62,67 @@ const aulas = [
 ];
 
 const faqItems = [
-  { q: 'O curso é totalmente online?', a: 'Sim. O acesso é feito pela plataforma Hotmart, podendo assistir pelo celular ou computador, a qualquer hora.' },
-  { q: 'Por quanto tempo tenho acesso?', a: 'O acesso é vitalício. O curso não expira e você pode assistir quantas vezes quiser.' },
-  { q: 'Recebo certificado?', a: 'Sim! Ao concluir você recebe certificado de conclusão para baixar direto pela Hotmart.' },
-  { q: 'Serve para iniciantes?', a: 'Sim! O curso começa do zero, sem exigir conhecimento prévio. Qualquer pessoa consegue aprender.' },
-  { q: 'Qual é a garantia?', a: 'Garantia incondicional de 15 dias. Se não gostar por qualquer motivo, basta solicitar o reembolso.' },
-  { q: 'Em quantas vezes posso parcelar?', a: 'Em até 12x de R$ 20,37 no cartão, ou R$ 197,00 à vista.' },
-  { q: 'Terei suporte durante o curso?', a: 'Sim! Há suporte disponível para dúvidas técnicas ao longo do curso.' },
+  { q: 'O curso é totalmente online?', a: 'Sim. O acesso é feito pela plataforma Hotmart, podendo assistir pelo celular ou computador, a qualquer hora e em qualquer lugar.' },
+  { q: 'Por quanto tempo tenho acesso?', a: 'O acesso é vitalício. O curso não expira e você pode assistir quantas vezes quiser, para sempre.' },
+  { q: 'Recebo certificado?', a: 'Sim! Ao concluir o curso você recebe um certificado de conclusão que pode ser baixado direto pela plataforma Hotmart.' },
+  { q: 'Serve para iniciantes?', a: 'Sim! O curso foi desenvolvido do zero, sem exigir conhecimento prévio. Qualquer pessoa consegue aprender e começar a prestar serviços.' },
+  { q: 'Qual é a garantia?', a: 'Garantia incondicional de 15 dias. Se não gostar por qualquer motivo, basta solicitar o reembolso e devolvemos 100% do valor pago.' },
+  { q: 'Em quantas vezes posso parcelar?', a: 'Em até 12x de R$ 20,37 no cartão de crédito, ou R$ 197,00 à vista com desconto.' },
+  { q: 'Terei suporte durante o curso?', a: 'Sim! Há suporte disponível para dúvidas técnicas ao longo de todo o curso.' },
 ];
 
+const testimonialPrints = [
+  {
+    image: '/images/comentario-aluno-jose.webp',
+    imageAlt:
+      'Avaliação 5 estrelas de aluno no curso de instalação e manutenção de ar condicionado split — aumento de renda com climatização',
+    quote:
+      'Olá Leandro e equipe, quero dizer que o curso de vocês foi a melhor coisa que fiz! As aulas são muito bem explicadas e com ótima qualidade. Antes ganhava um salário mínimo trabalhando o dia todo, sofrendo com patrão ruim. Comecei a trabalhar com a climatização a 3 meses, e já estou ganhando 4 vezes mais do que ganhava e tenho muito mais tempo para a minha família.',
+    heading: 'Aluno verificado — técnico em climatização',
+    stars: '★★★★★',
+  },
+  {
+    image: '/images/comentario-aluno-marcos-1.webp',
+    imageAlt:
+      'Avaliação 5 estrelas de aluno no curso técnico de ar condicionado — refrigeração e climatização com mais clientes',
+    quote:
+      'Bom dia Leandro. Já fiz cursos online e presencial de refrigeração e climatização mas nem um tem a mesma qualidade que o seu. Com a sua didática consegui aprender tudo muito rápido e com facilidade. Graças aos seus ensinamentos hoje vivo trabalhando nessa área maravilhosa! Comecei a trabalhar a um mês atrás com ar condicionado, como não tenho muitos clientes só consegui 2910 esse mês. Mas a cada dia consigo mais clientes. Acredito que logo estou ganhando em torno de 5 mil! Você é o melhor!',
+    heading: 'Aluno verificado — instalação de ar condicionado',
+    stars: '★★★★★',
+  },
+  {
+    image: '/images/comentario-de-aluno-curso.webp',
+    imageAlt:
+      'Avaliação nota 10 de aluno no curso de ar condicionado online — aulas práticas e didática do professor Leandro',
+    quote:
+      'Bom, primeiramente, boa tarde! Estou gostando bastante desse curso, vídeos bem curtos e bem explicativo e nos deixa sem nenhuma dúvida, bem detalhado, adorei bastante recomendo muito. O professor Leandro está de parabéns, lhe dou uma nota 10 em explicação e paciência no curso. Adorei!',
+    heading: 'Aluno verificado — curso de ar condicionado online',
+    stars: '★★★★★',
+  },
+  {
+    image: '/images/comentario-de-aluno-edmar-curso.webp',
+    imageAlt:
+      'Avaliação 5 estrelas de aluno no curso de ar condicionado e refrigeração — faturamento com serviços de climatização',
+    quote:
+      'Meu depoimento é o seguinte. Fiz o seu curso de geladeira a uns 6 meses atrás e a dois meses fiz o de ar condicionado. Sua didática é excelente, da área de climatização você é o melhor. Na minha cidade quem trabalha com refrigeração e climatização faz um serviço ruim, então pra mim que faço tudo direitinho o serviço não falta. Esse mês faturei 9.240 reais! Pra quem não terminou a escola isso é muita coisa! Vou até contratar alguém pra começar a trabalhar comigo.',
+    heading: 'Aluno verificado — refrigeração e climatização',
+    stars: '★★★★★',
+  },
+];
+
+const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+const blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'root';
+
+const recentBlogPosts = (await getCollection('posts'))
+  .filter((post) => post.data.publishedDate || post.data.date)
+  .sort((a, b) => {
+    const da = new Date((a.data.publishedDate || a.data.date) as string).getTime();
+    const db = new Date((b.data.publishedDate || b.data.date) as string).getTime();
+    return db - da;
+  })
+  .slice(0, 5);
+
 const courseSchemaJsonLd = {
-  '@context': 'https://schema.org',
   '@type': 'Course',
   name: 'Curso de Ar Condicionado',
   url: 'https://cursodearcondicionado.com.br/',
@@ -115,6 +167,23 @@ const courseSchemaJsonLd = {
   },
   totalHistoricalEnrollment: 11900,
 };
+
+const faqPageJsonLd = {
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: a,
+    },
+  })),
+};
+
+const extraJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [courseSchemaJsonLd, faqPageJsonLd],
+};
 ---
 
 <BaseLayoutcursodear
@@ -128,7 +197,7 @@ const courseSchemaJsonLd = {
   footerNav={beFootNav}
   contentThemeId="cursodear"
   canonicalOverride={canonicalHomeUrl}
-  extraJsonLd={courseSchemaJsonLd}
+  extraJsonLd={extraJsonLd}
 >
   <div class="bg-white text-slate-900">
     <!-- 2. HERO -->
@@ -164,48 +233,23 @@ const courseSchemaJsonLd = {
               <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>Garantia de 15 dias</span></p>
             </div>
           </div>
-          <aside class="w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl overflow-hidden">
-            <div class="mb-4 rounded-xl bg-slate-800 p-4">
-              <p class="text-center text-[11px] font-semibold uppercase tracking-[0.16em] text-orange-300">OFERTA ESPECIAL DE MATRÍCULA</p>
-              <div class="mt-3 flex items-center justify-between gap-2">
-                <div class="text-center">
-                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
-                    <p id="countdown-hours" class="text-xl md:text-3xl font-black text-white">00</p>
-                    <p class="text-xs uppercase text-gray-400">HRS</p>
-                  </div>
-                </div>
-                <span class="text-xl text-white">:</span>
-                <div class="text-center">
-                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
-                    <p id="countdown-minutes" class="text-xl md:text-3xl font-black text-white">00</p>
-                    <p class="text-xs uppercase text-gray-400">MIN</p>
-                  </div>
-                </div>
-                <span class="text-xl text-white">:</span>
-                <div class="text-center">
-                  <div class="min-w-[52px] md:min-w-[60px] rounded border border-slate-600 bg-slate-700 px-2 md:px-3 py-2 text-center">
-                    <p id="countdown-seconds" class="text-xl md:text-3xl font-black text-white">00</p>
-                    <p class="text-xs uppercase text-gray-400">SEG</p>
-                  </div>
-                </div>
-              </div>
+          <aside class="w-full max-w-sm rounded-2xl border border-white/20 bg-white p-6 shadow-2xl">
+            <div class="flex justify-center">
+              <span class="bg-red-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wide">MAIS VENDIDO</span>
             </div>
-            <div class="flex justify-center mb-2">
-              <span class="bg-red-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase">MAIS VENDIDO</span>
-            </div>
-            <p class="text-gray-400 text-sm line-through text-center mt-3">De R$ 297,00</p>
-            <p class="text-orange-500 font-black text-4xl md:text-5xl text-center leading-none">R$ 197,00</p>
-            <p class="text-gray-500 text-sm text-center mt-1">ou 12x de R$ 20,37 no cartão</p>
+            <p class="mt-5 text-center text-sm text-gray-400 line-through">De R$ 297,00</p>
+            <p class="mt-1 text-center text-4xl font-black leading-none text-orange-500 md:text-5xl">R$ 197,00</p>
+            <p class="mt-2 text-center text-sm text-gray-500">ou 12x de R$ 20,37 no cartão</p>
             <a
               href={hotmartAffiliateUrl}
               target="_blank"
               rel="nofollow noopener noreferrer"
-              class="mt-4 w-full block bg-green-500 hover:bg-green-600 text-white font-black py-4 rounded-xl text-center text-lg uppercase tracking-wide transition"
+              class="mt-5 block w-full rounded-xl bg-green-500 py-4 text-center text-lg font-black uppercase tracking-wide text-white transition hover:bg-green-600"
             >
               QUERO ME INSCREVER AGORA
             </a>
-            <p class="text-center text-gray-400 text-xs mt-2">🔒 Compra 100% segura pela Hotmart</p>
-            <p class="mt-4 border-t pt-4 text-sm leading-relaxed text-gray-700">
+            <p class="mt-3 text-center text-xs text-gray-400">🔒 Compra 100% segura pela Hotmart</p>
+            <p class="mt-5 border-t border-slate-100 pt-4 text-sm leading-relaxed text-gray-600">
               Ao entrar hoje, você recebe acesso imediato a todo o treinamento com mais de 160 aulas, trilha completa de 30 horas, certificado de conclusão e suporte para dúvidas técnicas. O conteúdo foi montado para acelerar sua entrada no mercado de instalação e manutenção, com acesso vitalício para revisão e garantia incondicional de 15 dias.
             </p>
           </aside>
@@ -237,7 +281,7 @@ const courseSchemaJsonLd = {
             >
               <img
                 src="https://i.ytimg.com/vi/54B2R6Br_bc/hqdefault.jpg"
-                alt=""
+                alt="Aula prática de instalação de ar condicionado split no curso técnico online — vídeo de apresentação"
                 loading="lazy"
                 decoding="async"
                 class="h-full w-full object-cover opacity-90 transition duration-300 group-hover:opacity-100 group-hover:scale-[1.01]"
@@ -340,7 +384,10 @@ const courseSchemaJsonLd = {
                 </div>
                 <div class="flex items-center gap-3">
                   <span class="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-600">{aula.count}</span>
-                  <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
+                  <span class="shrink-0 text-lg leading-none text-slate-400" aria-hidden="true">
+                    <span class="group-open:hidden">+</span>
+                    <span class="hidden group-open:inline">×</span>
+                  </span>
                 </div>
               </summary>
               <div class="border-t border-slate-200 bg-gradient-to-b from-orange-50/70 to-white px-4 py-4 sm:px-5">
@@ -476,14 +523,14 @@ const courseSchemaJsonLd = {
     </section>
 
     <!-- 8. CERTIFICAÇÃO -->
-    <section class="py-16 md:py-24">
+    <section class="py-16 md:py-24" id="certificacao">
       <div class="mx-auto max-w-6xl px-4 md:px-0">
         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-6">
           <div class="grid items-start gap-6 md:grid-cols-2">
             <div class="flex items-start gap-4">
               <span class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#F97316] text-2xl font-bold text-white">✓</span>
               <div>
-                <h2 class="text-2xl font-bold text-slate-900">NOSSA CERTIFICAÇÃO É RECONHECIDA EM TODO O BRASIL</h2>
+                <h2 class="text-2xl font-bold text-slate-900">Certificação reconhecida em todo o Brasil</h2>
                 <p class="mt-3 text-sm leading-relaxed text-slate-700">
                   Ao concluir o curso, você recebe certificado de conclusão pela plataforma Hotmart. O documento comprova sua participação e reforça sua credibilidade profissional para atuar no mercado de climatização.
                 </p>
@@ -502,8 +549,15 @@ const courseSchemaJsonLd = {
     </section>
 
     <!-- 9. BÔNUS -->
-    <section class="bg-white">
-      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 py-16">
+    <section class="bg-white" id="bonus" aria-labelledby="bonus-heading">
+      <header class="mx-auto max-w-3xl px-6 pt-16 text-center">
+        <p class="text-[11px] font-black uppercase tracking-[0.22em] text-orange-600">Bônus inclusos</p>
+        <h2 id="bonus-heading" class="mt-2 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
+          Materiais extras grátis para alunos
+        </h2>
+        <div class="mx-auto mt-4 h-[3px] w-16 rounded-full bg-orange-500"></div>
+      </header>
+      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 pb-16 pt-10">
         <div class="flex-1">
           <span class="text-sm font-black uppercase tracking-widest text-orange-500">BÔNUS 01</span>
           <h3 class="mt-2 mb-4 text-2xl font-black text-slate-800">Bônus de Ar Condicionado Inverter</h3>
@@ -520,16 +574,14 @@ const courseSchemaJsonLd = {
           </div>
         </div>
         <div class="w-full flex-shrink-0 md:w-[420px]">
-          <img src="/images/bonus_1.webp" alt="Bônus Curso de Tecnologia Inverter LG e Consul" class="rounded-2xl shadow-xl w-full object-contain" loading="lazy" decoding="async" />
+          <img src="/images/bonus_1.webp" alt="Bônus curso técnico: tecnologia ar condicionado Inverter LG e Consul — instalação e manutenção split" class="rounded-2xl shadow-xl w-full object-contain" loading="lazy" decoding="async" />
         </div>
       </div>
-    </section>
 
-    <section class="bg-[#f8fafc]">
-      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 py-16">
+      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 bg-[#f8fafc] px-6 py-16">
         <div class="w-full flex-shrink-0 md:w-[420px] order-2 md:order-1">
           <div class="flex justify-center">
-            <img src="/images/bonus_2.webp" alt="Checklist de Ferramentas para Técnico de Ar Condicionado" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
+            <img src="/images/bonus_2.webp" alt="Checklist de ferramentas para técnico de ar condicionado — curso de instalação split e manutenção" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
           </div>
         </div>
         <div class="flex-1 order-1 md:order-2">
@@ -548,10 +600,8 @@ const courseSchemaJsonLd = {
           </div>
         </div>
       </div>
-    </section>
 
-    <section class="bg-white">
-      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 px-6 py-16">
+      <div class="mx-auto flex max-w-5xl flex-col md:flex-row items-center gap-12 bg-white px-6 py-16">
         <div class="flex-1">
           <span class="text-sm font-black uppercase tracking-widest text-orange-500">BÔNUS 03</span>
           <h3 class="mt-2 mb-4 text-2xl font-black text-slate-800">Guia de Atendimento e Pós-Serviço</h3>
@@ -569,11 +619,11 @@ const courseSchemaJsonLd = {
         </div>
         <div class="w-full flex-shrink-0 md:w-[420px]">
           <div class="flex justify-center">
-            <img src="/images/bonus_3.webp" alt="Guia de Atendimento e Pós-Serviço para Instalador de Ar Condicionado" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
+            <img src="/images/bonus_3.webp" alt="Guia de atendimento para instalador de ar condicionado — curso técnico online de instalação split" class="h-64 md:h-80 w-auto object-contain rounded-2xl shadow-xl max-h-64 md:max-h-none mx-auto" loading="lazy" decoding="async" />
           </div>
         </div>
       </div>
-      <p class="mt-8 flex items-center justify-center gap-2 text-center text-sm text-gray-500"><span>⬇️</span><span>Os bônus são liberados automaticamente após a compra</span></p>
+      <p class="mt-8 flex items-center justify-center gap-2 px-6 pb-16 text-center text-sm text-gray-500"><span>⬇️</span><span>Os bônus são liberados automaticamente após a compra</span></p>
     </section>
 
     <!-- 10. DEPOIMENTOS -->
@@ -591,38 +641,30 @@ const courseSchemaJsonLd = {
         </header>
 
         <div class="mx-auto mt-10 grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <img src="/images/comentario-aluno-jose.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
-            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
-              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
-              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
-            </div>
-          </div>
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <img src="/images/comentario-aluno-marcos-1.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
-            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
-              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
-              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
-            </div>
-          </div>
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <img src="/images/comentario-de-aluno-curso.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
-            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
-              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
-              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
-            </div>
-          </div>
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <img src="/images/comentario-de-aluno-edmar-curso.webp" alt="Depoimento de aluno" class="w-full h-auto object-cover" loading="lazy" />
-            <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between">
-              <span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span>
-              <span class="text-gray-400 text-xs">Curso de Ar Condicionado</span>
-            </div>
-          </div>
+          {testimonialPrints.map((t) => (
+            <article class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
+              <div class="px-5 pt-5">
+                <h3 class="text-sm font-bold text-slate-900">{t.heading}</h3>
+                <blockquote class="mt-3 border-l-4 border-orange-500 pl-4 text-sm leading-relaxed text-slate-700">
+                  <p>{t.quote}</p>
+                </blockquote>
+                <p class="mt-3 text-base text-yellow-500" aria-label="5 de 5 estrelas">{t.stars}</p>
+              </div>
+              <figure class="border-t border-gray-100">
+                <img src={t.image} alt={t.imageAlt} class="w-full h-auto object-cover" loading="lazy" decoding="async" />
+                <figcaption class="flex items-center justify-between px-4 py-3 text-xs">
+                  <span class="font-bold text-orange-500">✓ ALUNO VERIFICADO</span>
+                  <span class="text-gray-400">Curso de Ar Condicionado</span>
+                </figcaption>
+              </figure>
+            </article>
+          ))}
         </div>
 
-        <h3 class="mt-14 text-center text-2xl font-black tracking-tight text-white">Depoimentos em vídeo</h3>
-        <p class="mb-6 mt-2 text-center text-sm text-slate-300">Resultados reais de alunos que aplicaram o método</p>
+        <header class="mx-auto mt-14 max-w-3xl text-center">
+          <h3 class="text-2xl font-black tracking-tight text-white">Depoimentos em vídeo</h3>
+          <p class="mb-6 mt-2 text-sm text-slate-300">Resultados reais de alunos que aplicaram o método</p>
+        </header>
         <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
           <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
             <div class="relative">
@@ -649,6 +691,52 @@ const courseSchemaJsonLd = {
             <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Artigos recentes (link interno home → blog) -->
+    <section class="bg-white py-16 md:py-24" id="artigos-recentes">
+      <div class="mx-auto max-w-6xl px-4 md:px-0">
+        <header class="mx-auto max-w-3xl text-center">
+          <p class="text-[11px] font-black uppercase tracking-[0.22em] text-orange-600">Blog técnico</p>
+          <h2 class="mt-2 text-balance text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
+            Artigos recentes
+          </h2>
+          <div class="mx-auto mt-4 h-[3px] w-16 rounded-full bg-orange-500"></div>
+          <p class="mx-auto mt-4 text-sm leading-relaxed text-slate-600">
+            Guias sobre instalação, manutenção e mercado para técnico de ar condicionado.
+          </p>
+        </header>
+        <ul class="mx-auto mt-10 max-w-3xl divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
+          {recentBlogPosts.map((post) => {
+            const postUrl = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
+            const description =
+              (post.data.metaDescription as string | undefined)?.trim() ||
+              (post.data.description as string | undefined)?.trim() ||
+              '';
+            return (
+              <li class="px-5 py-4 transition-colors hover:bg-orange-50/40">
+                <a
+                  href={postUrl}
+                  class="text-base font-bold text-slate-900 hover:text-orange-600"
+                >
+                  {post.data.title}
+                </a>
+                {description && (
+                  <p class="mt-2 text-sm leading-relaxed text-slate-600">{description}</p>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+        <p class="mt-8 text-center">
+          <a
+            href="/blog"
+            class="text-sm font-bold text-orange-600 hover:text-orange-500"
+          >
+            Ver todos os artigos →
+          </a>
+        </p>
       </div>
     </section>
 
@@ -709,85 +797,30 @@ const courseSchemaJsonLd = {
       </div>
     </section>
 
-    <section class="bg-white py-16 md:py-24" id="faq">
-      <div class="mx-auto max-w-6xl px-4 md:px-0">
-        <header class="mx-auto max-w-3xl text-center">
+    <section class="bg-white pt-16 md:pt-24 pb-10 md:pb-12" id="faq">
+      <div class="mx-auto max-w-3xl px-4">
+        <header class="text-center">
           <p class="text-[11px] font-black uppercase tracking-[0.22em] text-orange-600">FAQ</p>
           <h2 class="mt-2 text-balance text-2xl font-black tracking-tight text-slate-900 sm:text-3xl">
             Perguntas frequentes
           </h2>
           <div class="mx-auto mt-4 h-[3px] w-16 rounded-full bg-orange-500"></div>
         </header>
-        <div class="mx-auto mt-6 max-w-full md:max-w-3xl px-4 md:px-0">
-          <details class="border border-slate-200 rounded-2xl mb-3 overflow-hidden bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
-            <summary class="flex justify-between items-center gap-4 px-5 py-4 bg-white font-semibold text-sm md:text-base text-slate-900 cursor-pointer hover:bg-orange-50/40 transition-colors list-none [&::-webkit-details-marker]:hidden">
-              O curso é totalmente online?
-              <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
-            </summary>
-            <div class="px-5 pb-5 pt-4 text-slate-700 text-sm leading-relaxed bg-gradient-to-b from-orange-50/70 to-white border-t border-slate-200">
-              Sim. O acesso é feito pela plataforma Hotmart, podendo assistir pelo celular ou computador, a qualquer hora e em qualquer lugar.
-            </div>
-          </details>
-
-          <details class="border border-slate-200 rounded-2xl mb-3 overflow-hidden bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
-            <summary class="flex justify-between items-center gap-4 px-5 py-4 bg-white font-semibold text-sm md:text-base text-slate-900 cursor-pointer hover:bg-orange-50/40 transition-colors list-none [&::-webkit-details-marker]:hidden">
-              Por quanto tempo tenho acesso?
-              <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
-            </summary>
-            <div class="px-5 pb-5 pt-4 text-slate-700 text-sm leading-relaxed bg-gradient-to-b from-orange-50/70 to-white border-t border-slate-200">
-              O acesso é vitalício. O curso não expira e você pode assistir quantas vezes quiser, para sempre.
-            </div>
-          </details>
-
-          <details class="border border-slate-200 rounded-2xl mb-3 overflow-hidden bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
-            <summary class="flex justify-between items-center gap-4 px-5 py-4 bg-white font-semibold text-sm md:text-base text-slate-900 cursor-pointer hover:bg-orange-50/40 transition-colors list-none [&::-webkit-details-marker]:hidden">
-              Recebo certificado?
-              <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
-            </summary>
-            <div class="px-5 pb-5 pt-4 text-slate-700 text-sm leading-relaxed bg-gradient-to-b from-orange-50/70 to-white border-t border-slate-200">
-              Sim! Ao concluir o curso você recebe um certificado de conclusão que pode ser baixado direto pela plataforma Hotmart.
-            </div>
-          </details>
-
-          <details class="border border-slate-200 rounded-2xl mb-3 overflow-hidden bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
-            <summary class="flex justify-between items-center gap-4 px-5 py-4 bg-white font-semibold text-sm md:text-base text-slate-900 cursor-pointer hover:bg-orange-50/40 transition-colors list-none [&::-webkit-details-marker]:hidden">
-              Serve para iniciantes?
-              <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
-            </summary>
-            <div class="px-5 pb-5 pt-4 text-slate-700 text-sm leading-relaxed bg-gradient-to-b from-orange-50/70 to-white border-t border-slate-200">
-              Sim! O curso foi desenvolvido do zero, sem exigir conhecimento prévio. Qualquer pessoa consegue aprender e começar a prestar serviços.
-            </div>
-          </details>
-
-          <details class="border border-slate-200 rounded-2xl mb-3 overflow-hidden bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
-            <summary class="flex justify-between items-center gap-4 px-5 py-4 bg-white font-semibold text-sm md:text-base text-slate-900 cursor-pointer hover:bg-orange-50/40 transition-colors list-none [&::-webkit-details-marker]:hidden">
-              Qual é a garantia?
-              <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
-            </summary>
-            <div class="px-5 pb-5 pt-4 text-slate-700 text-sm leading-relaxed bg-gradient-to-b from-orange-50/70 to-white border-t border-slate-200">
-              Garantia incondicional de 15 dias. Se não gostar por qualquer motivo, basta solicitar o reembolso e devolvemos 100% do valor pago.
-            </div>
-          </details>
-
-          <details class="border border-slate-200 rounded-2xl mb-3 overflow-hidden bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
-            <summary class="flex justify-between items-center gap-4 px-5 py-4 bg-white font-semibold text-sm md:text-base text-slate-900 cursor-pointer hover:bg-orange-50/40 transition-colors list-none [&::-webkit-details-marker]:hidden">
-              Em quantas vezes posso parcelar?
-              <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
-            </summary>
-            <div class="px-5 pb-5 pt-4 text-slate-700 text-sm leading-relaxed bg-gradient-to-b from-orange-50/70 to-white border-t border-slate-200">
-              Em até 12x de R$ 20,37 no cartão de crédito, ou R$ 197,00 à vista com desconto.
-            </div>
-          </details>
-
-          <details class="border border-slate-200 rounded-2xl mb-3 overflow-hidden bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
-            <summary class="flex justify-between items-center gap-4 px-5 py-4 bg-white font-semibold text-sm md:text-base text-slate-900 cursor-pointer hover:bg-orange-50/40 transition-colors list-none [&::-webkit-details-marker]:hidden">
-              Terei suporte durante o curso?
-              <span class="text-slate-400 text-lg after:content-['+'] group-open:after:content-['×']"></span>
-            </summary>
-            <div class="px-5 pb-5 pt-4 text-slate-700 text-sm leading-relaxed bg-gradient-to-b from-orange-50/70 to-white border-t border-slate-200">
-              Sim! Há suporte disponível para dúvidas técnicas ao longo de todo o curso.
-            </div>
-          </details>
+        <div class="mt-6">
+          {faqItems.map((item) => (
+            <details class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)] mb-3 last:mb-0">
+              <summary class="flex cursor-pointer list-none items-center justify-between gap-4 bg-white px-5 py-4 text-sm font-semibold text-slate-900 transition-colors hover:bg-orange-50/40 md:text-base [&::-webkit-details-marker]:hidden">
+                {item.q}
+                <span class="shrink-0 text-lg leading-none text-slate-400" aria-hidden="true">
+                  <span class="group-open:hidden">+</span>
+                  <span class="hidden group-open:inline">×</span>
+                </span>
+              </summary>
+              <div class="faq-answer border-t border-slate-200 bg-gradient-to-b from-orange-50/70 to-white px-5 pb-5 pt-4 text-sm leading-relaxed text-slate-700">
+                {item.a}
+              </div>
+            </details>
+          ))}
         </div>
       </div>
     </section>
@@ -824,65 +857,13 @@ const courseSchemaJsonLd = {
     </a>
   </div>
 
-  <script>
-    (() => {
-      const hourEl = document.getElementById('countdown-hours');
-      const minEl = document.getElementById('countdown-minutes');
-      const secEl = document.getElementById('countdown-seconds');
-      if (!hourEl || !minEl || !secEl) return;
-
-      const KEY = 'cursodear_offer_timer_ends_at';
-      const DURATION_MS = 45 * 60 * 1000;
-
-      function getOrCreateEndAt() {
-        try {
-          const raw = localStorage.getItem(KEY) || '';
-          const n = Number(raw);
-          if (Number.isFinite(n) && n > Date.now()) return n;
-        } catch {
-          // ignore
-        }
-        const endAt = Date.now() + DURATION_MS;
-        try {
-          localStorage.setItem(KEY, String(endAt));
-        } catch {
-          // ignore
-        }
-        return endAt;
-      }
-
-      let endAt = getOrCreateEndAt();
-
-      function updateCountdown() {
-        const diff = endAt - Date.now();
-        if (diff <= 0) {
-          // Reinicia o ciclo para manter urgência por sessão/visita
-          endAt = Date.now() + DURATION_MS;
-          try {
-            localStorage.setItem(KEY, String(endAt));
-          } catch {
-            // ignore
-          }
-        }
-
-        const t = Math.max(0, endAt - Date.now());
-        const hours = Math.floor(t / (1000 * 60 * 60));
-        const minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((t % (1000 * 60)) / 1000);
-
-        hourEl.textContent = String(hours).padStart(2, '0');
-        minEl.textContent = String(minutes).padStart(2, '0');
-        secEl.textContent = String(seconds).padStart(2, '0');
-      }
-
-      updateCountdown();
-      setInterval(updateCountdown, 1000);
-    })();
-  </script>
-
   <style>
     :global(html) {
       scroll-padding-top: 80px;
+    }
+    /* Evita que respostas fechadas do FAQ reservem altura (causa espaço em branco) */
+    :global(#faq details:not([open]) .faq-answer) {
+      display: none;
     }
   </style>
 </BaseLayoutcursodear>
