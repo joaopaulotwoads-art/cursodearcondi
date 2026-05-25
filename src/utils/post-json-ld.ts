@@ -363,3 +363,35 @@ export function buildPostJsonLd(opts: {
         '@graph': graph,
     };
 }
+
+export type PostFaqItem = { q: string; a: string };
+
+export function buildFaqPageJsonLdNode(faq: PostFaqItem[]): Record<string, unknown> | null {
+    if (!faq?.length) return null;
+    return {
+        '@type': 'FAQPage',
+        mainEntity: faq.map(({ q, a }) => ({
+            '@type': 'Question',
+            name: q,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: a,
+            },
+        })),
+    };
+}
+
+/** Adiciona FAQPage ao @graph do JSON-LD do post quando há itens em frontmatter. */
+export function mergePostJsonLdWithFaq(
+    base: Record<string, unknown> | null | undefined,
+    faq?: PostFaqItem[] | null,
+): Record<string, unknown> | null | undefined {
+    if (!base || !faq?.length) return base ?? null;
+    const faqNode = buildFaqPageJsonLdNode(faq);
+    if (!faqNode) return base;
+    const graph = base['@graph'];
+    if (Array.isArray(graph)) {
+        return { ...base, '@graph': [...graph, faqNode] };
+    }
+    return base;
+}

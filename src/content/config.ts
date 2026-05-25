@@ -31,6 +31,15 @@ const posts = defineCollection({
         seoSchema: z.enum(['auto', 'blogPosting', 'articleItemList', 'none']).optional(),
         /** Layout editorial: reviewRoundup = artigo tipo ranking (fundo rosado, CTAs amarelos, blocos de review). */
         articleLayout: z.enum(['default', 'reviewRoundup']).optional(),
+        /** Perguntas frequentes (corpo do artigo + FAQPage no JSON-LD). */
+        faq: z
+            .array(
+                z.object({
+                    q: z.string(),
+                    a: z.string(),
+                }),
+            )
+            .optional(),
     }),
 });
 

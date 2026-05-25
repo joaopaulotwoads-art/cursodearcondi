@@ -12,6 +12,7 @@ import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '.
 import {
   buildAuthorAbsoluteUrl,
   buildPostJsonLd,
+  mergePostJsonLdWithFaq,
   toAbsoluteUrl,
   toIsoDateTime,
 } from './post-json-ld';
@@ -133,21 +134,24 @@ export async function loadBlogPageData(
       }
     }
     postJsonLd = usecursodear
-      ? buildPostJsonLd({
-          seoSchema: post.data.seoSchema,
-          headline: post.data.title,
-          description: post.data.metaDescription || '',
-          pageUrl,
-          siteUrl: publicSiteUrl,
-          siteName: (beMenu as { logoText?: string } | null)?.logoText || siteName,
-          publishedDate: post.data.publishedDate,
-          imageUrl: ogImageAbs,
-          authorName: author?.data?.name,
-          authorUrl: author ? buildAuthorAbsoluteUrl(publicSiteUrl, author.id) : undefined,
-          htmlContent,
-          categoryName,
-          categoryPath,
-        })
+      ? mergePostJsonLdWithFaq(
+          buildPostJsonLd({
+            seoSchema: post.data.seoSchema,
+            headline: post.data.title,
+            description: post.data.metaDescription || '',
+            pageUrl,
+            siteUrl: publicSiteUrl,
+            siteName: (beMenu as { logoText?: string } | null)?.logoText || siteName,
+            publishedDate: post.data.publishedDate,
+            imageUrl: ogImageAbs,
+            authorName: author?.data?.name,
+            authorUrl: author ? buildAuthorAbsoluteUrl(publicSiteUrl, author.id) : undefined,
+            htmlContent,
+            categoryName,
+            categoryPath,
+          }),
+          post.data.faq,
+        )
       : null;
 
     blogPermalinkStructureResolved =
