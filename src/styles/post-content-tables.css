@@ -1,0 +1,98 @@
+/* Tabelas em posts (salário, comparativos, etc.) */
+.post-table-wrap {
+  margin: 1.25rem 0 1.75rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(234, 88, 12, 0.22);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 14px rgba(234, 88, 12, 0.06);
+  background: #fff;
+}
+
+.post-salary-table {
+  width: 100%;
+  min-width: 32rem;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.post-salary-table caption {
+  caption-side: top;
+  padding: 0.85rem 1rem;
+  text-align: left;
+  font-weight: 700;
+  font-size: 0.875rem;
+  color: var(--color-heading, #1a1a1a);
+  background: linear-gradient(180deg, #fff7ed 0%, #fff 100%);
+  border-bottom: 1px solid rgba(234, 88, 12, 0.15);
+}
+
+.post-salary-table thead th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9a3412;
+  background: #ffedd5;
+  border-bottom: 2px solid rgba(234, 88, 12, 0.25);
+  white-space: nowrap;
+}
+
+.post-salary-table thead th:first-child {
+  border-radius: 0;
+}
+
+.post-salary-table tbody td {
+  padding: 0.85rem 1rem;
+  color: var(--color-dark, #333);
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  vertical-align: top;
+}
+
+.post-salary-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.post-salary-table tbody tr:nth-child(even) {
+  background: var(--color-surface, #f9fafb);
+}
+
+.post-salary-table tbody tr:hover {
+  background: #fff7ed;
+}
+
+.post-salary-table .post-salary-table-region {
+  font-weight: 700;
+  color: var(--color-heading, #1a1a1a);
+  white-space: nowrap;
+}
+
+.post-salary-table .post-salary-table-region span {
+  display: block;
+  margin-top: 0.15rem;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: var(--color-muted, #6b7280);
+}
+
+.post-salary-table .post-salary-table-value {
+  font-weight: 600;
+  color: #15803d;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .post-salary-table {
+    font-size: 0.875rem;
+  }
+
+  .post-salary-table thead th,
+  .post-salary-table tbody td {
+    padding: 0.65rem 0.75rem;
+  }
+}

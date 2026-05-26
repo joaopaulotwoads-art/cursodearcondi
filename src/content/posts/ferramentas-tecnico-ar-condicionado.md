@@ -131,6 +131,5 @@ Com planejamento de compras, você evita gastos impulsivos e transforma ferramen
 
 Quem trata ferramenta como investimento, e não custo, evolui mais rápido na carreira técnica. Um kit bem montado permite executar instalação, manutenção e diagnóstico com padrão profissional desde os primeiros clientes.
 
-**Quer aprender na prática? Conheça o Curso de Ar Condicionado completo →**  
-[https://cursodearcondicionado.com.br](https://cursodearcondicionado.com.br)
+**Quer aprender na prática?** Conheça o [Curso de Ar Condicionado](/) ou **[Quero me inscrever](https://go.hotmart.com/R103468777C?dp=1)**
 

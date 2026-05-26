@@ -120,7 +120,7 @@ export async function loadBlogPageData(
     publicSiteUrl = resolvePublicSiteUrl(siteCfg.canonicalUrl as string | undefined, origin);
     pageUrl = buildCanonicalPageUrl(publicSiteUrl, pathnameForCanonical);
     {
-      const rawImg = post.data.metaImage || post.data.thumbnail;
+      const rawImg = post.data.metaImage || post.data.image || post.data.thumbnail;
       ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolvecursodearMediaUrl(rawImg) || rawImg);
     }
     articleIso = toIsoDateTime(post.data.publishedDate);

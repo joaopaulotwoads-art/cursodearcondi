@@ -80,7 +80,7 @@ const documentTitle = metaTitleTrim ? metaTitleTrim : post.data.title;
 const siteCfg = await readSiteSettings();
 const publicSiteUrl = resolvePublicSiteUrl(siteCfg.canonicalUrl as string | undefined, Astro.url.origin);
 const pageUrl = buildCanonicalPageUrl(publicSiteUrl, Astro.url.pathname);
-const rawPostImg = post.data.metaImage || post.data.thumbnail;
+const rawPostImg = post.data.metaImage || post.data.image || post.data.thumbnail;
 const ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolvecursodearMediaUrl(rawPostImg) || rawPostImg);
 const articleIso = toIsoDateTime(post.data.publishedDate);
 let categoryName: string | undefined;

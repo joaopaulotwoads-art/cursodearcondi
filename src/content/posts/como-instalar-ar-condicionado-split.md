@@ -64,7 +64,7 @@ Além da evaporadora e da condensadora, confira:
 
 **Quer aprender a instalar do zero?** O curso tem 160 aulas e 30 horas, do básico ao comissionamento profissional.
 
-[Ver o curso completo na Hotmart](https://go.hotmart.com/R103468777C?dp=1)
+[Começar agora](https://go.hotmart.com/R103468777C?dp=1)
 
 ## Passo 1. Dimensionamento correto de BTUs e cabo na instalação split
 
@@ -184,6 +184,6 @@ Microvazamentos passam despercebidos, o sistema perde gás e o cliente culpa a m
 
 **Instalar ar condicionado split** com qualidade é repetir o método: dimensionar, fixar evaporadora e condensadora, tubular com isolamento, testar estanqueidade, fazer vácuo e comissionar com medições. Quem segue isso reduz retorno e ganha indicação.
 
-Para aprender do zero com aulas gravadas e suporte, acesse o **[Curso de Ar Condicionado](/)** com **160 aulas** e **30 horas**, ou garanta sua vaga na Hotmart.
+Para aprender do zero com aulas gravadas e suporte, acesse o **[Curso de Ar Condicionado](/)** com **160 aulas** e **30 horas**.
 
-**[Quer aprender na prática? Ver o curso completo na Hotmart](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever](https://go.hotmart.com/R103468777C?dp=1)**

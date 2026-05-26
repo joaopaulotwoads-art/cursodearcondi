@@ -36,7 +36,7 @@ const relatedPosts = relatedPostsProp ?? [];
 const date = post.data.publishedDate;
 const layoutVariant = post.data.articleLayout ?? 'default';
 const isReviewRoundup = layoutVariant === 'reviewRoundup';
-const heroImage = resolvecursodearMediaUrl(post.data.thumbnail || post.data.metaImage);
+const heroImage = resolvecursodearMediaUrl(post.data.thumbnail || post.data.image);
 const htmlBody = htmlContent
   ? (() => {
       let html = demoteBodyH1ToH2(rewritecursodearContentImagesInHtml(htmlContent));
@@ -178,7 +178,7 @@ const applyRoundupArticleScope =
     class:list={[
       'post-content max-w-none text-[var(--color-dark)]',
       !htmlContent &&
-        'prose prose-neutral prose-lg max-w-none prose-p:text-[18px] prose-p:leading-[1.6] prose-p:mb-[1.25em] prose-p:text-[var(--color-dark)] prose-headings:[font-family:var(--font-heading)] prose-headings:font-bold prose-headings:text-[var(--color-heading)] prose-h1:text-3xl prose-h1:tracking-tight prose-h2:text-2xl prose-h2:tracking-tight prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:tracking-tight prose-h3:mt-6 prose-h3:mb-3 prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-3 prose-h5:text-base prose-h5:font-semibold prose-h5:mt-6 prose-h5:mb-3 prose-h6:text-[0.8125rem] prose-h6:uppercase prose-h6:tracking-wide prose-h6:font-semibold prose-h6:text-[#64748b] prose-h6:mt-6 prose-h6:mb-3 prose-li:my-2 prose-a:font-medium prose-a:text-[var(--color-link)] prose-a:underline hover:prose-a:text-[var(--color-link-hover)]',
+        'prose prose-neutral prose-lg max-w-none prose-p:text-[18px] prose-p:leading-[1.6] prose-p:mb-[1.25em] prose-p:text-[var(--color-dark)] prose-headings:[font-family:var(--font-heading)] prose-headings:font-bold prose-headings:text-[var(--color-heading)] prose-h1:text-3xl prose-h1:tracking-tight prose-h2:text-2xl prose-h2:tracking-tight prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:tracking-tight prose-h3:mt-6 prose-h3:mb-3 prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-3 prose-h5:text-base prose-h5:font-semibold prose-h5:mt-6 prose-h5:mb-3 prose-h6:text-[0.8125rem] prose-h6:uppercase prose-h6:tracking-wide prose-h6:font-semibold prose-h6:text-[#64748b] prose-h6:mt-6 prose-h6:mb-3 prose-li:my-2 prose-a:font-medium prose-a:text-[var(--color-link)] prose-a:underline hover:prose-a:text-[var(--color-link-hover)] prose-img:my-8 prose-img:w-full prose-img:max-w-full prose-img:rounded-2xl prose-img:border prose-img:border-[var(--color-border)]',
     ]}
   >
     {postHtmlBody ? (

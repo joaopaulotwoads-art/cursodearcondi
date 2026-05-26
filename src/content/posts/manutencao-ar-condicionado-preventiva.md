@@ -123,6 +123,5 @@ Com rotina padronizada, o técnico entrega mais valor percebido e consegue justi
 
 Manutenção preventiva não é apenas limpeza. É procedimento técnico com checklist, medição elétrica e análise do sistema. Quando bem executada, melhora desempenho do equipamento e gera recorrência de faturamento para o profissional.
 
-**Quer aprender na prática? Conheça o Curso de Ar Condicionado completo →**  
-[https://cursodearcondicionado.com.br](https://cursodearcondicionado.com.br)
+**Quer aprender na prática?** Conheça o [Curso de Ar Condicionado](/) ou **[Quero me inscrever](https://go.hotmart.com/R103468777C?dp=1)**
 

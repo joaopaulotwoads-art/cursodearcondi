@@ -111,6 +111,5 @@ Esse padrão profissional melhora taxa de aprovação de orçamento e aumenta in
 
 Entender Inverter é entender o presente e o futuro da climatização. Quanto mais cedo você dominar modulação, eletrônica e diagnóstico, mais competitivo fica no mercado técnico de 2026.
 
-**Quer aprender na prática? Conheça o Curso de Ar Condicionado completo →**  
-[https://cursodearcondicionado.com.br](https://cursodearcondicionado.com.br)
+**Quer aprender na prática?** Conheça o [Curso de Ar Condicionado](/) ou **[Quero me inscrever](https://go.hotmart.com/R103468777C?dp=1)**
 
