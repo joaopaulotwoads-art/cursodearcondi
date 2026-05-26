@@ -12,6 +12,7 @@ tags:
   - custo
 thumbnail: "/images/blog/pessoa-usando-ar-condicionado-sala.webp"
 image: "/images/blog/pessoa-usando-ar-condicionado-sala.webp"
+imageAlt: "Quanto custa instalar ar condicionado em 2026"
 metaTitle: "Quanto Custa Instalar Ar Condicionado em 2026? Preços Reais por BTU"
 metaDescription: "Veja quanto custa instalar ar condicionado split em 2026: preço da mão de obra por BTU, materiais, por região e como economizar."
 metaImage: "/images/blog/pessoa-usando-ar-condicionado-sala.webp"
@@ -174,10 +175,10 @@ Você não tem prática para reagir rápido a vazamento, erro de flange ou dreno
 E se der problema, o conserto pode sair mais caro que a economia.
 
 <div class="cursodear-cta-wrapper not-prose">
-  <a href="/" aria-label="Ver o curso de ar condicionado">
-    Técnicos que sabem instalar ganham R$ 300–700 por visita. Conheça o curso com 160 aulas práticas →
-    <span style="display:block;font-weight:900;margin-top:8px;">QUERO ME INSCREVER AGORA</span>
-  </a>
+  <aside class="cursodear-post-cta" aria-label="Chamada para o curso de ar condicionado">
+    <p class="cursodear-post-cta__lead">Técnicos que sabem instalar ganham R$ 300–700 por visita. Conheça o curso com 160 aulas práticas.</p>
+    <a href="/" class="cursodear-post-cta__btn">Quero me inscrever agora</a>
+  </aside>
 </div>
 
 ## Como Escolher um Bom Técnico de Ar Condicionado

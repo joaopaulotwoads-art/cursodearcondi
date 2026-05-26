@@ -21,6 +21,7 @@ const posts = defineCollection({
         thumbnail: z.string().optional(),
         /** Imagem principal do post (hero/OG); alias semântico de thumbnail quando usado sozinho. */
         image: z.string().optional(),
+        imageAlt: z.string().optional(),
         metaTitle: z.string().optional(),
         metaDescription: z.string().optional(),
         metaImage: z.string().optional(),
