@@ -1,7 +1,7 @@
 ---
 title: "Manutenção Preventiva de Ar Condicionado: Quando e Como Fazer"
 slug: "manutencao-ar-condicionado-preventiva"
-author: "administrador"
+author: "fernando-costa"
 publishedDate: "2026-04-05"
 category: "manutencao"
 metaTitle: "Manutenção Preventiva de Ar Condicionado Split"

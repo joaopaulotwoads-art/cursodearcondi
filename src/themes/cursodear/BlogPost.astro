@@ -1,12 +1,16 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import PostArticleToc from '../../components/cursodear/PostArticleToc.astro';
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
 import { resolvecursodearMediaUrl, rewritecursodearContentImagesInHtml } from '../../utils/media-url';
 import { demoteBodyH1ToH2, replaceProductBoxTitleH2WithDiv } from '../../utils/post-html-sanitize';
 import { splitReviewRoundupBodyParagraphs } from '../../utils/review-paragraph-split';
+import { buildMarkdownToc, POST_TOC_MIN_ITEMS, type PostTocItem } from '../../utils/post-markdown-toc';
+import { readPost } from '../../utils/post-utils';
 import { injectH2IdsAndBuildToc, splitHtmlAfterReviewHeroPicks } from '../../utils/review-article-toc';
 import { injectMissingProsConsCtas } from '../../utils/review-pros-cons-cta';
 import { ensureRoundupTableHead, upgradeRoundupItemsHtml } from '../../utils/review-roundup-rows';
+import '../../styles/post-article-toc.css';
 
 interface Props {
   post: any;
@@ -55,7 +59,26 @@ if (isReviewRoundup && postHtmlBody) {
   postHtmlBody = injectMissingProsConsCtas(tocResult.html);
   reviewTocItems = tocResult.toc;
   reviewBodySplit = splitHtmlAfterReviewHeroPicks(postHtmlBody);
+} else if (postHtmlBody) {
+  const tocResult = injectH2IdsAndBuildToc(postHtmlBody);
+  postHtmlBody = tocResult.html;
+  reviewTocItems = tocResult.toc;
 }
+
+const postSlug = post.data.slug || post.id;
+let markdownTocItems: PostTocItem[] = [];
+if (!htmlContent && Content) {
+  const postFile = await readPost(postSlug);
+  if (postFile?.content) {
+    const parsed = buildMarkdownToc(postFile.content);
+    markdownTocItems = parsed.length >= POST_TOC_MIN_ITEMS ? parsed : [];
+  }
+}
+
+const articleTocItems: PostTocItem[] = markdownTocItems.length
+  ? markdownTocItems
+  : reviewTocItems.map((item) => ({ ...item, level: 2 as const }));
+const showArticleToc = articleTocItems.length >= POST_TOC_MIN_ITEMS;
 
 /**
  * Cartão de produto, prós/contras e títulos de review usam CSS em article-review-roundup.css
@@ -162,55 +185,61 @@ const applyRoundupArticleScope =
       isReviewRoundup && reviewBodySplit ? (
         <>
           {reviewBodySplit.head ? <div class="cursodear-post-html post-content" set:html={reviewBodySplit.head} /> : null}
-          {reviewTocItems.length > 0 && (
-            <details class="review-article-toc">
-              <summary class="review-article-toc-summary">
-                <span class="review-article-toc-title">Índice do Artigo</span>
-                <span class="review-article-toc-chevron" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M6 9l6 6 6-6" />
-                  </svg>
-                </span>
-              </summary>
-              <nav class="review-article-toc-nav" aria-label="Seções do artigo">
-                <ul class="review-article-toc-list">
-                  {reviewTocItems.map((item) => (
-                    <li>
-                      <a href={`#${item.id}`} class="review-article-toc-link">
-                        {item.text}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            </details>
-          )}
+          {showArticleToc && <PostArticleToc items={articleTocItems} />}
           <div class="cursodear-post-html post-content" set:html={reviewBodySplit.tail} />
         </>
       ) : (
-        <div class="cursodear-post-html post-content" set:html={postHtmlBody} />
+        <>
+          {showArticleToc && <PostArticleToc items={articleTocItems} />}
+          <div class="cursodear-post-html post-content" set:html={postHtmlBody} />
+        </>
       )
     ) : (
-      Content && <Content />
+      Content && (
+        <div class="post-content-with-toc" data-post-toc>
+          {showArticleToc && (
+            <>
+              <script
+                type="application/json"
+                id="post-toc-data"
+                set:html={JSON.stringify(articleTocItems)}
+              />
+              <PostArticleToc items={articleTocItems} />
+            </>
+          )}
+          <Content />
+        </div>
+      )
     )}
   </div>
 
+  {markdownTocItems.length > 0 && (
+    <script is:inline>
+      {`function applyPostMarkdownToc(){var dataEl=document.getElementById("post-toc-data");var root=document.querySelector("[data-post-toc]");if(!dataEl||!root)return;var items=[];try{items=JSON.parse(dataEl.textContent||"[]")}catch(e){return}var headings=root.querySelectorAll("h2,h3");items.forEach(function(item,idx){var h=headings[idx];if(h)h.id=item.id});var tocPanel=root.querySelector(".post-article-toc");var firstH2=root.querySelector("h2");if(tocPanel&&firstH2)firstH2.before(tocPanel)}applyPostMarkdownToc();document.addEventListener("astro:page-load",applyPostMarkdownToc);`}
+    </script>
+  )}
+
   {author && (
-    <section class="mt-12 pt-10 border-t border-[var(--color-border)]" aria-labelledby="post-author-heading">
-      <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8">
-        <div class="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+    <section
+      class="post-author-section mt-12 pt-10 border-t border-[var(--color-border)]"
+      aria-labelledby="post-author-heading"
+    >
+      <div
+        class="post-author-card relative left-1/2 w-[min(56rem,calc(100vw-2rem))] max-w-4xl -translate-x-1/2 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8 lg:p-10"
+      >
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-[5.5rem_1fr] sm:gap-x-6 sm:gap-y-4">
           {author.data.avatar ? (
             <img
               src={resolvecursodearMediaUrl(author.data.avatar)}
               alt={author.data.name}
               width="96"
               height="96"
-              class="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shrink-0 ring-2 ring-gray-200 border border-[var(--color-border)]"
+              class="w-20 h-20 sm:w-[5.5rem] sm:h-[5.5rem] rounded-full object-cover shrink-0 ring-2 ring-gray-200 border border-[var(--color-border)] sm:row-span-1"
               loading="lazy"
             />
           ) : (
             <div
-              class="w-20 h-20 sm:w-24 sm:h-24 rounded-full shrink-0 flex items-center justify-center text-xl sm:text-2xl font-semibold text-[var(--color-heading)] bg-white border border-[var(--color-border)] ring-2 ring-gray-200"
+              class="w-20 h-20 sm:w-[5.5rem] sm:h-[5.5rem] rounded-full shrink-0 flex items-center justify-center text-xl sm:text-2xl font-semibold text-[var(--color-heading)] bg-white border border-[var(--color-border)] ring-2 ring-gray-200 sm:row-span-1"
               aria-hidden="true"
             >
               {String(author.data.name || '?')
@@ -219,25 +248,26 @@ const applyRoundupArticleScope =
                 .toUpperCase()}
             </div>
           )}
-          <div class="min-w-0 flex-1">
-            <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-1">Sobre quem escreveu</p>
-            <div id="post-author-heading" class="text-xl font-semibold text-[var(--color-heading)]">
+          <div class="min-w-0 sm:pt-1">
+            <div id="post-author-heading" class="text-xl font-semibold text-[var(--color-heading)] md:text-[1.35rem]">
               {author.data.name}
             </div>
             {author.data.role && (
-              <p class="mt-1 text-sm font-medium text-[var(--color-muted)]">{author.data.role}</p>
+              <p class="mt-1.5 text-sm font-medium text-[var(--color-heading)] md:text-base">{author.data.role}</p>
             )}
-            {author.data.bio && (
-              <p class="mt-4 text-[var(--color-muted)] leading-relaxed text-[0.98rem]">{author.data.bio}</p>
-            )}
-            <a
-              href={`/authors/${author.id}`}
-              class="inline-flex items-center gap-2 mt-5 text-sm font-medium text-[var(--color-link)] no-underline hover:underline min-h-[44px]"
-            >
-              Ver perfil completo
-              <span aria-hidden="true">→</span>
-            </a>
           </div>
+          {author.data.bio && (
+            <p class="sm:col-span-2 text-[var(--color-muted)] text-[17px] leading-[1.65] md:text-[18px] md:leading-[1.7]">
+              {author.data.bio}
+            </p>
+          )}
+          <a
+            href={author.data.profilePath || `/authors/${author.id}`}
+            class="sm:col-span-2 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-link)] no-underline hover:underline min-h-[44px]"
+          >
+            Ver perfil completo
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
       </div>
     </section>

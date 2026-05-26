@@ -1,0 +1,108 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayoutcursodear from '../../themes/cursodear/BaseLayout.astro';
+import ExpertProfilePage from '../../themes/cursodear/ExpertProfilePage.astro';
+import { readSingleton } from '../../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../../utils/read-site-settings';
+import { resolvecursodearMediaUrl } from '../../utils/media-url';
+import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+import { toAbsoluteUrl } from '../../utils/post-json-ld';
+
+export const prerender = true;
+
+const AUTHOR_ID = 'fernando-costa';
+
+const author = await getEntry('authors', AUTHOR_ID);
+if (!author) {
+  return Astro.redirect('/404');
+}
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
+const profilePath = author.data.profilePath || '/sobre/fernando-costa';
+const canonicalUrl = `${siteUrl.replace(/\/+$/, '')}${profilePath}/`;
+
+const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
+
+const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+const blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'blog';
+
+const allPosts = await getCollection('posts');
+const authorPosts = allPosts
+  .filter((post) => post.data.author === AUTHOR_ID)
+  .sort((a, b) => (b.data.publishedDate || '').localeCompare(a.data.publishedDate || ''));
+
+const categories = await getCollection('categories');
+
+const pageTitle = `${author.data.name} | ${author.data.role}`;
+const rawBio = String(author.data.bio || '').trim();
+const pageDescription =
+  rawBio.length > 165 ? `${rawBio.slice(0, 162).trim()}…` : rawBio;
+
+const avatarAbs = toAbsoluteUrl(siteUrl, resolvecursodearMediaUrl(author.data.avatar) || author.data.avatar);
+
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${canonicalUrl}#person`,
+  name: author.data.name,
+  jobTitle: author.data.role,
+  description: rawBio,
+  url: canonicalUrl,
+  image: avatarAbs,
+  worksFor: {
+    '@type': 'Organization',
+    name: siteNameForLayout,
+    url: `${siteUrl.replace(/\/+$/, '')}/`,
+  },
+  knowsAbout: author.data.expertise || [],
+  hasCredential: (author.data.certifications || []).map((c) => ({
+    '@type': 'EducationalOccupationalCredential',
+    name: c.title,
+    description: c.detail,
+  })),
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Início', item: `${siteUrl.replace(/\/+$/, '')}/` },
+    { '@type': 'ListItem', position: 2, name: 'Sobre', item: `${siteUrl.replace(/\/+$/, '')}/sobre/` },
+    { '@type': 'ListItem', position: 3, name: author.data.name, item: canonicalUrl },
+  ],
+};
+
+const extraJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [personJsonLd, breadcrumbJsonLd],
+};
+---
+
+<BaseLayoutcursodear
+  title={pageTitle}
+  description={pageDescription}
+  siteName={siteNameForLayout}
+  logoSrc={logoForLayout}
+  siteUrl={siteUrl}
+  nav={beNav}
+  footerNav={beFootNav}
+  contentThemeId="cursodear"
+  extraJsonLd={extraJsonLd}
+  canonicalOverride={canonicalUrl}
+>
+  <ExpertProfilePage
+    author={author}
+    posts={authorPosts}
+    blogPermalinkStructure={blogPermalinkStructure}
+    blogUrlPrefix={blogUrlPrefix}
+    categories={categories}
+  />
+</BaseLayoutcursodear>

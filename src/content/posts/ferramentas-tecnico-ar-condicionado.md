@@ -1,7 +1,7 @@
 ---
 title: "Ferramentas para Técnico de Ar Condicionado: Lista Completa"
 slug: "ferramentas-tecnico-ar-condicionado"
-author: "administrador"
+author: "fernando-costa"
 publishedDate: "2026-04-20"
 category: "ferramentas"
 metaTitle: "Ferramentas para Técnico de Ar Condicionado: lista essencial"

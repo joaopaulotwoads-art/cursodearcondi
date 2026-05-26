@@ -51,6 +51,25 @@ const authors = defineCollection({
         role: z.string(),
         avatar: z.string().optional(),
         bio: z.string(),
+        /** URL do perfil completo (E-E-A-T), ex.: /sobre/fernando-costa */
+        profilePath: z.string().optional(),
+        expertise: z.array(z.string()).optional(),
+        certifications: z
+            .array(
+                z.object({
+                    title: z.string(),
+                    detail: z.string().optional(),
+                }),
+            )
+            .optional(),
+        projects: z
+            .array(
+                z.object({
+                    title: z.string(),
+                    description: z.string(),
+                }),
+            )
+            .optional(),
         // Campos de acesso ao painel admin
         email: z.string().optional(),
         adminRole: z.enum(['admin', 'editor', 'none']).optional(),

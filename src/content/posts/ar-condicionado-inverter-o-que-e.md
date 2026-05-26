@@ -1,7 +1,7 @@
 ---
 title: "Ar Condicionado Inverter: O Que É e Como Funciona"
 slug: "ar-condicionado-inverter-o-que-e"
-author: "administrador"
+author: "fernando-costa"
 publishedDate: "2026-04-10"
 category: "tecnologia"
 metaTitle: "Ar Condicionado Inverter: como funciona na prática"

@@ -1,0 +1,40 @@
+name: Fernando Costa
+slug: fernando-costa
+role: Responsável Técnico e Consultor de Climatização
+profilePath: /sobre/fernando-costa
+avatar: /images/cursodear/fernando-costa.png
+bio: >-
+  Fernando Costa é engenheiro eletricista com pós-graduação em Engenharia de
+  Segurança do Trabalho e foco em eficiência energética em sistemas de
+  refrigeração. Com mais de 12 anos de experiência em grandes projetos de
+  climatização comercial e industrial, atua como curador técnico do nosso portal,
+  garantindo que todos os guias de instalação, normas de segurança elétrica
+  (NR-10) e procedimentos de manutenção sigam rigorosamente os padrões de
+  qualidade e segurança exigidos pelo mercado.
+expertise:
+  - Instalação e comissionamento de ar condicionado split
+  - Normas ABNT para climatização e qualidade do ar
+  - Segurança elétrica NR-10 em serviços de refrigeração
+  - PMOC e manutenção preventiva
+  - Eficiência energética em sistemas HVAC
+  - Diagnóstico de falhas em equipamentos inverter
+certifications:
+  - title: Engenheiro Eletricista
+    detail: Formação com atuação em projetos elétricos e integração de sistemas HVAC
+  - title: Pós-graduação em Engenharia de Segurança do Trabalho
+    detail: Foco em riscos elétricos, procedimentos seguros e conformidade em campo
+  - title: Qualificação NR-10
+    detail: Segurança em instalações e serviços com eletricidade em climatização
+  - title: Referência técnica ABNT NBR 16401
+    detail: Instalação, operação e manutenção de sistemas de ar condicionado
+  - title: Procedimentos PMOC
+    detail: Plano de manutenção, operação e controle aplicado a ambientes climatizados
+projects:
+  - title: Climatização comercial em rede varejista
+    description: Padronização de instalação split, checklist de comissionamento e treinamento de equipes de campo em mais de 40 unidades.
+  - title: Retrofit HVAC em edifício corporativo
+    description: Substituição de sistema convencional por VRF, com análise de carga térmica e redução de consumo energético.
+  - title: Auditoria PMOC em ambiente de saúde
+    description: Revisão de manutenção preventiva, registros de temperatura e conformidade com exigências de qualidade do ar interno.
+  - title: Capacitação técnica para instaladores
+    description: Curadoria de conteúdo prático sobre vácuo, estanqueidade, carga de refrigerante e segurança elétrica para técnicos.

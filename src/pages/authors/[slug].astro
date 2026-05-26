@@ -20,6 +20,10 @@ export async function getStaticPaths() {
 
 const { author } = Astro.props;
 
+if (author.data.profilePath) {
+  return Astro.redirect(author.data.profilePath);
+}
+
 const allPosts = await getCollection('posts');
 const authorPosts = allPosts
   .filter((post) => post.data.author === author.id)

@@ -24,8 +24,10 @@ const a = author.data;
 <article class="max-w-4xl mx-auto px-4 sm:px-5 py-10 sm:py-12">
   <header class="mb-10">
     <a href="/blog" class="text-sm font-medium text-[var(--color-link)] no-underline hover:underline mb-4 inline-block">← Blog</a>
-    <p class="text-xs font-semibold uppercase tracking-wider text-[var(--color-muted)] mb-2">Autora</p>
     <h1 class="text-3xl font-extrabold tracking-tight text-[var(--color-heading)] md:text-4xl">{a.name}</h1>
+    {a.role && (
+      <p class="mt-2 text-base font-medium text-[var(--color-muted)] md:text-lg">{a.role}</p>
+    )}
   </header>
 
   <section class="mb-12 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 md:p-8" aria-labelledby="author-bio-heading">
@@ -52,7 +54,6 @@ const a = author.data;
       )}
       <div class="min-w-0 flex-1">
         <h2 id="author-bio-heading" class="sr-only">Sobre {a.name}</h2>
-        {a.role && <p class="text-sm font-medium text-[var(--color-muted)] mb-2">{a.role}</p>}
         {a.bio && <p class="text-[var(--color-text)] text-[18px] leading-relaxed">{a.bio}</p>}
       </div>
     </div>

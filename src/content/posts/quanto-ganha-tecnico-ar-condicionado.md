@@ -1,7 +1,7 @@
 ---
 title: "Quanto Ganha um Técnico de Ar Condicionado em 2026"
 slug: "quanto-ganha-tecnico-ar-condicionado"
-author: "administrador"
+author: "fernando-costa"
 publishedDate: "2026-04-15"
 category: "mercado"
 metaTitle: "Quanto ganha um técnico de ar condicionado em 2026"

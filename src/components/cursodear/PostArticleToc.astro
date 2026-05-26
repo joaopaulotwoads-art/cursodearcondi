@@ -1,0 +1,32 @@
+---
+import type { PostTocItem } from '../../utils/post-markdown-toc';
+
+interface Props {
+  items: PostTocItem[];
+}
+
+const { items } = Astro.props;
+if (!items.length) return null;
+---
+
+<details class="post-article-toc">
+  <summary class="post-article-toc-summary">
+    <span class="post-article-toc-title">Índice do artigo</span>
+    <span class="post-article-toc-chevron" aria-hidden="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 9l6 6 6-6" />
+      </svg>
+    </span>
+  </summary>
+  <nav class="post-article-toc-nav" aria-label="Índice do artigo">
+    <ul class="post-article-toc-list">
+      {items.map((item) => (
+        <li class:list={[item.level === 3 && 'post-article-toc-item--h3']}>
+          <a href={`#${item.id}`} class="post-article-toc-link">
+            {item.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</details>
