@@ -25,8 +25,6 @@ faq:
     a: "Depende do técnico. Muitos aceitam Pix, cartão ou parcelamento informal — vale perguntar no orçamento."
 ---
 
-# Quanto Custa Instalar Ar Condicionado em 2026? Preços Reais por BTU
-
 O preço médio de instalação de ar condicionado split varia de **R$ 300 a R$ 700** em mão de obra, mais **R$ 100 a R$ 300** em materiais. O total depende do BTU, da complexidade e da região do Brasil.
 
 Se você está pensando em entrar na área, vale ver também **[quanto ganha um técnico](/blog/quanto-ganha-tecnico-ar-condicionado/)**. O ticket da instalação é onde muita gente começa a fazer caixa.
