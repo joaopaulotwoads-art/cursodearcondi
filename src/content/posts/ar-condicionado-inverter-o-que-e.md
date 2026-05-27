@@ -39,7 +39,7 @@ Elementos centrais:
 - sensores de temperatura
 - comunicação entre evaporadora e condensadora
 
-Quando um desses elementos sai da faixa esperada, o equipamento pode entrar em proteção e exibir códigos de erro. Por isso, Éotroca por tentativaÉ� costuma sair caro. O caminho é medir e interpretar.
+Quando um desses elementos sai da faixa esperada, o equipamento pode entrar em proteção e exibir códigos de erro. Por isso, “troca por tentativa” costuma sair caro. O caminho é medir e interpretar.
 
 ## LG Dual Inverter e Consul Inverter na rotina do técnico
 
@@ -87,12 +87,12 @@ Isso eleva o valor percebido de quem sabe trabalhar com eletrônica aplicada e d
 
 Mesmo com mercado aquecido, alguns profissionais ficam para trás por:
 
-- depender apenas de ÉomaceteÉ�
+- depender apenas de “macete”
 - não estudar esquemas e códigos de falha
 - ignorar atualização de fabricante
 - não investir em instrumentação mínima
 
-Quem trata Inverter como Éoar comum com nome diferenteÉ� tende a perder qualidade e margem. Quem estuda o sistema como tecnologia própria vira referência.
+Quem trata Inverter como “ar comum com nome diferente” tende a perder qualidade e margem. Quem estuda o sistema como tecnologia própria vira referência.
 
 ## Boas práticas de atendimento em chamados Inverter
 

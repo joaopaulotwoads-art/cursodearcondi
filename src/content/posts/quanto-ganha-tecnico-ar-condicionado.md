@@ -51,7 +51,7 @@ Referência de mercado para **técnico de refrigeração e climatização** em r
 
 <div class="post-table-wrap not-prose" role="region" aria-label="Tabela de salário CLT por região" tabindex="0">
   <table class="post-salary-table">
-    <caption>Salário CLT por região em 2026 �?" técnico de ar condicionado</caption>
+    <caption>Salário CLT por região em 2026 É" técnico de ar condicionado</caption>
     <thead>
       <tr>
         <th scope="col">Região</th>

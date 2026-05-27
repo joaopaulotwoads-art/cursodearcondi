@@ -46,11 +46,11 @@ Esses valores assumem instalação padrão de split. Quando tem altura, distânc
 
 ### Mão de obra: tempo do técnico (2—4 horas)
 
-Em 2 a 4 horas, o técnico sério faz o que muita gente �?oeconomiza�?� e depois paga caro no retorno.
+Em 2 a 4 horas, o técnico sério faz o que muita gente “economiza” e depois paga caro no retorno.
 Marca posição da evaporadora, garante nível, define saída de dreno e rota de tubulação.
 
 Depois entra a parte crítica: flange, estanqueidade e vácuo.
-�? aí que dá diferença entre instalação que dura anos e instalação que vaza em semanas.
+É aí que dá diferença entre instalação que dura anos e instalação que vaza em semanas.
 
 No final, ele mede corrente, confere pressão/temperatura e entrega o aparelho rodando estável.
 Se você quer comparar com um padrão de execução, veja **[como instalar ar condicionado](/blog/como-instalar-ar-condicionado-split/)**.
@@ -68,12 +68,12 @@ Quando o profissional fala em **[kit de instalação](/blog/kit-instalacao-ar-co
 ### O que geralmente não está incluso
 
 Quase sempre fica fora:
-disjuntor, cabo elétrico extra, tomada dedicada, DR, eletroduto e �?oquebra-quebra�?� de parede.
+disjuntor, cabo elétrico extra, tomada dedicada, DR, eletroduto e “quebra-quebra” de parede.
 
 Também pode ficar fora: pintura, massa corrida, refazer forro, tubulação embutida e qualquer obra civil.
 Se tiver altura (escada grande, telhado, fachada), normalmente entra taxa ou mão de obra maior.
 
-Antes de fechar, peça para o técnico listar �?oextras�?� mais comuns no seu caso.
+Antes de fechar, peça para o técnico listar “extras” mais comuns no seu caso.
 Os campeões são:
 
 - metro adicional de tubulação (cobre + isolamento)
@@ -105,7 +105,7 @@ No frio, muita gente aceita margem menor para rodar serviço e manter o caixa.
 
 ### Instalação simples: até 3 metros de tubulação, sem quebra de parede
 
-�? o �?opadrão apartamento�?�.
+É o “padrão apartamento”.
 Evaporadora no quarto ou sala, condensadora na varanda técnica, furo direto e canaleta externa curta.
 
 Se a elétrica já está pronta, o técnico foca no frigorífico e entrega rápido.
@@ -119,7 +119,7 @@ Tubulação longa exige mais cobre, mais isolamento e pode exigir complemento de
 Também entra mais risco: ponto de vazamento aumenta, acabamento fica mais chato e o tempo cresce.
 Se tem andaime, rapel, acesso ruim ou altura, o custo pode dobrar fácil.
 
-Exemplos que quase sempre viram �?ocomplexa�?�:
+Exemplos que quase sempre viram “complexa”:
 condensadora no telhado e evaporadora no térreo, split em parede dupla e tubulação passando por forro, e rotas que precisam de muitas curvas.
 
 Aqui vale pedir duas coisas no orçamento:
@@ -133,7 +133,7 @@ Isso corta discussão depois.
 Muita loja empurra kit genérico.
 Nem sempre a bitola e a qualidade do cobre estão no padrão que o equipamento pede.
 
-Comprar o kit certo antes de chamar o técnico reduz improviso e �?osurpresa�?� no orçamento.
+Comprar o kit certo antes de chamar o técnico reduz improviso e “surpresa” no orçamento.
 Para entender exatamente o que comprar, veja **[kit de instalação](/blog/kit-instalacao-ar-condicionado/)**.
 
 ### Fazer a instalação elétrica antes (cabo e disjuntor)
@@ -146,7 +146,7 @@ O orçamento fica mais previsível e a instalação tende a ser mais rápida.
 
 Se você não domina elétrica, não inventa.
 Um ponto mal dimensionado queima placa e vira prejuízo.
-O �?obarato�?� vira manutenção mais cedo — e manutenção custa.
+O “barato” vira manutenção mais cedo — e manutenção custa.
 
 ### Comparar orçamentos de 3 técnicos diferentes
 
@@ -154,7 +154,7 @@ Comparar preço sem comparar método não ajuda.
 Peça orçamento por escrito e faça as mesmas perguntas para os três.
 
 Pergunte o que está incluso, quantos metros de tubulação entram e o que vira extra.
-Se um é �?obarato demais�?�, normalmente o corte vem em vácuo, teste ou material.
+Se um é “barato demais”, normalmente o corte vem em vácuo, teste ou material.
 
 Uma dica simples: compare por checklist.
 Você manda o mesmo texto para todo mundo e recebe respostas parecidas.
@@ -164,13 +164,13 @@ Fica mais fácil ver quem está improvisando.
 
 Vale, mas com honestidade.
 Instalação não é só furar parede e ligar.
-�? parte elétrica, parte frigorífica e padrão de segurança.
+É parte elétrica, parte frigorífica e padrão de segurança.
 
 Para quem quer trabalhar com isso, aprender reduz dependência e aumenta renda.
 Mas precisa de ferramental, checklist e treino real.
 E o retorno financeiro fica claro quando você entende **[quanto ganha um técnico](/blog/quanto-ganha-tecnico-ar-condicionado/)**.
 
-Se a ideia é instalar �?osó o meu�?�, o risco é outro.
+Se a ideia é instalar “só o meu”, o risco é outro.
 Você não tem prática para reagir rápido a vazamento, erro de flange ou dreno mal feito.
 E se der problema, o conserto pode sair mais caro que a economia.
 
@@ -196,17 +196,17 @@ Quem trabalha certo tem método.
 
 Peça para ele descrever como evita retorno.
 Técnico bom fala de vácuo, teste, torque, isolamento e acabamento.
-Técnico ruim fala só �?ofica gelando�?�.
+Técnico ruim fala só “fica gelando”.
 
 ### Red flags que indicam técnico sem preparo
 
-Se a pessoa diz que �?onão precisa vácuo�?�, já é alerta.
+Se a pessoa diz que “não precisa vácuo”, já é alerta.
 Se não testa estanqueidade, o vazamento aparece depois e sobra para você.
-Se não usa manifold, a chance de �?oachismo�?� aumenta.
+Se não usa manifold, a chance de “achismo” aumenta.
 
 Para ter um norte do que deveria ser feito, compare com o passo a passo de **[como instalar ar condicionado](/blog/como-instalar-ar-condicionado-split/)**.
 
-E depois da instalação, não deixe o aparelho �?osumir�?� por dois anos.
+E depois da instalação, não deixe o aparelho “sumir” por dois anos.
 Uma **[manutenção preventiva](/blog/manutencao-preventiva-ar-condicionado-guia/)** por ano reduz consumo e evita dor de cabeça no pico do verão.
 
 ## Perguntas Frequentes sobre Preço de Instalação
@@ -220,7 +220,7 @@ Uma **[manutenção preventiva](/blog/manutencao-preventiva-ar-condicionado-guia
 **Q: Posso pagar parcelado a instalação?**  
 **A:** Depende do técnico. Muitos aceitam Pix, cartão ou parcelamento informal — vale perguntar no orçamento.
 
-Se você quer evitar dor de cabeça, foque menos em �?oquem cobra mais barato�?� e mais em �?oquem entrega padrão�?�.
+Se você quer evitar dor de cabeça, foque menos em “quem cobra mais barato” e mais em “quem entrega padrão”.
 Instalação é o tipo de serviço que você só descobre o erro depois, quando o aparelho perde rendimento ou começa a pingar.
 
 ![Controle remoto de ar condicionado split exibindo temperatura de 25 graus Celsius](/images/blog/controle-remoto-ar-condicionado.webp)

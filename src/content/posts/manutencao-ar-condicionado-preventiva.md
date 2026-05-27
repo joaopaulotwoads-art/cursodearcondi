@@ -52,7 +52,7 @@ Produtos agressivos ou jato mal direcionado podem gerar infiltração e danos em
 
 ## Verificação elétrica com alicate amperímetro
 
-Após limpeza, a parte elétrica precisa ser validada. Muitos equipamentos �?ofuncionam�?�, mas operam fora da faixa ideal de corrente. Isso acelera desgaste de compressor e componentes.
+Após limpeza, a parte elétrica precisa ser validada. Muitos equipamentos “funcionam”, mas operam fora da faixa ideal de corrente. Isso acelera desgaste de compressor e componentes.
 
 Na revisão elétrica:
 
@@ -66,7 +66,7 @@ O alicate amperímetro é indispensável para comparar comportamento real com re
 
 ## Teste de carga de gás
 
-Um erro comum é �?ocompletar gás�?� sem diagnóstico. Na preventiva, o correto é avaliar sinais de troca térmica e parâmetros do sistema antes de qualquer intervenção no fluido.
+Um erro comum é “completar gás” sem diagnóstico. Na preventiva, o correto é avaliar sinais de troca térmica e parâmetros do sistema antes de qualquer intervenção no fluido.
 
 Pontos de atenção:
 
@@ -90,7 +90,7 @@ Exemplo de estratégia:
 - visita avulsa: ticket maior
 - contrato recorrente: ticket unitário menor, mas receita previsível
 
-Essa previsibilidade faz diferença para quem está saindo do �?obico�?� e construindo negócio profissional.
+Essa previsibilidade faz diferença para quem está saindo do “bico” e construindo negócio profissional.
 
 ## Como transformar preventiva em crescimento profissional
 
@@ -121,7 +121,7 @@ Com rotina padronizada, o técnico entrega mais valor percebido e consegue justi
 
 ## Conclusão
 
-Manutenção preventiva não é apenas limpeza. �? procedimento técnico com checklist, medição elétrica e análise do sistema. Quando bem executada, melhora desempenho do equipamento e gera recorrência de faturamento para o profissional.
+Manutenção preventiva não é apenas limpeza. É procedimento técnico com checklist, medição elétrica e análise do sistema. Quando bem executada, melhora desempenho do equipamento e gera recorrência de faturamento para o profissional.
 
 **Quer aprender na prática?** Conheça o [Curso de Ar Condicionado](/) ou **[Quero me inscrever](https://go.hotmart.com/R103468777C?dp=1)**
 

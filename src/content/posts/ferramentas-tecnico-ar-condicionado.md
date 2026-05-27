@@ -35,7 +35,7 @@ Sem esse conjunto, o técnico depende de improviso e aumenta chance de vazamento
 
 O manifold é amplamente usado para leitura de pressão e apoio em procedimentos de carga/serviço. Já o vacuômetro é essencial para validar a qualidade do vácuo, algo que o manifold sozinho não mede com precisão adequada.
 
-Erro comum no começo da carreira: fazer vácuo �?opor tempo�?� sem medição. Isso pode deixar umidade no sistema, causar falhas futuras e comprometer compressor.
+Erro comum no começo da carreira: fazer vácuo “por tempo” sem medição. Isso pode deixar umidade no sistema, causar falhas futuras e comprometer compressor.
 
 Boas práticas:
 
@@ -53,7 +53,7 @@ Quem trabalha com split precisa dominar elétrica básica aplicada. O kit mínim
 - testador de tensão
 - jogo de terminais e crimpagem
 
-Com esse kit, você consegue verificar tensão, corrente, continuidade e comportamento básico de componentes. Isso evita �?otroca no chute�?� e melhora assertividade no diagnóstico.
+Com esse kit, você consegue verificar tensão, corrente, continuidade e comportamento básico de componentes. Isso evita “troca no chute” e melhora assertividade no diagnóstico.
 
 ## Ferramentas mecânicas e de instalação
 
@@ -112,7 +112,7 @@ Antes de sair para o primeiro atendimento, confirme:
 - EPIs
 - materiais de acabamento
 
-Esse checklist simples evita �?ovolta na loja�?� no meio do serviço e melhora sua postura profissional.
+Esse checklist simples evita “volta na loja” no meio do serviço e melhora sua postura profissional.
 
 ## Evolução do kit ao longo da carreira
 
