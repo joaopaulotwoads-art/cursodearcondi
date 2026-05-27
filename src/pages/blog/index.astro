@@ -1,10 +1,10 @@
----
+Ôªø---
 /**
  * blog/index.astro
  *
  * Listagem do blog - exibe posts publicados.
  * Usa layout conforme siteMode: local ? LocalLayout (header/footer do modo local), blog ? MainLayout.
- * Tema cursodear: layout Curso de Ar Condicionadoùe (BaseLayout + BlogList).
+ * Tema cursodear: layout Curso de Ar Condicionadoe (BaseLayout + BlogList).
  */
 
 import { getCollection, getEntry } from 'astro:content';
@@ -50,9 +50,9 @@ const beFoot = usecursodear ? await readSingleton('footer', 'cursodear') : null;
 const beBlog = usecursodear ? (await readSingleton('blog', 'cursodear')) || {} : {};
 const beNav = beMenu ? navFromMenu(beMenu) : [];
 const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const blogPageTitle = 'Blog de RefrigeraÁ„o e ClimatizaÁ„o | Dicas e Tutoriais TÈcnicos';
+const blogPageTitle = 'Blog de Refrigeracao e Climatizacao | Dicas e Tutoriais Tecnicos';
 const blogPageDescription =
-    'Artigos tÈcnicos sobre instalaÁ„o e manutenÁ„o de ar condicionado, refrigeraÁ„o e climatizaÁ„o. Conte˙do pr·tico para tÈcnicos e iniciantes.';
+    'Artigos tecnicos sobre instalacao e manutencao de ar condicionado, refrigeracao e climatizacao. Conteudo pratico para tecnicos e iniciantes.';
 ---
 
 {usecursodear ? (

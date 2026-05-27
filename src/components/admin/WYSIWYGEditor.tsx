@@ -1,4 +1,4 @@
-/**
+﻿/**
  * WYSIWYGEditor.tsx
  * 
  * Editor WYSIWYG melhorado com TipTap - experiência estilo Gutenberg.
@@ -22,7 +22,7 @@ import {
     expandPreservedHtmlBlocks,
 } from './preserved-html-tiptap';
 
-/** Headings com `class` preservada no HTML (ex.: `.review-section-label` nos reviews Curso de Ar Condicionado�e). */
+/** Headings com `class` preservada no HTML (ex.: `.review-section-label` nos reviews Curso de Ar Condicionadoe). */
 const HeadingWithClass = Heading.extend({
     addAttributes() {
         return {

@@ -1,6 +1,6 @@
----
+Ôªø---
 /**
- * Polùtica de Cookies.
+ * Poltica de Cookies.
  */
 import { getEntry } from 'astro:content';
 import MainLayout from '../layouts/MainLayout.astro';
@@ -10,15 +10,15 @@ import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
-const pageTitle = 'Polùtica de Cookies';
+const pageTitle = 'Poltica de Cookies';
 const pageDescription =
-  'Saiba como utilizamos cookies para melhorar sua experiùncia de navegaùùo.';
+  'Saiba como utilizamos cookies para melhorar sua experincia de navegao.';
 
 const canonicalPage = 'https://cursodearcondicionado.com.br/politica-de-cookies/';
 const schemaJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebPage',
-  name: 'Polùtica de Cookies',
+  name: 'Poltica de Cookies',
   url: canonicalPage,
   publisher: {
     '@type': 'Organization',
@@ -45,7 +45,7 @@ const logoForLayout = logoSrcFromMenu(beMenu as Record<string, unknown> | null) 
 {isLocal || activeTheme !== 'cursodear' ? (
   <MainLayout title={pageTitle} description={pageDescription} robots="noindex, follow">
     <section class="container mx-auto px-6 py-16 max-w-3xl">
-      <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Polùtica de Cookies</h1>
+      <h1 class="text-3xl md:text-4xl font-heading font-bold text-white mb-8">Poltica de Cookies</h1>
       <div class="text-slate-300 leading-relaxed space-y-4">
         <PoliticaCookiesContent />
       </div>
@@ -67,46 +67,46 @@ const logoForLayout = logoSrcFromMenu(beMenu as Record<string, unknown> | null) 
   >
     <div class="bg-white text-slate-900">
       <section class="bg-slate-800 py-12 text-center">
-        <h1 class="text-3xl font-black text-white md:text-4xl">Polùtica de Cookies</h1>
+        <h1 class="text-3xl font-black text-white md:text-4xl">Poltica de Cookies</h1>
       </section>
 
       <div class="mx-auto max-w-3xl px-6 py-16">
         <p class="mb-8 inline-block rounded-full bg-gray-100 px-4 py-1.5 text-xs font-medium text-gray-600">
-          ùltima atualizaùùo: abril de 2026
+          ltima atualizao: abril de 2026
         </p>
 
         <div class="prose prose-gray max-w-none text-gray-600">
-          <h2 class="mt-0 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">1. O que sùo Cookies?</h2>
+          <h2 class="mt-0 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">1. O que so Cookies?</h2>
           <p class="mb-4 text-sm leading-relaxed text-gray-600">
-            Cookies sùo pequenos arquivos de texto armazenados no seu dispositivo quando vocù acessa nosso site. Eles nos
-            ajudam a melhorar sua experiùncia de navegaùùo.
+            Cookies so pequenos arquivos de texto armazenados no seu dispositivo quando voc acessa nosso site. Eles nos
+            ajudam a melhorar sua experincia de navegao.
           </p>
 
           <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">2. Cookies que Utilizamos</h2>
 
           <p class="mb-1 text-sm font-semibold text-slate-700">Cookies Essenciais</p>
           <p class="mb-4 text-sm leading-relaxed text-gray-600">
-            Necessùrios para o funcionamento do site. Nùo podem ser desativados.
+            Necessrios para o funcionamento do site. No podem ser desativados.
           </p>
 
           <p class="mb-1 text-sm font-semibold text-slate-700">Cookies de Desempenho</p>
           <p class="mb-4 text-sm leading-relaxed text-gray-600">
-            Google Analytics ù analisam como os visitantes usam o site (dados anonimizados).
+            Google Analytics  analisam como os visitantes usam o site (dados anonimizados).
           </p>
 
           <p class="mb-1 text-sm font-semibold text-slate-700">Cookies de Marketing</p>
           <p class="mb-4 text-sm leading-relaxed text-gray-600">
-            Utilizados para exibir anùncios relevantes em outras plataformas (Facebook Pixel, Google Ads).
+            Utilizados para exibir anncios relevantes em outras plataformas (Facebook Pixel, Google Ads).
           </p>
 
           <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">3. Como Gerenciar Cookies</h2>
           <p class="mb-4 text-sm leading-relaxed text-gray-600">
-            Vocù pode desativar cookies nas configuraùùes do seu navegador. Isso pode afetar algumas funcionalidades do site.
+            Voc pode desativar cookies nas configuraes do seu navegador. Isso pode afetar algumas funcionalidades do site.
           </p>
 
           <h2 class="mt-8 border-b border-gray-200 pb-2 text-xl font-bold text-slate-800">4. Contato</h2>
           <p class="mb-4 text-sm leading-relaxed text-gray-600">
-            Em caso de dùvidas:{' '}
+            Em caso de dvidas:{' '}
             <a href="mailto:contato@cursodearcondicionado.com.br" class="text-orange-600 hover:underline">
               contato@cursodearcondicionado.com.br
             </a>

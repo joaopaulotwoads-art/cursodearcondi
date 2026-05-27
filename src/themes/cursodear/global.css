@@ -1,23 +1,23 @@
-@import '../../styles/affiliate-blocks.css';
+﻿@import '../../styles/affiliate-blocks.css';
 @import '../../styles/article-review-roundup.css';
 @import '../../styles/post-content-tables.css';
 
-/* Tema Curso de Ar Condicionado�e — fundo neutro, texto #333, Open Sans, entrelinha editorial ~1.6 */
+/* Tema Curso de Ar Condicionado - fundo neutro, texto #333, Open Sans, entrelinha editorial ~1.6 */
 :root {
   --color-bg: #ffffff;
   --color-text: #333333;
   --color-heading: #1a1a1a;
   --color-muted: #6b7280;
-  /* Corpo do texto (parágrafos; próximo ao cinza escuro da referência) */
+  /* Corpo do texto (paragrafos; proximo ao cinza escuro da referencia) */
   --color-dark: #333333;
-  /* CTAs e destaques da marca (botões; links do texto usam --color-link) */
+  /* CTAs e destaques da marca (botoes; links do texto usam --color-link) */
   --color-accent: #c4a77d;
   --color-border: #e5e7eb;
-  /* Superfícies discretas (substitui bege/rosa antigos) */
+  /* Superficies discretas (substitui bege/rosa antigos) */
   --color-surface: #f9fafb;
   --color-rosa: #f9fafb;
   --color-nude: #f3f4f6;
-  /* Links no corpo: azul sóbrio */
+  /* Links no corpo: azul sobrio */
   --color-link: #2563eb;
   --color-link-hover: #1d4ed8;
   --cursodear-font-sans: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
@@ -320,7 +320,7 @@
 
 /* ── Product Review (bloco “⭐ Review” dentro do post) ──────────────────────
  * O styling original existia em src/styles/global.css (layout "global"),
- * mas o tema Curso de Ar Condicionado�e não importa esse arquivo. Então carregamos aqui
+ * mas o tema Curso de Ar Condicionadoe não importa esse arquivo. Então carregamos aqui
  * para o review não ficar com aparência “pobre”.
  */
 

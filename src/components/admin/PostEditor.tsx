@@ -1,4 +1,4 @@
-/**
+﻿/**
  * PostEditor.tsx
  * 
  * Componente React completo para edição de posts.
@@ -578,7 +578,7 @@ export default function PostEditor({ post, authors, categories, templateId }: Pr
                                         onChange={(e) => setSeoSchema(e.target.value as NonNullable<PostData['seoSchema']>)}
                                         className="admin-input"
                                     >
-                                        <option value="auto">Automático — detecta lista de produtos (cards Curso de Ar Condicionado�e) ou artigo</option>
+                                        <option value="auto">Automático — detecta lista de produtos (cards Curso de Ar Condicionadoe) ou artigo</option>
                                         <option value="blogPosting">Artigo / post informativo (BlogPosting)</option>
                                         <option value="articleItemList">Ranking ou review (Article + ItemList)</option>
                                         <option value="none">Sem schema extra (só WebSite no layout)</option>

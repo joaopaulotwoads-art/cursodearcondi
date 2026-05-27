@@ -1,4 +1,4 @@
-/** Campos do SingletonEditor para o tema Curso de Ar Condicionado�e (home). */
+﻿/** Campos do SingletonEditor para o tema Curso de Ar Condicionadoe (home). */
 
 export const cursodear_HOME_FIELDS = [
     { key: 'heroKicker', type: 'text', label: 'Selo acima do título (hero)' },

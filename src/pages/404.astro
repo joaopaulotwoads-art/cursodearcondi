@@ -1,0 +1,27 @@
+---
+import { canonicalPathname, shouldRedirectAddTrailingSlash } from '../utils/read-site-settings';
+
+const { pathname, href } = Astro.url;
+
+// Se faltar a barra final, redireciona para a versao canonical com "/"
+if (shouldRedirectAddTrailingSlash(pathname)) {
+  const u = new URL(href);
+  u.pathname = canonicalPathname(pathname);
+  return Astro.redirect(u.toString(), 301);
+}
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404: Nao encontrado</title>
+    <meta name="robots" content="noindex, follow" />
+  </head>
+  <body style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; padding: 48px;">
+    <h1 style="margin: 0 0 8px;">404: Nao encontrado</h1>
+    <p style="margin: 0 0 20px; color: #555;">A pagina que voce tentou acessar nao existe.</p>
+    <a href="/" style="color: #2563eb; text-decoration: none;">Voltar para a home</a>
+  </body>
+</html>
+

@@ -1,4 +1,4 @@
-import { defineCollection, z } from 'astro:content';
+﻿import { defineCollection, z } from 'astro:content';
 import { normalizeCanonicalUrl } from '../utils/read-site-settings';
 // Force reload v2
 import { glob } from 'astro/loaders';
@@ -19,7 +19,7 @@ const posts = defineCollection({
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
         thumbnail: z.string().optional(),
-        /** Imagem principal do post (hero/OG); alias sem�ntico de thumbnail quando usado sozinho. */
+        /** Imagem principal do post (hero/OG); alias semntico de thumbnail quando usado sozinho. */
         image: z.string().optional(),
         imageAlt: z.string().optional(),
         metaTitle: z.string().optional(),
@@ -28,7 +28,7 @@ const posts = defineCollection({
         /** `html` = corpo guardado como HTML (ex.: import Ghost); render com set:html. */
         contentFormat: z.enum(['markdown', 'html']).optional(),
         /**
-         * JSON-LD do post: auto = detecta cards Curso de Ar Condicionado�e (ItemList) ou BlogPosting;
+         * JSON-LD do post: auto = detecta cards Curso de Ar Condicionadoe (ItemList) ou BlogPosting;
          * blogPosting = artigo informativo; articleItemList = ranking/review; none = desliga.
          */
         seoSchema: z.enum(['auto', 'blogPosting', 'articleItemList', 'none']).optional(),
@@ -166,9 +166,9 @@ const siteSettings = defineCollection({
         siteMode: z.enum(['blog', 'local']).default('blog'),
         aiProvider: z.enum(['openai', 'gemini']).default('gemini').optional(),
         aiApiKey: z.string().optional(),
-        // Pexels API �?? imagens em posts gerados por IA (1 a cada ~400 palavras, máx 5)
+        // Pexels API ?? imagens em posts gerados por IA (1 a cada ~400 palavras, máx 5)
         pexelsApiKey: z.string().optional(),
-        // SEO Técnico �?? sempre apex https:// sem www (igual Vercel)
+        // SEO Técnico ?? sempre apex https:// sem www (igual Vercel)
         canonicalUrl: z
             .string()
             .optional()
@@ -182,7 +182,7 @@ const siteSettings = defineCollection({
         // Estrutura de permalink dos posts
         blogPermalinkStructure: z.enum(['postname', 'year_month', 'year_month_day']).default('postname'),
         blogUrlPrefix: z.enum(['blog', 'root']).default('blog'), // 'root' = sem /blog na URL
-        // Contato centralizado �?? usado em Header, Footer, páginas locais, schema JSON-LD
+        // Contato centralizado ?? usado em Header, Footer, páginas locais, schema JSON-LD
         companyPhone: z.string().optional(),
         companyWhatsapp: z.string().optional(),
         // Atualizações automáticas do template (workflow .github)

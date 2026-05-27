@@ -8,7 +8,9 @@ import markdoc from '@astrojs/markdoc';
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
-    trailingSlash: 'always',
+    // Aceita /rota e /rota/ sem 404 (especialmente no dev).
+    // Canonical/sitemap continuam padronizando com barra final via utils/read-site-settings.ts
+    trailingSlash: 'ignore',
     adapter: vercel(),
     /** CSS inline no HTML → menos pedidos bloqueantes no caminho crítico (Lighthouse / LCP). */
     build: {

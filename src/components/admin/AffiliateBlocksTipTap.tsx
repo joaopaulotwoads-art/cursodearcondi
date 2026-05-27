@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Blocos estilo Affiliatable para posts (produto, roundup, tabela, prós/contras, versus).
  * HTML estável + classes cnx-aff-* para Turndown preservar no .mdoc.
  */
@@ -24,7 +24,7 @@ const cursodear_PRODUCT_CARD_STYLE: CSSProperties = {
     margin: 0,
 };
 
-/** CTA padrão Curso de Ar Condicionado�e (amarelo + texto escuro) — igual ao artigo público */
+/** CTA padrão Curso de Ar Condicionadoe (amarelo + texto escuro) — igual ao artigo público */
 const cursodear_CTA_STYLE: CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
