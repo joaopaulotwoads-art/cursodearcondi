@@ -4,6 +4,8 @@ slug: "como-limpar-ar-condicionado-split"
 author: "fernando-costa"
 publishedDate: "2026-05-27"
 category: "manutencao"
+thumbnail: "/images/blog/como-limpar-ar-condicionado-split.webp"
+metaImage: "/images/blog/como-limpar-ar-condicionado-split.webp"
 metaTitle: "Como Limpar Ar Condicionado Split: Passo a Passo 2026"
 metaDescription: "Aprenda como limpar ar condicionado split em casa com segurança: filtro, evaporadora, condensadora e quando chamar um técnico. Guia completo 2026."
 tags:
@@ -16,20 +18,20 @@ faq:
   - q: "Posso usar água sanitária para limpar ar condicionado?"
     a: "Não. Use apenas produtos específicos para ar condicionado ou água e sabão neutro. Água sanitária corrói alumínio da serpentina e danifica componentes internos."
   - q: "Quanto tempo leva para secar o filtro do ar condicionado?"
-    a: "30 a 60 minutos à sombra em local ventilado. Nunca use secador de cabelo — o calor deforma o plástico e danifica a malha filtrante."
+    a: "30 a 60 minutos à sombra em local ventilado. Nunca use secador de cabelo: o calor deforma o plástico e danifica a malha filtrante."
   - q: "Ar condicionado com cheiro ruim é perigoso?"
-    a: "Pode indicar proliferação de fungos e bactérias na serpentina e na bandeja. Faça higienização imediatamente — o ar contaminado afeta saúde respiratória, especialmente em crianças e idosos."
+    a: "Pode indicar proliferação de fungos e bactérias na serpentina e na bandeja. Faça higienização imediatamente. O ar contaminado afeta saúde respiratória, especialmente em crianças e idosos."
   - q: "Com que frequência devo limpar o filtro do ar condicionado?"
     a: "A cada 15 dias em uso residencial normal. Em ambientes com muita poeira, pets ou uso intenso, limpe semanalmente. Filtro sujo aumenta o consumo de energia e força o compressor."
   - q: "Posso limpar a parte interna do ar condicionado sozinho?"
     a: "A limpeza básica de filtro pode ser feita pelo próprio usuário. A higienização profunda da serpentina, turbina e bandeja exige técnico capacitado para evitar danos à placa eletrônica e ao sistema elétrico."
 ---
 
-**Como limpar ar condicionado split** corretamente faz diferença no consumo de energia, na qualidade do ar e na vida útil do equipamento. Neste guia de 2026, você vê do filtro à condensadora — o que pode ser feito em casa e quando chamar um técnico. Para quem quer dominar limpeza e manutenção como serviço profissional, o [Curso de Ar Condicionado](/) tem **160 aulas** e **30 horas** de conteúdo prático.
+**Como limpar ar condicionado split** corretamente faz diferença no consumo de energia, na qualidade do ar e na vida útil do equipamento. Neste guia de 2026, você vê do filtro à condensadora: o que pode ser feito em casa e quando chamar um técnico. Para quem quer dominar limpeza e manutenção como serviço profissional, o [Curso de Ar Condicionado](/) tem **160 aulas** e **30 horas** de conteúdo prático.
 
 ## Por que limpar ar condicionado é obrigatório
 
-Um split sujo trabalha mais para entregar menos refrigeração. O filtro entupido restringe vazão de ar, o compressor aumenta a carga, o consumo de energia sobe e o rendimento cai. Além disso, sujeira acumulada na serpentina e na bandeja cria ambiente propício para fungos e bactérias — que saem junto com o ar insuflado no ambiente.
+Um split sujo trabalha mais para entregar menos refrigeração. O filtro entupido restringe vazão de ar, o compressor aumenta a carga, o consumo de energia sobe e o rendimento cai. Além disso, sujeira acumulada na serpentina e na bandeja cria ambiente propício para fungos e bactérias que saem junto com o ar insuflado no ambiente.
 
 Principais consequências de não limpar:
 
@@ -69,7 +71,7 @@ O filtro é a parte que o próprio usuário pode e deve limpar regularmente. É 
 **Passo a passo para limpar o filtro:**
 
 1. Desligue o aparelho no controle e no disjuntor
-2. Abra a tampa frontal da evaporadora — geralmente trava em dois pinos laterais
+2. Abra a tampa frontal da evaporadora. Ela geralmente trava em dois pinos laterais
 3. Retire os filtros com cuidado para não entornar a sujeira acumulada
 4. Aspire o excesso de poeira antes de molhar
 5. Lave em água corrente morna com sabão neutro, passando suavemente dos dois lados
@@ -78,6 +80,8 @@ O filtro é a parte que o próprio usuário pode e deve limpar regularmente. É 
 8. Religue o disjuntor e teste o aparelho
 
 Frequência recomendada: **a cada 15 dias** em uso normal. Em ambientes com poeira, pets ou uso intenso, limpe semanalmente.
+
+![Limpeza do filtro do ar condicionado split removido e lavado](/images/blog/limpeza-filtro-ar-condicionado-split.webp)
 
 ## Como limpar a evaporadora do ar condicionado split
 
@@ -92,12 +96,14 @@ Essa etapa exige mais cuidado e, na limpeza profunda, é recomendada por técnic
 3. Remova e lave os filtros separadamente
 4. Aplique produto específico (espuma higienizante) na serpentina, de cima para baixo
 5. Aguarde o tempo de contato indicado no produto (em geral 5 a 10 minutos)
-6. Enxágue com água em baixa pressão — nunca direcione o jato diretamente à placa
+6. Enxágue com água em baixa pressão. Nunca direcione o jato diretamente à placa
 7. Limpe a bandeja de dreno e verifique escoamento
 8. Remova a proteção da placa apenas quando tudo estiver seco
 9. Ligue e verifique funcionamento e drenagem
 
 **Atenção:** se não tiver experiência, contrate um técnico. Dano à placa eletrônica pode custar mais do que o aparelho.
+
+![Técnico aplicando produto higienizante na serpentina da evaporadora de ar condicionado split](/images/blog/higienizacao-evaporadora-ar-condicionado-split.webp)
 
 ## Como limpar a condensadora do ar condicionado split
 
@@ -107,13 +113,15 @@ A unidade externa acumula poeira, folhas, insetos e sujeira do ambiente. Condens
 
 1. Desligue no disjuntor
 2. Remova detritos visíveis das grades com pincel ou escova macia
-3. Borrife água em baixa pressão nas aletas do condensador — de dentro para fora sempre
+3. Borrife água em baixa pressão nas aletas do condensador, sempre de dentro para fora
 4. Limpe o gabinete externo com pano úmido
 5. Verifique se não há obstruções no entorno que bloqueiem a saída de ar
 
-Nunca dirija jato forte de lavadora diretamente nas aletas — o alumínio dobra facilmente e prejudica a passagem de ar.
+Nunca dirija jato forte de lavadora diretamente nas aletas. O alumínio dobra facilmente e prejudica a passagem de ar.
 
 Se a condensadora estiver muito suja ou instalada em local de difícil acesso, é serviço de técnico.
+
+![Limpeza da condensadora unidade externa do ar condicionado com água em baixa pressão](/images/blog/limpeza-condensadora-ar-condicionado-externa.webp)
 
 ## Quando a limpeza básica não é suficiente
 
@@ -135,7 +143,7 @@ O ar condicionado de janela tem estrutura diferente do split, mas os princípios
 
 - o filtro fica na face frontal e é removido com mais facilidade
 - a serpentina do lado externo (condensadora) pode ser acessada com o aparelho parcialmente removido da janela
-- a bandeja de dreno fica no fundo do gabinete — accumula mais água e exige limpeza frequente para evitar mofo e odor
+- a bandeja de dreno fica no fundo do gabinete, acumulando mais água e exigindo limpeza frequente para evitar mofo e odor
 - a limpeza interna completa exige retirar o aparelho da abertura ou desmontar o gabinete
 
 **Frequência recomendada para o janeleiro:**
@@ -144,7 +152,9 @@ O ar condicionado de janela tem estrutura diferente do split, mas os princípios
 - bandeja e dreno: mensal
 - higienização completa: semestral
 
-O cuidado com a vedação ao redor do gabinete também faz parte da manutenção do janeleiro — vedação ruim deixa entrar calor, umidade e insetos, prejudicando o rendimento.
+O cuidado com a vedação ao redor do gabinete também faz parte da manutenção do janeleiro. Vedação ruim deixa entrar calor, umidade e insetos, prejudicando o rendimento.
+
+![Limpeza de ar condicionado de janela com filtro removido e bandeja higienizada](/images/blog/limpeza-ar-condicionado-janela.webp)
 
 ## Quanto cobrar por limpeza e higienização de ar condicionado
 
@@ -156,7 +166,7 @@ Faixas praticadas em 2026:
 - **higienização completa com produto:** R$ 180 a R$ 350 por unidade
 - **contrato semestral (2 visitas/ano):** R$ 200 a R$ 500 por equipamento
 
-Contratos recorrentes transformam limpeza em receita previsível. Um técnico com 20 equipamentos em contrato semestral fatura entre R$ 4.000 e R$ 10.000 por semestre apenas com preventiva — sem contar instalações e corretivas.
+Contratos recorrentes transformam limpeza em receita previsível. Um técnico com 20 equipamentos em contrato semestral fatura entre R$ 4.000 e R$ 10.000 por semestre apenas com preventiva, sem contar instalações e corretivas.
 
 ## Perguntas Frequentes sobre Limpeza de Ar Condicionado
 
@@ -166,11 +176,11 @@ Não. Use apenas produtos específicos para ar condicionado ou água e sabão ne
 
 ### Quanto tempo leva para secar o filtro?
 
-De **30 a 60 minutos à sombra** em local ventilado. Nunca use secador de cabelo — o calor deforma o plástico do filtro e danifica a malha filtrante.
+De **30 a 60 minutos à sombra** em local ventilado. Nunca use secador de cabelo: o calor deforma o plástico do filtro e danifica a malha filtrante.
 
 ### Ar condicionado com cheiro ruim é perigoso?
 
-Pode indicar fungos e bactérias na serpentina ou na bandeja — faça higienização imediatamente. O ar contaminado afeta a saúde respiratória, especialmente em crianças, idosos e pessoas com asma ou rinite.
+Pode indicar fungos e bactérias na serpentina ou na bandeja. Faça higienização imediatamente. O ar contaminado afeta a saúde respiratória, especialmente em crianças, idosos e pessoas com asma ou rinite.
 
 ### Com que frequência devo limpar o filtro?
 
@@ -195,7 +205,7 @@ Chamar técnico com frequência certa é mais barato do que consertar dano causa
 
 ## Conclusão
 
-**Limpar ar condicionado split** com regularidade mantém o equipamento eficiente, o ar limpo e o bolso aliviado. Para o usuário, o filtro a cada 15 dias resolve o básico. Para a higienização completa — serpentina, turbina, bandeja e condensadora — a recomendação é técnico capacitado pelo menos uma vez ao ano.
+**Limpar ar condicionado split** com regularidade mantém o equipamento eficiente, o ar limpo e o bolso aliviado. Para o usuário, o filtro a cada 15 dias resolve o básico. Para a higienização completa da serpentina, turbina, bandeja e condensadora, a recomendação é técnico capacitado pelo menos uma vez ao ano.
 
 Para quem quer oferecer limpeza e higienização como serviço profissional, o **[Curso de Ar Condicionado](/)** ensina do básico ao comissionamento em **160 aulas** e **30 horas**.
 
