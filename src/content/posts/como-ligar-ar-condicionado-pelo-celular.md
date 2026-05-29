@@ -25,8 +25,6 @@ Para ligar o ar condicionado pelo celular, você precisa de um modelo com Wi-Fi 
 
 Funciona com Android e iOS. O passo a passo varia de marca para marca, mas o processo é sempre o mesmo: baixar o app, criar conta, conectar o aparelho ao Wi-Fi da sua rede e vincular o dispositivo ao aplicativo.
 
-![Pessoa controlando ar condicionado pelo celular com aplicativo da marca](/images/blog/ar-condicionado-controle-celular.webp)
-
 ## Quais Ar Condicionados Têm Controle pelo Celular?
 
 A maioria dos splits Inverter lançados a partir de 2020 já vem com módulo Wi-Fi integrado. Modelos mais antigos de algumas marcas permitem adicionar um adaptador Wi-Fi externo, disponível como acessório opcional.
@@ -102,8 +100,6 @@ Se o aparelho não aparece no app durante a configuração ou some da lista de d
 A maioria dos ar condicionados com Wi-Fi só se conecta à faixa de 2,4 GHz. Roteadores modernos com banda dupla às vezes ocultam as faixas de 2,4 GHz e 5 GHz sob o mesmo nome de rede.
 
 Se for esse o caso, acesse as configurações do roteador e separe os nomes das duas faixas. Isso garante que o aparelho se conecte à faixa correta durante a configuração.
-
-![Configuração de rede Wi-Fi 2,4 GHz para conectar ar condicionado ao app](/images/blog/wifi-ar-condicionado-configuracao.webp)
 
 ### Resetar o módulo Wi-Fi do equipamento
 
