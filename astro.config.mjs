@@ -24,5 +24,15 @@ export default defineConfig({
         tailwind(), 
         markdoc({ allowHTML: true })
     ],
+    redirects: {
+        '/blog/ferramentas-tecnico-ar-condicionado': {
+            status: 301,
+            destination: '/blog/ferramentas-para-ar-condicionado',
+        },
+        '/blog/ferramentas-tecnico-ar-condicionado/': {
+            status: 301,
+            destination: '/blog/ferramentas-para-ar-condicionado/',
+        },
+    },
     // Reset Trigger: 2026-02-07 11:40
 });
