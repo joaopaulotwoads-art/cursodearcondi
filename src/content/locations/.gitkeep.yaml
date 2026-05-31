@@ -1,0 +1,6 @@
+# Arquivo de marcação — mantém o diretório no git sem criar entradas na coleção.
+# Remova este arquivo ao adicionar a primeira localidade real.
+name: _placeholder
+slug: _placeholder
+state: _placeholder
+active: false
