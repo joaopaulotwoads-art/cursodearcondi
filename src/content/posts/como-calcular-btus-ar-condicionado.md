@@ -2,7 +2,7 @@
 title: "BTUs de Ar Condicionado: Como Calcular para Cada Ambiente [2026]"
 slug: "como-calcular-btus-ar-condicionado"
 author: "fernando-costa"
-publishedDate: "2026-05-31"
+publishedDate: "2026-06-11"
 category: "instalacao"
 thumbnail: "/images/blog/como-calcular-btus-ar-condicionado.webp"
 metaImage: "/images/blog/como-calcular-btus-ar-condicionado.webp"
