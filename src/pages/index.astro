@@ -9,9 +9,9 @@ import type { BlogPermalinkStructure, BlogUrlPrefix } from '../utils/blog-permal
 import { SEO_ORGANIZATION_NAME, ORG_SAME_AS, absoluteUrl, DEFAULT_ORG_LOGO_PATH } from '../utils/seo-meta';
 
 const pageTitle = 'Curso de Ar Condicionado Online 2026 | Formação Profissional';
-const pageDescription = 'Curso de Ar Condicionado com acesso imediato, certificado e formação completa para instalação e manutenção.';
+const pageDescription = 'Curso de ar condicionado online: 160 aulas, 30h de conteúdo, certificado reconhecido e acesso vitalício. Aprenda instalação, manutenção e Inverter.';
 const pageKeywords = 'curso de ar condicionado, curso de instalação de ar condicionado, curso de manutenção de ar condicionado, curso split, curso inverter, técnico de ar condicionado, curso de refrigeração, curso de climatização, instalação split, manutenção preventiva ar condicionado, recarga de gás r410a, curso ar condicionado online';
-const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
+const hotmartUrl = 'https://go.hotmart.com/R103468777C?dp=1';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
@@ -241,9 +241,8 @@ const extraJsonLd = {
             <p class="mt-1 text-center text-4xl font-black leading-none text-orange-500 md:text-5xl">R$ 197,00</p>
             <p class="mt-2 text-center text-sm text-gray-500">ou 12x de R$ 20,37 no cartão</p>
             <a
-              href={hotmartAffiliateUrl}
+              href={hotmartUrl}
               target="_blank"
-              rel="nofollow noopener noreferrer"
               class="mt-5 block w-full rounded-xl bg-green-500 py-4 text-center text-lg font-black uppercase tracking-wide text-white transition hover:bg-green-600"
             >
               QUERO ME INSCREVER AGORA
@@ -666,31 +665,47 @@ const extraJsonLd = {
           <p class="mb-6 mt-2 text-sm text-slate-300">Resultados reais de alunos que aplicaram o método</p>
         </header>
         <div class="mx-auto grid max-w-4xl grid-cols-1 gap-6 md:grid-cols-2">
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <div class="relative">
-              <iframe src="https://www.youtube.com/embed/re2MUygH5AY" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          {[
+            { id: 're2MUygH5AY', label: 'Depoimento de aluno 1' },
+            { id: 'JDCCY-RaeAM', label: 'Depoimento de aluno 2' },
+            { id: 'hVK9NHrQBxQ', label: 'Depoimento de aluno 3' },
+            { id: '50xBKEi5Gag', label: 'Depoimento de aluno 4' },
+          ].map(({ id, label }) => (
+            <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
+              <div class="relative w-full" style="padding-top: 56.25%;">
+                <button
+                  type="button"
+                  class="group absolute inset-0 h-full w-full focus:outline-none"
+                  data-yt={id}
+                  aria-label={`Reproduzir ${label}`}
+                >
+                  <img
+                    src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`}
+                    alt={label}
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full object-cover"
+                  />
+                  <span class="absolute inset-0 bg-black/30"></span>
+                  <span class="absolute left-1/2 top-1/2 flex h-[52px] w-[52px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white/95 shadow-lg">
+                    <span class="ml-1 block h-0 w-0 border-y-[9px] border-y-transparent border-l-[15px] border-l-orange-500"></span>
+                  </span>
+                </button>
+              </div>
+              <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
             </div>
-            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
-          </div>
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <div class="relative">
-              <iframe src="https://www.youtube.com/embed/JDCCY-RaeAM" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
-          </div>
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <div class="relative">
-              <iframe src="https://www.youtube.com/embed/hVK9NHrQBxQ" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
-          </div>
-          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-[0_28px_80px_-60px_rgba(0,0,0,0.8)]">
-            <div class="relative">
-              <iframe src="https://www.youtube.com/embed/50xBKEi5Gag" title="Depoimento de aluno" class="w-full aspect-video" width="100%" height="100%" frameborder="0" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="px-4 py-3 border-t border-gray-100"><span class="text-orange-500 text-xs font-bold">✓ ALUNO VERIFICADO</span></div>
-          </div>
+          ))}
         </div>
+        <script is:inline>
+          document.querySelectorAll('button[data-yt]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              var id = btn.getAttribute('data-yt');
+              var wrapper = btn.closest('.relative');
+              if (!wrapper || !id) return;
+              wrapper.innerHTML = '<iframe class="absolute inset-0 h-full w-full" src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) + '?autoplay=1&rel=0" title="Depoimento de aluno" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+            });
+          });
+        </script>
       </div>
     </section>
 
@@ -743,9 +758,13 @@ const extraJsonLd = {
     <!-- 11. FAQ -->
     <section id="sobre-o-curso" class="bg-gray-50 py-16">
       <div class="max-w-4xl mx-auto px-6">
-        <h2 class="text-2xl font-black text-slate-800 mb-6">
-          Curso de Ar Condicionado: Tudo que Você Precisa Saber Antes de se Inscrever
-        </h2>
+        <header class="mb-6">
+          <p class="text-[11px] font-black uppercase tracking-[0.22em] text-orange-600">Sobre o curso</p>
+          <h2 class="mt-2 text-2xl font-black text-slate-800">
+            Curso de ar condicionado online: tudo o que você precisa saber antes de se inscrever
+          </h2>
+          <div class="mt-4 h-[3px] w-16 rounded-full bg-orange-500"></div>
+        </header>
 
         <div class="prose prose-gray max-w-none space-y-4 text-gray-600 text-sm leading-relaxed">
           <p>
@@ -831,9 +850,8 @@ const extraJsonLd = {
         <h2 class="text-2xl md:text-4xl font-black text-white">Garanta sua vaga agora</h2>
         <p class="mt-3 mb-8 text-gray-400">+11.900 alunos já estão no mercado. Sua vez.</p>
         <a
-          href={hotmartAffiliateUrl}
+          href={hotmartUrl}
           target="_blank"
-          rel="nofollow noopener noreferrer"
           class="w-full md:w-auto bg-orange-500 hover:bg-orange-400 text-white font-black py-5 px-12 rounded-2xl text-base md:text-xl uppercase tracking-wide transition transform hover:scale-105 shadow-lg shadow-orange-500/30"
         >
           QUERO ME INSCREVER AGORA
@@ -849,7 +867,6 @@ const extraJsonLd = {
     <a
       href="https://wa.me/5514988034123"
       target="_blank"
-      rel="noopener noreferrer"
       aria-label="Chat de suporte"
       class="fixed bottom-6 right-6 inline-flex h-14 w-14 items-center justify-center rounded-full bg-orange-500 text-xl text-white shadow-xl"
     >
