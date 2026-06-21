@@ -58,7 +58,7 @@ let principalCityName: string | null = null;
 if (isLocalMode) {
     try {
         const { listServices } = await import('../../utils/service-utils');
-        const allLocations = await getCollection('locations').catch(() => []);
+        const allLocations: any[] = [];
         const services = await listServices();
         const activeServices = services.filter(s => s.data.active !== false);
         const bairros = allLocations.filter((l: any) => l.data?.active && l.data?.type !== 'cidade');

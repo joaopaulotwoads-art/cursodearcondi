@@ -14,7 +14,6 @@
  * Todos os textos são lidos do singleton 'local/home.yaml' via readSingleton.
  */
 
-import { getCollection } from 'astro:content';
 import LocalLayout from '../../layouts/LocalLayout.astro';
 import { getSiteContactInfo, formatPhone } from '../../utils/site-contact';
 import { listServices } from '../../utils/service-utils';
@@ -43,7 +42,7 @@ const serviceBase = principalSlug ? `/${principalSlug}` : '/servicos';
 function slugFrom(str: string): string {
     return (str || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '') || 'default';
 }
-const allLocations = await getCollection('locations').catch(() => []);
+const allLocations: any[] = [];
 const bairros = allLocations.filter((l: any) => l.data?.active && l.data?.type !== 'cidade');
 const byCityKey = new Map<string, { cityName: string; count: number }>();
 for (const loc of bairros) {
