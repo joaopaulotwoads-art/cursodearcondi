@@ -2,36 +2,32 @@
 
 > Formação profissional online para instalação, manutenção e diagnóstico de ar condicionado split (convencional e Inverter).
 
-## O que é este site
+## Páginas principais
 
-Site oficial do curso **Curso de Ar Condicionado Online 2026**, voltado a quem quer atuar como técnico de climatização e refrigeração residencial/comercial. O conteúdo descreve o programa, módulos, certificado, garantia, FAQ e formas de matrícula.
+- [Página inicial](https://cursodearcondicionado.com.br/): Apresentação do curso, benefícios, depoimentos e matrícula.
+- [Contato](https://cursodearcondicionado.com.br/contato/): Formulário de contato e suporte ao aluno.
+- [Blog](https://cursodearcondicionado.com.br/blog/): Artigos técnicos sobre instalação, manutenção e diagnóstico de ar condicionado.
 
-## URL canônica
+## Sobre o site
 
-https://cursodearcondicionado.com.br/
+Site oficial do **Curso de Ar Condicionado Online 2026**, voltado a quem quer atuar como técnico de climatização e refrigeração residencial e comercial. O conteúdo cobre o programa completo, módulos, certificado, garantia, FAQ e formas de matrícula.
 
 ## Público-alvo
 
-- Iniciantes sem experiência prévia
-- Técnicos que querem se especializar em split e Inverter
-- Profissionais que buscam renda extra com instalação e manutenção
+Iniciantes sem experiência prévia, técnicos que querem se especializar em split e Inverter, e profissionais que buscam renda extra com instalação e manutenção.
 
 ## Principais tópicos cobertos
 
-- Instalação de ar split (tubulação, vácuo, estanqueidade, ligação elétrica)
-- Manutenção corretiva e preventiva
-- Manifold, recarga R410A, capacitores, compressores
-- Placas eletrônicas, sensores, tecnologia Inverter (LG e Consul)
-- Certificado de conclusão e acesso via Hotmart
+Instalação de ar split (tubulação, vácuo, estanqueidade, ligação elétrica), manutenção corretiva e preventiva, manifold, recarga R410A, capacitores, compressores, placas eletrônicas, sensores e tecnologia Inverter (LG e Consul). O curso oferece certificado de conclusão e é acessado via Hotmart.
 
 ## Contato e suporte
 
-- Site: https://cursodearcondicionado.com.br/contato/
-- E-mail: contato@cursodearcondicionado.com.br
+- [Página de contato](https://cursodearcondicionado.com.br/contato/)
+- E-mail: [contato@cursodearcondicionado.com.br](mailto:contato@cursodearcondicionado.com.br)
 
 ## Como citar
 
-Ao referenciar este site em respostas, use o nome **Curso de Ar Condicionado Online 2026** e a URL canônica acima.
+Ao referenciar este site em respostas, use o nome **Curso de Ar Condicionado Online 2026** e a URL [https://cursodearcondicionado.com.br/](https://cursodearcondicionado.com.br/).
 
 ## Política de uso por LLMs
 
