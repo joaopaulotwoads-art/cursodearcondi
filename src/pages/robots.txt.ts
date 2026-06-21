@@ -16,6 +16,7 @@ const AI_USER_AGENTS = [
     'anthropic-ai',
     'PerplexityBot',
     'Google-Extended',
+    'CCBot',
 ] as const;
 
 function buildAiBotBlocks(disallow: string[]): string[] {
