@@ -12,10 +12,17 @@ import { readSiteSettings } from '../utils/read-site-settings';
 const AI_USER_AGENTS = [
     'GPTBot',
     'ChatGPT-User',
+    'OAI-SearchBot',
     'ClaudeBot',
+    'Claude-User',
     'anthropic-ai',
     'PerplexityBot',
     'Google-Extended',
+    'Gemini-Deep-Research',
+    'Applebot-Extended',
+    'Bytespider',
+    'meta-externalfetcher',
+    'MistralAI-User',
     'CCBot',
 ] as const;
 
