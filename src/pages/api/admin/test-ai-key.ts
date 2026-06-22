@@ -70,26 +70,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
         const body     = await request.json();
         const provider = body.provider as 'openai' | 'gemini';
-        let apiKey = (body.apiKey || '').trim();
-        if (!apiKey) {
-            apiKey =
-                provider === 'openai'
-                    ? (process.env.OPENAI_API_KEY || '').trim()
-                    : (process.env.GEMINI_API_KEY || '').trim();
-        }
+        const apiKey   = (body.apiKey || '').trim();
 
         if (!apiKey) {
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    message:
-                        'API Key não fornecida. Cole a chave acima ou defina OPENAI_API_KEY / GEMINI_API_KEY nas variáveis de ambiente (ex.: Vercel).',
-                }),
-                {
-                    status: 400,
-                    headers: { 'Content-Type': 'application/json' },
-                },
-            );
+            return new Response(JSON.stringify({ success: false, message: 'API Key não fornecida.' }), {
+                status: 400, headers: { 'Content-Type': 'application/json' },
+            });
         }
 
         if (!['openai', 'gemini'].includes(provider)) {

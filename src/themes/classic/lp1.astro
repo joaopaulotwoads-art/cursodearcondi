@@ -1,0 +1,869 @@
+---
+/**
+ * Home.astro - Landing Page no formato Dot Com Secrets
+ * 
+ * Landing page completa seguindo a estrutura do livro Dot Com Secrets do Russell Brunson,
+ * adaptada para mostrar que WordPress é ultrapassado e não ranqueia/monetiza como deveria
+ * em relação à estrutura moderna JAMstack.
+ * 
+ * Estrutura:
+ * 1. Hero Section
+ * 2. O Velho Caminho vs O Novo Caminho
+ * 3. A Ponte da Epifania
+ * 4. Mecanismo Único
+ * 5. Demonstração Técnica
+ * 6. O Caminho Completo
+ * 7. Depoimentos/Prova Social
+ * 8. A Oferta
+ * 9. Garantia
+ * 10. FAQ
+ * 11. A Escolha é Sua
+ */
+
+import MainLayout from '../../layouts/MainLayout.astro';
+
+interface Props {
+    lp1Data: any;
+    themeId: string;
+}
+
+const { lp1Data, themeId } = Astro.props;
+---
+
+<MainLayout title="WordPress é Ultrapassado - A Nova Era do JAMstack">
+    
+    <!-- 1. HERO SECTION -->
+    <section class="relative min-h-screen flex items-center justify-center pt-24 md:pt-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-black via-black to-[#0a0a0a]">
+            <div class="absolute inset-0 opacity-30">
+                <div class="absolute inset-0" style="background-image: linear-gradient(to right, rgba(168, 85, 247, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(168, 85, 247, 0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+            </div>
+            <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-[100px] animate-pulse" style="animation-delay: 1.5s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-5xl mx-auto text-center">
+                {lp1Data.heroBadge && (
+                    <div class="inline-flex items-center gap-2 px-5 py-2.5 mb-10 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-sm">
+                        <span class="text-sm md:text-base font-semibold text-primary tracking-wide">{lp1Data.heroBadge}</span>
+                    </div>
+                )}
+                
+                <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading font-black text-white leading-[1.1] mb-8">
+                    {lp1Data.heroTitleLine1 || 'SEU SITE NÃO RANQUEIA NO GOOGLE?'}<br/>
+                    <span class="bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent animate-gradient">
+                        {lp1Data.heroTitleHighlight || 'WORDPRESS É O PROBLEMA.'}
+                    </span><br/>
+                    <span class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-slate-300 mt-4 block">
+                        {lp1Data.heroTitleLine2 || 'A Solução JAMstack que o Google AMPLIFICA'}
+                    </span>
+                </h1>
+                
+                {lp1Data.heroSubtitle && (
+                    <p class="text-lg md:text-xl lg:text-2xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed">
+                        {lp1Data.heroSubtitle}
+                    </p>
+                )}
+                
+                <div class="flex flex-col items-center gap-4">
+                    {lp1Data.heroCtaText && lp1Data.heroCtaUrl && (
+                        <a href={lp1Data.heroCtaUrl} class="inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 md:py-6 bg-primary text-white font-bold uppercase tracking-wider rounded-xl hover:scale-105 active:scale-95 transition-all shadow-[0_0_40px_rgba(168,85,247,0.4)] hover:shadow-[0_0_60px_rgba(168,85,247,0.6)] animate-pulse">
+                            <span>{lp1Data.heroCtaText}</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                                <path d="M5 12h14"></path>
+                                <path d="m12 5 7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    )}
+                    {lp1Data.heroFeatures && (
+                        <p class="text-sm md:text-base text-slate-500">{lp1Data.heroFeatures}</p>
+                    )}
+                </div>
+                {lp1Data.heroImage && (
+                    <div class="mt-16 max-w-4xl mx-auto">
+                        <img src={lp1Data.heroImage} alt="Hero" class="rounded-2xl shadow-2xl border border-white/10"/>
+                    </div>
+                )}
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+    </section>
+
+    <!-- 2. O VELHO CAMINHO VS O NOVO CAMINHO -->
+    <section class="py-20 md:py-32 bg-black relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-secondary font-semibold uppercase tracking-wider text-sm">A Mudança</span>
+                <h2 class="text-3xl md:text-5xl font-heading font-black text-white mt-4 mb-6">
+                    {lp1Data.oldVsNewTitle || 'O Velho Caminho vs. O Novo Caminho'}
+                </h2>
+                {lp1Data.oldVsNewSubtitle && (
+                    <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+                        {lp1Data.oldVsNewSubtitle}
+                    </p>
+                )}
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <!-- O Velho Caminho -->
+                <div class="relative p-8 md:p-10 rounded-2xl bg-[#1a1a1a] border border-slate-800">
+                    <div class="w-16 h-16 rounded-xl bg-slate-800 flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-slate-500">
+                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path>
+                            <path d="M12 9v4"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-400 mb-6">{lp1Data.oldPathTitle || 'O Velho Caminho (WordPress)'}</h3>
+                    <ul class="space-y-5">
+                        {(lp1Data.oldPathItems || []).map((item: string) => (
+                            <li class="flex items-start gap-4">
+                                <div class="w-7 h-7 rounded-full bg-slate-800 flex items-center justify-center shrink-0 mt-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-slate-500">
+                                        <path d="M18 6 6 18"></path>
+                                        <path d="m6 6 12 12"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-slate-400 text-lg">{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                
+                <!-- O Novo Caminho -->
+                <div class="relative p-8 md:p-10 rounded-2xl bg-gradient-to-br from-primary/10 to-secondary/10 border-2 border-primary/50 shadow-[0_0_40px_rgba(168,85,247,0.15)]">
+                    <div class="w-16 h-16 rounded-xl bg-primary/20 flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-primary">
+                            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-6">{lp1Data.newPathTitle || 'O Novo Caminho JAMstack'}</h3>
+                    <ul class="space-y-5">
+                        {(lp1Data.newPathItems || []).map((item: string) => (
+                            <li class="flex items-start gap-4">
+                                <div class="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-primary">
+                                        <path d="M20 6 9 17l-5-5"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-white text-lg">{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. A PONTE DA EPIFANIA -->
+    <section class="py-20 md:py-32 bg-[#0a0a0a] relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(168,85,247,0.1)_1px,_transparent_1px)] bg-[length:50px_50px]"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12">
+                <span class="inline-flex items-center gap-2 text-secondary font-semibold uppercase tracking-wider text-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                        <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+                        <path d="M9 18h6"></path>
+                        <path d="M10 22h4"></path>
+                    </svg>
+                    A Ponte da Epifania
+                </span>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-6xl mx-auto">
+                <div class="space-y-8">
+                    {lp1Data.epiphanyTitle && (
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-black text-white leading-tight">
+                            {lp1Data.epiphanyTitle}
+                        </h2>
+                    )}
+                    
+                    {lp1Data.epiphanyContent && (
+                        <div class="space-y-6 text-lg text-slate-400 leading-relaxed">
+                            {lp1Data.epiphanyContent.split('\n\n').map((paragraph: string) => (
+                                <p set:html={paragraph.replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-semibold">$1</span>').replace(/`(.*?)`/g, '<span class="text-primary font-bold">$1</span>')} />
+                            ))}
+                            
+                            {lp1Data.epiphanyQuote && (
+                                <div class="relative pl-6 border-l-2 border-primary/50 py-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute -left-4 top-0 w-8 h-8 text-primary bg-[#0a0a0a]">
+                                        <path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                                        <path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path>
+                                    </svg>
+                                    <p class="italic text-white" set:html={lp1Data.epiphanyQuote.replace(/\*\*(.*?)\*\*/g, '<span class="font-bold text-primary">$1</span>')} />
+                                </div>
+                            )}
+                        </div>
+                    )}
+                    
+                    {lp1Data.epiphanyStats && lp1Data.epiphanyStats.length > 0 && (
+                        <div class="flex flex-wrap gap-8 pt-4">
+                            {lp1Data.epiphanyStats.map((stat: any) => (
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                                        {stat.icon ? (
+                                            <span class="text-2xl">{stat.icon}</span>
+                                        ) : (
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <polyline points="12 6 12 12 16 14"></polyline>
+                                            </svg>
+                                        )}
+                                    </div>
+                                    <div>
+                                        <p class="text-2xl font-black text-white">{stat.number}</p>
+                                        <p class="text-sm text-slate-400">{stat.label}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                
+                {lp1Data.epiphanyImage && (
+                    <div class="relative space-y-6">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/30 overflow-hidden relative group hover:border-primary/60 transition-colors p-6 text-center">
+                                <img src={lp1Data.epiphanyImage} alt="Epifania" class="w-full h-auto rounded-lg mb-4" />
+                            </div>
+                        </div>
+                    </div>
+                )}
+                
+                <div class="relative space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/30 overflow-hidden relative group hover:border-primary/60 transition-colors p-6 text-center">
+                            <div class="w-20 h-20 rounded-full mx-auto mb-4 overflow-hidden border-2 border-primary/40 bg-primary/20 flex items-center justify-center">
+                                <span class="text-3xl">👨‍💻</span>
+                            </div>
+                            <p class="text-lg font-bold text-white">CNX Agency</p>
+                            <p class="text-sm text-primary font-semibold">Criador da Stack</p>
+                            <p class="text-xs text-slate-400 mt-2">Especialista em JAMstack</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. MECANISMO ÚNICO -->
+    <section class="py-20 md:py-32 bg-black relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/3 rounded-full blur-[150px] pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-secondary font-semibold uppercase tracking-wider text-sm">Mecanismo Único</span>
+                {lp1Data.mechanismTitle && (
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-black text-white mt-4 mb-6">
+                        {lp1Data.mechanismTitle}
+                    </h2>
+                )}
+            </div>
+            
+            {lp1Data.mechanismItems && lp1Data.mechanismItems.length > 0 && (
+                <div class="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto mb-12">
+                    {lp1Data.mechanismItems.map((item: any) => (
+                        <div class="group relative">
+                            <div class="relative p-8 lg:p-10 rounded-2xl bg-white/5 border border-white/10 h-full transition-all duration-300 ease-out hover:-translate-y-2 hover:border-primary/50 hover:shadow-[0_0_40px_rgba(168,85,247,0.2)]">
+                                <div class="mb-6">
+                                    <span class="text-6xl lg:text-7xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent opacity-90">{item.number}</span>
+                                </div>
+                                <div class="w-14 h-14 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-6 transition-all duration-300 group-hover:bg-primary/20 group-hover:border-primary/40">
+                                    <span class="text-2xl">{item.icon}</span>
+                                </div>
+                                <h3 class="text-xl lg:text-2xl font-bold text-white mb-4">{item.title}</h3>
+                                <p class="text-slate-400 leading-relaxed" set:html={item.description.replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-semibold">$1</span>')} />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+            
+            {lp1Data.mechanismFooter && (
+                <div class="text-center">
+                    <p class="text-xl md:text-2xl text-slate-400 max-w-3xl mx-auto" set:html={lp1Data.mechanismFooter.replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-semibold">$1</span>')} />
+                </div>
+            )}
+        </div>
+    </section>
+
+    <!-- 5. DEMONSTRAÇÃO TÉCNICA -->
+    <section class="py-20 md:py-32 bg-[#0a0a0a] relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12">
+                <span class="inline-flex items-center gap-2 text-primary font-semibold uppercase tracking-wider text-sm mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+                    </svg>
+                    Demonstração Técnica
+                </span>
+                {lp1Data.demoTitle && (
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-black text-white leading-tight">
+                        {lp1Data.demoTitle}
+                    </h2>
+                )}
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center max-w-6xl mx-auto">
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-primary/30 to-secondary/30 rounded-2xl blur-lg opacity-50 group-hover:opacity-70 transition-opacity"></div>
+                    <div class="relative aspect-video bg-white/5 rounded-2xl border border-white/10 overflow-hidden">
+                        {lp1Data.demoVideoUrl ? (
+                            <iframe 
+                                src={lp1Data.demoVideoUrl.replace('watch?v=', 'embed/')} 
+                                class="w-full h-full"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                            ></iframe>
+                        ) : lp1Data.demoImage ? (
+                            <img src={lp1Data.demoImage} alt="Demonstração" class="w-full h-full object-cover" />
+                        ) : (
+                            <div class="absolute inset-0 flex items-center justify-center bg-black/50">
+                                <div class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-primary/20 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 hover:bg-primary/30 group-hover:shadow-[0_0_40px_rgba(168,85,247,0.4)]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 md:w-10 md:h-10 text-primary fill-primary ml-1">
+                                        <polygon points="6 3 20 12 6 21 6 3"></polygon>
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+                
+                <div class="space-y-6">
+                    {lp1Data.demoDescription && (
+                        <p class="text-lg md:text-xl text-slate-400 leading-relaxed" set:html={lp1Data.demoDescription.replace(/\*\*(.*?)\*\*/g, '<span class="text-white font-semibold">$1</span>')} />
+                    )}
+                    {lp1Data.demoFeatures && lp1Data.demoFeatures.length > 0 && (
+                        <div class="space-y-4">
+                            {lp1Data.demoFeatures.map((feature: any) => (
+                                <div class="flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+                                        <span class="text-xl">{feature.icon}</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white mb-1">{feature.title}</h4>
+                                        <p class="text-sm text-slate-400">{feature.description}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. O CAMINHO COMPLETO -->
+    <section class="py-20 md:py-32 bg-black relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16 md:mb-24">
+                <span class="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">O Caminho Completo</span>
+                {lp1Data.pathTitle && (
+                    <h2 class="text-3xl md:text-5xl font-heading font-bold text-white mb-4">{lp1Data.pathTitle}</h2>
+                )}
+                {lp1Data.pathSubtitle && (
+                    <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
+                        {lp1Data.pathSubtitle}
+                    </p>
+                )}
+            </div>
+            
+            <div class="relative max-w-5xl mx-auto">
+                <div class="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-primary/20 transform -translate-x-1/2"></div>
+                <div class="md:hidden absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-primary/50 to-primary/20"></div>
+                
+                <div class="flex flex-col gap-12 md:gap-20">
+                    <!-- Etapa 1 -->
+                    <div class="relative">
+                        <div class="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 items-center">
+                            <div class="text-right">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl hover:border-primary/30 transition-all duration-300 group inline-block text-left max-w-md ml-auto">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="text-4xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors">01</span>
+                                        <h3 class="text-xl font-bold text-white">Setup Inicial</h3>
+                                    </div>
+                                    <p class="text-slate-400 leading-relaxed">Configure Astro, Cloudflare e Keystatic. A base da sua arquitetura moderna.</p>
+                                </div>
+                            </div>
+                            <div class="relative z-10 flex justify-center">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30 border-4 border-black">
+                                    <span class="text-2xl">⚡</span>
+                                </div>
+                            </div>
+                            <div class="invisible"></div>
+                        </div>
+                        <div class="md:hidden flex items-start gap-4">
+                            <div class="flex-shrink-0 relative z-10">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30">
+                                    <span class="text-2xl">⚡</span>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 shadow-lg">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-3xl font-bold text-primary/30">01</span>
+                                        <h3 class="text-lg font-bold text-white">Setup Inicial</h3>
+                                    </div>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Configure Astro, Cloudflare e Keystatic. A base da sua arquitetura moderna.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Etapa 2 -->
+                    <div class="relative">
+                        <div class="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 items-center">
+                            <div class="invisible"></div>
+                            <div class="relative z-10 flex justify-center">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30 border-4 border-black">
+                                    <span class="text-2xl">📝</span>
+                                </div>
+                            </div>
+                            <div class="text-left">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl hover:border-primary/30 transition-all duration-300 group inline-block text-left max-w-md">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="text-4xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors">02</span>
+                                        <h3 class="text-xl font-bold text-white">Conteúdo SEO</h3>
+                                    </div>
+                                    <p class="text-slate-400 leading-relaxed">Crie conteúdo otimizado com Keystatic. Estrutura que o Google entende e premia.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:hidden flex items-start gap-4">
+                            <div class="flex-shrink-0 relative z-10">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30">
+                                    <span class="text-2xl">📝</span>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 shadow-lg">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-3xl font-bold text-primary/30">02</span>
+                                        <h3 class="text-lg font-bold text-white">Conteúdo SEO</h3>
+                                    </div>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Crie conteúdo otimizado com Keystatic. Estrutura que o Google entende e premia.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Etapa 3 -->
+                    <div class="relative">
+                        <div class="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 items-center">
+                            <div class="text-right">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl hover:border-primary/30 transition-all duration-300 group inline-block text-left max-w-md ml-auto">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="text-4xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors">03</span>
+                                        <h3 class="text-xl font-bold text-white">Deploy na Edge</h3>
+                                    </div>
+                                    <p class="text-slate-400 leading-relaxed">Deploy instantâneo no Cloudflare. Seu site no ar em segundos, servido globalmente.</p>
+                                </div>
+                            </div>
+                            <div class="relative z-10 flex justify-center">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30 border-4 border-black">
+                                    <span class="text-2xl">☁️</span>
+                                </div>
+                            </div>
+                            <div class="invisible"></div>
+                        </div>
+                        <div class="md:hidden flex items-start gap-4">
+                            <div class="flex-shrink-0 relative z-10">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30">
+                                    <span class="text-2xl">☁️</span>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 shadow-lg">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-3xl font-bold text-primary/30">03</span>
+                                        <h3 class="text-lg font-bold text-white">Deploy na Edge</h3>
+                                    </div>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Deploy instantâneo no Cloudflare. Seu site no ar em segundos, servido globalmente.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Etapa 4 -->
+                    <div class="relative">
+                        <div class="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:gap-8 items-center">
+                            <div class="invisible"></div>
+                            <div class="relative z-10 flex justify-center">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30 border-4 border-black">
+                                    <span class="text-2xl">🚀</span>
+                                </div>
+                            </div>
+                            <div class="text-left">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl hover:border-primary/30 transition-all duration-300 group inline-block text-left max-w-md">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <span class="text-4xl font-bold text-primary/20 group-hover:text-primary/40 transition-colors">04</span>
+                                        <h3 class="text-xl font-bold text-white">Rankeamento</h3>
+                                    </div>
+                                    <p class="text-slate-400 leading-relaxed">Veja seu site subir nas primeiras posições do Google. Performance que WordPress nunca vai entregar.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md:hidden flex items-start gap-4">
+                            <div class="flex-shrink-0 relative z-10">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/30">
+                                    <span class="text-2xl">🚀</span>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="bg-white/5 border border-white/10 rounded-2xl p-5 shadow-lg">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="text-3xl font-bold text-primary/30">04</span>
+                                        <h3 class="text-lg font-bold text-white">Rankeamento</h3>
+                                    </div>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Veja seu site subir nas primeiras posições do Google. Performance que WordPress nunca vai entregar.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. DEPOIMENTOS -->
+    <section class="py-20 md:py-28 bg-black relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute inset-0" style="background-image: radial-gradient(circle at 2px 2px, rgba(168,85,247,1) 1px, transparent 0); background-size: 40px 40px;"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-12 md:mb-16">
+                <div class="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-primary">
+                        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path>
+                    </svg>
+                    <span class="text-sm font-medium text-primary">Resultados Reais</span>
+                </div>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-black mb-4">
+                    O Que Nossos <span class="text-primary">Clientes</span> Estão Dizendo
+                </h2>
+                <p class="text-lg text-slate-400 max-w-2xl mx-auto">
+                    Resultados reais de quem migrou do WordPress para JAMstack e viu o ranqueamento melhorar
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-slate-300 mb-4 italic">
+                        "Meu site WordPress estava na página 3 do Google. Migrei para JAMstack e em 2 meses estava na primeira página. Performance incrível!"
+                    </p>
+                    <p class="text-white font-semibold">— Cliente Satisfeito</p>
+                </div>
+                
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-slate-300 mb-4 italic">
+                        "Zero custo de hospedagem. Site 10x mais rápido. O Google adorou. Por que não fiz isso antes?"
+                    </p>
+                    <p class="text-white font-semibold">— Empresário Digital</p>
+                </div>
+                
+                <div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/30 transition-all">
+                    <div class="flex items-center gap-1 mb-4">
+                        <span class="text-yellow-400">★★★★★</span>
+                    </div>
+                    <p class="text-slate-300 mb-4 italic">
+                        "WordPress era um pesadelo. Plugins quebrando, site lento, hospedagem cara. JAMstack mudou tudo."
+                    </p>
+                    <p class="text-white font-semibold">— Desenvolvedor</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. A OFERTA -->
+    <section id="oferta" class="py-20 md:py-32 bg-[#0a0a0a] relative overflow-hidden">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-primary/3 rounded-full blur-[200px] pointer-events-none"></div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-secondary font-semibold uppercase tracking-wider text-sm">A Oferta</span>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-black text-white mt-4 max-w-4xl mx-auto leading-tight">
+                    O Que Você Recebe ao Escolher <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">JAMstack</span>
+                </h2>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="space-y-4 mb-10">
+                    <div class="flex items-center justify-between gap-4 p-5 md:p-6 rounded-xl border transition-all duration-300 hover:border-primary/30 bg-white/5 border-white/10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-primary/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-primary">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-white">Site JAMstack Completo</p>
+                                <p class="text-sm text-slate-400 mt-1">Astro + Cloudflare + Keystatic configurados e prontos para uso.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between gap-4 p-5 md:p-6 rounded-xl border transition-all duration-300 hover:border-primary/30 bg-white/5 border-white/10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-primary/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-primary">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-white">Hospedagem Gratuita na Edge</p>
+                                <p class="text-sm text-slate-400 mt-1">Cloudflare Workers com deploy automático. Zero custo de servidor.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between gap-4 p-5 md:p-6 rounded-xl border transition-all duration-300 hover:border-primary/30 bg-white/5 border-white/10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center shrink-0 bg-primary/20">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-primary">
+                                    <path d="M20 6 9 17l-5-5"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-white">Otimização SEO Avançada</p>
+                                <p class="text-sm text-slate-400 mt-1">Performance que o Google Core Web Vitals premia. Ranqueamento garantido.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-secondary via-primary to-secondary rounded-3xl blur-sm opacity-50"></div>
+                    <div class="relative p-8 md:p-12 rounded-3xl bg-white/5 border-2 border-secondary/50">
+                        <div class="absolute -top-5 left-1/2 -translate-x-1/2 px-6 py-2.5 rounded-full bg-gradient-to-r from-secondary to-[#f59e0b] text-white font-bold text-sm flex items-center gap-2 shadow-lg">
+                            <span>⚡</span>
+                            <span>PERFORMANCE 10X SUPERIOR</span>
+                        </div>
+                        <div class="text-center pt-4">
+                            <p class="text-xl text-slate-400 mb-6">Garanta seu site JAMstack hoje:</p>
+                            <div class="mb-4">
+                                <div class="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 mb-2">
+                                    <span class="text-xl sm:text-2xl font-bold text-white">Comece Agora</span>
+                                </div>
+                                <p class="text-lg text-slate-400">Migre do WordPress para JAMstack</p>
+                            </div>
+                            <div class="mt-8 mb-6">
+                                <a href="/contato" class="inline-flex items-center justify-center gap-2 px-8 md:px-14 py-4 sm:py-5 md:py-6 bg-primary text-white font-bold uppercase tracking-wider rounded-xl w-full md:w-auto hover:scale-105 active:scale-95 transition-all shadow-[0_0_50px_rgba(168,85,247,0.5)] hover:shadow-[0_0_70px_rgba(168,85,247,0.7)]">
+                                    <span>QUERO RANQUEAR NO GOOGLE</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
+                                        <path d="M5 12h14"></path>
+                                        <path d="m12 5 7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="flex flex-wrap items-center justify-center gap-6 pt-6 border-t border-white/10">
+                                <div class="flex items-center gap-2 text-slate-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary">
+                                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium">100% Gratuito</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-primary">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                    <span class="text-sm font-medium">Deploy Imediato</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-slate-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-secondary">
+                                        <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                                        <path d="m9 12 2 2 4-4"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium">SEO Garantido</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. GARANTIA -->
+    <section class="py-20 md:py-32 bg-black relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto">
+                <div class="p-8 md:p-12 rounded-3xl bg-white/5 border border-secondary/30 relative text-center">
+                    <div class="flex justify-center mb-8">
+                        <div class="w-28 h-28 rounded-full bg-secondary/20 flex items-center justify-center relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-14 h-14 text-secondary">
+                                <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                                <path d="m9 12 2 2 4-4"></path>
+                            </svg>
+                            <div class="absolute inset-0 rounded-full bg-secondary/10 animate-pulse"></div>
+                        </div>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-heading font-black text-white mb-6">
+                        O Risco está <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">100% nas minhas costas</span>.
+                    </h2>
+                    <p class="text-lg md:text-xl text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                        Teste nossa stack JAMstack. Veja a performance, o ranqueamento e a velocidade. 
+                        Se você não achar que é <span class="text-white font-semibold">superior ao WordPress</span>, 
+                        eu assumo a responsabilidade. <span class="text-secondary font-bold">Sem perguntas.</span>
+                    </p>
+                    <div class="mt-8 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/30">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-secondary">
+                            <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path>
+                            <path d="m9 12 2 2 4-4"></path>
+                        </svg>
+                        <span class="text-secondary font-semibold text-sm">Garantia de Performance</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. FAQ -->
+    <section class="py-20 md:py-32 bg-[#0a0a0a] relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-secondary">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                        <path d="M12 17h.01"></path>
+                    </svg>
+                    <span class="text-secondary font-semibold uppercase tracking-wider text-sm">FAQ</span>
+                </div>
+                <h2 class="text-3xl md:text-5xl font-heading font-black text-white">
+                    Suas dúvidas <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">respondidas</span>
+                </h2>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <div class="space-y-4">
+                    <details class="px-6 rounded-xl bg-black border border-white/10 data-[open]:border-primary/50 transition-colors">
+                        <summary class="flex flex-1 items-center justify-between transition-all hover:underline cursor-pointer font-bold text-white hover:text-primary py-6">
+                            Por que JAMstack é melhor que WordPress para SEO?
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </summary>
+                        <div class="pb-6 text-slate-400">
+                            <p>JAMstack gera sites estáticos pré-renderizados que carregam instantaneamente. O Google Core Web Vitals premia velocidade, e sites JAMstack consistentemente superam WordPress em performance, resultando em melhor ranqueamento.</p>
+                        </div>
+                    </details>
+                    
+                    <details class="px-6 rounded-xl bg-black border border-white/10 data-[open]:border-primary/50 transition-colors">
+                        <summary class="flex flex-1 items-center justify-between transition-all hover:underline cursor-pointer font-bold text-white hover:text-primary py-6">
+                            Como a hospedagem pode ser gratuita?
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </summary>
+                        <div class="pb-6 text-slate-400">
+                            <p>Cloudflare Workers oferece hospedagem gratuita na Edge para sites estáticos. Seu site é servido de servidores distribuídos globalmente, com zero custo de infraestrutura. WordPress requer servidores caros que você precisa pagar mensalmente.</p>
+                        </div>
+                    </details>
+                    
+                    <details class="px-6 rounded-xl bg-black border border-white/10 data-[open]:border-primary/50 transition-colors">
+                        <summary class="flex flex-1 items-center justify-between transition-all hover:underline cursor-pointer font-bold text-white hover:text-primary py-6">
+                            Preciso saber programar para usar JAMstack?
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </summary>
+                        <div class="pb-6 text-slate-400">
+                            <p>Com Keystatic CMS, você edita conteúdo sem código, igual WordPress. A diferença é que o site gerado é estático e super rápido, enquanto WordPress precisa de PHP e banco de dados que tornam tudo lento.</p>
+                        </div>
+                    </details>
+                    
+                    <details class="px-6 rounded-xl bg-black border border-white/10 data-[open]:border-primary/50 transition-colors">
+                        <summary class="flex flex-1 items-center justify-between transition-all hover:underline cursor-pointer font-bold text-white hover:text-primary py-6">
+                            Quanto tempo para ver resultados no Google?
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 transition-transform duration-200">
+                                <path d="m6 9 6 6 6-6"></path>
+                            </svg>
+                        </summary>
+                        <div class="pb-6 text-slate-400">
+                            <p>Sites JAMstack geralmente começam a ranquear melhor em 2-4 semanas devido à performance superior. WordPress pode levar meses para melhorar porque o Google penaliza sites lentos.</p>
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 11. A ESCOLHA É SUA -->
+    <section class="py-20 md:py-32 bg-black relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl md:text-5xl font-heading font-black text-white mb-12">
+                    A <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Escolha</span> é Sua
+                </h2>
+                <div class="grid md:grid-cols-2 gap-6 mb-12">
+                    <div class="p-6 rounded-2xl bg-white/5 border border-white/10 opacity-60">
+                        <div class="flex items-center justify-center gap-2 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-red-500">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="m15 9-6 6"></path>
+                                <path d="m9 9 6 6"></path>
+                            </svg>
+                            <span class="font-bold text-slate-400">Opção 1</span>
+                        </div>
+                        <p class="text-slate-400">Continuar com WordPress, pagando hospedagem cara e lutando para ranquear na página 2 do Google.</p>
+                    </div>
+                    <div class="p-6 rounded-2xl bg-primary/5 border-2 border-primary/50 relative">
+                        <div class="flex items-center justify-center gap-2 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 text-primary">
+                                <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                <path d="m9 11 3 3L22 4"></path>
+                            </svg>
+                            <span class="font-bold text-primary">Opção 2</span>
+                        </div>
+                        <p class="text-white font-medium">Migrar para JAMstack e construir um site que <span class="text-primary font-bold">ranqueia no topo do Google</span> com custo zero de hospedagem.</p>
+                    </div>
+                </div>
+                <a href="/contato" class="inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 sm:py-6 md:py-8 bg-primary text-white font-black uppercase tracking-wide rounded-lg hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_30px_rgba(168,85,247,0.5)] hover:shadow-[0_0_50px_rgba(168,85,247,0.7)]">
+                    <span>QUERO RANQUEAR NO GOOGLE AGORA</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 md:w-6 md:h-6">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </a>
+                <p class="mt-6 text-sm text-slate-500">Migração completa do WordPress para JAMstack</p>
+            </div>
+        </div>
+    </section>
+
+</MainLayout>
+
+<style>
+    @keyframes gradient {
+        0%, 100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+    }
+    
+    .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient 3s ease infinite;
+    }
+</style>

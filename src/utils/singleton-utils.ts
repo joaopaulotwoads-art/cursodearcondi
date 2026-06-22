@@ -9,24 +9,14 @@ import yaml from 'js-yaml';
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { isGitHubConfigured, githubWriteFile } from './github-api';
-import { readSiteSettings } from './read-site-settings';
-import { getSingletonsBaseDir } from './repo-paths';
 
-const SINGLETONS_BASE_DIR = getSingletonsBaseDir(import.meta.url);
-
-const KNOWN_THEMES = new Set(['classic', 'cursodear', '8links-test2', 'local']);
+const SINGLETONS_BASE_DIR = path.resolve('./src/content/singletons');
 
 /**
- * Tema ativo para leitura/escrita de singletons (alinhado a settings.yaml → activeTheme).
+ * Retorna o ID do tema para singletons. Sem sistema de temas, sempre usa 'classic'.
  */
 async function getActiveThemeId(): Promise<string> {
-    try {
-        const s = await readSiteSettings();
-        const t = String(s.activeTheme || 'classic').trim() || 'classic';
-        return KNOWN_THEMES.has(t) ? t : 'classic';
-    } catch {
-        return 'classic';
-    }
+    return 'classic';
 }
 
 /**
@@ -80,11 +70,11 @@ export async function writeSingleton(name: string, data: unknown, themeId?: stri
         });
 
         if (isGitHubConfigured()) {
-            return (await githubWriteFile(
+            return githubWriteFile(
                 `src/content/singletons/${activeTheme}/${name}.yaml`,
                 yamlContent,
                 `content: save singleton "${name}"`,
-            )).ok;
+            );
         }
 
         const themeDir = path.join(SINGLETONS_BASE_DIR, activeTheme);

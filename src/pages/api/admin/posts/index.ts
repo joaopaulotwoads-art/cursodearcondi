@@ -1,14 +1,6 @@
 import type { APIRoute } from 'astro';
 import { listPosts, writePost, slugExists, generateSlug } from '../../../../utils/post-utils';
 import type { PostData } from '../../../../utils/post-utils';
-import { isGitHubConfigured } from '../../../../utils/github-api';
-
-const SEO_SCHEMA_VALUES = ['auto', 'blogPosting', 'articleItemList', 'none'] as const;
-
-function parseSeoSchema(v: unknown): PostData['seoSchema'] {
-    if (typeof v !== 'string') return undefined;
-    return (SEO_SCHEMA_VALUES as readonly string[]).includes(v) ? (v as PostData['seoSchema']) : undefined;
-}
 
 /**
  * api/admin/posts/index.ts
@@ -36,7 +28,7 @@ export const GET: APIRoute = async () => {
             count: sortedPosts.length,
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao listar posts:', error);
@@ -45,55 +37,43 @@ export const GET: APIRoute = async () => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     }
 };
 
 export const POST: APIRoute = async ({ request }) => {
     try {
-        if (process.env.VERCEL && !isGitHubConfigured()) {
-            return new Response(JSON.stringify({
-                success: false,
-                error:
-                    'Ambiente Vercel: configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO (Settings → Environment Variables) e faça redeploy para salvar posts pelo painel.',
-            }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
-            });
-        }
-
         const body = await request.json();
-        const { title, slug, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, content, contentFormat, seoSchema } = body;
-        const normalizedSlug = generateSlug(String(slug || ''));
+        const { title, slug, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, content } = body;
         
         // Validações
-        if (!title || !normalizedSlug) {
+        if (!title || !slug) {
             return new Response(JSON.stringify({
                 success: false,
                 error: 'Título e slug são obrigatórios',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
         // Verificar se slug já existe
-        const exists = await slugExists(normalizedSlug);
+        const exists = await slugExists(slug);
         if (exists) {
             return new Response(JSON.stringify({
                 success: false,
                 error: 'Um post com este slug já existe',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
         // Preparar dados
         const postData: PostData = {
             title,
-            slug: normalizedSlug,
+            slug,
             author: author || undefined,
             category: category || undefined,
             publishedDate: publishedDate || undefined,
@@ -101,28 +81,28 @@ export const POST: APIRoute = async ({ request }) => {
             metaTitle: metaTitle || undefined,
             metaDescription: metaDescription || undefined,
             metaImage: metaImage || undefined,
-            contentFormat: contentFormat === 'html' ? 'html' : undefined,
-            seoSchema: parseSeoSchema(seoSchema),
         };
         
-        const wrote = await writePost(normalizedSlug, postData, content || '');
-        if (!wrote.ok) {
+        // Escrever arquivo
+        const success = await writePost(slug, postData, content || '');
+        
+        if (!success) {
             return new Response(JSON.stringify({
                 success: false,
-                error: wrote.error || 'Erro ao criar post',
+                error: 'Erro ao criar post',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
         return new Response(JSON.stringify({
             success: true,
             message: 'Post criado com sucesso',
-            slug: normalizedSlug,
+            slug,
         }), {
             status: 201,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao criar post:', error);
@@ -131,7 +111,7 @@ export const POST: APIRoute = async ({ request }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     }
 };

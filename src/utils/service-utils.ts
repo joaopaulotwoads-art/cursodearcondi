@@ -116,11 +116,11 @@ export async function writeService(slug: string, data: ServiceData): Promise<boo
         const filename = slugToFilename(slug);
 
         if (isGitHubConfigured()) {
-            return (await githubWriteFile(
+            return githubWriteFile(
                 `${SERVICES_GH_PATH}/${filename}`,
                 yamlContent,
                 `content: save service "${slug}"`,
-            )).ok;
+            );
         }
 
         await fs.mkdir(SERVICES_DIR, { recursive: true });

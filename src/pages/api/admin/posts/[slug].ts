@@ -9,33 +9,24 @@ import type { APIRoute } from 'astro';
  * PUT: Atualiza o post
  * DELETE: Deleta o post
  */
-import { readPost, writePost, deletePost, slugExists, generateSlug } from '../../../../utils/post-utils';
+import { readPost, writePost, deletePost, slugExists } from '../../../../utils/post-utils';
 import type { PostData } from '../../../../utils/post-utils';
-import { isGitHubConfigured } from '../../../../utils/github-api';
-
-const SEO_SCHEMA_VALUES = ['auto', 'blogPosting', 'articleItemList', 'none'] as const;
-
-function parseSeoSchema(v: unknown): PostData['seoSchema'] {
-    if (typeof v !== 'string') return undefined;
-    return (SEO_SCHEMA_VALUES as readonly string[]).includes(v) ? (v as PostData['seoSchema']) : undefined;
-}
 
 export const GET: APIRoute = async ({ params }) => {
     try {
         const { slug } = params;
-        const normalizedSlug = generateSlug(String(slug || ''));
         
-        if (!slug || !normalizedSlug) {
+        if (!slug) {
             return new Response(JSON.stringify({
                 success: false,
                 error: 'Slug é obrigatório',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
-        const post = await readPost(String(slug)) || await readPost(normalizedSlug);
+        const post = await readPost(slug);
         
         if (!post) {
             return new Response(JSON.stringify({
@@ -43,7 +34,7 @@ export const GET: APIRoute = async ({ params }) => {
                 error: 'Post não encontrado',
             }), {
                 status: 404,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
@@ -52,7 +43,7 @@ export const GET: APIRoute = async ({ params }) => {
             post,
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao ler post:', error);
@@ -61,56 +52,42 @@ export const GET: APIRoute = async ({ params }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     }
 };
 
 export const PUT: APIRoute = async ({ params, request }) => {
     try {
-        if (process.env.VERCEL && !isGitHubConfigured()) {
-            return new Response(JSON.stringify({
-                success: false,
-                error:
-                    'Ambiente Vercel: configure GITHUB_TOKEN, GITHUB_OWNER e GITHUB_REPO (Settings → Environment Variables) e faça redeploy para salvar posts pelo painel.',
-            }), {
-                status: 500,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
-            });
-        }
-
         const { slug } = params;
-        const rawCurrentSlug = String(slug || '');
         const body = await request.json();
-        const { title, newSlug, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, content, contentFormat, seoSchema } = body;
-        const normalizedCurrentSlug = generateSlug(rawCurrentSlug);
-        const normalizedNewSlug = newSlug ? generateSlug(String(newSlug)) : '';
+        const { title, newSlug, author, category, publishedDate, thumbnail, metaTitle, metaDescription, metaImage, content } = body;
         
-        if (!slug || !normalizedCurrentSlug) {
+        if (!slug) {
             return new Response(JSON.stringify({
                 success: false,
                 error: 'Slug é obrigatório',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
         // Se mudou o slug, verificar se o novo já existe
-        if (normalizedNewSlug && normalizedNewSlug !== normalizedCurrentSlug) {
-            const exists = await slugExists(normalizedNewSlug, normalizedCurrentSlug);
+        if (newSlug && newSlug !== slug) {
+            const exists = await slugExists(newSlug, slug);
             if (exists) {
                 return new Response(JSON.stringify({
                     success: false,
                     error: 'Um post com este slug já existe',
                 }), {
                     status: 400,
-                    headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                    headers: { 'Content-Type': 'application/json' },
                 });
             }
         }
         
-        const finalSlug = normalizedNewSlug || normalizedCurrentSlug;
+        const finalSlug = newSlug || slug;
         
         // Preparar dados
         const postData: PostData = {
@@ -123,26 +100,23 @@ export const PUT: APIRoute = async ({ params, request }) => {
             metaTitle: metaTitle || undefined,
             metaDescription: metaDescription || undefined,
             metaImage: metaImage || undefined,
-            contentFormat: contentFormat === 'html' ? 'html' : undefined,
-            seoSchema: parseSeoSchema(seoSchema),
         };
         
         // Se mudou o slug, deletar arquivo antigo
-        if (finalSlug !== normalizedCurrentSlug) {
-            await deletePost(rawCurrentSlug);
-            if (rawCurrentSlug !== normalizedCurrentSlug) {
-                await deletePost(normalizedCurrentSlug);
-            }
+        if (newSlug && newSlug !== slug) {
+            await deletePost(slug);
         }
         
-        const wrote = await writePost(finalSlug, postData, content || '');
-        if (!wrote.ok) {
+        // Escrever arquivo
+        const success = await writePost(finalSlug, postData, content || '');
+        
+        if (!success) {
             return new Response(JSON.stringify({
                 success: false,
-                error: wrote.error || 'Erro ao atualizar post',
+                error: 'Erro ao atualizar post',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
@@ -152,7 +126,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
             slug: finalSlug,
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao atualizar post:', error);
@@ -161,7 +135,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     }
 };
@@ -176,7 +150,7 @@ export const DELETE: APIRoute = async ({ params }) => {
                 error: 'Slug é obrigatório',
             }), {
                 status: 400,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
@@ -188,7 +162,7 @@ export const DELETE: APIRoute = async ({ params }) => {
                 error: 'Erro ao deletar post',
             }), {
                 status: 500,
-                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                headers: { 'Content-Type': 'application/json' },
             });
         }
         
@@ -197,7 +171,7 @@ export const DELETE: APIRoute = async ({ params }) => {
             message: 'Post deletado com sucesso',
         }), {
             status: 200,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     } catch (error: any) {
         console.error('❌ Erro ao deletar post:', error);
@@ -206,7 +180,7 @@ export const DELETE: APIRoute = async ({ params }) => {
             error: error.message,
         }), {
             status: 500,
-            headers: { 'Content-Type': 'application/json; charset=utf-8' },
+            headers: { 'Content-Type': 'application/json' },
         });
     }
 };

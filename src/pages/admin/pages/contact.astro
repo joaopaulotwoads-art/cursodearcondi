@@ -16,8 +16,7 @@ const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
 const isLocal = siteMode === 'local';
 
-const activeBlogTheme = (settings?.data?.activeTheme || 'classic') as string;
-const themeId = isLocal ? 'local' : activeBlogTheme;
+const themeId = isLocal ? 'local' : 'classic';
 let initialData = await readSingleton('contact', themeId);
 
 if (isLocal && !initialData) {
