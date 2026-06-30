@@ -202,58 +202,82 @@ const extraJsonLd = {
   <div class="bg-white text-slate-900">
     <!-- 2. HERO -->
     <section
-      class="relative min-h-[650px] overflow-hidden"
+      class="relative min-h-[520px] overflow-hidden"
       style="background-image: url('/images/hero-bg.webp'); background-size: cover; background-position: center top;"
     >
       <img src="/images/hero-bg.webp" alt="Técnico instalando ar condicionado split" class="sr-only" loading="eager" decoding="async" />
-      <div class="absolute inset-0 bg-black/60"></div>
-      <div class="mx-auto flex flex-col md:flex-row items-start gap-8 px-4 md:px-6 py-10 md:py-20 max-w-6xl relative">
-        <div class="grid w-full gap-8 md:grid-cols-[1.1fr,0.9fr]">
-          <div class="text-white">
-            <span class="bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded uppercase tracking-widest">
-              +11.900 técnicos formados · Avaliação 4.7 de 5
-            </span>
-            <h1 class="text-3xl md:text-6xl font-black text-white leading-tight mt-4">Curso de Ar Condicionado Online</h1>
-            <p class="text-gray-200 text-lg mt-4 max-w-lg leading-relaxed">
-              Aprenda a cobrar R$ 300 a R$ 500 por instalação de split e transforme conhecimento técnico em renda real. Do zero ao avançado: instalação, manutenção corretiva, preventiva e tecnologia Inverter.
-            </p>
-            <div class="flex items-center gap-2 mt-6 text-white text-sm">
-              <span class="text-yellow-400">★★★★★</span>
-              <span class="font-bold">4.7</span>
-              <span class="text-gray-300">(189 avaliações)</span>
-              <span class="text-gray-400">·</span>
-              <span class="text-gray-300">+11.900 alunos</span>
-              <span class="text-gray-400">·</span>
-              <span class="text-gray-300">94% positivas</span>
-            </div>
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-2">
-              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>160 aulas e 30 horas de conteúdo</span></p>
-              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>Acesso vitalício ao curso</span></p>
-              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>Certificado de conclusão</span></p>
-              <p class="flex items-center gap-2 rounded-lg bg-white/10 px-3 py-2 text-white text-sm"><span class="text-orange-500">✓</span><span>Garantia de 15 dias</span></p>
-            </div>
-          </div>
-          <aside class="w-full max-w-sm rounded-2xl border border-white/20 bg-white p-6 shadow-2xl">
-            <div class="flex justify-center">
-              <span class="bg-red-500 text-white text-xs font-bold px-4 py-1 rounded-full uppercase tracking-wide">MAIS VENDIDO</span>
-            </div>
-            <p class="mt-5 text-center text-sm text-gray-400 line-through">De R$ 297,00</p>
-            <p class="mt-1 text-center text-4xl font-black leading-none text-orange-500 md:text-5xl">R$ 197,00</p>
-            <p class="mt-2 text-center text-sm text-gray-500">ou 12x de R$ 20,37 no cartão</p>
-            <p class="mt-1 text-center text-xs font-bold text-red-500">Economia de R$ 100 — preço pode voltar ao normal</p>
-            <a
-              href={hotmartUrl}
-              target="_blank"
-              class="mt-5 block w-full rounded-xl bg-green-500 py-4 text-center text-lg font-black uppercase tracking-wide text-white transition hover:bg-green-600"
-            >
-              QUERO ME INSCREVER AGORA
-            </a>
-            <p class="mt-3 text-center text-xs text-gray-400">🔒 Compra 100% segura pela Hotmart</p>
-            <p class="mt-5 border-t border-slate-100 pt-4 text-sm leading-relaxed text-gray-600">
-              Ao entrar hoje, você recebe acesso imediato a todo o treinamento com mais de 160 aulas, trilha completa de 30 horas, certificado de conclusão e suporte para dúvidas técnicas. O conteúdo foi montado para acelerar sua entrada no mercado de instalação e manutenção, com acesso vitalício para revisão e garantia incondicional de 15 dias.
-            </p>
-          </aside>
+      <div class="absolute inset-0 bg-black/65"></div>
+      <div class="mx-auto max-w-4xl px-4 md:px-6 py-14 md:py-24 relative text-center">
+        <span class="inline-block bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded uppercase tracking-widest mb-5">
+          +11.900 técnicos formados · Avaliação 4.7 de 5
+        </span>
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight">
+          Curso de Ar Condicionado Online
+        </h1>
+        <p class="text-gray-200 text-lg mt-5 max-w-2xl mx-auto leading-relaxed">
+          Formação completa em instalação, manutenção corretiva, preventiva e tecnologia Inverter. Do zero ao avançado, com aulas práticas e certificado reconhecido.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-6 text-white text-sm">
+          <span class="text-yellow-400">★★★★★</span>
+          <span class="font-bold">4.7</span>
+          <span class="text-gray-300">(189 avaliações)</span>
+          <span class="text-gray-400 hidden sm:inline">·</span>
+          <span class="text-gray-300">+11.900 alunos</span>
+          <span class="text-gray-400 hidden sm:inline">·</span>
+          <span class="text-gray-300">94% de avaliações positivas</span>
         </div>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="#modulos"
+            class="inline-flex items-center justify-center min-h-[52px] px-8 py-3 rounded-xl bg-white text-slate-900 text-base font-black hover:bg-gray-100 transition"
+          >
+            Ver o conteúdo do curso
+          </a>
+          <a
+            href={hotmartUrl}
+            target="_blank"
+            class="inline-flex items-center justify-center min-h-[52px] px-8 py-3 rounded-xl bg-orange-500 text-white text-base font-black hover:bg-orange-400 transition"
+          >
+            Inscrever-se agora
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FICHA DO CURSO -->
+    <section class="bg-slate-900 border-b border-slate-800">
+      <div class="mx-auto max-w-5xl px-4 md:px-6 py-5">
+        <ul class="flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-slate-300">
+          <li class="flex items-center gap-2">
+            <span class="text-orange-400 font-bold">160</span>
+            <span>aulas gravadas</span>
+          </li>
+          <li class="hidden sm:flex items-center text-slate-600" aria-hidden="true">|</li>
+          <li class="flex items-center gap-2">
+            <span class="text-orange-400 font-bold">30h</span>
+            <span>de carga horária</span>
+          </li>
+          <li class="hidden sm:flex items-center text-slate-600" aria-hidden="true">|</li>
+          <li class="flex items-center gap-2">
+            <span class="text-orange-400 font-bold">Online</span>
+            <span>acesso pelo celular ou PC</span>
+          </li>
+          <li class="hidden sm:flex items-center text-slate-600" aria-hidden="true">|</li>
+          <li class="flex items-center gap-2">
+            <span class="text-orange-400 font-bold">Certificado</span>
+            <span>incluso ao concluir</span>
+          </li>
+          <li class="hidden sm:flex items-center text-slate-600" aria-hidden="true">|</li>
+          <li class="flex items-center gap-2">
+            <span class="text-orange-400 font-bold">Nível</span>
+            <span>iniciante ao avançado</span>
+          </li>
+          <li class="hidden sm:flex items-center text-slate-600" aria-hidden="true">|</li>
+          <li class="flex items-center gap-2">
+            <span class="text-orange-400 font-bold">Idioma</span>
+            <span>Português</span>
+          </li>
+        </ul>
       </div>
     </section>
 
@@ -716,6 +740,42 @@ const extraJsonLd = {
             });
           });
         </script>
+      </div>
+    </section>
+
+    <!-- INSCRICAO / PRECO -->
+    <section class="bg-white py-16 md:py-24" id="inscricao">
+      <div class="mx-auto max-w-3xl px-4">
+        <header class="text-center mb-10">
+          <p class="text-[11px] font-black uppercase tracking-[0.22em] text-orange-600">Inscrição</p>
+          <h2 class="mt-2 text-2xl md:text-3xl font-black tracking-tight text-slate-900">
+            Comece hoje o curso de ar condicionado online
+          </h2>
+          <div class="mx-auto mt-4 h-[3px] w-16 rounded-full bg-orange-500"></div>
+        </header>
+        <div class="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl shadow-slate-900/10">
+          <div class="text-center mb-6">
+            <p class="text-sm text-gray-400 line-through">De R$ 297,00</p>
+            <p class="text-5xl font-black text-orange-500 leading-none mt-1">R$ 197,00</p>
+            <p class="text-sm text-gray-500 mt-2">ou 12x de R$ 20,37 no cartão</p>
+          </div>
+          <ul class="space-y-2 mb-8">
+            <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-orange-500 font-bold">✓</span> 160 aulas e 30 horas de conteúdo</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-orange-500 font-bold">✓</span> Acesso vitalício — sem prazo de expiração</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-orange-500 font-bold">✓</span> Certificado de conclusão incluso</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-orange-500 font-bold">✓</span> Suporte técnico para dúvidas</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-orange-500 font-bold">✓</span> Bônus: módulo Inverter, checklist e guia de atendimento</li>
+            <li class="flex items-center gap-2 text-sm text-slate-700"><span class="text-orange-500 font-bold">✓</span> Garantia incondicional de 15 dias</li>
+          </ul>
+          <a
+            href={hotmartUrl}
+            target="_blank"
+            class="block w-full rounded-xl bg-green-500 py-4 text-center text-lg font-black uppercase tracking-wide text-white transition hover:bg-green-600"
+          >
+            Quero me inscrever agora
+          </a>
+          <p class="mt-3 text-center text-xs text-gray-400">Pagamento 100% seguro pela plataforma Hotmart</p>
+        </div>
       </div>
     </section>
 
