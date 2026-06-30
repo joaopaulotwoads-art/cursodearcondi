@@ -148,8 +148,9 @@ const extraJsonLd = {
   <div class="bg-white text-slate-900">
 
     <!-- HERO -->
-    <section class="relative min-h-[500px] overflow-hidden bg-slate-900">
-      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 opacity-95"></div>
+    <section class="relative min-h-[500px] overflow-hidden bg-slate-900"
+      style="background-image: url('/images/automotivo-hero.webp'); background-size: cover; background-position: center;">
+      <div class="absolute inset-0 bg-black/65"></div>
       <div class="mx-auto max-w-4xl px-4 md:px-6 py-14 md:py-24 relative text-center">
         <span class="inline-block bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded uppercase tracking-widest mb-5">
           +6.000 profissionais formados · GL Treinamentos
@@ -318,9 +319,13 @@ const extraJsonLd = {
         <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-8">Seu instrutor</h2>
         <div class="flex flex-col md:flex-row gap-8 items-start">
           <div class="flex-shrink-0">
-            <div class="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center text-5xl font-black text-blue-700">
-              GM
-            </div>
+            <img
+              src="/images/giliard-mota.webp"
+              alt="Giliard Mota, instrutor do curso de ar condicionado automotivo"
+              class="w-28 h-28 rounded-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
           <div>
             <h3 class="text-xl font-black text-slate-900">Giliard Mota</h3>
