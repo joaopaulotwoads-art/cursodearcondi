@@ -53,13 +53,15 @@ const modulos = [
 ];
 
 const faqItems = [
+  { q: 'Qual a diferença para os cursos gratuitos?', a: 'Os cursos gratuitos disponíveis online são apostilas em PDF com teoria introdutória. Servem para ter uma noção do sistema, mas não ensinam diagnóstico real. Este curso tem 100 horas de vídeo aula gravadas em oficina, com demonstração prática de cada procedimento.' },
+  { q: 'O curso tem aulas em vídeo ou só material em PDF?', a: '100% em vídeo aula. Cada módulo é demonstrado na prática, com câmera no equipamento, leitura de manifold, diagnóstico elétrico e procedimentos reais de oficina. As apostilas em PDF são complementos, não o conteúdo principal.' },
   { q: 'O curso de ar condicionado automotivo é para iniciantes?', a: 'Sim. O curso começa do zero, explicando o funcionamento do sistema antes de entrar em diagnóstico e manutenção. Não é necessário experiência prévia em mecânica ou refrigeração.' },
   { q: 'Quanto tempo tenho acesso ao curso?', a: 'O acesso é vitalício. Você assiste quantas vezes quiser, pelo celular ou computador, sem prazo de expiração.' },
-  { q: 'Recebo certificado ao concluir?', a: 'Sim. Ao finalizar o curso você recebe o certificado de conclusão emitido pela GL Treinamentos, que pode ser baixado e compartilhado.' },
-  { q: 'O curso cobre R134a e R1234yf?', a: 'Sim. O curso aborda ambos os fluidos refrigerantes, incluindo pressões de trabalho, procedimento de recarga e legislação vigente.' },
+  { q: 'Recebo certificado ao concluir?', a: 'Sim. Ao finalizar o curso você recebe o certificado de conclusão que pode ser baixado e compartilhado.' },
+  { q: 'O curso cobre R134a e R1234yf?', a: 'Sim. O curso aborda ambos os fluidos refrigerantes, incluindo pressões de trabalho, procedimento de recarga por massa e legislação ambiental vigente.' },
   { q: 'Qual é a garantia?', a: 'Garantia incondicional de 15 dias. Se por qualquer motivo você não gostar, basta solicitar o reembolso e o valor é devolvido integralmente.' },
-  { q: 'Como é feito o pagamento?', a: 'O pagamento é feito pela plataforma Kiwify, que aceita cartão de crédito (em até 12 parcelas), boleto e Pix.' },
-  { q: 'Terei suporte durante o curso?', a: 'Sim. O curso inclui 6 meses de suporte VIP via grupo no WhatsApp com o instrutor Giliard Mota e a equipe GL Treinamentos.' },
+  { q: 'Como é feito o pagamento?', a: 'O pagamento é feito pela plataforma Kiwify, que aceita cartão de crédito em até 12 parcelas, boleto e Pix.' },
+  { q: 'Terei suporte durante o curso?', a: 'Sim. O curso inclui 6 meses de suporte VIP via grupo no WhatsApp com o instrutor Giliard Mota, para tirar dúvidas técnicas ao longo do aprendizado.' },
 ];
 
 const courseSchemaJsonLd = {
@@ -221,14 +223,25 @@ const extraJsonLd = {
     <!-- INTRO SEO -->
     <section class="py-12 md:py-16 bg-white">
       <div class="mx-auto max-w-3xl px-4 md:px-6">
-        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-6">O que é o curso de ar condicionado automotivo</h2>
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-6">Por que este curso é diferente</h2>
+
+        <p class="text-slate-500 text-sm font-semibold uppercase tracking-widest mb-4">O problema com os cursos gratuitos</p>
         <p class="text-lg text-slate-700 leading-relaxed mb-5">
-          O ar condicionado automotivo é um dos sistemas mais complexos do veículo moderno e um dos que mais geram chamados em oficinas.
-          Quem domina o diagnóstico e a manutenção desse sistema tem agenda cheia o ano todo: o calor brasileiro garante demanda constante, independente da crise.
+          Existem dezenas de cursos gratuitos de ar condicionado automotivo online. A maioria são apostilas em PDF com teoria básica.
+          Servem para ter uma ideia do sistema. Não servem para atender um cliente com o carro parado na sua frente.
         </p>
+
+        <p class="text-slate-500 text-sm font-semibold uppercase tracking-widest mb-4">O que este curso entrega</p>
+        <p class="text-lg text-slate-700 leading-relaxed mb-5">
+          São 100 horas de vídeo aula gravadas em oficina real, com diagnóstico passo a passo, leitura de manifold, recarga de gás R134a e R1234yf, elétrica do sistema e gestão de serviços.
+          Do ciclo de refrigeração ao scanner automotivo, tudo demonstrado na prática.
+        </p>
+
+        <p class="text-slate-500 text-sm font-semibold uppercase tracking-widest mb-4">O resultado esperado</p>
         <p class="text-lg text-slate-700 leading-relaxed">
-          Este curso cobre o sistema completo: do ciclo de refrigeração ao diagnóstico com scanner, passando por recarga de gás R134a e R1234yf, compressor, condensador, evaporador, eletricidade e gestão de serviços.
-          Tudo em aulas práticas, gravadas em oficina real.
+          Serviços de diagnóstico e recarga de gás chegam a R$ 600 por atendimento.
+          Com 5 atendimentos por semana, já são mais de R$ 5.000 mensais de forma autônoma.
+          O curso te dá o método para chegar lá.
         </p>
       </div>
     </section>
@@ -281,19 +294,19 @@ const extraJsonLd = {
         <h2 class="text-2xl md:text-3xl font-black mb-8">Para quem é este curso</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="bg-blue-900/60 rounded-xl p-6 border border-blue-800">
-            <p class="text-3xl mb-3">&#128296;</p>
-            <h3 class="font-bold text-lg mb-2">Iniciantes</h3>
-            <p class="text-blue-200 text-sm leading-relaxed">Quem nunca trabalhou com A/C automotivo e quer entrar no mercado com base técnica sólida, sem precisar de curso presencial caro.</p>
+            <span class="inline-block bg-blue-700 text-blue-100 text-xs font-bold px-3 py-1 rounded uppercase tracking-widest mb-4">Iniciantes</span>
+            <p class="text-blue-100 text-sm leading-relaxed mb-2">Você nunca trabalhou com A/C automotivo e quer entrar no mercado com uma base técnica sólida.</p>
+            <p class="text-blue-300 text-sm leading-relaxed">O curso começa do zero e não exige conhecimento prévio em mecânica ou refrigeração.</p>
           </div>
           <div class="bg-blue-900/60 rounded-xl p-6 border border-blue-800">
-            <p class="text-3xl mb-3">&#128664;</p>
-            <h3 class="font-bold text-lg mb-2">Mecânicos e auxiliares</h3>
-            <p class="text-blue-200 text-sm leading-relaxed">Profissionais de oficina que já fazem manutenção geral e querem agregar o diagnóstico de A/C para aumentar o ticket médio dos serviços.</p>
+            <span class="inline-block bg-blue-700 text-blue-100 text-xs font-bold px-3 py-1 rounded uppercase tracking-widest mb-4">Mecânicos e auxiliares</span>
+            <p class="text-blue-100 text-sm leading-relaxed mb-2">Você já atua em oficina e quer adicionar o diagnóstico de A/C para aumentar o ticket médio dos atendimentos.</p>
+            <p class="text-blue-300 text-sm leading-relaxed">Serviço de A/C agrega de R$ 250 a R$ 600 por atendimento sem precisar de estrutura extra.</p>
           </div>
           <div class="bg-blue-900/60 rounded-xl p-6 border border-blue-800">
-            <p class="text-3xl mb-3">&#127978;</p>
-            <h3 class="font-bold text-lg mb-2">Técnicos autônomos</h3>
-            <p class="text-blue-200 text-sm leading-relaxed">Quem já presta serviços de A/C e quer profissionalizar o diagnóstico, cobrar mais por cada atendimento e reduzir retornos por erro.</p>
+            <span class="inline-block bg-blue-700 text-blue-100 text-xs font-bold px-3 py-1 rounded uppercase tracking-widest mb-4">Técnicos autônomos</span>
+            <p class="text-blue-100 text-sm leading-relaxed mb-2">Você já faz serviços de A/C mas quer profissionalizar o diagnóstico e cobrar mais por atendimento.</p>
+            <p class="text-blue-300 text-sm leading-relaxed">Diagnóstico correto reduz retorno de cliente e aumenta a margem em cada serviço.</p>
           </div>
         </div>
       </div>
@@ -421,18 +434,26 @@ const extraJsonLd = {
     <!-- TEXTO SEO -->
     <section class="py-10 bg-slate-50">
       <div class="mx-auto max-w-3xl px-4 md:px-6">
-        <h2 class="text-xl font-black text-slate-900 mb-4">Por que aprender ar condicionado automotivo em 2026</h2>
-        <p class="text-slate-700 leading-relaxed mb-4">
-          A frota nacional ultrapassa 115 milhões de veículos e o A/C é um dos sistemas que mais geram chamados em oficinas.
-          Cada veículo precisa de manutenção preventiva do sistema pelo menos uma vez a cada dois anos, o que garante demanda constante para o profissional capacitado.
+        <h2 class="text-xl font-black text-slate-900 mb-6">Mercado de ar condicionado automotivo no Brasil</h2>
+
+        <h3 class="font-bold text-slate-800 mb-2">Demanda garantida o ano todo</h3>
+        <p class="text-slate-700 leading-relaxed mb-5">
+          A frota nacional ultrapassa 115 milhões de veículos e o A/C é um dos sistemas com maior taxa de chamado em oficinas.
+          O calor brasileiro garante demanda constante: não importa a época do ano, cliente com A/C quebrado precisa de atendimento rápido.
         </p>
-        <p class="text-slate-700 leading-relaxed mb-4">
-          Serviços de diagnóstico e recarga de gás chegam a cobrar entre R$ 250 e R$ 600 por atendimento, com margem elevada e materiais simples.
-          Com 5 atendimentos por semana, é possível faturar mais de R$ 5.000 mensais de forma autônoma.
+
+        <h3 class="font-bold text-slate-800 mb-2">Quanto ganha um técnico de A/C automotivo</h3>
+        <p class="text-slate-700 leading-relaxed mb-5">
+          Diagnóstico e recarga de gás chegam a R$ 600 por atendimento com materiais simples e baixo custo fixo.
+          Técnicos autônomos com carteira de clientes ativa faturam entre R$ 4.000 e R$ 8.000 mensais.
+          Em concessionárias e frotas corporativas, o salário médio fica entre R$ 2.700 e R$ 3.300.
         </p>
+
+        <h3 class="font-bold text-slate-800 mb-2">Online vs presencial: o que faz mais sentido</h3>
         <p class="text-slate-700 leading-relaxed">
-          Com Giliard Mota como instrutor, você aprende com quem tem mais de 25 anos de prática em oficina e já formou milhares de profissionais pelo Brasil.
-          O método é direto: teoria aplicada, prática filmada em bancada real e suporte para tirar dúvidas.
+          Os cursos presenciais de A/C automotivo custam entre R$ 1.200 e R$ 1.500 e duram 3 dias intensivos.
+          Este curso tem 100 horas de vídeo aula com acesso vitalício: você assiste no seu ritmo, revisita qualquer módulo e conta com suporte para dúvidas.
+          O custo é menor e o aprendizado é mais profundo.
         </p>
       </div>
     </section>
