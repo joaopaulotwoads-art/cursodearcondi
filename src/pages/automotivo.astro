@@ -2,14 +2,15 @@
 import { getEntry } from 'astro:content';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import { readSingleton } from '../utils/singleton-utils';
-import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+import { SEO_ORGANIZATION_NAME, ORG_SAME_AS, absoluteUrl, DEFAULT_ORG_LOGO_PATH } from '../utils/seo-meta';
 
-const pageTitle = 'Curso de Ar Condicionado Automotivo | Carga de Gás e Manutenção';
-const pageDescription =
-  'Aprenda manutenção e carga de gás em ar condicionado automotivo. Curso prático com certificado para atender oficinas e clientes.';
-
-const hotmartAffiliateUrl = 'https://go.hotmart.com/R103468777C?dp=1';
+const pageTitle = 'Curso de Ar Condicionado Automotivo Online | GL Treinamentos 2026';
+const pageDescription = 'Aprenda ar condicionado automotivo do zero: diagnóstico, recarga de gás, compressor, válvula de expansão e mais. +6.000 alunos. Certificado. Acesso vitalício.';
+const pageKeywords = 'curso de ar condicionado automotivo online, curso ar condicionado automotivo, curso de refrigeração automotiva, curso diagnostico ar condicionado carro, curso tecnico ar condicionado automotivo, GL Treinamentos';
+const kiwifyUrl = 'https://pay.kiwify.com.br/4KQCJIS';
+const canonicalPageUrl = 'https://cursodearcondicionado.com.br/automotivo/';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
@@ -17,331 +18,453 @@ const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | un
 
 const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
 const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
-const beNav = beMenu ? navFromMenu(beMenu) : [];
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
 const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 
-const learnItems = [
-  { t: 'Circuito de climatização', d: 'Como o ar frio circula no veículo, troca de calor e integração com a ventilação da cabine.' },
-  { t: 'Compressor e acionamento', d: 'Tipos de compressor, correia, embreagem e sinais de desgaste ou falha.' },
-  { t: 'Condensador e radiador', d: 'Limpeza, obstruções e impacto na eficiência do sistema em dias quentes.' },
-  { t: 'Evaporador e drenos', d: 'Umidade, odores, entupimento do dreno e cuidados na desmontagem.' },
-  { t: 'Diagnóstico de vazamentos', d: 'Métodos seguros de inspeção e boas práticas antes da recarga.' },
-  { t: 'Segurança com refrigerante', d: 'EPI, normas básicas e cuidados com pressão e temperatura no automotivo.' },
+const aprenderItems = [
+  'Funcionamento completo do sistema de A/C automotivo',
+  'Diagnóstico profissional com manifold e detector de vazamento',
+  'Recarga de gás R134a e R1234yf',
+  'Compressor: tipos, teste e substituição',
+  'Condensador e evaporador: limpeza e troca',
+  'Válvula de expansão e tubos de orifício',
+  'Secador e filtro desidrante',
+  'Eletricidade do sistema: relés, fusíveis e pressostatos',
+  'Diagnóstico com scanner automotivo',
+  'Vedação de vazamentos e recuperação de gás',
+  'Manutenção preventiva do sistema de climatização',
+  'Gestão e precificação de serviços automotivos',
 ];
 
-const checklist = [
-  'Diferenças entre ar automotivo e split residencial',
-  'Leitura de pressões e interpretação em linha com o fabricante',
-  'Testes elétricos em ventiladores, relés e sensores',
-  'Manutenção preventiva em concessionárias e oficinas independentes',
-  'Atendimento ao cliente e orçamento técnico',
-  'Documentação do serviço e garantia',
-  'Atualização para quem já trabalha com elétrica veicular',
-  'Preparação para atuar com veículos leves e utilitários',
+const modulos = [
+  { number: '01', title: 'Fundamentos do Ar Condicionado Automotivo', count: '12 aulas', text: 'Ciclo de refrigeração, componentes do sistema, tipos de fluidos refrigerantes, ferramentas obrigatórias e segurança no diagnóstico.' },
+  { number: '02', title: 'Fluidos Refrigerantes: R134a e R1234yf', count: '8 aulas', text: 'Diferenças entre R134a e R1234yf, pressões de trabalho, legislação ambiental, recuperação e recarga correta por massa.' },
+  { number: '03', title: 'Compressor Automotivo', count: '14 aulas', text: 'Tipos de compressor (pistão, scroll, rotativo), teste de compressão, embreagem magnética, diagnóstico de travamento e troca.' },
+  { number: '04', title: 'Condensador e Evaporador', count: '10 aulas', text: 'Função de cada componente, inspeção de obstruções, limpeza química, identificação de vazamento e substituição.' },
+  { number: '05', title: 'Válvula de Expansão e Tubo de Orifício', count: '8 aulas', text: 'Diferença entre TXV e tubo de orifício, sintomas de falha, teste com manifold e procedimento de troca.' },
+  { number: '06', title: 'Secador / Filtro Desidrante', count: '5 aulas', text: 'Função do secador, quando substituir, posição correta e procedimento de instalação com vácuo.' },
+  { number: '07', title: 'Eletricidade do Sistema A/C', count: '12 aulas', text: 'Relés, fusíveis, pressostato de alta e baixa, sensor de temperatura, fan motor e diagnóstico com multímetro.' },
+  { number: '08', title: 'Diagnóstico com Scanner', count: '8 aulas', text: 'Leitura de dados do módulo de A/C, PIDs de temperatura e pressão, códigos de falha e interpretação de sensores.' },
+  { number: '09', title: 'Detecção e Vedação de Vazamentos', count: '6 aulas', text: 'Detector eletrônico de gás, UV com corante, localização de microvazamentos em mangueiras, conexões e evaporador.' },
+  { number: '10', title: 'Manutenção Preventiva', count: '7 aulas', text: 'Higienização do evaporador, troca de filtro de cabine, limpeza do condensador e checklist completo de revisão.' },
+  { number: '11', title: 'Gestão e Precificação', count: '5 aulas', text: 'Como precificar serviços de A/C, montagem de orçamento, gestão de estoque de peças e fidelização de clientes.' },
+  { number: '12', title: 'Módulo Ganhe Rápido', count: '5 aulas', text: 'Os serviços de maior ticket e maior demanda para começar a faturar nos primeiros dias com o conhecimento do curso.' },
 ];
 
-const modules = [
-  { id: '01', title: 'Introdução ao ar condicionado automotivo', items: ['História e evolução no Brasil', 'Visão geral dos componentes', 'Ferramentas e EPIs básicos'] },
-  { id: '02', title: 'Elétrica e comandos', items: ['Relés, fusíveis e chicote', 'Comandos no painel', 'Leitura de esquemas simplificados'] },
-  { id: '03', title: 'Compressor e transmissão', items: ['Tipos de compressor', 'Correia e tensão', 'Ruídos e vibrações anormais'] },
-  { id: '04', title: 'Troca de calor e ventilação', items: ['Condensador e fluxo de ar', 'Evaporador e filtro de cabine', 'Dreno e higienização'] },
-  { id: '05', title: 'Diagnóstico e recarga', items: ['Indícios de baixa carga', 'Teste de estanqueidade conceitual', 'Boas práticas na recarga'] },
-  { id: '06', title: 'Encerramento', items: ['Checklist final de entrega', 'Próximos passos na carreira', 'Indicações de aprofundamento'] },
+const faqItems = [
+  { q: 'O curso de ar condicionado automotivo é para iniciantes?', a: 'Sim. O curso começa do zero, explicando o funcionamento do sistema antes de entrar em diagnóstico e manutenção. Não é necessário experiência prévia em mecânica ou refrigeração.' },
+  { q: 'Quanto tempo tenho acesso ao curso?', a: 'O acesso é vitalício. Você assiste quantas vezes quiser, pelo celular ou computador, sem prazo de expiração.' },
+  { q: 'Recebo certificado ao concluir?', a: 'Sim. Ao finalizar o curso você recebe o certificado de conclusão emitido pela GL Treinamentos, que pode ser baixado e compartilhado.' },
+  { q: 'O curso cobre R134a e R1234yf?', a: 'Sim. O curso aborda ambos os fluidos refrigerantes, incluindo pressões de trabalho, procedimento de recarga e legislação vigente.' },
+  { q: 'Qual é a garantia?', a: 'Garantia incondicional de 15 dias. Se por qualquer motivo você não gostar, basta solicitar o reembolso e o valor é devolvido integralmente.' },
+  { q: 'Como é feito o pagamento?', a: 'O pagamento é feito pela plataforma Kiwify, que aceita cartão de crédito (em até 12 parcelas), boleto e Pix.' },
+  { q: 'Terei suporte durante o curso?', a: 'Sim. O curso inclui 6 meses de suporte VIP via grupo no WhatsApp com o instrutor Giliard Mota e a equipe GL Treinamentos.' },
 ];
+
+const courseSchemaJsonLd = {
+  '@type': 'Course',
+  name: 'Curso de Ar Condicionado Automotivo Online',
+  url: canonicalPageUrl,
+  description: 'Curso completo de ar condicionado automotivo: diagnóstico, recarga de gás R134a e R1234yf, compressor, condensador, evaporador, eletricidade do sistema e gestão de serviços. +6.000 alunos formados.',
+  inLanguage: 'pt-BR',
+  courseMode: 'online',
+  educationalLevel: 'beginner',
+  timeRequired: 'PT100H',
+  provider: {
+    '@type': 'Organization',
+    name: 'GL Treinamentos',
+    url: 'https://gltreinamentos.com/',
+  },
+  hasCourseInstance: {
+    '@type': 'CourseInstance',
+    courseMode: 'online',
+    courseWorkload: 'PT100H',
+    instructor: {
+      '@type': 'Person',
+      name: 'Giliard Mota',
+      jobTitle: 'Especialista em Ar Condicionado Automotivo',
+    },
+  },
+  offers: {
+    '@type': 'Offer',
+    price: '997.00',
+    priceCurrency: 'BRL',
+    availability: 'https://schema.org/InStock',
+    validFrom: '2026-01-01',
+    url: canonicalPageUrl,
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '312',
+    bestRating: '5',
+    worstRating: '1',
+  },
+  totalHistoricalEnrollment: 6000,
+};
+
+const faqPageJsonLd = {
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map(({ q, a }) => ({
+    '@type': 'Question',
+    name: q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: a,
+    },
+  })),
+};
+
+const breadcrumbJsonLd = {
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Início', item: 'https://cursodearcondicionado.com.br/' },
+    { '@type': 'ListItem', position: 2, name: 'Curso de Ar Condicionado Automotivo', item: canonicalPageUrl },
+  ],
+};
+
+const extraJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [courseSchemaJsonLd, faqPageJsonLd, breadcrumbJsonLd],
+};
 ---
 
 <BaseLayoutcursodear
   title={pageTitle}
   description={pageDescription}
+  keywords={pageKeywords}
   siteName={siteNameForLayout}
   logoSrc={logoForLayout}
   siteUrl={siteUrl}
-  nav={beNav}
+  nav={[]}
   footerNav={beFootNav}
   contentThemeId="cursodear"
-  canonicalOverride="https://cursodearcondicionado.com.br/automotivo/"
+  canonicalOverride={canonicalPageUrl}
+  extraJsonLd={extraJsonLd}
 >
-  <div class="min-w-0 bg-slate-50 text-slate-900 antialiased">
-    <!-- Hero + oferta (modelo landing, cores slate + blue-900 do site) -->
-    <section class="scroll-mt-24 border-b border-slate-200 bg-white px-3 py-10 sm:px-6 sm:py-14 lg:py-16">
-      <div class="mx-auto grid min-w-0 max-w-7xl gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
-        <div class="min-w-0">
-          <p class="inline-flex max-w-full flex-wrap rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[0.65rem] font-bold uppercase tracking-wide text-slate-600 sm:text-xs">
-            Curso online · Ar condicionado automotivo
-          </p>
-          <h1 class="mt-4 break-words text-balance text-3xl font-black leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-            Curso de Ar Condicionado Automotivo
-          </h1>
-          <p class="mt-4 max-w-xl text-pretty text-base leading-relaxed text-slate-700 sm:text-lg">
-            Do básico ao diagnóstico em veículos: circuito, componentes, segurança com refrigerante e rotina de oficina.
-          </p>
-          <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm">
-            <img
-              src="/images/lp/eletrica-aplicada.png"
-              alt="Instrumentação e diagnóstico em sistema automotivo"
-              class="aspect-[4/3] h-auto w-full max-w-full object-cover"
-              loading="eager"
-              decoding="async"
-            />
-          </div>
-        </div>
+  <div class="bg-white text-slate-900">
 
-        <aside class="min-w-0 lg:justify-self-end lg:w-full lg:max-w-md" aria-label="Resumo da oferta">
-          <div class="rounded-2xl border-2 border-blue-900/20 bg-white p-5 shadow-lg sm:p-6">
-            <p class="rounded-lg bg-blue-900 px-3 py-2 text-center text-xs font-bold uppercase tracking-wide text-white">
-              Acesso imediato após a confirmação do pagamento
-            </p>
-            <p class="mt-4 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">Investimento</p>
-            <p class="mt-1 text-center text-3xl font-black text-slate-900 sm:text-4xl">12x de R$ 20,37</p>
-            <p class="mt-1 text-center text-sm font-semibold text-slate-700">ou R$ 197,00 à vista</p>
-            <ul class="mt-5 space-y-2.5 border-t border-slate-200 pt-5 text-sm text-slate-700">
-              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Certificado ao concluir a carga horária</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Aulas em vídeo — assista quando quiser</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Conteúdo focado no mercado automotivo</span></li>
-              <li class="flex gap-2"><span class="text-blue-700">✓</span><span>Suporte e comunidade de alunos (conforme regras do curso)</span></li>
-            </ul>
-            <a
-              href={hotmartAffiliateUrl}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              aria-label="Comprar curso de ar condicionado automotivo"
-              class="mt-6 flex min-h-[52px] w-full items-center justify-center rounded-lg bg-blue-900 px-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800"
-            >
-              Comprar agora
-            </a>
-            <p class="mt-3 text-center text-xs text-slate-500">Pagamento seguro · Hotmart</p>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- O que você vai aprender -->
-    <section class="border-b border-slate-200 bg-white px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="aprender-heading">
-      <div class="mx-auto min-w-0 max-w-6xl">
-        <h2 id="aprender-heading" class="text-center text-2xl font-black text-slate-900 sm:text-3xl">
-          O que você vai aprender no curso
-        </h2>
-        <p class="mx-auto mt-3 max-w-2xl text-center text-sm text-slate-600 sm:text-base">
-          Módulos pensados para aplicar na oficina, com linguagem clara e foco em segurança.
+    <!-- HERO -->
+    <section class="relative min-h-[500px] overflow-hidden bg-slate-900">
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950 opacity-95"></div>
+      <div class="mx-auto max-w-4xl px-4 md:px-6 py-14 md:py-24 relative text-center">
+        <span class="inline-block bg-blue-600 text-white text-xs font-bold px-4 py-1.5 rounded uppercase tracking-widest mb-5">
+          +6.000 profissionais formados · GL Treinamentos
+        </span>
+        <h1 class="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight">
+          Curso de Ar Condicionado Automotivo Online
+        </h1>
+        <p class="text-gray-200 text-lg mt-5 max-w-2xl mx-auto leading-relaxed">
+          Formação completa em diagnóstico, manutenção e recarga de sistemas A/C automotivos. Do zero ao avançado, com aulas práticas, suporte VIP e certificado.
         </p>
-        <div class="mt-10 grid min-w-0 grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {learnItems.map((item) => (
-            <article class="flex min-w-0 gap-4 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-900 text-lg text-white" aria-hidden="true">◎</span>
-              <div class="min-w-0">
-                <h3 class="font-bold text-slate-900">{item.t}</h3>
-                <p class="mt-1 text-sm leading-relaxed text-slate-600">{item.d}</p>
-              </div>
-            </article>
-          ))}
+        <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 mt-6 text-white text-sm">
+          <span class="text-yellow-400">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span class="font-bold">4.9</span>
+          <span class="text-gray-300">(312 avaliações)</span>
+          <span class="text-gray-400 hidden sm:inline">·</span>
+          <span class="text-gray-300">+6.000 alunos</span>
+          <span class="text-gray-400 hidden sm:inline">·</span>
+          <span class="text-gray-300">100h de conteúdo</span>
+        </div>
+        <div class="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href="#modulos"
+            class="inline-flex items-center justify-center min-h-[52px] px-8 py-3 rounded-xl bg-white text-slate-900 text-base font-black hover:bg-gray-100 transition"
+          >
+            Ver o conteúdo do curso
+          </a>
+          <a
+            href={kiwifyUrl}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center justify-center min-h-[52px] px-8 py-3 rounded-xl bg-blue-600 text-white text-base font-black hover:bg-blue-500 transition"
+          >
+            Inscrever-se agora
+          </a>
         </div>
       </div>
     </section>
 
-    <!-- Conteúdo do curso (acordeão) -->
-    <section class="px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="conteudo-heading">
-      <div class="mx-auto min-w-0 max-w-3xl">
-        <h2 id="conteudo-heading" class="text-center text-2xl font-black uppercase tracking-tight text-slate-900 sm:text-3xl">
-          Conteúdo do curso
-        </h2>
-        <ol class="mt-8 list-none space-y-3 p-0">
-          {modules.map((mod, i) => (
-            <li>
-              <details class="min-w-0 rounded-xl border border-slate-200 bg-white p-0 shadow-sm open:border-blue-200" open={i === 0}>
-                <summary class="cursor-pointer list-none border-b border-transparent px-4 py-4 [&::-webkit-details-marker]:hidden sm:px-5">
-                  <h3 class="text-base font-bold text-slate-900 sm:text-lg">
-                    <span class="text-blue-800">Módulo {mod.id}</span>
-                    {' — '}
-                    {mod.title}
-                  </h3>
-                </summary>
-                <ul class="space-y-2 border-t border-slate-100 px-4 py-4 text-sm text-slate-700 sm:px-5">
-                  {mod.items.map((line) => (
-                    <li class="flex gap-2 pl-0">
-                      <span class="text-blue-600">•</span>
-                      <span class="min-w-0">{line}</span>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            </li>
-          ))}
-        </ol>
+    <!-- FICHA DO CURSO -->
+    <section class="bg-slate-900 border-b border-slate-800">
+      <div class="mx-auto max-w-5xl px-4 md:px-6 py-5">
+        <ul class="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-slate-300">
+          <li class="flex items-center gap-2">
+            <span class="text-blue-400 font-bold">100h</span>
+            <span>carga horária</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-slate-600">·</span>
+            <span>Online</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-slate-600">·</span>
+            <span>Certificado incluso</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-slate-600">·</span>
+            <span>Lives mensais</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-slate-600">·</span>
+            <span>Iniciante ao avançado</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-slate-600">·</span>
+            <span>Idioma: Português</span>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- Checklist em duas colunas -->
-    <section class="border-y border-slate-200 bg-white px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="checklist-heading">
-      <div class="mx-auto min-w-0 max-w-5xl">
-        <h2 id="checklist-heading" class="text-center text-2xl font-black text-slate-900 sm:text-3xl">
-          Tópicos que você leva para o dia a dia
-        </h2>
-        <ul class="mt-8 grid min-w-0 grid-cols-1 gap-x-8 gap-y-3 md:grid-cols-2">
-          {checklist.map((line) => (
-            <li class="flex min-w-0 gap-2 text-sm text-slate-700 sm:text-base">
-              <span class="mt-0.5 shrink-0 text-blue-700" aria-hidden="true">✓</span>
-              <span class="min-w-0">{line}</span>
+    <!-- INTRO SEO -->
+    <section class="py-12 md:py-16 bg-white">
+      <div class="mx-auto max-w-3xl px-4 md:px-6">
+        <p class="text-lg text-slate-700 leading-relaxed mb-4">
+          O ar condicionado automotivo é um dos sistemas mais complexos do veículo moderno e um dos que mais geram chamados em oficinas. Quem domina o diagnóstico e a manutenção desse sistema tem agenda cheia o ano todo: o calor brasileiro garante demanda constante, independente da crise.
+        </p>
+        <p class="text-lg text-slate-700 leading-relaxed">
+          O curso de ar condicionado automotivo da GL Treinamentos, ministrado por Giliard Mota, cobre o sistema completo: do ciclo de refrigeração ao diagnóstico com scanner, passando por recarga de gás R134a e R1234yf, compressor, condensador, evaporador, eletricidade e gestão de serviços.
+        </p>
+      </div>
+    </section>
+
+    <!-- O QUE VOCE VAI APRENDER -->
+    <section class="py-12 md:py-16 bg-slate-50">
+      <div class="mx-auto max-w-4xl px-4 md:px-6">
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-8">O que você vai aprender</h2>
+        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {aprenderItems.map((item) => (
+            <li class="flex items-start gap-3 bg-white rounded-lg p-4 border border-slate-200">
+              <span class="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold">&#10003;</span>
+              <span class="text-slate-700 text-sm leading-snug">{item}</span>
             </li>
           ))}
         </ul>
       </div>
     </section>
 
-    <!-- Descrição -->
-    <section class="px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="desc-heading">
-      <div class="mx-auto min-w-0 max-w-3xl">
-        <h2 id="desc-heading" class="text-2xl font-black text-slate-900 sm:text-3xl">Descrição do curso</h2>
-        <div class="mt-6 space-y-4 text-sm leading-relaxed text-slate-700 sm:text-base">
-          <p>
-            O curso de <strong>ar condicionado automotivo</strong> foi montado para quem precisa de segurança na execução e
-            clareza na conversa com o cliente: você entende o que cada componente faz, onde costuma falhar e como
-            organizar o serviço sem atalhos perigosos.
-          </p>
-          <p>
-            As aulas combinam fundamentos com situações típicas de oficina — pressão, ventilação, odores, ruído no
-            compressor e dúvidas na recarga — sempre com ênfase em <strong>normas de segurança</strong> e responsabilidade
-            ambiental.
-          </p>
-          <p>
-            Ao final, você estará mais preparado para integrar a climatização ao seu portfólio, seja em mecânica geral,
-            elétrica veicular ou refrigeração com foco em veículos.
-          </p>
+    <!-- MODULOS -->
+    <section id="modulos" class="py-12 md:py-16 bg-white">
+      <div class="mx-auto max-w-4xl px-4 md:px-6">
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-2">Conteúdo do curso</h2>
+        <p class="text-slate-500 mb-8 text-sm">12 módulos · 100 horas de aulas práticas</p>
+        <div class="space-y-3">
+          {modulos.map((mod) => (
+            <details class="group border border-slate-200 rounded-xl overflow-hidden">
+              <summary class="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none bg-slate-50 hover:bg-slate-100 transition">
+                <div class="flex items-center gap-4">
+                  <span class="text-xs font-bold text-slate-400 w-6 flex-shrink-0">{mod.number}</span>
+                  <span class="font-bold text-slate-800 text-sm">{mod.title}</span>
+                </div>
+                <div class="flex items-center gap-3 flex-shrink-0">
+                  <span class="text-xs text-slate-500 hidden sm:inline">{mod.count}</span>
+                  <svg class="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </div>
+              </summary>
+              <div class="px-5 py-4 border-t border-slate-100 bg-white">
+                <p class="text-slate-600 text-sm leading-relaxed">{mod.text}</p>
+              </div>
+            </details>
+          ))}
         </div>
       </div>
     </section>
 
-    <!-- Professor -->
-    <section class="border-y border-slate-200 bg-slate-100/80 px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="prof-heading">
-      <div class="mx-auto min-w-0 max-w-4xl rounded-2xl border border-slate-200 bg-white p-5 sm:p-8">
-        <h2 id="prof-heading" class="text-2xl font-black text-slate-900 sm:text-3xl">Professor</h2>
-        <div class="mt-6 grid min-w-0 gap-8 md:grid-cols-[auto,1fr] md:items-start">
-          <div class="flex justify-center md:justify-start">
-            <div
-              class="flex h-28 w-28 shrink-0 items-center justify-center rounded-full border-4 border-slate-200 bg-blue-900 text-2xl font-black text-white md:h-32 md:w-32"
-              aria-hidden="true"
-            >
-              LM
+    <!-- PARA QUEM E -->
+    <section class="py-12 md:py-16 bg-blue-950 text-white">
+      <div class="mx-auto max-w-4xl px-4 md:px-6">
+        <h2 class="text-2xl md:text-3xl font-black mb-8">Para quem é este curso</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-blue-900/60 rounded-xl p-6 border border-blue-800">
+            <p class="text-3xl mb-3">&#128296;</p>
+            <h3 class="font-bold text-lg mb-2">Iniciantes</h3>
+            <p class="text-blue-200 text-sm leading-relaxed">Quem nunca trabalhou com A/C automotivo e quer entrar no mercado com base técnica sólida, sem precisar de curso presencial caro.</p>
+          </div>
+          <div class="bg-blue-900/60 rounded-xl p-6 border border-blue-800">
+            <p class="text-3xl mb-3">&#128664;</p>
+            <h3 class="font-bold text-lg mb-2">Mecânicos e auxiliares</h3>
+            <p class="text-blue-200 text-sm leading-relaxed">Profissionais de oficina que já fazem manutenção geral e querem agregar o diagnóstico de A/C para aumentar o ticket médio dos serviços.</p>
+          </div>
+          <div class="bg-blue-900/60 rounded-xl p-6 border border-blue-800">
+            <p class="text-3xl mb-3">&#127978;</p>
+            <h3 class="font-bold text-lg mb-2">Técnicos autônomos</h3>
+            <p class="text-blue-200 text-sm leading-relaxed">Quem já presta serviços de A/C e quer profissionalizar o diagnóstico, cobrar mais por cada atendimento e reduzir retornos por erro.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INSTRUTOR -->
+    <section class="py-12 md:py-16 bg-white">
+      <div class="mx-auto max-w-4xl px-4 md:px-6">
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-8">Seu instrutor</h2>
+        <div class="flex flex-col md:flex-row gap-8 items-start">
+          <div class="flex-shrink-0">
+            <div class="w-28 h-28 rounded-full bg-blue-100 flex items-center justify-center text-5xl font-black text-blue-700">
+              GM
             </div>
           </div>
-          <div class="min-w-0">
-            <p class="text-xl font-bold text-slate-900">Professor Leandro Moraes</p>
-            <p class="mt-2 text-sm leading-relaxed text-slate-700 sm:text-base">
-              Técnico em refrigeração há mais de 20 anos, formado pelo SENAI (Taguatinga/DF), com experiência em
-              autorizadas e no Curso de Ar Condicionado. Canal <strong>CURSO DE AR CONDICIONADO</strong> no
-              YouTube com dezenas de milhares de inscritos.
+          <div>
+            <h3 class="text-xl font-black text-slate-900">Giliard Mota</h3>
+            <p class="text-blue-600 font-semibold mb-3 text-sm">Especialista em Ar Condicionado Automotivo · GL Treinamentos</p>
+            <p class="text-slate-700 leading-relaxed mb-4">
+              Giliard Mota tem mais de 25 anos de experiência prática em sistemas de A/C automotivo. Fundador da GL Treinamentos, já formou mais de 6.000 profissionais pelo Brasil. Com mais de 100 mil inscritos no YouTube, é referência em conteúdo técnico acessível e aplicado em oficina real.
             </p>
-            <ul class="mt-4 grid gap-2 text-sm text-slate-700 sm:grid-cols-2">
-              <li class="flex gap-2"><span class="text-blue-700">✓</span> Didática objetiva</li>
-              <li class="flex gap-2"><span class="text-blue-700">✓</span> Experiência em campo e em sala</li>
-              <li class="flex gap-2"><span class="text-blue-700">✓</span> Conteúdo alinhado ao mercado</li>
-              <li class="flex gap-2"><span class="text-blue-700">✓</span> Referência em cursos online na área</li>
+            <ul class="flex flex-wrap gap-3 text-sm">
+              <li class="bg-slate-100 rounded-full px-4 py-1.5 text-slate-700">+25 anos de experiência</li>
+              <li class="bg-slate-100 rounded-full px-4 py-1.5 text-slate-700">+6.000 alunos formados</li>
+              <li class="bg-slate-100 rounded-full px-4 py-1.5 text-slate-700">+100k no YouTube</li>
             </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Bônus (3 blocos) -->
-    <section class="px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="bonus-heading">
-      <div class="mx-auto min-w-0 max-w-6xl">
-        <h2 id="bonus-heading" class="text-center text-2xl font-black text-slate-900 sm:text-3xl">Bônus exclusivos</h2>
-        <div class="mt-10 grid min-w-0 grid-cols-1 gap-6 lg:grid-cols-3">
-          <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-            <div class="bg-slate-200/80 px-4 py-3">
-              <p class="text-xs font-bold uppercase tracking-wide text-blue-900">Bônus 01</p>
-              <h3 class="mt-1 font-bold text-slate-900">Material de apoio em PDF</h3>
-            </div>
-            <div class="p-4">
-              <img src="/images/lp/inverter-board.png" alt="" class="aspect-video w-full rounded-lg object-cover" loading="lazy" decoding="async" />
-              <p class="mt-3 text-sm text-slate-600">Resumos e checklists para levar à oficina.</p>
-            </div>
-          </article>
-          <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-            <div class="bg-slate-200/80 px-4 py-3">
-              <p class="text-xs font-bold uppercase tracking-wide text-blue-900">Bônus 02</p>
-              <h3 class="mt-1 font-bold text-slate-900">Certificado digital</h3>
-            </div>
-            <div class="p-4">
-              <img src="/images/lp/certificado.png" alt="Certificado do curso" class="aspect-video w-full rounded-lg object-cover" loading="lazy" decoding="async" />
-              <p class="mt-3 text-sm text-slate-600">Conclusão com registro e carga horária (conforme regras da plataforma).</p>
-            </div>
-          </article>
-          <article class="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-            <div class="bg-slate-200/80 px-4 py-3">
-              <p class="text-xs font-bold uppercase tracking-wide text-blue-900">Bônus 03</p>
-              <h3 class="mt-1 font-bold text-slate-900">Canal de dúvidas</h3>
-            </div>
-            <div class="p-4">
-              <img src="/images/lp/whatsapp-suporte.png" alt="Suporte" class="mx-auto h-24 w-auto object-contain" loading="lazy" decoding="async" />
-              <p class="mt-3 text-sm text-slate-600">Orientações para acompanhar o curso e tirar dúvidas (conforme disponibilidade divulgada na compra).</p>
-            </div>
-          </article>
+    <!-- NUMEROS -->
+    <section class="py-10 bg-blue-600 text-white">
+      <div class="mx-auto max-w-4xl px-4 md:px-6">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          <div>
+            <div class="text-3xl md:text-4xl font-black">+6.000</div>
+            <div class="text-blue-100 text-sm mt-1">Alunos formados</div>
+          </div>
+          <div>
+            <div class="text-3xl md:text-4xl font-black">100h</div>
+            <div class="text-blue-100 text-sm mt-1">De conteúdo prático</div>
+          </div>
+          <div>
+            <div class="text-3xl md:text-4xl font-black">4.9</div>
+            <div class="text-blue-100 text-sm mt-1">Avaliação média</div>
+          </div>
+          <div>
+            <div class="text-3xl md:text-4xl font-black">+25 anos</div>
+            <div class="text-blue-100 text-sm mt-1">Experiência do instrutor</div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Depoimentos -->
-    <section class="bg-slate-900 px-3 py-12 text-white sm:px-6 sm:py-16" aria-labelledby="depo-heading">
-      <div class="mx-auto min-w-0 max-w-6xl">
-        <h2 id="depo-heading" class="text-center text-2xl font-black sm:text-3xl">O que dizem nossos alunos</h2>
-        <p class="mx-auto mt-2 max-w-2xl text-center text-sm text-slate-300">
-          Resultados podem variar conforme dedicação e experiência prévia. Depoimentos ilustrativos da linha de cursos do Curso de Ar Condicionado.
+    <!-- BONUS -->
+    <section class="py-12 md:py-16 bg-slate-50">
+      <div class="mx-auto max-w-4xl px-4 md:px-6">
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-2">Bônus inclusos na matrícula</h2>
+        <p class="text-slate-500 mb-8 text-sm">Além das aulas, você recebe esses recursos para acelerar seu aprendizado e o início dos serviços</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="bg-white rounded-xl p-5 border border-slate-200">
+            <h3 class="font-bold text-slate-800 mb-1 text-sm">Suporte VIP por 6 meses</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Grupo exclusivo no WhatsApp com o instrutor e a equipe GL para tirar dúvidas técnicas direto de quem é do ofício.</p>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200">
+            <h3 class="font-bold text-slate-800 mb-1 text-sm">App GL Treinamentos</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Acesse as aulas pelo celular a qualquer hora, mesmo em modo offline, sem precisar de computador.</p>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200">
+            <h3 class="font-bold text-slate-800 mb-1 text-sm">Apostilas em PDF</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Material de apoio para consultar na oficina, com tabelas de pressão, checklists e esquemas elétricos.</p>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200">
+            <h3 class="font-bold text-slate-800 mb-1 text-sm">Lives mensais</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Aulas ao vivo mensais com casos reais de diagnóstico, perguntas ao instrutor e atualização de conteúdo.</p>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200">
+            <h3 class="font-bold text-slate-800 mb-1 text-sm">Módulo Ganhe Rápido</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Os serviços de maior ticket e maior demanda para começar a faturar nos primeiros dias após a matrícula.</p>
+          </div>
+          <div class="bg-white rounded-xl p-5 border border-slate-200">
+            <h3 class="font-bold text-slate-800 mb-1 text-sm">Ferramentas de baixo custo</h3>
+            <p class="text-slate-500 text-xs leading-relaxed">Projeto com a lista de ferramentas essenciais para montar seu kit profissional gastando pouco no início.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRECO E CTA -->
+    <section id="inscricao" class="py-12 md:py-16 bg-white">
+      <div class="mx-auto max-w-2xl px-4 md:px-6">
+        <div class="bg-slate-900 rounded-2xl p-8 md:p-10 text-center text-white border border-slate-700">
+          <p class="text-slate-400 text-sm uppercase tracking-widest mb-2">Oferta especial</p>
+          <p class="text-slate-400 line-through text-lg mb-1">De R$ 1.397,00</p>
+          <div class="text-5xl font-black text-white mb-1">R$ 997</div>
+          <p class="text-slate-300 text-sm mb-6">ou 12x de R$ 103,11 no cartão</p>
+          <ul class="text-left space-y-2 mb-8 max-w-xs mx-auto">
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> 100 horas de aulas práticas</li>
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> Certificado de conclusão</li>
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> Acesso vitalício</li>
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> Suporte VIP por 6 meses</li>
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> Lives mensais incluídas</li>
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> App GL Treinamentos</li>
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> Apostilas em PDF</li>
+            <li class="flex items-center gap-2 text-slate-200 text-sm"><span class="text-green-400 font-bold">&#10003;</span> Garantia de 15 dias</li>
+          </ul>
+          <a
+            href={kiwifyUrl}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center justify-center w-full max-w-sm min-h-[56px] px-8 py-4 rounded-xl bg-blue-600 text-white text-lg font-black hover:bg-blue-500 transition"
+          >
+            Quero me inscrever agora
+          </a>
+          <p class="text-slate-400 text-xs mt-4">Garantia incondicional de 15 dias. Pagamento seguro via Kiwify.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEXTO SEO -->
+    <section class="py-10 bg-slate-50">
+      <div class="mx-auto max-w-3xl px-4 md:px-6">
+        <h2 class="text-xl font-black text-slate-900 mb-4">Por que aprender ar condicionado automotivo em 2026</h2>
+        <p class="text-slate-700 leading-relaxed mb-4">
+          O mercado de manutenção automotiva no Brasil cresce junto com a frota nacional, que ultrapassa 115 milhões de veículos. Entre os sistemas com maior taxa de falha em oficinas, o A/C ocupa posição de destaque: cada veículo precisa de manutenção do sistema pelo menos uma vez a cada dois anos.
         </p>
-        <div class="mt-10 grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {['Conteúdo direto ao ponto.', 'Consegui aplicar na oficina no mesmo mês.', 'Professor explica sem enrolação.', 'Recomendo para quem quer entrar na área.', 'Ótimo custo-benefício.', 'Voltei para revisar as aulas várias vezes.'].map((txt) => (
-            <figure class="min-w-0 rounded-xl border border-slate-700 bg-slate-800/80 p-4">
-              <div class="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-slate-600 text-xs font-bold text-slate-200" aria-hidden="true">Aluno</div>
-              <blockquote class="text-center text-sm leading-relaxed text-slate-200">“{txt}”</blockquote>
-            </figure>
+        <p class="text-slate-700 leading-relaxed mb-4">
+          Profissionais que dominam diagnóstico e recarga de gás cobram entre R$ 250 e R$ 600 por atendimento, com margem elevada e materiais simples. Com apenas 5 atendimentos por semana, é possível faturar acima de R$ 5.000 mensais trabalhando de forma autônoma.
+        </p>
+        <p class="text-slate-700 leading-relaxed">
+          O curso da GL Treinamentos é a formação mais completa disponível no Brasil para quem quer entrar nesse mercado ou profissionalizar a operação existente. Com Giliard Mota como instrutor, você aprende com quem tem mais de 25 anos na área e capacidade comprovada de ensinar qualquer pessoa a dominar o sistema de A/C automotivo.
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-12 md:py-16 bg-white">
+      <div class="mx-auto max-w-3xl px-4 md:px-6">
+        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-8">Perguntas frequentes</h2>
+        <div class="space-y-3">
+          {faqItems.map(({ q, a }) => (
+            <details class="group border border-slate-200 rounded-xl overflow-hidden">
+              <summary class="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none hover:bg-slate-50 transition">
+                <span class="font-semibold text-slate-800 text-sm">{q}</span>
+                <svg class="w-4 h-4 text-slate-400 flex-shrink-0 group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+              </summary>
+              <div class="px-5 py-4 border-t border-slate-100">
+                <p class="text-slate-600 text-sm leading-relaxed">{a}</p>
+              </div>
+            </details>
           ))}
         </div>
       </div>
     </section>
 
-    <!-- FAQ -->
-    <section class="border-t border-slate-200 bg-white px-3 py-12 sm:px-6 sm:py-16" aria-labelledby="faq-heading">
-      <div class="mx-auto min-w-0 max-w-3xl">
-        <h2 id="faq-heading" class="text-center text-2xl font-black uppercase tracking-tight text-slate-900 sm:text-3xl">
-          Perguntas frequentes
-        </h2>
-        <div class="mt-8 space-y-3">
-          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5" open>
-            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">O curso é só para automotivo?</summary>
-            <p class="mt-2 text-sm leading-relaxed text-slate-700">Sim. Esta página descreve a trilha com foco em climatização veicular; o curso de split residencial está em Nossos Cursos.</p>
-          </details>
-          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">Preciso de ferramentas caras para começar?</summary>
-            <p class="mt-2 text-sm leading-relaxed text-slate-700">O curso orienta o uso de equipamentos comuns em oficina; evolução de ferramentas depende do tipo de serviço que você pretende oferecer.</p>
-          </details>
-          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">Recebo certificado?</summary>
-            <p class="mt-2 text-sm leading-relaxed text-slate-700">Sim, após concluir os requisitos da plataforma (Hotmart), conforme regras exibidas na página de compra.</p>
-          </details>
-          <details class="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-4 sm:p-5">
-            <summary class="cursor-pointer list-none break-words pr-6 font-bold text-slate-900 [&::-webkit-details-marker]:hidden">Posso ver as aulas no celular?</summary>
-            <p class="mt-2 text-sm leading-relaxed text-slate-700">Sim. O acesso é pelo app ou site da Hotmart, com qualidade de áudio e vídeo compatível com conexão estável.</p>
-          </details>
-        </div>
-        <p class="mt-10 text-center">
-          <a
-            href={hotmartAffiliateUrl}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            aria-label="Garantir vaga no curso automotivo"
-            class="inline-flex min-h-[48px] w-full max-w-md items-center justify-center rounded-lg bg-blue-900 px-6 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-blue-800 sm:w-auto"
-          >
-            Quero começar agora
-          </a>
+    <!-- CTA FINAL -->
+    <section class="py-12 md:py-16 bg-blue-600 text-white text-center">
+      <div class="mx-auto max-w-2xl px-4 md:px-6">
+        <h2 class="text-2xl md:text-3xl font-black mb-3">Comece hoje mesmo</h2>
+        <p class="text-blue-100 mb-8 leading-relaxed">
+          Mais de 6.000 profissionais já transformaram a carreira com o curso da GL Treinamentos. O próximo pode ser você.
         </p>
-        <p class="mt-6 text-center text-sm text-slate-600">
-          <a class="font-semibold text-blue-800 underline decoration-blue-200 underline-offset-2 hover:text-blue-700" href="/cursos">Curso split residencial</a>
-          {' · '}
-          <a class="font-semibold text-blue-800 underline decoration-blue-200 underline-offset-2 hover:text-blue-700" href="/">Início</a>
-        </p>
+        <a
+          href={kiwifyUrl}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center min-h-[56px] px-10 py-4 rounded-xl bg-white text-blue-700 text-lg font-black hover:bg-blue-50 transition"
+        >
+          Quero me inscrever agora
+        </a>
+        <p class="text-blue-200 text-xs mt-4">Garantia incondicional de 15 dias. Pagamento seguro via Kiwify.</p>
       </div>
     </section>
+
   </div>
 </BaseLayoutcursodear>
-
