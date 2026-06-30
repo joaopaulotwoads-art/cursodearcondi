@@ -1,0 +1,88 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+
+const pageTitle = 'Área do Aluno | Curso de Ar Condicionado Online';
+const pageDescription = 'Acesse sua área do aluno e continue seus estudos no curso de ar condicionado online.';
+const canonicalPageUrl = 'https://cursodearcondicionado.com.br/area-do-aluno/';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
+
+const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
+const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
+
+const hotmartUrl = 'https://go.hotmart.com/R103468777C?dp=1';
+---
+
+<BaseLayoutcursodear
+  title={pageTitle}
+  description={pageDescription}
+  siteName={siteNameForLayout}
+  logoSrc={logoForLayout}
+  siteUrl={siteUrl}
+  nav={[]}
+  footerNav={beFootNav}
+  contentThemeId="cursodear"
+  canonicalOverride={canonicalPageUrl}
+>
+  <div class="bg-slate-50 min-h-screen py-16 md:py-24">
+    <div class="mx-auto max-w-md px-4">
+
+      <!-- Curso de Ar Condicionado (Hotmart) -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-6">
+        <div class="flex items-center gap-4 mb-6">
+          <img src="/images/cursodear/logo.png" alt="Curso de Ar Condicionado" class="h-10 w-auto" />
+          <div>
+            <h1 class="text-lg font-black text-slate-900 leading-tight">Área do Aluno</h1>
+            <p class="text-slate-500 text-xs">Curso de Ar Condicionado Online</p>
+          </div>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+          O acesso ao curso é feito pela plataforma Hotmart. Clique no botão abaixo para entrar na sua conta e continuar os estudos.
+        </p>
+        <a
+          href={hotmartUrl}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center w-full min-h-[48px] px-6 py-3 rounded-xl bg-orange-500 text-white font-black hover:bg-orange-400 transition text-sm"
+        >
+          Acessar minha conta na Hotmart
+        </a>
+        <p class="text-slate-400 text-xs text-center mt-4">
+          Ainda não é aluno? <a href="/" class="text-orange-500 hover:underline">Conheça o curso</a>
+        </p>
+      </div>
+
+      <!-- Curso de Ar Condicionado Automotivo (Kiwify) -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <div class="mb-4">
+          <h2 class="text-base font-black text-slate-900 mb-1">Curso de Ar Condicionado Automotivo</h2>
+          <p class="text-slate-500 text-xs">Plataforma Kiwify</p>
+        </div>
+        <p class="text-slate-600 text-sm leading-relaxed mb-6">
+          O acesso ao curso de ar condicionado automotivo é feito pela plataforma Kiwify. Use o e-mail cadastrado no momento da compra para entrar.
+        </p>
+        <a
+          href="https://kiwify.com.br/login"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center w-full min-h-[48px] px-6 py-3 rounded-xl bg-blue-600 text-white font-black hover:bg-blue-500 transition text-sm"
+        >
+          Acessar minha conta na Kiwify
+        </a>
+        <p class="text-slate-400 text-xs text-center mt-4">
+          Ainda não é aluno? <a href="/automotivo/" class="text-blue-600 hover:underline">Conheça o curso automotivo</a>
+        </p>
+      </div>
+
+    </div>
+  </div>
+</BaseLayoutcursodear>

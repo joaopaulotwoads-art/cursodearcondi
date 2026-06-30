@@ -17,3 +17,6 @@ items:
   - label: Contato
     href: /contato
     target: _self
+  - label: Área do Aluno
+    href: /area-do-aluno
+    target: _self
