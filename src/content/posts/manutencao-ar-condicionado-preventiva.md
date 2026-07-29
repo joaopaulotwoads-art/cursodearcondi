@@ -144,4 +144,4 @@ Dominar a preventiva e saber vender contratos é o caminho mais direto para cons
 
 Quer aprender a fazer manutenção preventiva e corretiva de forma profissional? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**

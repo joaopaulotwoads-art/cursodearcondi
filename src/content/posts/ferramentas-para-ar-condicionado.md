@@ -257,4 +257,4 @@ Digital é a recomendação para quem está começando. A leitura é mais fácil
 
 Quem trata ferramenta como investimento, e não como despesa, evolui mais rápido, tem menos retrabalho e conquista clientes recorrentes. Quer aprender a usar cada instrumento na prática? O **[Curso de Ar Condicionado](/)** ensina do básico ao diagnóstico profissional em **160 aulas** e **30 horas**.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**

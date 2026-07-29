@@ -149,7 +149,7 @@ Equipamento Inverter é padrão em vendas novas. Quem domina esse segmento cobra
 
 **Comece a faturar em semanas.** O [Curso de Ar Condicionado](/) tem 160 aulas e 30 horas, do zero à [instalação](/como-instalar-ar-condicionado-split/) e manutenção com método validado.
 
-[Começar agora](https://go.hotmart.com/R103468777C?dp=1)
+[Começar agora](https://go.hotmart.com/R103468777C?ap=7d17)
 
 ## Quanto tempo para começar a trabalhar como técnico de ar condicionado?
 
@@ -191,4 +191,4 @@ Vale. Equipamentos Inverter dominam vendas novas e pagam serviços de diagnósti
 
 Para acelerar sua entrada no mercado, conheça o **[Curso de Ar Condicionado](/)** com 160 aulas e 30 horas de conteúdo prático.
 
-**[Quero me inscrever](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever](https://go.hotmart.com/R103468777C?ap=7d17)**

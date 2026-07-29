@@ -194,4 +194,4 @@ Sim. Vibração excessiva, gás baixo e compressor com defeito fazem o sistema t
 
 Quer aprender a fazer esse diagnóstico de forma profissional? O **[Curso de Ar Condicionado](/)** ensina do básico ao conserto em **160 aulas** e **30 horas**.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**

@@ -156,4 +156,4 @@ Dominar o diagnóstico e a recarga de fluido refrigerante é uma das habilidades
 
 Quer aprender a trabalhar com R410A, R32 e todos os equipamentos de forma profissional? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**

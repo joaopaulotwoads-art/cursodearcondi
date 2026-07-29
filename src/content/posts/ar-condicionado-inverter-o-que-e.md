@@ -191,4 +191,4 @@ Quanto mais cedo você dominar modulação de frequência, eletrônica de potên
 
 Quer aprender na prática, com os modelos mais vendidos no Brasil? O **[Curso de Ar Condicionado](/)** ensina do básico ao diagnóstico avançado em **160 aulas** e **30 horas**.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**

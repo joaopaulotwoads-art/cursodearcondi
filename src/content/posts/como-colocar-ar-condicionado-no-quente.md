@@ -116,4 +116,4 @@ Se o aparelho tem o modo mas não esquenta o ambiente, verifique a temperatura e
 
 Quer aprender a diagnosticar e resolver qualquer problema de ar condicionado de forma profissional? O **[Curso de Ar Condicionado](/)** ensina do básico ao diagnóstico avançado em **160 aulas** e **30 horas**.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**

@@ -209,4 +209,4 @@ Chamar técnico com frequência certa é mais barato do que consertar dano causa
 
 Para quem quer oferecer limpeza e higienização como serviço profissional, o **[Curso de Ar Condicionado](/)** ensina do básico ao comissionamento em **160 aulas** e **30 horas**.
 
-**[Quero me inscrever](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever](https://go.hotmart.com/R103468777C?ap=7d17)**

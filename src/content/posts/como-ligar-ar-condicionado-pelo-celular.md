@@ -132,4 +132,4 @@ Se o aparelho não aparecer no app, verifique a faixa de Wi-Fi e faça o reset d
 
 Quer aprender a instalar, configurar e diagnosticar qualquer modelo de ar condicionado de forma profissional? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**

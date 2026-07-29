@@ -164,4 +164,4 @@ Saber dimensionar corretamente é o que separa o técnico profissional do instal
 
 Quer aprender instalação completa, do dimensionamento ao comissionamento? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 
-**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?dp=1)**
+**[Quero me inscrever agora](https://go.hotmart.com/R103468777C?ap=7d17)**
