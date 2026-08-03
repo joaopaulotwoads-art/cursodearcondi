@@ -1,39 +1,28 @@
-﻿---
+---
 /**
  * admin/pages/home.astro
  *
- * Edição da Home: tema classic → HomeEditor; tema cursodear → SingletonEditor (campos Curso de Ar Condicionadoe).
+ * Edição da Home (singleton). Usa HomeEditor com schema classic.
  */
 
-import { getEntry } from 'astro:content';
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import HomeEditor from '../../../components/admin/HomeEditor.tsx';
-import SingletonEditor from '../../../components/admin/SingletonEditor.tsx';
-import { cursodear_HOME_FIELDS } from '../../../components/admin/cursodear-editor-fields';
 import { readSingleton } from '../../../utils/singleton-utils';
 
-const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const activeThemeId = (settings?.data?.activeTheme || 'classic') as string;
-const initialData = await readSingleton('home', activeThemeId);
+const initialData = await readSingleton('home', 'classic');
 ---
 
-<AdminLayout title="Página Inicial - Admin">
+<AdminLayout title="Página Inicial - CNX Agency Admin">
     <div id="home-editor-wrapper" class="min-h-[400px]">
-        {activeThemeId === 'cursodear' ? (
-            <SingletonEditor
+        {initialData !== null ? (
+            <HomeEditor
                 client:only="react"
-                name="home"
-                title="Página inicial (tema Curso de Ar Condicionadoe)"
-                fields={cursodear_HOME_FIELDS}
-                initialData={initialData ?? {}}
-                themeId="cursodear"
+                initialData={initialData}
             />
-        ) : initialData !== null ? (
-            <HomeEditor client:only="react" initialData={initialData} />
         ) : (
             <div class="p-8 text-center">
                 <p class="text-[#a3a3a3] mb-4">Carregando dados da página inicial...</p>
-                <p class="text-[#737373] text-sm">Verifique se home.yaml existe em src/content/singletons/{activeThemeId}/.</p>
+                <p class="text-[#737373] text-sm">Se esta mensagem persistir, verifique se o arquivo home.yaml existe em src/content/singletons/classic/.</p>
             </div>
         )}
     </div>

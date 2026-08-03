@@ -22,13 +22,7 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import {
-    isGitHubConfigured,
-    githubWriteFile,
-    githubDeleteFile,
-    githubReadFile,
-    githubListDirectory,
-} from './github-api';
+import { isGitHubConfigured, githubWriteFile, githubDeleteFile } from './github-api';
 
 export interface PostData {
     title: string;
@@ -40,8 +34,6 @@ export interface PostData {
     metaTitle?: string;
     metaDescription?: string;
     metaImage?: string;
-    contentFormat?: 'markdown' | 'html';
-    seoSchema?: 'auto' | 'blogPosting' | 'articleItemList' | 'none';
 }
 
 export interface PostFile {
@@ -61,112 +53,53 @@ export function slugToFilename(slug: string): string {
 }
 
 /**
- * Lê um arquivo de post e retorna dados parseados (.mdoc ou .md).
+ * Lê um arquivo de post e retorna dados parseados
  */
 export async function readPost(slug: string): Promise<PostFile | null> {
-    const exts = ['.mdoc', '.md'];
-    for (const ext of exts) {
-        const filename = `${slug}${ext}`;
+    try {
+        const filename = slugToFilename(slug);
         const filePath = path.join(POSTS_DIR, filename);
-        try {
-            const fileContent = await fs.readFile(filePath, 'utf-8');
-            const parsed = matter(fileContent);
-            return {
-                data: parsed.data as PostData,
-                content: parsed.content,
-                filename,
-            };
-        } catch {
-            continue;
-        }
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        const parsed = matter(fileContent);
+        
+        return {
+            data: parsed.data as PostData,
+            content: parsed.content,
+            filename,
+        };
+    } catch (error) {
+        console.error(`❌ Erro ao ler post ${slug}:`, error);
+        return null;
     }
-    // Produção (Vercel): escrita vai para o GitHub; o disco do serverless não tem o ficheiro novo.
-    if (isGitHubConfigured()) {
-        for (const ext of exts) {
-            const filename = `${slug}${ext}`;
-            const pathInRepo = `src/content/posts/${filename}`;
-            try {
-                const remote = await githubReadFile(pathInRepo);
-                if (!remote) continue;
-                const parsed = matter(remote.content);
-                return {
-                    data: parsed.data as PostData,
-                    content: parsed.content,
-                    filename,
-                };
-            } catch {
-                continue;
-            }
-        }
-    }
-    return null;
 }
 
 /**
- * Lista todos os posts disponíveis.
- * Com GitHub configurado, lê o diretório no repositório (fonte de verdade após deploy na Vercel).
- * Caso contrário, usa o filesystem local (dev).
+ * Lista todos os posts disponíveis
  */
 export async function listPosts(): Promise<PostFile[]> {
-    if (isGitHubConfigured()) {
-        try {
-            const entries = await githubListDirectory('src/content/posts');
-            const postFiles = entries.filter(
-                (f) =>
-                    (f.name.endsWith('.mdoc') || f.name.endsWith('.md')) &&
-                    !f.name.startsWith('.'),
-            );
-            const posts = await Promise.all(
-                postFiles.map(async (f) => {
-                    try {
-                        const remote = await githubReadFile(f.path);
-                        if (!remote) return null;
-                        const parsed = matter(remote.content);
-                        return {
-                            data: parsed.data as PostData,
-                            content: parsed.content,
-                            filename: f.name,
-                        };
-                    } catch {
-                        return null;
-                    }
-                }),
-            );
-            return posts.filter((p): p is PostFile => p !== null);
-        } catch (error) {
-            console.error('❌ Erro ao listar posts (GitHub):', error);
-            return [];
-        }
-    }
-
     try {
         const files = await fs.readdir(POSTS_DIR);
-        const postFiles = files.filter((f) => (f.endsWith('.mdoc') || f.endsWith('.md')) && !f.startsWith('.'));
-
+        const mdocFiles = files.filter(f => f.endsWith('.mdoc'));
+        
         const posts = await Promise.all(
-            postFiles.map(async (filename) => {
+            mdocFiles.map(async (filename) => {
                 const filePath = path.join(POSTS_DIR, filename);
                 const fileContent = await fs.readFile(filePath, 'utf-8');
                 const parsed = matter(fileContent);
-
+                
                 return {
                     data: parsed.data as PostData,
                     content: parsed.content,
                     filename,
                 };
-            }),
+            })
         );
-
+        
         return posts;
     } catch (error) {
         console.error('❌ Erro ao listar posts:', error);
         return [];
     }
-}
-
-export interface WritePostResult {
-    ok: boolean;
-    error?: string;
 }
 
 /**
@@ -176,7 +109,7 @@ export async function writePost(
     slug: string,
     data: PostData,
     content: string
-): Promise<WritePostResult> {
+): Promise<boolean> {
     try {
         const cleanData: Record<string, unknown> = {};
         Object.keys(data).forEach(key => {
@@ -190,44 +123,22 @@ export async function writePost(
             lineWidth: -1, noRefs: true, quotingType: '"',
         });
         const fileContent = `---\n${frontmatter}---\n\n${content || ''}`;
-        if (fileContent.includes('\uFFFD')) {
-            return {
-                ok: false,
-                error:
-                    'O arquivo teria caracteres corrompidos (substituição Unicode). Não salve: use UTF-8 no editor, recarregue o post e evite colar de fontes que quebram acentos (PDF/Word sem colar como texto simples).',
-            };
-        }
-        let filename = slugToFilename(slug);
-        for (const ext of ['.mdoc', '.md']) {
-            const fp = path.join(POSTS_DIR, `${slug}${ext}`);
-            try {
-                await fs.access(fp);
-                filename = `${slug}${ext}`;
-                break;
-            } catch {
-                /* next */
-            }
-        }
+        const filename = slugToFilename(slug);
 
         if (isGitHubConfigured()) {
-            const gh = await githubWriteFile(
+            return githubWriteFile(
                 `src/content/posts/${filename}`,
                 fileContent,
                 `content: save post "${slug}"`,
             );
-            if (!gh.ok) {
-                return { ok: false, error: gh.error || 'Falha ao gravar no GitHub.' };
-            }
-            return { ok: true };
         }
 
         const filePath = path.join(POSTS_DIR, filename);
         await fs.writeFile(filePath, fileContent, 'utf-8');
-        return { ok: true };
+        return true;
     } catch (error) {
-        const message = error instanceof Error ? error.message : String(error);
         console.error(`❌ Erro ao escrever post ${slug}:`, error);
-        return { ok: false, error: message };
+        return false;
     }
 }
 
@@ -238,31 +149,20 @@ export async function writePost(
  */
 export async function deletePost(slug: string): Promise<boolean> {
     try {
-        const exts = ['.mdoc', '.md'];
-        let filePath: string | null = null;
-        let filename: string | null = null;
-        for (const ext of exts) {
-            const fn = `${slug}${ext}`;
-            const fp = path.join(POSTS_DIR, fn);
-            try {
-                await fs.access(fp);
-                filePath = fp;
-                filename = fn;
-                break;
-            } catch {
-                continue;
-            }
-        }
+        const filename = slugToFilename(slug);
 
         if (isGitHubConfigured()) {
-            const fn = filename || slugToFilename(slug);
             return githubDeleteFile(
-                `src/content/posts/${fn}`,
+                `src/content/posts/${filename}`,
                 `content: delete post "${slug}"`,
             );
         }
 
-        if (!filePath || !filename) {
+        const filePath = path.join(POSTS_DIR, filename);
+
+        try {
+            await fs.access(filePath);
+        } catch {
             console.error(`\x1b[31m✗ [X] Post não encontrado: ${slug}\x1b[0m`);
             return false;
         }

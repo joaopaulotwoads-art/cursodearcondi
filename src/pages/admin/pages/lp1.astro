@@ -1,0 +1,32 @@
+---
+/**
+ * admin/pages/lp1.astro
+ * 
+ * Página de edição da Landing Page 1 (Dot Com Secrets).
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import LP1Editor from '../../../components/admin/LP1Editor.tsx';
+import { readSingleton } from '../../../utils/singleton-utils';
+
+// Obter tema ativo
+const settings = await getEntry('siteSettings', 'settings');
+const activeThemeId = settings?.data?.activeTheme || 'classic';
+
+const initialData = await readSingleton('lp1', activeThemeId);
+---
+
+<AdminLayout title="Landing Page 1 - CNX Agency Admin">
+    <div id="lp1-editor-wrapper" class="min-h-[400px]">
+        <LP1Editor 
+            client:only="react"
+            initialData={initialData}
+        />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar a landing page.</p>
+        </div>
+    </noscript>
+</AdminLayout>

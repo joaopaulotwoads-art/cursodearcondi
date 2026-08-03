@@ -9,10 +9,9 @@
 import { getEntry } from 'astro:content';
 import CookieConsent from '../components/CookieConsent.astro';
 import { readSingleton } from '../utils/singleton-utils';
-import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../utils/read-site-settings';
+import { readSiteSettings } from '../utils/read-site-settings';
 import Header from '../themes/classic/components/Header.astro';
 import Footer from '../themes/classic/components/Footer.astro';
-import FaviconLinks from '../components/FaviconLinks.astro';
 import '../styles/global.css';
 import '@fontsource/inter';
 import '@fontsource/outfit';
@@ -21,14 +20,12 @@ interface Props {
     title?: string;
     description?: string;
     ogImage?: string;
-    robots?: string;
 }
 
 const { 
     title = "Meu Site",
     description = "Bem-vindo ao meu site",
     ogImage = "/images/og-default.png",
-    robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
 } = Astro.props;
 
 const siteSettings = await getEntry('siteSettings', 'settings').catch(() => null);
@@ -38,10 +35,12 @@ const colorScheme: 'dark' | 'light' = (siteSettings?.data?.colorScheme as 'dark'
 
 const theme = await getEntry('siteThemes', 'classic').catch(() => null);
 
-// Canonical URL: settings (sem www) ou origem da requisição sem www
-const canonicalBase = resolvePublicSiteUrl(siteConfig.canonicalUrl as string | undefined, Astro.url.origin);
-const canonicalHref = buildCanonicalPageUrl(canonicalBase, Astro.url.pathname);
-const ogImageAbs = ogImage ? new URL(ogImage, `${canonicalBase}/`).href : '';
+// Canonical URL: preferir settings, fallback para URL da requisição
+const canonicalBase = (siteConfig.canonicalUrl as string)?.trim() || '';
+const pathname      = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonicalHref = canonicalBase
+    ? `${canonicalBase.replace(/\/$/, '')}${pathname === '/' ? '' : pathname}`
+    : Astro.url.origin + pathname;
 const pixelSettings = await readSingleton('pixels', themeId).catch(() => null);
 const gaId = pixelSettings?.googleAnalyticsId || '';
 const fbPixelId = pixelSettings?.facebookPixelId || '';
@@ -72,18 +71,16 @@ const secondaryRGB = hexToRgb(secondaryColor);
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<FaviconLinks />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="canonical" href={canonicalHref} />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
         <meta name="description" content={description} />
-        <meta name="robots" content={robots} />
 
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:url" content={canonicalHref} />
-        {ogImage && <meta property="og:image" content={ogImageAbs} />}
+        {ogImage && <meta property="og:image" content={new URL(ogImage, Astro.url)} />}
 
         <!-- GA e Meta Pixel são injetados via CookieConsent apenas após consentimento -->
 

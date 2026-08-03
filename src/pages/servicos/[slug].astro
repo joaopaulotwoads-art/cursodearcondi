@@ -7,15 +7,10 @@
  * Principal = cidade com mais bairros cadastrados.
  */
 
-import { getEntry } from 'astro:content';
 import { listServices, readService } from '../../utils/service-utils';
 import { getPrincipalLocationSlug } from '../../utils/location-utils';
 
 export async function getStaticPaths() {
-    const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-    if ((settings?.data?.siteMode || 'blog') !== 'local') {
-        return [];
-    }
     const services = await listServices();
     return services.map(({ data }) => ({
         params: { slug: data.slug },

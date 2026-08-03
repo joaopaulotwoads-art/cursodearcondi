@@ -10,10 +10,8 @@
 import MainLayout from '../../layouts/MainLayout.astro';
 import LocalLayout from '../../layouts/LocalLayout.astro';
 import { readSingleton } from '../../utils/singleton-utils';
-import { getCollection } from 'astro:content';
 
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
-import { resolvecursodearMediaUrl } from '../../utils/media-url';
 
 interface Props {
     posts: any[];
@@ -21,17 +19,10 @@ interface Props {
     layoutType?: 'main' | 'local';
     blogPermalinkStructure?: BlogPermalinkStructure;
     blogUrlPrefix?: BlogUrlPrefix;
-    /** Título da aba / layout quando a listagem está filtrada por categoria. */
-    listTitle?: string;
 }
 
-const { posts, themeId, layoutType = 'main', blogPermalinkStructure = 'postname', blogUrlPrefix = 'blog', listTitle } = Astro.props;
+const { posts, themeId, layoutType = 'main', blogPermalinkStructure = 'postname', blogUrlPrefix = 'blog' } = Astro.props;
 const Layout = layoutType === 'local' ? LocalLayout : MainLayout;
-const categories = await getCollection('categories');
-function categoryLabel(slug: string | undefined) {
-    if (!slug) return '';
-    return categories.find((c) => c.id === slug)?.data.name || slug;
-}
 const blogThemeId = layoutType === 'local' ? 'local' : themeId;
 
 const blogData         = await readSingleton('blog', blogThemeId) || (blogThemeId === 'local' ? await readSingleton('blog', 'classic') : null);
@@ -39,12 +30,12 @@ const heroBadge        = blogData?.heroBadge        || '📝 Blog';
 const heroTitle        = blogData?.heroTitle        || 'Últimas';
 const heroTitleHL      = blogData?.heroTitleHighlight || 'Novidades';
 const heroDescription  = blogData?.heroDescription  || 'Artigos sobre desenvolvimento web, SEO, JAMstack e tecnologia';
-const pageTitle        = blogData?.pageTitle        || 'Blog · Artigos e Novidades';
+const pageTitle        = blogData?.pageTitle        || 'Blog — Artigos e Novidades';
 const emptyMessage     = blogData?.emptyMessage     || 'Nenhum post publicado ainda';
 const emptySubMessage  = blogData?.emptySubMessage  || 'Volte em breve para ver nossos artigos!';
 ---
 
-<Layout title={listTitle || pageTitle}>
+<Layout title={pageTitle}>
     
     <!-- HERO SECTION -->
     <section class="relative min-h-[60vh] flex items-center justify-center pt-24 md:pt-32 overflow-hidden">
@@ -86,7 +77,7 @@ const emptySubMessage  = blogData?.emptySubMessage  || 'Volte em breve para ver 
             ) : (
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
                     {posts.map((post) => {
-                        const thumbnail = resolvecursodearMediaUrl(post.data.thumbnail || post.data.metaImage);
+                        const thumbnail = post.data.thumbnail || post.data.metaImage;
                         const postUrl = getPostUrl(
                             { ...post, data: { ...post.data, slug: post.data.slug || post.id } },
                             blogPermalinkStructure,
@@ -114,7 +105,7 @@ const emptySubMessage  = blogData?.emptySubMessage  || 'Volte em breve para ver 
                             <div class="mb-3">
                                 {post.data.category && (
                                     <span class="text-[10px] font-bold uppercase tracking-widest px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-full">
-                                        {categoryLabel(post.data.category)}
+                                        {post.data.category}
                                     </span>
                                 )}
                             </div>

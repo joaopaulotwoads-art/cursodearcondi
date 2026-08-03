@@ -8,14 +8,7 @@ import markdoc from '@astrojs/markdoc';
 // https://astro.build/config
 export default defineConfig({
     output: 'server',
-    // Aceita /rota e /rota/ sem 404 (especialmente no dev).
-    // Canonical/sitemap continuam padronizando com barra final via utils/read-site-settings.ts
-    trailingSlash: 'ignore',
     adapter: vercel(),
-    /** CSS inline no HTML → menos pedidos bloqueantes no caminho crítico (Lighthouse / LCP). */
-    build: {
-        inlineStylesheets: 'always',
-    },
     integrations: [
         react({
             // classic evita erro "jsxDEV is not a function" com client:only em dev
@@ -24,11 +17,5 @@ export default defineConfig({
         tailwind(), 
         markdoc({ allowHTML: true })
     ],
-    redirects: {
-        '/blog/ferramentas-tecnico-ar-condicionado': {
-            status: 301,
-            destination: '/blog/ferramentas-para-ar-condicionado',
-        },
-    },
     // Reset Trigger: 2026-02-07 11:40
 });

@@ -17,7 +17,7 @@
 import type { APIRoute } from 'astro';
 import { writePost, slugExists } from '../../../../../utils/post-utils';
 import type { PostData } from '../../../../../utils/post-utils';
-import { loadAISettings, resolveApiKey, resolvePexelsApiKey, callAI } from '../../../../../utils/ai-provider';
+import { loadAISettings, resolveApiKey, callAI } from '../../../../../utils/ai-provider';
 import { searchPexelsPhotos, getPhotoUrl, getThumbnailUrl } from '../../../../../utils/pexels';
 
 interface Outline {
@@ -523,7 +523,6 @@ export const POST: APIRoute = async ({ request }) => {
 
         const aiSettings = await loadAISettings();
         const apiKey = resolveApiKey(aiSettings);
-        const pexelsKey = resolvePexelsApiKey(aiSettings);
 
         const encoder = new TextEncoder();
         const send = (data: object) => `data: ${JSON.stringify(data)}\n\n`;
@@ -564,7 +563,7 @@ export const POST: APIRoute = async ({ request }) => {
                     }
 
                     let thumbnailUrl: string | undefined;
-                    if (pexelsKey) {
+                    if (aiSettings.pexelsApiKey?.trim()) {
                         onProgress('🖼️ Traduzindo título para busca no Pexels...');
                         let searchQuery = title;
                         if (apiKey) {
@@ -581,7 +580,7 @@ export const POST: APIRoute = async ({ request }) => {
                             const result = await insertImagesByWordCount(
                                 content,
                                 title,
-                                pexelsKey,
+                                aiSettings.pexelsApiKey.trim(),
                                 searchQuery
                             );
                             content = result.content;
@@ -604,12 +603,10 @@ export const POST: APIRoute = async ({ request }) => {
                         ...(thumbnailUrl && { thumbnail: thumbnailUrl, metaImage: thumbnailUrl }),
                     };
 
-                    const wrote = await writePost(slug, postData, content);
+                    const success = await writePost(slug, postData, content);
 
-                    if (!wrote.ok) {
-                        controller.enqueue(
-                            encoder.encode(send({ step: 'error', error: wrote.error || 'Erro ao salvar post' })),
-                        );
+                    if (!success) {
+                        controller.enqueue(encoder.encode(send({ step: 'error', error: 'Erro ao salvar post' })));
                     } else {
                         controller.enqueue(encoder.encode(send({ step: 'done', success: true, slug, title })));
                     }

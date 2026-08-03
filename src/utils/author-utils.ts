@@ -132,11 +132,11 @@ export async function writeAuthor(slug: string, data: AuthorData): Promise<boole
         const filename = slugToFilename(slug);
 
         if (isGitHubConfigured()) {
-            return (await githubWriteFile(
+            return githubWriteFile(
                 `src/content/authors/${filename}`,
                 yamlContent,
                 `content: save author "${slug}"`,
-            )).ok;
+            );
         }
 
         const filePath = path.join(AUTHORS_DIR, filename);

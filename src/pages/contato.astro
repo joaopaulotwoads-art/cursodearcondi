@@ -1,310 +1,305 @@
 ---
-import { getEntry } from 'astro:content';
-import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
-import { readSingleton } from '../utils/singleton-utils';
-import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
-import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+/**
+ * contato.astro - Página de Contato
+ *
+ * Roteia para o componente correto conforme siteMode:
+ * - local → themes/local/Contato.astro (identidade visual azul/WhatsApp)
+ * - blog  → MainLayout com conteúdo do tema classic (roxo/preto)
+ */
 
-const pageTitle = 'Fale Conosco | Suporte ao Aluno';
-const pageDescription = 'Entre em contato com nossa equipe de suporte. WhatsApp (14) 98803-4123 ou e-mail. Respondemos em até 24 horas úteis.';
+import { getEntry } from 'astro:content';
+import MainLayout from '../layouts/MainLayout.astro';
+import LocalContato from '../themes/local/Contato.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { getSiteContactInfo } from '../utils/site-contact';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
-const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
+const siteMode = (settings?.data?.siteMode || 'blog') as 'blog' | 'local';
+const isLocal = siteMode === 'local';
 
-const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
-const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
-const beNav = beMenu ? navFromMenu(beMenu) : [];
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
-const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
+let data: Record<string, unknown> | null;
+if (isLocal) {
+    const localContact = await readSingleton('contact', 'local');
+    if (localContact) {
+        data = localContact;
+    } else {
+        const [localHome, contact] = await Promise.all([
+            readSingleton('home', 'local') || {},
+            getSiteContactInfo(),
+        ]);
+        data = {
+            heroTitle: 'Entre em Contato',
+            heroSubtitle: localHome.ctaText || 'Estamos prontos para atender. Entre em contato pelo WhatsApp, telefone ou e-mail.',
+            email: localHome.companyEmail || '',
+            phone: contact.phone || contact.whatsapp,
+            address: [localHome.companyAddress, localHome.companyCity, localHome.companyState, localHome.companyCEP].filter(Boolean).join(' - '),
+        };
+    }
+} else {
+    data = await readSingleton('contact', 'classic');
+}
 
-const contactSchemaJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'ContactPage',
-  name: 'Contato | Curso de Ar Condicionado',
-  url: 'https://cursodearcondicionado.com.br/contato/',
-  publisher: {
-    '@type': 'Organization',
-    name: 'Curso de Ar Condicionado',
-    telephone: '+55-14-98803-4123',
-    email: 'contato@cursodearcondicionado.com.br',
-  },
-};
+const siteName = isLocal ? ((await readSingleton('home', 'local'))?.companyName || 'Site') : 'CNX Agency';
 ---
 
-<BaseLayoutcursodear
-  title={pageTitle}
-  description={pageDescription}
-  siteName={siteNameForLayout}
-  logoSrc={logoForLayout}
-  siteUrl={siteUrl}
-  nav={beNav}
-  footerNav={beFootNav}
-  contentThemeId="cursodear"
-  extraJsonLd={contactSchemaJsonLd}
-  canonicalOverride="https://cursodearcondicionado.com.br/contato/"
->
-  <div class="bg-white text-slate-900">
-    <section class="bg-slate-800 py-16 text-center">
-      <div class="mx-auto max-w-4xl px-6">
-        <span class="text-orange-500 font-bold text-xs uppercase tracking-widest">
-          FALE CONOSCO
-        </span>
-        <h1 class="text-4xl font-black text-white mt-2 mb-4">
-          Entre em Contato
-        </h1>
-        <p class="text-gray-300 max-w-xl mx-auto text-base leading-relaxed">
-          Tire suas dúvidas sobre o curso, suporte técnico
-          ou qualquer outra informação. Respondemos em até
-          24 horas úteis.
-        </p>
-      </div>
+{isLocal ? (
+    <LocalContato data={data || {}} siteName={siteName} />
+) : (
+<MainLayout title={`${data?.heroTitle || 'Contato'} - ${siteName}`}>
+    
+    <!-- HERO SECTION -->
+    <section class="relative min-h-[70vh] flex items-center justify-center pt-24 md:pt-32 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-black via-black to-[#0a0a0a]">
+            <div class="absolute inset-0 opacity-30">
+                <div class="absolute inset-0" style="background-image: linear-gradient(to right, rgba(168, 85, 247, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(168, 85, 247, 0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
+            </div>
+            <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] animate-pulse"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-secondary/8 rounded-full blur-[100px] animate-pulse" style="animation-delay: 1.5s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-5xl mx-auto text-center">
+                <div class="inline-flex items-center gap-2 px-5 py-2.5 mb-10 rounded-full border border-primary/40 bg-primary/10 backdrop-blur-sm">
+                    <span class="text-sm md:text-base font-semibold text-primary tracking-wide">Fale Conosco</span>
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-heading font-black text-white leading-[1.1] mb-8">
+                    {data?.heroTitle || 'Entre em Contato'}
+                </h1>
+                
+                {data?.heroSubtitle && (
+                    <p class="text-lg md:text-xl lg:text-2xl text-slate-400 max-w-3xl mx-auto mb-12 leading-relaxed">
+                        {data.heroSubtitle}
+                    </p>
+                )}
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
     </section>
 
-    <section class="max-w-5xl mx-auto px-6 py-16">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <a
-          href="https://wa.me/5514988034123"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="bg-green-500 hover:bg-green-600 text-white rounded-2xl p-8 text-center flex flex-col items-center gap-3 transition shadow-lg"
-        >
-          <span class="text-4xl">💬</span>
-          <h3 class="font-black text-lg">WhatsApp</h3>
-          <p class="text-green-100 text-sm">(14) 98803-4123</p>
-          <span class="bg-white text-green-600 font-bold text-xs px-4 py-2 rounded-full uppercase">
-            Chamar agora →
-          </span>
-        </a>
+    <!-- CONTACT INFO & FORM -->
+    <section class="py-20 md:py-32 bg-black relative overflow-hidden">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+                <!-- Contact Info -->
+                <div class="space-y-8">
+                    <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all">
+                        <h2 class="text-3xl font-heading font-bold text-white mb-8">Informações de Contato</h2>
+                        
+                        {data?.email && (
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-2xl flex-shrink-0">
+                                    📧
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-500 mb-1">E-mail</p>
+                                    <a href={`mailto:${data.email}`} class="text-white hover:text-primary transition-colors">
+                                        {data.email}
+                                    </a>
+                                </div>
+                            </div>
+                        )}
 
-        <a
-          href="mailto:contato@cursodearcondicionado.com.br"
-          class="bg-white border-2 border-orange-500 rounded-2xl p-8 text-center flex flex-col items-center gap-3 shadow-lg hover:bg-orange-50 transition"
-        >
-          <span class="text-4xl">✉️</span>
-          <h3 class="font-black text-slate-800 text-lg">E-mail</h3>
-          <p class="text-gray-500 text-sm">
-            contato@cursodearcondicionado.com.br
-          </p>
-          <span class="bg-orange-500 text-white font-bold text-xs px-4 py-2 rounded-full uppercase">
-            Enviar e-mail →
-          </span>
-        </a>
+                        {data?.phone && (
+                            <div class="flex items-start gap-4 mb-6">
+                                <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-2xl flex-shrink-0">
+                                    📞
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-500 mb-1">Telefone</p>
+                                    <a href={`tel:${String(data.phone || '').replace(/\D/g, '')}`} class="text-white hover:text-primary transition-colors">
+                                        {data.phone}
+                                    </a>
+                                </div>
+                            </div>
+                        )}
 
-        <div class="bg-white border border-gray-200 rounded-2xl p-8 text-center flex flex-col items-center gap-3 shadow-sm">
-          <span class="text-4xl">📍</span>
-          <h3 class="font-black text-slate-800 text-lg">
-            Localização
-          </h3>
-          <p class="text-gray-500 text-sm leading-relaxed">
-            Av. Rodrigues Alves, 96<br />
-            Jardim Redentor — Bauru/SP
-          </p>
-          <a
-            href="https://maps.app.goo.gl/bAPz55ZAM24twfTo9"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="bg-slate-800 text-white font-bold text-xs px-4 py-2 rounded-full uppercase hover:bg-slate-700 transition"
-          >
-            Ver no mapa →
-          </a>
+                        {data?.address && (
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center text-2xl flex-shrink-0">
+                                    📍
+                                </div>
+                                <div>
+                                    <p class="text-sm text-slate-500 mb-1">Endereço</p>
+                                    <p class="text-white whitespace-pre-line">{data.address}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Social Links */}
+                    {data?.socialLinks && data.socialLinks.length > 0 && (
+                        <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all">
+                            <h3 class="text-2xl font-heading font-bold text-white mb-6">Redes Sociais</h3>
+                            <div class="space-y-4">
+                                {data.socialLinks.map((social: any) => (
+                                    <a 
+                                        href={social.url}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-primary/40 transition-all group"
+                                    >
+                                        <span class="text-2xl">{social.icon}</span>
+                                        <span class="text-white group-hover:text-primary transition-colors font-semibold">{social.platform}</span>
+                                        <span class="ml-auto text-slate-500 group-hover:translate-x-1 transition-transform">→</span>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Contact Form */}
+                <div class="p-8 md:p-12 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/50 transition-all">
+                    <h2 class="text-3xl font-heading font-bold text-white mb-8">{data?.formTitle || 'Envie sua Mensagem'}</h2>
+                    
+                    <form class="space-y-6" id="contact-form" onsubmit="return false;">
+                        <div>
+                            <label for="name" class="block text-sm font-semibold text-slate-300 mb-2">Nome</label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name"
+                                required
+                                class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                placeholder="Seu nome completo"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-slate-300 mb-2">E-mail</label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email"
+                                required
+                                class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                placeholder="seu@email.com"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="subject" class="block text-sm font-semibold text-slate-300 mb-2">Assunto</label>
+                            <input 
+                                type="text" 
+                                id="subject" 
+                                name="subject"
+                                required
+                                class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
+                                placeholder="Como podemos ajudar?"
+                            />
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-slate-300 mb-2">Mensagem</label>
+                            <textarea 
+                                id="message" 
+                                name="message"
+                                required
+                                rows="5"
+                                class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none"
+                                placeholder="Conte-nos mais sobre seu projeto..."
+                            ></textarea>
+                        </div>
+
+                        <button 
+                            type="submit"
+                            class="w-full px-8 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 hover:scale-[1.02] transition-all shadow-xl hover:shadow-primary/30"
+                        >
+                            {data?.formSubmitText || 'Enviar Mensagem'}
+                        </button>
+
+                        <div id="form-message" class="hidden p-4 rounded-xl"></div>
+                    </form>
+                </div>
+            </div>
         </div>
-      </div>
     </section>
 
-    <section class="max-w-5xl mx-auto px-6 pb-16">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
-        <div>
-          <h2 class="text-2xl font-black text-slate-800 mb-2">
-            Envie sua mensagem
-          </h2>
-          <p class="text-gray-500 text-sm mb-8">
-            Preencha o formulário e responderemos
-            em até 24 horas úteis.
-          </p>
-
-          <form
-            action="https://formsubmit.co/contato@cursodearcondicionado.com.br"
-            method="POST"
-            class="space-y-4"
-          >
-            <input type="hidden" name="_subject" value="Nova mensagem - Curso de Ar Condicionado" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_next" value="https://cursodearcondicionado.com.br/contato?enviado=true" />
-            <input type="text" name="_honey" style="display:none" />
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Nome completo *</label>
-              <input
-                type="text"
-                name="nome"
-                required
-                placeholder="Seu nome"
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">E-mail *</label>
-              <input
-                type="email"
-                name="email"
-                required
-                placeholder="seu@email.com"
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">WhatsApp</label>
-              <input
-                type="tel"
-                name="whatsapp"
-                placeholder="(00) 00000-0000"
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition"
-              />
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Assunto *</label>
-              <select
-                name="assunto"
-                required
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition bg-white"
-              >
-                <option value="">Selecione...</option>
-                <option value="Dúvida sobre o curso">Dúvida sobre o curso</option>
-                <option value="Suporte técnico">Suporte técnico</option>
-                <option value="Problemas com acesso">Problemas com acesso</option>
-                <option value="Certificado">Certificado</option>
-                <option value="Reembolso">Reembolso / Garantia</option>
-                <option value="Outros">Outros</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="block text-sm font-semibold text-gray-700 mb-1">Mensagem *</label>
-              <textarea
-                name="mensagem"
-                required
-                rows="5"
-                placeholder="Escreva sua mensagem aqui..."
-                class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition resize-none"
-              ></textarea>
-            </div>
-
-            <button
-              type="submit"
-              class="w-full bg-orange-500 hover:bg-orange-600 text-white font-black py-4 rounded-xl uppercase tracking-wide transition text-base"
-            >
-              ENVIAR MENSAGEM →
-            </button>
-
-            <p class="text-xs text-gray-400 text-center">
-              🔒 Seus dados estão seguros. Não fazemos spam.
-            </p>
-          </form>
-        </div>
-
-        <div class="space-y-8">
-          <div class="rounded-2xl overflow-hidden shadow-md border border-gray-200">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3691.0615387622606!2d-49.03531582470722!3d-22.313512279677077!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94bf5d70916f0c85%3A0xf9fafa89cf77ec46!2sAv.%20Rodrigues%20Alves%2C%2096%20-%20Jardim%20Redentor%2C%20Bauru%20-%20SP!5e0!3m2!1spt-PT!2sbr!4v1777417609252!5m2!1spt-PT!2sbr"
-              width="100%"
-              height="280"
-              style="border:0;"
-              allowfullscreen=""
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-
-          <div class="bg-gray-50 rounded-2xl p-6 border border-gray-100">
-            <h3 class="font-black text-slate-800 text-base mb-4">
-              Siga nas redes sociais
-            </h3>
-            <div class="space-y-3">
-              <a
-                href="https://instagram.com/cursodearcondicionado"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition group"
-              >
-                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0">📸</div>
-                <div>
-                  <p class="font-semibold text-slate-800 text-sm group-hover:text-orange-500 transition">
-                    Instagram
-                  </p>
-                  <p class="text-gray-400 text-xs">
-                    @cursodearcondicionado
-                  </p>
+    <!-- CTA BANNER -->
+    {data && data.ctaTitle && (
+        <section class="py-20 md:py-32 bg-[#0a0a0a] relative overflow-hidden">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto text-center">
+                    <div class="p-12 rounded-3xl bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary/50 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent"></div>
+                        <div class="relative z-10">
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-heading font-black text-white mb-6">
+                                {data.ctaTitle}
+                            </h2>
+                            {data.ctaDescription && (
+                                <p class="text-white/80 text-lg md:text-xl mb-10 leading-relaxed">
+                                    {data.ctaDescription}
+                                </p>
+                            )}
+                            {data.ctaButtonText && data.ctaButtonUrl && (
+                                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                    <a 
+                                        href={data.ctaButtonUrl} 
+                                        class="inline-flex items-center justify-center gap-2 px-10 py-5 bg-white text-primary font-bold rounded-2xl hover:scale-105 transition-transform shadow-2xl"
+                                    >
+                                        {data.ctaButtonText}
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M5 12h14"></path>
+                                            <path d="m12 5 7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
-              </a>
-
-              <a
-                href="https://youtube.com/@cursodearcondicionado"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition group"
-              >
-                <div class="w-10 h-10 bg-red-500 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0">▶️</div>
-                <div>
-                  <p class="font-semibold text-slate-800 text-sm group-hover:text-orange-500 transition">
-                    YouTube
-                  </p>
-                  <p class="text-gray-400 text-xs">
-                    Curso de Ar Condicionado
-                  </p>
-                </div>
-              </a>
-
-              <a
-                href="https://facebook.com/cursodearcondicionado"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-3 p-3 bg-white rounded-xl border border-gray-200 hover:border-orange-500 hover:bg-orange-50 transition group"
-              >
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white text-lg flex-shrink-0">👍</div>
-                <div>
-                  <p class="font-semibold text-slate-800 text-sm group-hover:text-orange-500 transition">
-                    Facebook
-                  </p>
-                  <p class="text-gray-400 text-xs">
-                    Curso de Ar Condicionado
-                  </p>
-                </div>
-              </a>
             </div>
-          </div>
+        </section>
+    )}
 
-          <div class="bg-orange-50 border border-orange-200 rounded-2xl p-6">
-            <h3 class="font-black text-slate-800 text-base mb-3">
-              ⏰ Horário de atendimento
-            </h3>
-            <div class="space-y-1 text-sm text-gray-600">
-              <p>Segunda a Sexta: <strong>9h às 18h</strong></p>
-              <p>Sábado: <strong>9h às 12h</strong></p>
-              <p>Domingo: <strong>Fechado</strong></p>
-            </div>
-            <p class="text-xs text-gray-400 mt-3">
-              Para suporte urgente use o WhatsApp
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+    <script define:vars={{ successMessage: data?.formSuccessMessage }}>
+        const form = document.getElementById('contact-form');
+        const formMessage = document.getElementById('form-message');
+        const submitBtn = form?.querySelector('button[type="submit"]');
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('enviado') === 'true') {
-      const banner = document.createElement('div');
-      banner.className = 'fixed top-20 left-1/2 -translate-x-1/2 z-50 bg-green-500 text-white font-bold px-8 py-4 rounded-2xl shadow-xl text-sm';
-      banner.textContent = '✅ Mensagem enviada! Responderemos em breve.';
-      document.body.appendChild(banner);
-      setTimeout(() => banner.remove(), 5000);
-    }
-  </script>
-</BaseLayoutcursodear>
+        form?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!form || !formMessage) return;
 
+            const nameEl = form.querySelector('[name="name"]');
+            const emailEl = form.querySelector('[name="email"]');
+            const subjectEl = form.querySelector('[name="subject"]');
+            const messageEl = form.querySelector('[name="message"]');
+            const name = (nameEl?.value ?? '').toString().trim();
+            const email = (emailEl?.value ?? '').toString().trim();
+            const subject = (subjectEl?.value ?? '').toString().trim();
+            const message = (messageEl?.value ?? '').toString().trim();
+
+            formMessage.classList.remove('hidden', 'bg-red-500/20', 'border-red-500/40', 'bg-green-500/20', 'border-green-500/40', 'text-green-400');
+            formMessage.style.display = 'block';
+            formMessage.innerHTML = '<span class="inline-flex items-center gap-2">⏳ Enviando sua mensagem...</span>';
+            submitBtn?.setAttribute('disabled', 'true');
+
+            try {
+                const res = await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, subject, message, source: 'contato' }),
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    formMessage.innerHTML = '<span class="inline-flex items-center gap-2">✅ ' + (successMessage || 'Mensagem enviada com sucesso! Recebemos seu contato e retornaremos em breve.') + '</span>';
+                    formMessage.classList.add('bg-green-500/20', 'border', 'border-green-500/40', 'text-green-400');
+                    form.reset();
+                } else {
+                    formMessage.innerHTML = '<span class="inline-flex items-center gap-2">❌ ' + (data.error || 'Erro ao enviar. Tente novamente.') + '</span>';
+                    formMessage.classList.add('bg-red-500/20', 'border', 'border-red-500/40', 'text-red-400');
+                }
+            } catch (err) {
+                formMessage.innerHTML = '<span class="inline-flex items-center gap-2">❌ Erro de conexão. Verifique sua internet e tente novamente.</span>';
+                formMessage.classList.add('bg-red-500/20', 'border', 'border-red-500/40', 'text-red-400');
+            }
+            submitBtn?.removeAttribute('disabled');
+            setTimeout(function() { formMessage.classList.add('hidden'); }, 6000);
+        });
+    </script>
+</MainLayout>
+)}

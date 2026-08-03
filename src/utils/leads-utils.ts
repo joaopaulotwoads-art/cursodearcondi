@@ -62,7 +62,7 @@ async function writeLeadsFile(leads: Lead[]): Promise<boolean> {
     const content = JSON.stringify({ leads }, null, 2);
 
     if (isGitHubConfigured()) {
-        return (await githubWriteFile(LEADS_GH_PATH, content, 'content: novo lead')).ok;
+        return githubWriteFile(LEADS_GH_PATH, content, 'content: novo lead');
     }
 
     try {
