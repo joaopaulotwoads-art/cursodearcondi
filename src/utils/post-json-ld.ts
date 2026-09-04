@@ -174,7 +174,7 @@ function personNode(name: string, authorPageUrl: string): Record<string, unknown
     const base = authorPageUrl.replace(/\/+$/, '');
     return {
         '@type': 'Person',
-        '@id': `${base}#author`,
+        '@id': `${base}#person`,
         name,
         url: schemaPageUrl(`${base}/`),
     };

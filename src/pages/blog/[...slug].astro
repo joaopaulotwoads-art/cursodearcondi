@@ -104,7 +104,11 @@ const postJsonLd = usecursodear
         publishedDate: post.data.publishedDate,
         imageUrl: ogImageAbs,
         authorName: author?.data?.name,
-        authorUrl: author ? buildAuthorAbsoluteUrl(publicSiteUrl, author.id) : undefined,
+        authorUrl: author
+          ? author.data.profilePath
+            ? toAbsoluteUrl(publicSiteUrl, author.data.profilePath)
+            : buildAuthorAbsoluteUrl(publicSiteUrl, author.id)
+          : undefined,
         htmlContent,
         categoryName,
         categoryPath,
