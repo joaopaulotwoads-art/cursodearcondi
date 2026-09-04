@@ -28,7 +28,7 @@ faq:
 
 O ar condicionado funciona transferindo calor de dentro para fora do ambiente. Ele não cria frio, ele move o calor. O processo usa um fluido refrigerante que circula entre evaporadora e condensadora em ciclo contínuo.
 
-Se você quer ir além da teoria e aprender instalação e diagnóstico, o passo seguinte é o guia de **[como instalar ar condicionado split](/blog/como-instalar-ar-condicionado-split/)**.
+Se você quer ir além da teoria e aprender instalação e diagnóstico, o passo seguinte é o guia de **[como instalar ar condicionado split](/como-instalar-ar-condicionado-split/)**.
 
 Entender o ciclo ajuda a explicar para o cliente por que limpeza, carga correta e instalação sem vazamento não são detalhe. São o que mantém o equipamento gelando de verdade.
 
@@ -99,7 +99,7 @@ A condensadora recebe o calor que saiu do ambiente e joga para o exterior.
 Serpentim obstruído, ventilador fraco ou local fechado pioram muito o desempenho.
 
 Na instalação, espaço livre ao redor e boa fixação importam tanto quanto na parte interna.
-Veja o que muda no preço de uma instalação bem feita no artigo **[quanto custa instalar ar condicionado](/blog/quanto-custa-instalar-ar-condicionado/)**.
+Veja o que muda no preço de uma instalação bem feita no artigo **[quanto custa instalar ar condicionado](/quanto-custa-instalar-ar-condicionado/)**.
 
 ### Fluido refrigerante: R410A, R22 e R32
 
@@ -139,7 +139,7 @@ A dúvida **ar condicionado inverter como funciona** resume-se a uma coisa: o co
 No convencional, cada partida do compressor puxa pico de corrente.
 No Inverter, ele modula rotação e mantém temperatura mais estável.
 
-Para aprofundar tecnologia, leia **[ar condicionado Inverter: o que é](/blog/ar-condicionado-inverter-o-que-e/)**.
+Para aprofundar tecnologia, leia **[ar condicionado Inverter: o que é](/ar-condicionado-inverter-o-que-e/)**.
 
 Na prática, cliente pergunta "qual gasta menos?": a resposta honesta depende do uso.
 Ambiente com muita abertura de porta, vidro grande ou sol direto pesa mais que a etiqueta do aparelho.
@@ -161,7 +161,7 @@ Só completar gás sem consertar vazamento é remendo.
 Filtro entupido corta vazão de ar na evaporadora.
 O serpentim pode gelar e o conforto cai.
 
-Limpeza e **[manutenção preventiva](/blog/manutencao-ar-condicionado-preventiva/)** resolvem boa parte desses chamados sem peça cara.
+Limpeza e **[manutenção preventiva](/manutencao-preventiva-ar-condicionado-guia/)** resolvem boa parte desses chamados sem peça cara.
 
 ### Compressor com defeito
 
@@ -239,6 +239,6 @@ Dominar esse funcionamento acelera instalação, manutenção e diagnóstico.
 Quem quer trabalhar com isso precisa de método e prática, não só teoria.
 
 O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo, do ciclo básico ao conserto em campo.
-Use também o guia de **[ferramentas para técnico](/blog/ferramentas-tecnico-ar-condicionado/)** e veja **[quanto ganha um técnico](/blog/quanto-ganha-tecnico-ar-condicionado/)** que domina diagnóstico.
+Use também o guia de **[ferramentas para técnico](/ferramentas-para-ar-condicionado/)** e veja **[quanto ganha um técnico](/quanto-ganha-tecnico-ar-condicionado/)** que domina diagnóstico.
 
 [Ver o curso](/)

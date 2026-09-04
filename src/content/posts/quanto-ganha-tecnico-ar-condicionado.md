@@ -42,7 +42,7 @@ Quem quer entender **quanto ganha um técnico de ar condicionado** precisa compa
 **Autônomo**
 - Faturamento variável, com potencial de R$ 3.000 a R$ 9.000 ou mais
 - Você define preço, agenda e região de atuação
-- Precisa investir em [ferramentas](/ferramentas-tecnico-ar-condicionado/), deslocamento e captação de clientes
+- Precisa investir em [ferramentas](/ferramentas-para-ar-condicionado/), deslocamento e captação de clientes
 - Quem entrega padrão técnico cobra mais e retorna menos
 
 ### Salário CLT por região em 2026
@@ -133,7 +133,7 @@ Para visualizar **quanto ganha um técnico de ar condicionado autônomo**, veja 
 
 ![Manômetro de baixa pressão de manifold usado na instalação e manutenção de ar condicionado split](/images/blog/manifold-ar-condicionado-ferramentas.webp)
 
-Lembre: faturamento não é lucro líquido. Deslocamento, material, [kit de ferramentas](/ferramentas-tecnico-ar-condicionado/), marketing e impostos entram na conta. Mesmo assim, a margem atrai quem organiza operação.
+Lembre: faturamento não é lucro líquido. Deslocamento, material, [kit de ferramentas](/ferramentas-para-ar-condicionado/), marketing e impostos entram na conta. Mesmo assim, a margem atrai quem organiza operação.
 
 ## Como aumentar seus ganhos com especialização Inverter
 
@@ -156,7 +156,7 @@ Equipamento Inverter é padrão em vendas novas. Quem domina esse segmento cobra
 Com formação objetiva, muitos alunos atendem os primeiros serviços em **4 a 8 semanas**. O caminho usual:
 
 1. Aprender [instalação split](/como-instalar-ar-condicionado-split/) e segurança em campo
-2. Montar [kit mínimo de ferramentas](/ferramentas-tecnico-ar-condicionado/)
+2. Montar [kit mínimo de ferramentas](/ferramentas-para-ar-condicionado/)
 3. Fazer 3 a 5 serviços acompanhados ou com checklist
 4. Pedir indicação e divulgar na região
 5. Oferecer preventiva para gerar recorrência

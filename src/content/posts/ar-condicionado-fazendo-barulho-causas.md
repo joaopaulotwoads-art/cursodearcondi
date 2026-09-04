@@ -58,7 +58,7 @@ Filtro entupido reduz o fluxo de ar e faz o ventilador trabalhar com mais esfor�
 
 Como identificar: o ronco é constante e piora com o tempo. O aparelho gelava melhor antes.
 
-Como resolver: remova e lave o filtro. Se o barulho persistir após a limpeza, a serpentina pode precisar de higienização com produto específico. Veja o guia completo de [como limpar ar condicionado split](/blog/como-limpar-ar-condicionado-split/).
+Como resolver: remova e lave o filtro. Se o barulho persistir após a limpeza, a serpentina pode precisar de higienização com produto específico. Veja o guia completo de [como limpar ar condicionado split](/como-limpar-ar-condicionado-split/).
 
 Custo médio: zero se o usuário fizer a limpeza do filtro. R$ 150 a R$ 300 para higienização profissional.
 

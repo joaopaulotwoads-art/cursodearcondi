@@ -28,7 +28,7 @@ faq:
 
 O preço médio de instalação de ar condicionado split varia de **R$ 300 a R$ 700** em mão de obra, mais **R$ 100 a R$ 300** em materiais. O total depende do BTU, da complexidade e da região do Brasil.
 
-Se você está pensando em entrar na área, vale ver também **[quanto ganha um técnico](/blog/quanto-ganha-tecnico-ar-condicionado/)**. O ticket da instalação é onde muita gente começa a fazer caixa.
+Se você está pensando em entrar na área, vale ver também **[quanto ganha um técnico](/quanto-ganha-tecnico-ar-condicionado/)**. O ticket da instalação é onde muita gente começa a fazer caixa.
 
 ## Tabela de Preços de Instalação por BTU (2026)
 
@@ -53,7 +53,7 @@ Depois entra a parte crítica: flange, estanqueidade e vácuo.
 É aí que dá diferença entre instalação que dura anos e instalação que vaza em semanas.
 
 No final, ele mede corrente, confere pressão/temperatura e entrega o aparelho rodando estável.
-Se você quer comparar com um padrão de execução, veja **[como instalar ar condicionado](/blog/como-instalar-ar-condicionado-split/)**.
+Se você quer comparar com um padrão de execução, veja **[como instalar ar condicionado](/como-instalar-ar-condicionado-split/)**.
 
 ### Materiais básicos: tubulação, isolamento e suporte
 
@@ -61,7 +61,7 @@ O básico é cobre (líquido e sucção), isolamento térmico na linha, fita, dr
 Em muitos orçamentos isso aparece como **kit**.
 
 Dependendo do local, entram abraçadeiras, canaleta, acabamento simples e parafusos.
-Quando o profissional fala em **[kit de instalação](/blog/kit-instalacao-ar-condicionado/)**, é isso que você precisa entender item por item.
+Quando o profissional fala em **[kit de ferramentas para instalação](/ferramentas-para-ar-condicionado/)**, é isso que você precisa entender item por item.
 
 ![Unidade condensadora de ar condicionado split instalada em suporte na parede externa](/images/blog/condensadora-ar-condicionado-externa.webp)
 
@@ -134,7 +134,7 @@ Muita loja empurra kit genérico.
 Nem sempre a bitola e a qualidade do cobre estão no padrão que o equipamento pede.
 
 Comprar o kit certo antes de chamar o técnico reduz improviso e “surpresa” no orçamento.
-Para entender exatamente o que comprar, veja **[kit de instalação](/blog/kit-instalacao-ar-condicionado/)**.
+Para entender exatamente o que comprar, veja **[kit de ferramentas](/ferramentas-para-ar-condicionado/)**.
 
 ### Fazer a instalação elétrica antes (cabo e disjuntor)
 
@@ -168,7 +168,7 @@ Instalação não é só furar parede e ligar.
 
 Para quem quer trabalhar com isso, aprender reduz dependência e aumenta renda.
 Mas precisa de ferramental, checklist e treino real.
-E o retorno financeiro fica claro quando você entende **[quanto ganha um técnico](/blog/quanto-ganha-tecnico-ar-condicionado/)**.
+E o retorno financeiro fica claro quando você entende **[quanto ganha um técnico](/quanto-ganha-tecnico-ar-condicionado/)**.
 
 Se a ideia é instalar “só o meu”, o risco é outro.
 Você não tem prática para reagir rápido a vazamento, erro de flange ou dreno mal feito.
@@ -204,10 +204,10 @@ Se a pessoa diz que “não precisa vácuo”, já é alerta.
 Se não testa estanqueidade, o vazamento aparece depois e sobra para você.
 Se não usa manifold, a chance de “achismo” aumenta.
 
-Para ter um norte do que deveria ser feito, compare com o passo a passo de **[como instalar ar condicionado](/blog/como-instalar-ar-condicionado-split/)**.
+Para ter um norte do que deveria ser feito, compare com o passo a passo de **[como instalar ar condicionado](/como-instalar-ar-condicionado-split/)**.
 
 E depois da instalação, não deixe o aparelho “sumir” por dois anos.
-Uma **[manutenção preventiva](/blog/manutencao-preventiva-ar-condicionado-guia/)** por ano reduz consumo e evita dor de cabeça no pico do verão.
+Uma **[manutenção preventiva](/manutencao-preventiva-ar-condicionado-guia/)** por ano reduz consumo e evita dor de cabeça no pico do verão.
 
 ## Perguntas Frequentes sobre Preço de Instalação
 
@@ -215,7 +215,7 @@ Uma **[manutenção preventiva](/blog/manutencao-preventiva-ar-condicionado-guia
 **A:** Depende — muitos cobram **R$ 50 a R$ 100** de visita técnica, outros incluem no preço total da instalação.
 
 **Q: Quanto custa a manutenção anual depois da instalação?**  
-**A:** Entre **R$ 150 a R$ 300** para **[manutenção preventiva](/blog/manutencao-preventiva-ar-condicionado-guia/)** completa.
+**A:** Entre **R$ 150 a R$ 300** para **[manutenção preventiva](/manutencao-preventiva-ar-condicionado-guia/)** completa.
 
 **Q: Posso pagar parcelado a instalação?**  
 **A:** Depende do técnico. Muitos aceitam Pix, cartão ou parcelamento informal — vale perguntar no orçamento.
