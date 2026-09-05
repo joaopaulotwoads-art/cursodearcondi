@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import AffiliateDisclosure from '../../components/cursodear/AffiliateDisclosure.astro';
 import PostArticleToc from '../../components/cursodear/PostArticleToc.astro';
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
 import { resolvecursodearMediaUrl, rewritecursodearContentImagesInHtml } from '../../utils/media-url';
@@ -107,6 +108,7 @@ const applyRoundupArticleScope =
       {post.data.title}
     </h1>
   </header>
+  <AffiliateDisclosure />
   {heroImage && (
     <div
       class:list={[
