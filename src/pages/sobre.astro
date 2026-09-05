@@ -5,9 +5,9 @@ import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
-const pageTitle = 'Quem Somos | Formação Técnica Profissional em Climatização';
+const pageTitle = 'Quem Somos | Curso de Ar Condicionado';
 const pageDescription =
-  'Conheça nossa plataforma de formação técnica profissional. Instrutores especialistas, certificado reconhecido e +11.900 alunos formados.';
+  'Site independente sobre a profissão de instalador de ar condicionado: mercado, carreira e o curso que recomendamos.';
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
@@ -25,7 +25,7 @@ const aboutSchemaJsonLd = {
   '@type': 'EducationalOrganization',
   name: 'Curso de Ar Condicionado',
   description:
-    'Plataforma de cursos profissionalizantes técnicos em refrigeração, climatização e manutenção de eletrodomésticos.',
+    'Site independente sobre a profissão de instalador e técnico de ar condicionado, afiliado ao curso que recomenda.',
   url: 'https://cursodearcondicionado.com.br/',
   email: 'contato@cursodearcondicionado.com.br',
   telephone: '+55-14-98803-4123',
@@ -100,9 +100,9 @@ const aboutSchemaJsonLd = {
           Sobre o Curso de Ar Condicionado
         </h1>
         <p class="text-gray-300 max-w-2xl mx-auto text-base leading-relaxed">
-          Plataforma de cursos profissionalizantes focada em
-          formação técnica prática para o mercado de refrigeração,
-          climatização e manutenção de eletrodomésticos.
+          Site independente que orienta quem quer entender e entrar
+          no mercado de instalação e manutenção de ar condicionado —
+          e recomenda o curso no qual confiamos.
         </p>
       </div>
     </section>
@@ -112,24 +112,25 @@ const aboutSchemaJsonLd = {
         <h2 class="text-3xl font-black text-slate-800 mb-6">Quem Somos</h2>
         <div class="space-y-4 text-gray-600 text-base leading-relaxed">
           <p>
-            O Curso de Ar Condicionado é uma plataforma digital de cursos
-            profissionalizantes criada para democratizar o acesso
-            à formação técnica de qualidade no Brasil. Nosso foco
-            é o mercado de refrigeração, climatização e manutenção
+            O Curso de Ar Condicionado é um site independente focado
+            no mercado de refrigeração, climatização e manutenção
             de eletrodomésticos — um setor em constante crescimento
-            e com alta demanda por profissionais qualificados.
+            e com alta demanda por profissionais qualificados. Nosso
+            trabalho é ajudar quem está decidindo entrar nessa
+            profissão a entender o mercado, os custos reais e o
+            caminho de formação.
           </p>
           <p>
-            Trabalhamos com instrutores especialistas e ativos no
-            mercado, garantindo que cada aula reflita a realidade
-            do dia a dia do técnico profissional. Nossos cursos
-            são 100% online, com acesso vitalício, certificado
-            reconhecido e suporte dedicado ao aluno.
+            Recomendamos o Curso de Ar Condicionado, ministrado por
+            Leandro Moraes — instrutor com mais de 20 anos de
+            experiência em refrigeração e climatização —, do qual
+            somos afiliados: se você se inscrever pelos nossos
+            links, recebemos uma comissão, sem custo adicional
+            para você.
           </p>
           <p>
-            Desde o início da nossa operação, já contribuímos
-            para a formação de mais de 11.900 profissionais
-            em todo o Brasil — do Norte ao Sul do país —
+            O curso que recomendamos já formou mais de 11.900
+            alunos em todo o Brasil — do Norte ao Sul do país —
             que hoje atuam como técnicos autônomos, prestadores
             de serviço e empreendedores do setor.
           </p>
@@ -165,29 +166,30 @@ const aboutSchemaJsonLd = {
             <div class="text-4xl mb-4">🎯</div>
             <h3 class="font-black text-slate-800 text-lg mb-3">Nossa Missão</h3>
             <p class="text-gray-500 text-sm leading-relaxed">
-              Democratizar o acesso à formação técnica
-              de qualidade, capacitando profissionais para
-              conquistar independência financeira através
-              de um ofício valorizado.
+              Ajudar quem quer entrar no mercado de
+              climatização a tomar a decisão certa sobre
+              carreira e formação — com informação honesta,
+              não só promessa.
             </p>
           </article>
           <article class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
             <div class="text-4xl mb-4">🔭</div>
             <h3 class="font-black text-slate-800 text-lg mb-3">Nossa Visão</h3>
             <p class="text-gray-500 text-sm leading-relaxed">
-              Ser a principal plataforma de cursos
-              técnicos profissionalizantes do Brasil,
-              reconhecida pela qualidade do conteúdo e
-              pelo resultado gerado aos alunos.
+              Ser a referência mais confiável do Brasil
+              para quem pesquisa sobre a profissão de
+              instalador de ar condicionado antes de
+              decidir se profissionalizar.
             </p>
           </article>
           <article class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
             <div class="text-4xl mb-4">💡</div>
             <h3 class="font-black text-slate-800 text-lg mb-3">Nossos Valores</h3>
             <p class="text-gray-500 text-sm leading-relaxed">
-              Praticidade, transparência, resultado
-              real, suporte humano e compromisso com a
-              evolução profissional de cada aluno.
+              Transparência — inclusive sobre sermos
+              afiliados —, dado verificável em vez de
+              promessa vazia, e compromisso com quem
+              está decidindo a carreira.
             </p>
           </article>
         </div>
@@ -201,14 +203,14 @@ const aboutSchemaJsonLd = {
         </span>
 
         <h2 class="text-3xl font-black text-slate-800 mt-2 mb-4">
-          Por que estudar com a gente?
+          Por que confiar na nossa recomendação?
         </h2>
 
         <p class="text-gray-500 max-w-2xl mx-auto text-base leading-relaxed mb-12">
-          Todos os cursos do Curso de Ar Condicionado são ministrados
-          por profissionais ativos no mercado, com anos de
-          experiência prática e didática comprovada.
-          Você aprende com quem realmente faz.
+          Recomendamos apenas o curso que avaliamos de perto,
+          ministrado por um instrutor ativo no mercado, com anos
+          de experiência prática. Somos transparentes sobre a
+          afiliação — achamos que isso é parte de merecer sua confiança.
         </p>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
