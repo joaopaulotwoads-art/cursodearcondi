@@ -1,6 +1,5 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
-import AffiliateDisclosure from '../components/cursodear/AffiliateDisclosure.astro';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
@@ -201,9 +200,6 @@ const extraJsonLd = {
   extraJsonLd={extraJsonLd}
 >
   <div class="bg-white text-slate-900">
-    <div class="pt-4 px-4">
-      <AffiliateDisclosure />
-    </div>
     <!-- 2. HERO -->
     <section
       class="relative min-h-[520px] overflow-hidden"
