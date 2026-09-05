@@ -44,12 +44,6 @@ export function toIsoDateTime(dateStr?: string | null): string | undefined {
     return `${d}T12:00:00.000Z`;
 }
 
-export function buildAuthorAbsoluteUrl(siteOrigin: string, authorId: string): string {
-    const base = siteOrigin.replace(/\/+$/, '');
-    const seg = authorId.split('/').map(encodeURIComponent).join('/');
-    return `${base}/authors/${seg}`;
-}
-
 function siteRootOnly(siteUrl: string): string {
     return siteUrl.replace(/\/+$/, '');
 }
@@ -170,16 +164,6 @@ export function buildcursodearDefaultSiteJsonLd(opts: {
     };
 }
 
-function personNode(name: string, authorPageUrl: string): Record<string, unknown> {
-    const base = authorPageUrl.replace(/\/+$/, '');
-    return {
-        '@type': 'Person',
-        '@id': `${base}#person`,
-        name,
-        url: schemaPageUrl(`${base}/`),
-    };
-}
-
 export function buildPostJsonLd(opts: {
     seoSchema?: PostSeoSchema;
     /** Título do artigo (headline / caption) */
@@ -193,8 +177,8 @@ export function buildPostJsonLd(opts: {
     /** Largura/altura da imagem principal (OG); padrão 1200×630 */
     imageWidth?: number;
     imageHeight?: number;
-    authorName?: string;
-    authorUrl?: string;
+    /** Data da última revisão de conteúdo; usada em dateModified (cai para publishedDate quando ausente). */
+    updatedDate?: string;
     htmlContent?: string | null;
     /** Categoria do post: nome e path canônico (ex. /carrinhos-de-bebe/) */
     categoryName?: string;
@@ -213,14 +197,11 @@ export function buildPostJsonLd(opts: {
     const orgId = idFragment(root, 'organization');
     const pageUrl = schemaPageUrl(opts.pageUrl.trim());
     const iso = toIsoDateTime(opts.publishedDate);
+    const modifiedIso = toIsoDateTime(opts.updatedDate) || iso;
     const imgUrl = opts.imageUrl;
     const w = opts.imageWidth ?? DEFAULT_IMAGE_WIDTH;
     const h = opts.imageHeight ?? DEFAULT_IMAGE_HEIGHT;
     const caption = opts.headline;
-
-    const authorPageUrl = opts.authorUrl ? opts.authorUrl.replace(/\/+$/, '') + '/' : undefined;
-    const authorNode =
-        opts.authorName && authorPageUrl ? personNode(opts.authorName, authorPageUrl) : null;
 
     const imageId = idPage(pageUrl, 'primaryimage');
     const webPageId = idPage(pageUrl, 'webpage');
@@ -289,8 +270,8 @@ export function buildPostJsonLd(opts: {
         url: pageUrl,
         inLanguage: 'pt-BR',
         datePublished: iso,
-        dateModified: iso,
-        author: authorNode ? { '@id': authorNode['@id'] as string } : undefined,
+        dateModified: modifiedIso,
+        author: publisherRef,
         publisher: publisherRef,
         isPartOf: webSiteRef,
         mainEntityOfPage: { '@id': webPageId },
@@ -347,7 +328,6 @@ export function buildPostJsonLd(opts: {
                 'query-input': 'required name=search_term_string',
             },
         },
-        ...(authorNode ? [authorNode] : []),
         ...(imgUrl ? [imageObject] : []),
         webPage,
         mainEntity,

@@ -10,7 +10,6 @@ import { readPost } from './post-utils';
 import type { BlogPermalinkStructure, BlogUrlPrefix } from './blog-permalink';
 import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from './read-site-settings';
 import {
-  buildAuthorAbsoluteUrl,
   buildPostJsonLd,
   mergePostJsonLdWithFaq,
   toAbsoluteUrl,
@@ -39,6 +38,7 @@ export type BlogPageData = {
   pageUrl: string;
   ogImageAbs: string | undefined;
   articleIso: string | undefined;
+  articleModifiedIso: string | undefined;
   postJsonLd: ReturnType<typeof buildPostJsonLd> | null;
   category: CollectionEntry<'categories'> | null;
   publishedPosts: CollectionEntry<'posts'>[];
@@ -72,6 +72,7 @@ export async function loadBlogPageData(
   let pageUrl = '';
   let ogImageAbs: string | undefined;
   let articleIso: string | undefined;
+  let articleModifiedIso: string | undefined;
   let postJsonLd: ReturnType<typeof buildPostJsonLd> | null = null;
 
   let category: CollectionEntry<'categories'> | null = null;
@@ -124,6 +125,7 @@ export async function loadBlogPageData(
       ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolvecursodearMediaUrl(rawImg) || rawImg);
     }
     articleIso = toIsoDateTime(post.data.publishedDate);
+    articleModifiedIso = toIsoDateTime(post.data.updatedDate) || articleIso;
     let categoryName: string | undefined;
     let categoryPath: string | undefined;
     if (post.data.category) {
@@ -143,9 +145,8 @@ export async function loadBlogPageData(
             siteUrl: publicSiteUrl,
             siteName: (beMenu as { logoText?: string } | null)?.logoText || siteName,
             publishedDate: post.data.publishedDate,
+            updatedDate: post.data.updatedDate,
             imageUrl: ogImageAbs,
-            authorName: author?.data?.name,
-            authorUrl: author ? buildAuthorAbsoluteUrl(publicSiteUrl, author.id) : undefined,
             htmlContent,
             categoryName,
             categoryPath,
@@ -209,6 +210,7 @@ export async function loadBlogPageData(
     pageUrl,
     ogImageAbs,
     articleIso,
+    articleModifiedIso,
     postJsonLd,
     category,
     publishedPosts,

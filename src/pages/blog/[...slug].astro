@@ -18,7 +18,6 @@ import { buildPostPath, type BlogPermalinkStructure, type BlogUrlPrefix } from '
 import { pickRelatedPosts } from '../../utils/related-posts';
 import { readSiteSettings, resolvePublicSiteUrl, buildCanonicalPageUrl } from '../../utils/read-site-settings';
 import {
-  buildAuthorAbsoluteUrl,
   buildPostJsonLd,
   mergePostJsonLdWithFaq,
   toAbsoluteUrl,
@@ -83,6 +82,7 @@ const pageUrl = buildCanonicalPageUrl(publicSiteUrl, Astro.url.pathname);
 const rawPostImg = post.data.metaImage || post.data.image || post.data.thumbnail;
 const ogImageAbs = toAbsoluteUrl(publicSiteUrl, resolvecursodearMediaUrl(rawPostImg) || rawPostImg);
 const articleIso = toIsoDateTime(post.data.publishedDate);
+const articleModifiedIso = toIsoDateTime(post.data.updatedDate) || articleIso;
 let categoryName: string | undefined;
 let categoryPath: string | undefined;
 if (post.data.category) {
@@ -102,13 +102,8 @@ const postJsonLd = usecursodear
         siteUrl: publicSiteUrl,
         siteName: (beMenu as { logoText?: string } | null)?.logoText || siteName,
         publishedDate: post.data.publishedDate,
+        updatedDate: post.data.updatedDate,
         imageUrl: ogImageAbs,
-        authorName: author?.data?.name,
-        authorUrl: author
-          ? author.data.profilePath
-            ? toAbsoluteUrl(publicSiteUrl, author.data.profilePath)
-            : buildAuthorAbsoluteUrl(publicSiteUrl, author.id)
-          : undefined,
         htmlContent,
         categoryName,
         categoryPath,
@@ -136,7 +131,7 @@ const relatedPosts = usecursodear ? pickRelatedPosts(post, allPosts, 3) : [];
     ogType="article"
     ogImageAbs={ogImageAbs}
     articlePublishedTime={articleIso}
-    articleModifiedTime={articleIso}
+    articleModifiedTime={articleModifiedIso}
     extraJsonLd={postJsonLd}
 >
     <CursodearBlogPost

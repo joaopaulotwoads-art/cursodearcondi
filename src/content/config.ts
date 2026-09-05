@@ -16,6 +16,8 @@ const posts = defineCollection({
         /** Compatibilidade com posts antigos (date) e atuais (publishedDate). */
         date: z.string().optional(),
         publishedDate: z.string().optional(),
+        /** Data da última revisão de conteúdo (ex.: dado salarial atualizado); usada em dateModified do schema. */
+        updatedDate: z.string().optional(),
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
         thumbnail: z.string().optional(),
