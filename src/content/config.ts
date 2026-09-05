@@ -54,7 +54,7 @@ const authors = defineCollection({
         role: z.string(),
         avatar: z.string().optional(),
         bio: z.string(),
-        /** URL do perfil completo (E-E-A-T), ex.: /sobre/fernando-costa */
+        /** URL do perfil completo (E-E-A-T), ex.: /sobre/ */
         profilePath: z.string().optional(),
         expertise: z.array(z.string()).optional(),
         certifications: z

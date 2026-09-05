@@ -1,7 +1,7 @@
 ---
 title: "Como Limpar Ar Condicionado Split: Passo a Passo Completo 2026"
 slug: "como-limpar-ar-condicionado-split"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-27"
 category: "manutencao"
 thumbnail: "/images/blog/como-limpar-ar-condicionado-split.webp"

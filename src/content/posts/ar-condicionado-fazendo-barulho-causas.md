@@ -1,7 +1,7 @@
 ﻿---
 title: "Ar Condicionado Fazendo Barulho? Veja as 8 Causas e Como Resolver"
 slug: "ar-condicionado-fazendo-barulho-causas"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-27"
 category: "manutencao"
 thumbnail: "/images/blog/ar-condicionado-fazendo-barulho.webp"

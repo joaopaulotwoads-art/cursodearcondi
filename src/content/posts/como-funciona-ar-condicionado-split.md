@@ -1,7 +1,7 @@
 ﻿---
 title: "Como Funciona o Ar Condicionado Split? Explicação Simples 2026"
 slug: "como-funciona-ar-condicionado-split"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-26"
 category: "tecnologia"
 tags:

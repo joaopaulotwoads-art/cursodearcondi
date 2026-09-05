@@ -1,7 +1,7 @@
 ---
 title: "Ferramentas para Técnico de Ar Condicionado: Lista Completa com Preços 2026"
 slug: "ferramentas-para-ar-condicionado"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-26"
 category: "ferramentas"
 thumbnail: "/images/blog/ferramentas-tecnico-ar-condicionado-kit.webp"

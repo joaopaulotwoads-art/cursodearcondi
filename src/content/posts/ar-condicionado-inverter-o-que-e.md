@@ -1,7 +1,7 @@
 ---
 title: "Ar Condicionado Inverter: O Que É, Como Funciona e Como Instalar"
 slug: "ar-condicionado-inverter-o-que-e"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-26"
 category: "tecnologia"
 thumbnail: "/images/blog/tecnico-instalando-ar-condicionado.webp"

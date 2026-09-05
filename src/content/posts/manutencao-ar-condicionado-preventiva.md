@@ -1,7 +1,7 @@
 ---
 title: "Manutenção Preventiva de Ar Condicionado: Guia Completo 2026"
 slug: "manutencao-preventiva-ar-condicionado-guia"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-30"
 category: "manutencao"
 thumbnail: "/images/blog/manutencao-preventiva-ar-condicionado.webp"

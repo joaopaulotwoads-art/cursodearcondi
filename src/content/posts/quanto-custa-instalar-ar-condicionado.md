@@ -1,7 +1,7 @@
 ﻿---
 title: "Quanto Custa Instalar Ar Condicionado em 2026? Preços Reais por BTU"
 slug: "quanto-custa-instalar-ar-condicionado"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-26"
 category: "precos"
 tags:

@@ -1,7 +1,7 @@
 ---
 title: "Gás R410A em Ar Condicionado: Pressão, Recarga e Como Recolher"
 slug: "gas-r410a-pressao-recarga-ar-condicionado"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-30"
 category: "tecnico"
 thumbnail: "/images/blog/gas-r410a-pressao-recarga-ar-condicionado.webp"

@@ -1,7 +1,7 @@
 ---
 title: "Como Ligar o Ar Condicionado pelo Celular: App por App 2026"
 slug: "como-ligar-ar-condicionado-pelo-celular"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-29"
 category: "uso"
 thumbnail: "/images/blog/como-ligar-ar-condicionado-celular.webp"

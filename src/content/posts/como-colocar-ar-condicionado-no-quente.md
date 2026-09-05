@@ -1,7 +1,7 @@
 ---
 title: "Como Colocar o Ar Condicionado no Quente: Passo a Passo por Marca"
 slug: "como-colocar-ar-condicionado-no-quente"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-29"
 category: "uso"
 thumbnail: "/images/blog/controle-remoto-ar-condicionado.webp"

@@ -1,7 +1,7 @@
 ﻿---
 title: "Como Instalar Ar Condicionado Split: Passo a Passo Completo 2026"
 slug: "como-instalar-ar-condicionado-split"
-author: "fernando-costa"
+author: "equipe-curso-de-ar-condicionado"
 publishedDate: "2026-05-26"
 category: "instalacao"
 thumbnail: /images/cursodear/como-instalar-ar-condicionado-split.png
