@@ -99,6 +99,15 @@ const jsonLdGraph = mergeJsonLdWithOrganization(baseJsonLd, organizationJsonLd);
   )}
   <FaviconLinks />
   <meta name="theme-color" content="#faf7f5" />
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPD65NHEQ7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-MPD65NHEQ7');
+  </script>
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />
   {metaKeywords && <meta name="keywords" content={metaKeywords} />}
