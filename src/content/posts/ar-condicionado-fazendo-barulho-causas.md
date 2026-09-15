@@ -95,7 +95,7 @@ Sinais de gás baixo:
 
 ### O que fazer: chamar técnico para recarga de gás
 
-Gás refrigerante é produto controlado e o manuseio exige certificação. Não tente fazer a recarga sem equipamento adequado (manifold, balança e cilindro homologado). Além disso, se houver vazamento, apenas completar o gás sem localizar e corrigir o ponto de fuga gera retrabalho em semanas.
+Gás refrigerante é produto controlado e o manuseio exige certificação. Não tente fazer a recarga sem equipamento adequado (manifold, balança e cilindro homologado). Veja o [guia completo de pressão e recarga do R410A](/gas-r410a-pressao-recarga-ar-condicionado/) para o procedimento correto. Além disso, se houver vazamento, apenas completar o gás sem localizar e corrigir o ponto de fuga gera retrabalho em semanas.
 
 Custo médio: R$ 250 a R$ 500 (localização de vazamento, correção e recarga por massa).
 

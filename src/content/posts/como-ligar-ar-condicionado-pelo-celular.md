@@ -27,7 +27,7 @@ Funciona com Android e iOS. O passo a passo varia de marca para marca, mas o pro
 
 ## Quais Ar Condicionados Têm Controle pelo Celular?
 
-A maioria dos splits Inverter lançados a partir de 2020 já vem com módulo Wi-Fi integrado. Modelos mais antigos de algumas marcas permitem adicionar um adaptador Wi-Fi externo, disponível como acessório opcional.
+A maioria dos [splits Inverter](/ar-condicionado-inverter-o-que-e/) lançados a partir de 2020 já vem com módulo Wi-Fi integrado. Modelos mais antigos de algumas marcas permitem adicionar um adaptador Wi-Fi externo, disponível como acessório opcional.
 
 Para confirmar se o seu modelo tem a função, verifique se há o símbolo de Wi-Fi no painel da evaporadora ou na embalagem. Outra forma é pesquisar o modelo com a palavra Wi-Fi no site do fabricante. Aparelhos sem Wi-Fi integrado e sem suporte a adaptador não têm como ser controlados pelo celular.
 
@@ -129,6 +129,8 @@ Não. O controle remoto pelo app depende de conexão ativa entre o celular e o a
 Ligar o ar condicionado pelo celular é simples depois da configuração inicial: baixar o app da marca, conectar o aparelho ao Wi-Fi 2,4 GHz e vincular o dispositivo. O processo leva menos de 10 minutos e funciona nas principais marcas do mercado brasileiro.
 
 Se o aparelho não aparecer no app, verifique a faixa de Wi-Fi e faça o reset do módulo. São as causas que resolvem mais de 90% dos problemas de conexão.
+
+Quer entender o aparelho por dentro, além da configuração pelo app? Veja [como se tornar instalador de ar condicionado](/como-se-tornar-instalador-de-ar-condicionado/) e transforme esse interesse em profissão.
 
 Quer aprender a instalar, configurar e diagnosticar qualquer modelo de ar condicionado de forma profissional? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 

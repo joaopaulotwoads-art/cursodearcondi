@@ -114,7 +114,7 @@ No Brasil, a linha LG Dual Inverter tem grande volume de vendas residenciais, o 
 
 ## Como Instalar Ar Condicionado Inverter: Diferenças da Instalação
 
-A instalação mecânica do Inverter é igual ao convencional: fixação das unidades, passagem de tubulação de cobre, vácuo e carga de gás seguem os mesmos procedimentos. As diferenças estão na parte elétrica e na atenção às especificações do fabricante para o gás.
+A [instalação mecânica](/como-instalar-ar-condicionado-split/) do Inverter é igual ao convencional: fixação das unidades, passagem de tubulação de cobre, vácuo e carga de gás seguem os mesmos procedimentos. As diferenças estão na parte elétrica e na atenção às especificações do fabricante para o gás.
 
 ### Ligação elétrica: comunicação entre placas
 
@@ -164,7 +164,7 @@ O parque instalado de Inverter cresce a cada ano. Residências novas saem de obr
 
 ### Técnicos especializados em Inverter cobram entre 30% e 50% mais
 
-Diagnóstico de Inverter tem valor percebido maior. O cliente sabe que a tecnologia é mais cara e mais complexa. Quando o técnico demonstra conhecimento específico, como interpretar código de erro, testar IPM e avaliar pressão com superaquecimento, o orçamento tem menos resistência e a taxa de aprovação aumenta.
+Diagnóstico de Inverter tem valor percebido maior. O cliente sabe que a tecnologia é mais cara e mais complexa. Quando o técnico demonstra conhecimento específico, como interpretar código de erro, testar IPM e avaliar pressão com superaquecimento, o orçamento tem menos resistência e a taxa de aprovação aumenta — veja [quanto ganha um instalador de ar condicionado](/quanto-ganha-tecnico-ar-condicionado/) que domina esse tipo de especialização.
 
 <div class="cursodear-cta-wrapper not-prose">
   <aside class="cursodear-post-cta" aria-label="Chamada para o curso de ar condicionado">

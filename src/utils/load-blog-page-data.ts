@@ -17,6 +17,7 @@ import {
 } from './post-json-ld';
 import { resolvecursodearMediaUrl } from './media-url';
 import { pickRelatedPosts } from './related-posts';
+import { TECHNICAL_REVIEWER } from './seo-meta';
 
 type Props =
   | { kind: 'post'; post: CollectionEntry<'posts'> }
@@ -150,6 +151,7 @@ export async function loadBlogPageData(
             htmlContent,
             categoryName,
             categoryPath,
+            reviewer: TECHNICAL_REVIEWER,
           }),
           post.data.faq,
         )

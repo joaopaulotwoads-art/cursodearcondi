@@ -23,7 +23,7 @@ faq:
 
 Para começar como técnico de ar condicionado, você precisa investir entre **R$ 1.500 e R$ 5.000 em ferramentas**.
 
-Esta lista mostra o que comprar antes do primeiro serviço, o que pode esperar 3 a 6 meses e onde encontrar pelo melhor preço.
+Esta lista mostra o que comprar antes do primeiro serviço, o que pode esperar 3 a 6 meses e onde encontrar pelo melhor preço — o kit completo é o Passo 2 de [como se tornar instalador de ar condicionado](/como-se-tornar-instalador-de-ar-condicionado/).
 
 Para dominar o uso de cada ferramenta na prática, o [Curso de Ar Condicionado](/) tem **160 aulas** e **30 horas** de conteúdo técnico.
 
@@ -218,7 +218,7 @@ A tabela abaixo mostra os itens do kit inicial e o custo médio estimado para 20
   </table>
 </div>
 
-A estratégia recomendada: comprar o bloco obrigatório antes do primeiro serviço e adquirir os itens intermediários com a renda dos primeiros atendimentos. Não adie a compra da bomba de vácuo por mais de 30 dias: instalação sem vácuo adequado vai gerar retrabalho.
+A estratégia recomendada: comprar o bloco obrigatório antes do primeiro serviço e adquirir os itens intermediários com a renda dos primeiros atendimentos. Não adie a compra da bomba de vácuo por mais de 30 dias: [instalação sem vácuo adequado](/como-instalar-ar-condicionado-split/) vai gerar retrabalho.
 
 ## Onde Comprar Ferramentas para Técnico de Ar Condicionado?
 

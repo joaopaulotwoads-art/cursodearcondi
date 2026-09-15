@@ -21,58 +21,27 @@ const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
 const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 
 const aboutSchemaJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'EducationalOrganization',
-  name: 'Curso de Ar Condicionado',
-  description:
-    'Site independente sobre a profissão de instalador e técnico de ar condicionado, afiliado ao curso que recomenda.',
-  url: 'https://cursodearcondicionado.com.br/',
-  email: 'contato@cursodearcondicionado.com.br',
-  telephone: '+55-14-98803-4123',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: 'Av. Rodrigues Alves, 96',
-    addressLocality: 'Bauru',
-    addressRegion: 'SP',
-    addressCountry: 'BR',
-    postalCode: '17040-000',
+  '@type': 'AboutPage',
+  '@id': 'https://cursodearcondicionado.com.br/sobre/#webpage',
+  url: 'https://cursodearcondicionado.com.br/sobre/',
+  name: pageTitle,
+  description: pageDescription,
+  inLanguage: 'pt-BR',
+  // Referencia a Organization real (injetada automaticamente pelo BaseLayout) em vez de
+  // declarar uma segunda entidade "fundadora" do curso — a página é afiliada, não a escola.
+  about: {
+    '@id': 'https://cursodearcondicionado.com.br/#organization',
   },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: -22.313512279677077,
-    longitude: -49.03531582470722,
-  },
-  hasMap: 'https://maps.app.goo.gl/bAPz55ZAM24twfTo9',
-  sameAs: [
-    'https://instagram.com/cursodear',
-    'https://youtube.com/@cursodear',
-    'https://facebook.com/cursodear',
-  ],
-  founder: {
+  mainEntity: {
     '@type': 'Person',
     name: 'Leandro Moraes',
-    jobTitle: 'Instrutor e Especialista em Refrigeração',
+    jobTitle: 'Instrutor e Especialista em Refrigeração e Climatização',
     knowsAbout: [
       'Ar Condicionado',
       'Refrigeração',
       'Climatização',
       'Manutenção de Eletrodomésticos',
       'Tecnologia Inverter',
-    ],
-  },
-  hasOfferCatalog: {
-    '@type': 'OfferCatalog',
-    name: 'Cursos Profissionalizantes',
-    itemListElement: [
-      {
-        '@type': 'Course',
-        name: 'Curso de Ar Condicionado',
-        url: 'https://cursodearcondicionado.com.br/',
-        provider: {
-          '@type': 'Organization',
-          name: 'Curso de Ar Condicionado',
-        },
-      },
     ],
   },
 };

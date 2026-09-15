@@ -27,7 +27,7 @@ faq:
     a: "Microvazamentos passam despercebidos, o sistema perde gás em semanas e o cliente associa o problema à marca. O teste com nitrogênio antes do vácuo evita retrabalho e reclamação."
 ---
 
-**Como instalar ar condicionado split** com método profissional exige sequência, ferramental certo e checagens que não podem ser puladas. Neste passo a passo de 2026, você vê do dimensionamento à partida. Se quiser dominar na prática, o [Curso de Ar Condicionado](/) reúne **160 aulas** e **30 horas** de conteúdo, do zero ao comissionamento.
+**Como instalar ar condicionado split** com método profissional exige sequência, ferramental certo e checagens que não podem ser puladas. Antes do passo a passo, vale entender [como funciona o ciclo de refrigeração do split](/como-funciona-ar-condicionado-split/) — instalar bem começa por entender o que está sendo instalado. Neste passo a passo de 2026, você vê do dimensionamento à partida. Se quiser dominar na prática, o [Curso de Ar Condicionado](/) reúne **160 aulas** e **30 horas** de conteúdo, do zero ao comissionamento — o caminho completo está em [como se tornar instalador de ar condicionado](/como-se-tornar-instalador-de-ar-condicionado/).
 
 ![Unidade condensadora e evaporadora de ar condicionado split prontas para instalacao](/images/cursodear/unidade-condensadora-evaporadora-split.png)
 
@@ -132,7 +132,7 @@ Em linha dentro do limite de fábrica, a carga original costuma bastar. Linha lo
 
 ## Limpeza, higienização e manutenção preventiva do split
 
-A manutenção preventiva aumenta a vida útil e reduz consumo. Oriente o cliente sobre limpeza de filtros e, quando houver sujeira acumulada, faça higienização correta de serpentina, turbina e bandeja. Um split sujo perde rendimento e pode causar odor e gotejamento.
+A manutenção preventiva aumenta a vida útil e reduz consumo. Oriente o cliente sobre [limpeza de filtros e higienização](/como-limpar-ar-condicionado-split/) de serpentina, turbina e bandeja, e ofereça um [contrato de manutenção preventiva](/manutencao-preventiva-ar-condicionado-guia/) para gerar receita recorrente. Um split sujo perde rendimento e pode causar odor e gotejamento.
 
 ![Tecnico realizando limpeza e manutencao preventiva em ar condicionado split residencial](/images/cursodear/manutencao-higienizacao-split.png)
 
@@ -156,7 +156,7 @@ Valores variam por região, altura, comprimento de linha e complexidade. Referê
 - **R$ 400 a R$ 700** para 18 mil BTUs ou tubulação extra e segundo furo
 - **Acima de R$ 700** para altura com andaime, linha longa, obra ou retrofit elétrico
 
-Some deslocamento, material de tubo, suporte e dreno, e possível taxa de fim de semana. Quem instala com padrão técnico cobra mais e retorna menos.
+Some deslocamento, material de tubo, suporte e dreno, e possível taxa de fim de semana. Quem instala com padrão técnico cobra mais e retorna menos — veja a simulação completa de [quanto ganha um instalador de ar condicionado](/quanto-ganha-tecnico-ar-condicionado/) combinando instalação com preventiva e outros serviços.
 
 ## Perguntas frequentes sobre instalação de ar condicionado split
 

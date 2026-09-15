@@ -160,7 +160,7 @@ Sim. Para pé-direito entre 2,70m e 3,50m, some 10% ao cálculo base. Acima de 3
 
 O cálculo correto de BTUs combina a fórmula base com os fatores de correção do ambiente. Usar só a tabela por m² funciona para ambientes simples, mas ambientes com sol direto, muitas pessoas ou equipamentos eletrônicos exigem o cálculo completo para não errar o dimensionamento.
 
-Saber dimensionar corretamente é o que separa o técnico profissional do instalador que faz no olho. O cliente não reclama de aparelho que resfria bem, mas não esquece do que não funcionou.
+Saber dimensionar corretamente é o que separa o técnico profissional do instalador que faz no olho. O cliente não reclama de aparelho que resfria bem, mas não esquece do que não funcionou. O dimensionamento é só o Passo 1 de uma [instalação completa de split](/como-instalar-ar-condicionado-split/) — veja o passo a passo inteiro, da tubulação ao comissionamento.
 
 Quer aprender instalação completa, do dimensionamento ao comissionamento? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 

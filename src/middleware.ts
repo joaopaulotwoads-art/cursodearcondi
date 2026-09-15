@@ -26,6 +26,18 @@ export const onRequest = defineMiddleware(async (context, next) => {
         return context.redirect(u.toString(), 308);
     }
 
+    // 301: /blog/ferramentas-tecnico-ar-condicionado(/) → /ferramentas-para-ar-condicionado/
+    // Slug renomeado (ver astro.config.mjs). Precisa vir antes da regra genérica
+    // /blog/slug → /slug abaixo, que ainda reescreveria para o slug antigo e cairia em 404.
+    if (
+        pathname === '/blog/ferramentas-tecnico-ar-condicionado' ||
+        pathname === '/blog/ferramentas-tecnico-ar-condicionado/'
+    ) {
+        const u = new URL(context.url.href);
+        u.pathname = canonicalPathname('/ferramentas-para-ar-condicionado');
+        return context.redirect(u.toString(), 301);
+    }
+
     // Modo blog: /servicos → home em um passo (antes de forçar barra em /servicos/)
     if (pathname === '/servicos' || pathname.startsWith('/servicos/')) {
         try {

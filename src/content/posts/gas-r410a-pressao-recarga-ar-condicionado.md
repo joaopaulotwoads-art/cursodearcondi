@@ -59,7 +59,7 @@ Esses valores variam conforme a temperatura ambiente, a capacidade do equipament
 
 ## Como Detectar Vazamento de R410A
 
-O R410A é incolor e inodoro, o que torna o vazamento invisível a olho nu. A detecção exige método.
+O R410A é incolor e inodoro, o que torna o vazamento invisível a olho nu. Um dos sinais mais comuns é justamente o [ar condicionado fazendo barulho](/ar-condicionado-fazendo-barulho-causas/) — apito ou sibilo quando o compressor acelera. A detecção exige método.
 
 ### Sintomas: ar morno, gelo na tubulação, consumo alto
 
@@ -152,7 +152,7 @@ Não. Misturar fluidos refrigerantes danifica o compressor e é perigoso. Cada a
 
 O R410A exige equipamentos adequados, procedimento correto de recolhimento e técnica de recarga precisa. Pressão fora da faixa normal, gelo na tubulação e ar morno são os sinais mais claros de problema na carga.
 
-Dominar o diagnóstico e a recarga de fluido refrigerante é uma das habilidades mais requisitadas no mercado de manutenção de ar condicionado.
+Dominar o diagnóstico e a recarga de fluido refrigerante é uma das habilidades mais requisitadas no mercado de manutenção de ar condicionado — a carga de gás é uma das etapas de qualquer [instalação de split](/como-instalar-ar-condicionado-split/), e a especialização em diagnóstico eleva [quanto ganha um instalador de ar condicionado](/quanto-ganha-tecnico-ar-condicionado/).
 
 Quer aprender a trabalhar com R410A, R32 e todos os equipamentos de forma profissional? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 

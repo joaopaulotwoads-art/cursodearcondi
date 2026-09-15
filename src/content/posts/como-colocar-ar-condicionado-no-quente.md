@@ -85,11 +85,11 @@ Abaixo de 0°C, a eficiência do ciclo reverso cai significativamente. Abaixo de
 
 ### Gás refrigerante baixo
 
-Com o gás abaixo do nível correto, o sistema perde capacidade tanto no modo frio quanto no modo quente. O sintoma mais comum é ar com pouca diferença de temperatura em relação ao ambiente. Esse problema exige atendimento técnico para localizar o vazamento, corrigi-lo e recarregar o fluido.
+Com o gás abaixo do nível correto, o sistema perde capacidade tanto no modo frio quanto no modo quente. O sintoma mais comum é ar com pouca diferença de temperatura em relação ao ambiente. Esse problema exige atendimento técnico para localizar o vazamento, corrigi-lo e [recarregar o fluido refrigerante](/gas-r410a-pressao-recarga-ar-condicionado/).
 
 ### Defeito na válvula de 4 vias
 
-Se a válvula de 4 vias falhar, o aparelho não consegue inverter o ciclo e permanece no modo frio mesmo quando configurado para aquecer. O diagnóstico exige instrumentação técnica e a correção requer troca do componente. É um reparo que demanda técnico especializado.
+Se a válvula de 4 vias falhar, o aparelho não consegue inverter o ciclo e permanece no modo frio mesmo quando configurado para aquecer. O diagnóstico exige instrumentação técnica e a correção requer troca do componente. É um reparo que demanda [técnico especializado](/como-se-tornar-instalador-de-ar-condicionado/).
 
 <div class="cursodear-cta-wrapper not-prose">
   <aside class="cursodear-post-cta" aria-label="Chamada para o curso de ar condicionado">

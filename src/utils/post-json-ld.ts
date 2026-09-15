@@ -183,6 +183,8 @@ export function buildPostJsonLd(opts: {
     /** Categoria do post: nome e path canônico (ex. /carrinhos-de-bebe/) */
     categoryName?: string;
     categoryPath?: string;
+    /** Especialista que revisou tecnicamente o conteúdo (E-E-A-T); vira `reviewedBy` no BlogPosting. */
+    reviewer?: { name: string; jobTitle?: string; url?: string };
 }): Record<string, unknown> | null {
     let mode: PostSeoSchema = opts.seoSchema || 'auto';
     const items = extractcursodearRankedProductNames(opts.htmlContent);
@@ -253,6 +255,14 @@ export function buildPostJsonLd(opts: {
 
     const publisherRef = { '@id': orgId };
     const webSiteRef = { '@id': webSiteId };
+    const reviewedBy = opts.reviewer
+        ? {
+              '@type': 'Person',
+              name: opts.reviewer.name,
+              jobTitle: opts.reviewer.jobTitle || undefined,
+              url: opts.reviewer.url ? schemaPageUrl(absoluteUrl(root, opts.reviewer.url)) : undefined,
+          }
+        : undefined;
 
     const webPage: Record<string, unknown> = {
         '@type': 'WebPage',
@@ -273,6 +283,7 @@ export function buildPostJsonLd(opts: {
         dateModified: modifiedIso,
         author: publisherRef,
         publisher: publisherRef,
+        ...(reviewedBy ? { reviewedBy } : {}),
         isPartOf: webSiteRef,
         mainEntityOfPage: { '@id': webPageId },
         ...(imgUrl

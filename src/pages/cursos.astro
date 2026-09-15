@@ -4,6 +4,7 @@ import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+import { buildcursodearDefaultSiteJsonLd } from '../utils/post-json-ld';
 
 const pageTitle = 'Cursos Técnicos de Refrigeração e Climatização';
 const pageDescription =
@@ -29,6 +30,12 @@ const cursos = [
     title: 'Curso de Ar Condicionado',
     description:
       'Domine instalação, manutenção corretiva e preventiva, tecnologia Inverter e recarga de gás R410A.',
+    highlights: [
+      'Eletricidade aplicada, manifold e brasagem',
+      'Instalação completa de split (47 aulas)',
+      'Tecnologia Inverter: LG e Consul',
+      'Manutenção corretiva e preventiva',
+    ],
     aulas: '160',
     horas: '30h',
     rating: '4.7 (189)',
@@ -113,6 +120,51 @@ const cursos = [
   },
 ];
 
+function priceToNumber(price: string): number | undefined {
+  const match = price.match(/[\d.,]+/);
+  if (!match) return undefined;
+  return Number(match[0].replace(/\./g, '').replace(',', '.'));
+}
+
+const orgId = 'https://cursodearcondicionado.com.br/#organization';
+const cursosPageUrl = 'https://cursodearcondicionado.com.br/cursos/';
+
+const offerCatalogJsonLd = {
+  '@type': 'OfferCatalog',
+  '@id': `${cursosPageUrl}#catalog`,
+  name: 'Cursos Profissionalizantes',
+  itemListElement: cursos.map((curso) => {
+    const price = curso.available ? priceToNumber(curso.price) : undefined;
+    return {
+      '@type': 'Course',
+      name: curso.title,
+      description: curso.description,
+      url: cursosPageUrl,
+      provider: { '@id': orgId },
+      ...(curso.available
+        ? {
+            offers: {
+              '@type': 'Offer',
+              ...(price !== undefined ? { price, priceCurrency: 'BRL' } : {}),
+              availability: 'https://schema.org/InStock',
+              url: cursosPageUrl,
+            },
+          }
+        : {}),
+    };
+  }),
+};
+
+const baseSiteJsonLd = buildcursodearDefaultSiteJsonLd({
+  siteUrl,
+  siteName: siteNameForLayout,
+  description: pageDescription,
+});
+const cursosJsonLd = {
+  ...baseSiteJsonLd,
+  '@graph': [...(baseSiteJsonLd['@graph'] as object[]), offerCatalogJsonLd],
+};
+
 const beneficios = [
   { icon: '🎓', title: 'Certificado Reconhecido', text: 'Certificado válido em todo o Brasil' },
   { icon: '📱', title: 'Acesso em Qualquer Dispositivo', text: 'Estude pelo celular, tablet ou computador' },
@@ -131,6 +183,7 @@ const beneficios = [
   footerNav={beFootNav}
   contentThemeId="cursodear"
   canonicalOverride="https://cursodearcondicionado.com.br/cursos/"
+  extraJsonLd={cursosJsonLd}
 >
   <div class="bg-white text-slate-900">
     <section class="bg-slate-800 py-16 text-center text-white">
@@ -140,7 +193,8 @@ const beneficios = [
         </span>
         <h1 class="mt-4 text-3xl font-black sm:text-4xl">Nossos Cursos Profissionalizantes</h1>
         <p class="mt-4 text-sm text-slate-200 sm:text-base">
-          Formação completa para atuar no mercado de refrigeração e climatização com autoridade.
+          Hoje temos 1 curso disponível — Ar Condicionado — e mais 4 formações em desenvolvimento
+          para o mesmo mercado de refrigeração, climatização e manutenção de eletrodomésticos.
         </p>
       </div>
     </section>
@@ -152,10 +206,14 @@ const beneficios = [
       </div>
 
       <div class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {cursos.map((curso) => (
+        {cursos.map((curso, i) => (
           <div class="flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-md transition-shadow hover:shadow-xl">
             <div class="relative">
-              <img src={curso.image} alt={curso.imageAlt} class="h-48 w-full object-cover" loading="lazy" decoding="async" />
+              {i === 0 ? (
+                <img src={curso.image} alt={curso.imageAlt} class="h-48 w-full object-cover" loading="eager" fetchpriority="high" decoding="async" />
+              ) : (
+                <img src={curso.image} alt={curso.imageAlt} class="h-48 w-full object-cover" loading="lazy" decoding="async" />
+              )}
               <span class="absolute left-3 top-3 rounded-full bg-orange-500 px-3 py-1 text-xs font-bold uppercase text-white">
                 {curso.category}
               </span>
@@ -168,9 +226,20 @@ const beneficios = [
 
             <div class="flex flex-1 flex-col p-6">
               <h3 class="mb-2 text-lg font-black leading-tight text-slate-800">{curso.title}</h3>
-              <p class="mb-4 flex-1 text-sm leading-relaxed text-gray-500">{curso.description}</p>
+              <p class="mb-4 text-sm leading-relaxed text-gray-500">{curso.description}</p>
 
-              <div class="mb-4 flex items-center gap-4 text-xs text-gray-400">
+              {curso.highlights && (
+                <ul class="mb-4 flex-1 space-y-1.5 text-sm text-gray-600">
+                  {curso.highlights.map((item) => (
+                    <li class="flex items-start gap-2">
+                      <span class="mt-0.5 text-orange-500" aria-hidden="true">✓</span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <div class:list={['mb-4 flex items-center gap-4 text-xs text-gray-400', !curso.highlights && 'flex-1']}>
                 <span>🎬 {curso.aulas} aulas</span>
                 <span>⏱️ {curso.horas} de conteúdo</span>
                 <span>📜 Certificado</span>

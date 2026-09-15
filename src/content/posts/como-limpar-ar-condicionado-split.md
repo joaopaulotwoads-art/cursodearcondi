@@ -27,7 +27,7 @@ faq:
     a: "A limpeza básica de filtro pode ser feita pelo próprio usuário. A higienização profunda da serpentina, turbina e bandeja exige técnico capacitado para evitar danos à placa eletrônica e ao sistema elétrico."
 ---
 
-**Como limpar ar condicionado split** corretamente faz diferença no consumo de energia, na qualidade do ar e na vida útil do equipamento. Neste guia de 2026, você vê do filtro à condensadora: o que pode ser feito em casa e quando chamar um técnico. Para quem quer dominar limpeza e manutenção como serviço profissional, o [Curso de Ar Condicionado](/) tem **160 aulas** e **30 horas** de conteúdo prático.
+**Como limpar ar condicionado split** corretamente faz diferença no consumo de energia, na qualidade do ar e na vida útil do equipamento. Este guia complementa o [passo a passo de instalação](/como-instalar-ar-condicionado-split/): quem instala bem também orienta o cliente sobre a limpeza correta. Neste guia de 2026, você vê do filtro à condensadora: o que pode ser feito em casa e quando chamar um técnico. Para quem quer dominar limpeza e manutenção como serviço profissional, o [Curso de Ar Condicionado](/) tem **160 aulas** e **30 horas** de conteúdo prático.
 
 ## Por que limpar ar condicionado é obrigatório
 
@@ -42,7 +42,7 @@ Principais consequências de não limpar:
 - contaminação por fungos e bactérias
 - redução da vida útil do compressor
 
-Limpeza regular evita tudo isso e ainda gera receita recorrente para o técnico que oferece o serviço como contrato.
+Limpeza regular evita tudo isso e ainda gera receita recorrente para o técnico que oferece o serviço como [contrato de manutenção preventiva](/manutencao-preventiva-ar-condicionado-guia/).
 
 ## O que você precisa para limpar ar condicionado em casa
 
@@ -166,7 +166,7 @@ Faixas praticadas em 2026:
 - **higienização completa com produto:** R$ 180 a R$ 350 por unidade
 - **contrato semestral (2 visitas/ano):** R$ 200 a R$ 500 por equipamento
 
-Contratos recorrentes transformam limpeza em receita previsível. Um técnico com 20 equipamentos em contrato semestral fatura entre R$ 4.000 e R$ 10.000 por semestre apenas com preventiva, sem contar instalações e corretivas.
+Contratos recorrentes transformam limpeza em receita previsível. Um técnico com 20 equipamentos em contrato semestral fatura entre R$ 4.000 e R$ 10.000 por semestre apenas com preventiva, sem contar instalações e corretivas — veja o [caminho completo para se tornar instalador](/como-se-tornar-instalador-de-ar-condicionado/) e somar esses serviços.
 
 ## Perguntas Frequentes sobre Limpeza de Ar Condicionado
 

@@ -16,6 +16,8 @@ import '../../styles/post-article-toc.css';
 interface Props {
   post: any;
   author: any;
+  /** Especialista responsável pela revisão técnica do conteúdo (E-E-A-T). */
+  reviewer?: { name: string; jobTitle?: string; url?: string; avatar?: string };
   Content?: any;
   /** Corpo HTML (import Ghost / contentFormat: html); ignora Content. */
   htmlContent?: string | null;
@@ -27,6 +29,7 @@ interface Props {
 const {
   post,
   author,
+  reviewer,
   Content,
   htmlContent,
   relatedPosts: relatedPostsProp,
@@ -164,6 +167,15 @@ const applyRoundupArticleScope =
               <time class="mt-1 block text-sm text-[var(--color-muted)]" datetime={date}>
                 {new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
               </time>
+            )}
+            {reviewer && (
+              <p class="mt-1 text-sm text-[var(--color-muted)]">
+                Revisão técnica:{' '}
+                <a href={reviewer.url || '/sobre/'} class="font-medium text-[var(--color-link)] no-underline hover:underline">
+                  {reviewer.name}
+                </a>
+                {reviewer.jobTitle && `, ${reviewer.jobTitle}`}
+              </p>
             )}
           </div>
         </>

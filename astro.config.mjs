@@ -24,11 +24,8 @@ export default defineConfig({
         tailwind(), 
         markdoc({ allowHTML: true })
     ],
-    redirects: {
-        '/blog/ferramentas-tecnico-ar-condicionado': {
-            status: 301,
-            destination: '/blog/ferramentas-para-ar-condicionado',
-        },
-    },
+    // O redirect de /blog/ferramentas-tecnico-ar-condicionado agora vive em src/middleware.ts,
+    // que roda antes das rotas de redirect do Astro e por isso é o único lugar onde a regra
+    // pode interceptar a requisição antes da regra genérica /blog/slug → /slug.
     // Reset Trigger: 2026-02-07 11:40
 });

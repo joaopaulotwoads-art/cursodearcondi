@@ -37,6 +37,13 @@ Antes de entrar no passo a passo, vale entender por que essa é uma aposta de ca
 
 Na prática, isso significa: quanto mais aparelho é vendido, mais instalação, manutenção e assistência técnica são demandadas todo santo dia, em qualquer cidade do Brasil. É trabalho que não depende de estação do ano nem de região específica.
 
+<div class="cursodear-cta-wrapper not-prose">
+  <aside class="cursodear-post-cta" aria-label="Chamada para o curso de ar condicionado">
+    <p class="cursodear-post-cta__lead">Pronto para entrar num mercado em alta antes da concorrência? Aprenda o passo a passo completo, do fundamento elétrico à instalação com tecnologia Inverter. 160 aulas e 30 horas de conteúdo prático.</p>
+    <a href="/" class="cursodear-post-cta__btn">Quero me inscrever agora</a>
+  </aside>
+</div>
+
 ## Passo 1: aprenda o fundamento antes da prática
 
 Antes de pegar ferramenta, você precisa entender o que está fazendo. Isso inclui:

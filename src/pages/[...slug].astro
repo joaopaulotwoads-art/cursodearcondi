@@ -17,6 +17,7 @@ import CursodearBlogList from '../themes/cursodear/BlogList.astro';
 import { logoSrcFromMenu } from '../utils/theme-nav';
 import { buildPostPath, type BlogPermalinkStructure } from '../utils/blog-permalink';
 import { loadBlogPageData } from '../utils/load-blog-page-data';
+import { TECHNICAL_REVIEWER } from '../utils/seo-meta';
 
 export const prerender = true;
 
@@ -135,6 +136,7 @@ const {
         <CursodearBlogPost
           post={post}
           author={author}
+          reviewer={TECHNICAL_REVIEWER}
           Content={Content}
           htmlContent={htmlContent}
           relatedPosts={relatedPosts}

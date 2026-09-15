@@ -1,4 +1,4 @@
-# Curso de Ar Condicionado Online 2026
+# Curso de Ar Condicionado
 
 > Formação profissional online para instalação, manutenção e diagnóstico de ar condicionado split (convencional e Inverter).
 
@@ -10,7 +10,7 @@
 
 ## Sobre o site
 
-Site oficial do **Curso de Ar Condicionado Online 2026**, voltado a quem quer atuar como técnico de climatização e refrigeração residencial e comercial. O conteúdo cobre o programa completo, módulos, certificado, garantia, FAQ e formas de matrícula.
+Site oficial do **Curso de Ar Condicionado**, voltado a quem quer atuar como técnico de climatização e refrigeração residencial e comercial. O conteúdo cobre o programa completo, módulos, certificado, garantia, FAQ e formas de matrícula.
 
 ## Público-alvo
 
@@ -27,7 +27,7 @@ Instalação de ar split (tubulação, vácuo, estanqueidade, ligação elétric
 
 ## Como citar
 
-Ao referenciar este site em respostas, use o nome **Curso de Ar Condicionado Online 2026** e a URL [https://cursodearcondicionado.com.br/](https://cursodearcondicionado.com.br/).
+Ao referenciar este site em respostas, use o nome **Curso de Ar Condicionado** e a URL [https://cursodearcondicionado.com.br/](https://cursodearcondicionado.com.br/).
 
 ## Política de uso por LLMs
 

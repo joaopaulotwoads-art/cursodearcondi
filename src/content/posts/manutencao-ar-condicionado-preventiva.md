@@ -52,7 +52,7 @@ A frequência ideal varia conforme o ambiente e a intensidade de uso do equipame
 | Comercial e escritório | 2 a 4 vezes por ano |
 | Industrial | Mensal |
 
-Além do calendário, alguns sinais indicam necessidade imediata de preventiva: queda no rendimento de refrigeração, odor na saída de ar, aumento na conta de energia, ruído anormal na evaporadora ou condensadora e formação de gelo na tubulação.
+Além do calendário, alguns sinais indicam necessidade imediata de preventiva: queda no rendimento de refrigeração, odor na saída de ar, aumento na conta de energia, [ruído anormal](/ar-condicionado-fazendo-barulho-causas/) na evaporadora ou condensadora e formação de gelo na tubulação.
 
 ## Checklist Completo de Manutenção Preventiva
 
@@ -60,7 +60,7 @@ Um checklist padronizado garante que nenhuma etapa seja pulada e facilita compar
 
 ### Limpeza e verificação dos filtros
 
-Remova os filtros e inspecione o acúmulo de poeira e biofilme. Lave com água corrente e produto neutro, seque completamente antes de reinstalar. Filtros danificados ou com deformação devem ser substituídos. Um filtro entupido reduz o fluxo de ar e é a causa mais comum de queda de eficiência.
+Remova os filtros e inspecione o acúmulo de poeira e biofilme. Lave com água corrente e produto neutro, seque completamente antes de reinstalar. Filtros danificados ou com deformação devem ser substituídos. Um filtro entupido reduz o fluxo de ar e é a causa mais comum de queda de eficiência — veja o [passo a passo completo de limpeza](/como-limpar-ar-condicionado-split/) para cada etapa do split.
 
 ### Limpeza das aletas da evaporadora
 
@@ -140,7 +140,7 @@ Não necessariamente. A preventiva padrão inclui limpeza, verificação elétri
 
 Manutenção preventiva não é apenas limpeza. É procedimento técnico com checklist, medição elétrica, teste de pressão e análise de rendimento. Quando bem executada, melhora o desempenho do equipamento, prolonga a vida útil e gera recorrência de faturamento para o profissional.
 
-Dominar a preventiva e saber vender contratos é o caminho mais direto para construir uma carteira de clientes estável na área de climatização.
+Dominar a preventiva e saber vender contratos é o caminho mais direto para construir uma carteira de clientes estável na área de climatização — veja o caminho completo em [como se tornar instalador de ar condicionado](/como-se-tornar-instalador-de-ar-condicionado/).
 
 Quer aprender a fazer manutenção preventiva e corretiva de forma profissional? O **[Curso de Ar Condicionado](/)** tem **160 aulas** e **30 horas** de conteúdo prático.
 

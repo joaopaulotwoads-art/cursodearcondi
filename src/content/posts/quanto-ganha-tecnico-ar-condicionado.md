@@ -212,6 +212,13 @@ Para visualizar **quanto ganha um instalador de ar condicionado autônomo** de v
 
 Repare que, mesmo no cenário conservador, o líquido autônomo (R$3.381) já supera a média CLT (R$2.176 a R$2.530) — a diferença é que, ao contrário do CLT, não há garantia de repetir esse número todo mês: um mês parado pode ficar abaixo disso, sem colchão de benefícios. O cenário bom (R$11.302) só existe com 42 serviços rodando no mês, agenda de preventiva construída e temporada favorável. Nenhum dos dois é "o" número certo — a diferença entre eles é volume de serviço, não sorte.
 
+<div class="cursodear-cta-wrapper not-prose">
+  <aside class="cursodear-post-cta" aria-label="Chamada para o curso de ar condicionado">
+    <p class="cursodear-post-cta__lead">Quer sair do cenário conservador e chegar perto do cenário bom? Aprenda instalação, manutenção e tecnologia Inverter do zero ao atendimento profissional. 160 aulas e 30 horas de conteúdo prático.</p>
+    <a href="/" class="cursodear-post-cta__btn">Quero me inscrever agora</a>
+  </aside>
+</div>
+
 ![Manômetro de baixa pressão de manifold usado na instalação e manutenção de ar condicionado split](/images/blog/manifold-ar-condicionado-ferramentas.webp)
 
 ## Como aumentar seus ganhos com especialização Inverter
