@@ -9,34 +9,6 @@
 import type { APIRoute } from 'astro';
 import { readSiteSettings } from '../utils/read-site-settings';
 
-const AI_USER_AGENTS = [
-    'GPTBot',
-    'ChatGPT-User',
-    'OAI-SearchBot',
-    'ClaudeBot',
-    'Claude-User',
-    'anthropic-ai',
-    'PerplexityBot',
-    'Google-Extended',
-    'Gemini-Deep-Research',
-    'Applebot-Extended',
-    'Bytespider',
-    'meta-externalfetcher',
-    'MistralAI-User',
-    'CCBot',
-] as const;
-
-function buildAiBotBlocks(disallow: string[]): string[] {
-    const blocks: string[] = ['', '# Crawlers de IA (GEO/AEO) — leitura e citação permitidas'];
-    for (const ua of AI_USER_AGENTS) {
-        blocks.push('', `User-agent: ${ua}`, 'Allow: /');
-        for (const p of disallow.filter(Boolean)) {
-            blocks.push(`Disallow: ${p}`);
-        }
-    }
-    return blocks;
-}
-
 export const GET: APIRoute = async () => {
     const settings = await readSiteSettings();
     const generate = settings.generateRobots !== false;
@@ -47,15 +19,11 @@ export const GET: APIRoute = async () => {
 
     if (!generate) {
         body = [
-            ...buildAiBotBlocks(disallow),
-            '',
             'User-agent: *',
             'Allow: /',
         ].join('\n');
     } else {
         const lines = [
-            ...buildAiBotBlocks(disallow),
-            '',
             'User-agent: *',
             'Allow: /',
             ...disallow.filter(Boolean).map(p => `Disallow: ${p}`),

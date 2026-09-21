@@ -1,0 +1,224 @@
+---
+/**
+ * admin/import/wordpress.astro
+ * 
+ * Página de importação de posts do WordPress via XML.
+ * Permite upload de arquivo XML exportado do WordPress e importa todos os dados.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+---
+
+<AdminLayout title="Importar do WordPress - CNX Agency Admin">
+    <div class="space-y-6">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">
+                    Importar do WordPress
+                </h1>
+                <p class="text-[#a3a3a3]">
+                    Importe posts, categorias e autores do WordPress via arquivo XML
+                </p>
+            </div>
+            <a href="/admin/posts" class="admin-btn admin-btn-secondary">
+                ← Voltar para Posts
+            </a>
+        </div>
+
+        <!-- Instructions Card -->
+        <div class="admin-card p-6 border-primary/40 bg-primary/10">
+            <h3 class="text-lg font-heading font-bold text-primary mb-4">
+                📋 Como Exportar do WordPress
+            </h3>
+            <ol class="list-decimal list-inside space-y-2 text-[#e5e5e5]">
+                <li>Acesse o painel administrativo do WordPress</li>
+                <li>Vá em <strong>Ferramentas → Exportar</strong></li>
+                <li>Selecione <strong>"Todo o conteúdo"</strong> ou apenas <strong>"Posts"</strong></li>
+                <li>Clique em <strong>"Baixar arquivo de exportação"</strong></li>
+                <li>O arquivo XML será baixado (geralmente nomeado como <code class="bg-white/10 px-1 rounded">wordpress-YYYY-MM-DD.xml</code>)</li>
+            </ol>
+        </div>
+
+        <!-- Upload Form -->
+        <div class="admin-card p-6">
+            <h3 class="text-lg font-heading font-bold text-[#e5e5e5] mb-4">
+                📤 Upload do Arquivo XML
+            </h3>
+            
+            <form id="import-form" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-semibold text-[#e5e5e5] mb-2">
+                        Arquivo XML do WordPress
+                    </label>
+                    <input
+                        type="file"
+                        id="xml-file"
+                        name="file"
+                        accept=".xml,text/xml,application/xml"
+                        required
+                        class="admin-input file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90 cursor-pointer"
+                    />
+                    <p class="text-xs text-[#a3a3a3] mt-2">
+                        Selecione o arquivo XML exportado do WordPress (formato WXR)
+                    </p>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button
+                        type="submit"
+                        id="import-btn"
+                        class="admin-btn admin-btn-primary"
+                    >
+                        🚀 Iniciar Importação
+                    </button>
+                    <div id="loading" class="hidden flex items-center gap-2 text-[#a3a3a3]">
+                        <div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                        <span>Processando importação...</span>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Results -->
+            <div id="results" class="hidden mt-6 space-y-4">
+                <div id="success-results" class="hidden">
+                    <div class="p-4 rounded-lg bg-green-500/10 border border-green-500/30">
+                        <h4 class="font-semibold text-green-400 mb-2">✅ Importação Concluída!</h4>
+                        <div id="success-details" class="text-sm text-[#e5e5e5] space-y-1"></div>
+                    </div>
+                </div>
+                
+                <div id="error-results" class="hidden">
+                    <div class="p-4 rounded-lg bg-red-500/10 border border-red-500/30">
+                        <h4 class="font-semibold text-red-400 mb-2">❌ Erro na Importação</h4>
+                        <div id="error-details" class="text-sm text-[#e5e5e5]"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Card -->
+        <div class="admin-card p-6 border-secondary/40 bg-secondary/10">
+            <h3 class="text-lg font-heading font-bold text-secondary mb-4">
+                ℹ️ O que será importado?
+            </h3>
+            <ul class="space-y-2 text-[#e5e5e5]">
+                <li class="flex items-start gap-2">
+                    <span class="text-secondary">✓</span>
+                    <span><strong>Posts:</strong> Título, conteúdo, data de publicação, status (publicado/rascunho)</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-secondary">✓</span>
+                    <span><strong>Categorias:</strong> Nome e slug das categorias</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-secondary">✓</span>
+                    <span><strong>Autores:</strong> Nome, login, email e informações básicas</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-secondary">✓</span>
+                    <span><strong>Relacionamentos:</strong> Posts vinculados às suas categorias e autores</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <span class="text-secondary">✓</span>
+                    <span><strong>Imagens:</strong> Imagens dos posts serão baixadas e salvas localmente</span>
+                </li>
+            </ul>
+            <p class="mt-4 text-sm text-[#a3a3a3]">
+                <strong>Nota:</strong> Posts com slugs duplicados terão um sufixo numérico adicionado. 
+                Autores e categorias existentes serão ignorados.
+            </p>
+        </div>
+    </div>
+
+    <script is:inline>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('import-form');
+            const fileInput = document.getElementById('xml-file');
+            const importBtn = document.getElementById('import-btn');
+            const loading = document.getElementById('loading');
+            const results = document.getElementById('results');
+            const successResults = document.getElementById('success-results');
+            const errorResults = document.getElementById('error-results');
+            const successDetails = document.getElementById('success-details');
+            const errorDetails = document.getElementById('error-details');
+
+            if (!form || !fileInput || !importBtn || !loading || !results || !successResults || !errorResults || !successDetails || !errorDetails) {
+                console.error('❌ Elementos do formulário não encontrados');
+                return;
+            }
+
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const file = fileInput.files && fileInput.files[0];
+                if (!file) {
+                    fileInput.setCustomValidity('Por favor, selecione um arquivo XML');
+                    fileInput.reportValidity();
+                    return;
+                }
+                fileInput.setCustomValidity('');
+
+                // Mostrar loading
+                importBtn.disabled = true;
+                loading.classList.remove('hidden');
+                results.classList.add('hidden');
+                successResults.classList.add('hidden');
+                errorResults.classList.add('hidden');
+
+                try {
+                    const formData = new FormData();
+                    formData.append('file', file);
+
+                    const response = await fetch('/api/admin/import/wordpress', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    const result = await response.json();
+
+                    // Esconder loading
+                    loading.classList.add('hidden');
+                    importBtn.disabled = false;
+                    results.classList.remove('hidden');
+
+                    if (result.success) {
+                        // Mostrar sucesso
+                        successResults.classList.remove('hidden');
+                        errorResults.classList.add('hidden');
+                        
+                        const details = result.result;
+                        let errorsHtml = '';
+                        if (details.posts.errors && details.posts.errors.length > 0) {
+                            errorsHtml = '<div class="mt-3"><p class="text-yellow-400 font-semibold mb-1">Avisos:</p><ul class="list-disc list-inside space-y-1 text-xs">' +
+                                details.posts.errors.map(function(err) { return '<li>' + err + '</li>'; }).join('') +
+                                '</ul></div>';
+                        }
+                        
+                        successDetails.innerHTML = 
+                            '<p class="mb-2"><strong>' + details.posts.imported + '</strong> posts importados</p>' +
+                            '<p class="mb-2"><strong>' + details.authors.imported + '</strong> autores importados</p>' +
+                            '<p class="mb-2"><strong>' + details.categories.imported + '</strong> categorias importadas</p>' +
+                            (details.posts.imagesImported > 0 ? '<p class="mb-2"><strong>' + details.posts.imagesImported + '</strong> imagens importadas</p>' : '') +
+                            (details.posts.skipped > 0 ? '<p class="text-yellow-400">' + details.posts.skipped + ' posts ignorados (duplicados ou erros)</p>' : '') +
+                            errorsHtml +
+                            '<div class="mt-4"><a href="/admin/posts" class="admin-btn admin-btn-primary text-sm">Ver Posts Importados</a></div>';
+                    } else {
+                        // Mostrar erro
+                        errorResults.classList.remove('hidden');
+                        successResults.classList.add('hidden');
+                        errorDetails.textContent = result.error || 'Erro desconhecido ao importar';
+                    }
+                } catch (error) {
+                    console.error('❌ Erro na importação:', error);
+                    loading.classList.add('hidden');
+                    importBtn.disabled = false;
+                    results.classList.remove('hidden');
+                    errorResults.classList.remove('hidden');
+                    successResults.classList.add('hidden');
+                    errorDetails.textContent = 'Erro de rede ao processar importação. Verifique sua conexão.';
+                }
+            });
+        });
+    </script>
+</AdminLayout>

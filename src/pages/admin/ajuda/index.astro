@@ -1,0 +1,415 @@
+---
+/**
+ * admin/ajuda/index.astro
+ *
+ * Central de Ajuda do painel admin.
+ * Guia completo: primeiros passos, funcionalidades do CMS, atualizações e solução de problemas.
+ * Pensado para usuários leigos, com linguagem simples e orientações passo a passo.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
+import { getEntry } from 'astro:content';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
+const isLocal = siteMode === 'local';
+---
+
+<AdminLayout title="Ajuda — CNX Agency Admin">
+    <div class="max-w-4xl">
+
+        <div class="mb-8">
+            <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">Central de Ajuda</h1>
+            <p class="text-[#a3a3a3]">Tudo o que você precisa para usar o CNX com confiança.</p>
+        </div>
+
+        <!-- Navegação por seções -->
+        <div class="flex flex-wrap gap-2 mb-8 pb-6" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+            <a href="#primeiros-passos" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors" style="background: rgba(99,102,241,0.15); color: var(--primary, #6366f1); border: 1px solid rgba(99,102,241,0.3);">
+                🚀 Primeiros passos
+            </a>
+            <a href="#funcionalidades" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.05)]" style="color: #a3a3a3; border: 1px solid rgba(255,255,255,0.1);">
+                📋 O que cada coisa faz
+            </a>
+            <a href="#atualizacoes" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.05)]" style="color: #a3a3a3; border: 1px solid rgba(255,255,255,0.1);">
+                🔄 Atualizações
+            </a>
+            <a href="#urls" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.05)]" style="color: #a3a3a3; border: 1px solid rgba(255,255,255,0.1);">
+                🔗 URLs do Blog
+            </a>
+            <a href="#problemas" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors hover:bg-[rgba(255,255,255,0.05)]" style="color: #a3a3a3; border: 1px solid rgba(255,255,255,0.1);">
+                🔧 Solução de problemas
+            </a>
+        </div>
+
+        <!-- Seção 1: Primeiros passos -->
+        <section id="primeiros-passos" class="admin-card p-6 mb-8">
+            <h2 class="text-xl font-bold text-[#e5e5e5] mb-4">🚀 Primeiros passos</h2>
+            <p class="text-[#a3a3a3] text-sm mb-6">
+                Faça estes ajustes logo após configurar seu site para garantir que tudo funcione bem.
+            </p>
+
+            <div class="space-y-6">
+                <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                    <h3 class="font-semibold text-[#e5e5e5] mb-2">1. Trocar e-mail e senha do admin</h3>
+                    <p class="text-sm text-[#a3a3a3] mb-2">Por segurança, altere as credenciais padrão.</p>
+                    <p class="text-sm text-[#a3a3a3]">Vá em <a href="/admin/authors" class="text-indigo-400 hover:underline">Autores</a> → clique no usuário &quot;Administrador&quot; → altere e-mail e senha → Salvar.</p>
+                </div>
+
+                <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);">
+                    <h3 class="font-semibold text-[#e5e5e5] mb-2">2. Alterar nome do site</h3>
+                    <p class="text-sm text-[#a3a3a3]">Em <a href="/admin/configuracoes" class="text-indigo-400 hover:underline">Configurações</a> você define o nome que aparece no site.</p>
+                </div>
+
+                <div class="p-4 rounded-lg" style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25);">
+                    <h3 class="font-semibold text-[#22c55e] mb-2">3. Ativar atualizações automáticas (obrigatório)</h3>
+                    <p class="text-sm text-[#fbbf24] mb-2">⚠️ Sem isso, o botão &quot;Aplicar agora&quot; no banner de atualização retornará erro.</p>
+                    <p class="text-sm text-[#a3a3a3] mb-3">
+                        Para receber melhorias do template sem baixar nada de novo, ative as permissões do GitHub:
+                    </p>
+                    <ol class="text-sm text-[#a3a3a3] list-decimal list-inside space-y-2 ml-2">
+                        <li>Acesse seu repositório no GitHub</li>
+                        <li>Clique em <strong class="text-[#e5e5e5]">Settings</strong> (Configurações)</li>
+                        <li>No menu lateral: <strong class="text-[#e5e5e5]">Actions</strong> → <strong class="text-[#e5e5e5]">General</strong></li>
+                        <li>Em &quot;Workflow permissions&quot;, marque <strong class="text-[#e5e5e5]">Read and write permissions</strong></li>
+                        <li>Marque <strong class="text-[#e5e5e5]">Allow GitHub Actions to create and approve pull requests</strong></li>
+                        <li>Clique em <strong class="text-[#e5e5e5]">Save</strong></li>
+                    </ol>
+                    <p class="text-xs text-[#737373] mt-3">Isso é feito uma única vez. Depois, as atualizações funcionam com 1 clique no painel.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 2: Funcionalidades -->
+        <section id="funcionalidades" class="admin-card p-6 mb-8">
+            <h2 class="text-xl font-bold text-[#e5e5e5] mb-4">📋 O que cada coisa faz</h2>
+            <p class="text-[#a3a3a3] text-sm mb-6">
+                Entenda cada área do painel para aproveitar ao máximo o CMS.
+            </p>
+
+            <div class="space-y-4">
+                <div>
+                    <h3 class="font-semibold text-[#e5e5e5] mb-1">Dashboard</h3>
+                    <p class="text-sm text-[#a3a3a3]">Visão geral do site: posts recentes, estatísticas e ações rápidas.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-[#e5e5e5] mb-1">Posts</h3>
+                    <p class="text-sm text-[#a3a3a3]">Crie e edite artigos do blog. Defina título, conteúdo, categoria e data de publicação.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-[#e5e5e5] mb-1">Autores</h3>
+                    <p class="text-sm text-[#a3a3a3]">Contas que podem acessar o painel. Edite e-mail, senha e perfil.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-[#e5e5e5] mb-1">Categorias</h3>
+                    <p class="text-sm text-[#a3a3a3]">Organize os posts por tema (ex: Dicas, Novidades).</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-[#e5e5e5] mb-1">Páginas</h3>
+                    <p class="text-sm text-[#a3a3a3]">Edite a Home, Menu, Footer, Sobre, Contato e outras páginas fixas.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-[#e5e5e5] mb-1">Mídia</h3>
+                    <p class="text-sm text-[#a3a3a3]">Envie e gerencie imagens. Use nos posts e nas páginas.</p>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-[#e5e5e5] mb-1">Configurações</h3>
+                    <p class="text-sm text-[#a3a3a3]">IA para gerar conteúdo, SEO (sitemap, robots.txt), estrutura de URLs do blog e dados de contato (telefone e WhatsApp centralizados).</p>
+                </div>
+
+                {isLocal && (
+                    <div class="pt-4 mt-4" style="border-top: 1px solid rgba(255,255,255,0.08);">
+                        <h3 class="font-semibold text-[#10b981] mb-3">Modo Local — recursos extras</h3>
+                        <ul class="text-sm text-[#a3a3a3] space-y-2">
+                            <li><strong class="text-[#e5e5e5]">Page Generator:</strong> Keywords, bairros e páginas para SEO local.</li>
+                            <li><strong class="text-[#e5e5e5]">Template:</strong> Escolha um template de nicho (ex: encanador, eletricista).</li>
+                            <li><strong class="text-[#e5e5e5]">Home Local:</strong> Edite textos, NAP e serviços em destaque.</li>
+                            <li><strong class="text-[#e5e5e5]">Contato:</strong> Configure telefone e WhatsApp em Configurações → Contato.</li>
+                        </ul>
+                    </div>
+                )}
+            </div>
+        </section>
+
+        <!-- Seção 3: Atualizações -->
+        <section id="atualizacoes" class="admin-card p-6 mb-8">
+            <h2 class="text-xl font-bold text-[#e5e5e5] mb-4">🔄 Atualizações</h2>
+            <p class="text-[#a3a3a3] text-sm mb-6">
+                O CNX recebe melhorias e correções. Saiba como atualizar sem perder nada.
+            </p>
+
+            <div class="p-4 rounded-lg mb-6" style="background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.25);">
+                <p class="text-sm text-[#86efac] font-medium mb-2">✅ Seus posts, imagens e configurações não são alterados.</p>
+                <p class="text-sm text-[#a3a3a3]">Apenas o código do template é atualizado. Seu conteúdo fica intacto.</p>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="font-semibold text-[#e5e5e5]">Como atualizar</h3>
+                <p class="text-sm text-[#a3a3a3]">
+                    Quando houver uma nova versão, um banner amarelo aparece no topo do painel. Clique em <strong class="text-[#e5e5e5]">&quot;Quero as melhorias&quot;</strong> ou <strong class="text-[#e5e5e5]">&quot;Aplicar agora&quot;</strong>.
+                </p>
+                <p class="text-sm text-[#a3a3a3]">
+                    Em até 2 minutos seu site estará atualizado. Você pode continuar usando o painel normalmente.
+                </p>
+                <p class="text-xs text-[#737373] mt-2">
+                    Se as atualizações não funcionarem, confira se você fez o passo 3 da seção &quot;Primeiros passos&quot; (permissões do GitHub).
+                </p>
+            </div>
+        </section>
+
+        <!-- Seção 4: URLs do Blog -->
+        <section id="urls" class="admin-card p-6 mb-8">
+            <h2 class="text-xl font-bold text-[#e5e5e5] mb-4">🔗 Configuração de URLs do Blog</h2>
+            <p class="text-[#a3a3a3] text-sm mb-6">
+                Configure como as URLs dos seus posts são exibidas. Escolha entre estrutura tradicional com "/blog" ou URLs limpas.
+            </p>
+
+            <div class="p-4 rounded-lg mb-6" style="background: linear-gradient(135deg, rgba(168,85,247,0.08) 0%, rgba(99,102,241,0.08) 100%); border: 2px solid rgba(168,85,247,0.2);">
+                <div class="flex items-center gap-2 mb-3">
+                    <span style="background: linear-gradient(135deg, #a855f7, #6366f1); color: white; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700;">⚡ MAIS SOLICITADO</span>
+                    <h3 class="font-semibold text-[#e5e5e5]">Remover "/blog" da URL</h3>
+                </div>
+                <p class="text-sm text-[#c7d2fe] mb-4">
+                    Transforme <code class="bg-[rgba(255,255,255,0.1)] px-1.5 py-0.5 rounded text-xs">exemplo.com/blog/post</code> 
+                    em <code class="bg-[rgba(34,197,94,0.15)] px-1.5 py-0.5 rounded text-xs text-[#86efac]">exemplo.com/post</code>
+                </p>
+                
+                <div class="space-y-3">
+                    <h4 class="font-medium text-[#e5e5e5] text-sm">Como fazer:</h4>
+                    <ol class="text-sm text-[#a3a3a3] list-decimal list-inside space-y-2">
+                        <li>
+                            Acesse <a href="/admin/configuracoes/seo" class="text-[#c4b5fd] hover:underline font-medium">Configurações → SEO</a>
+                        </li>
+                        <li>
+                            Procure a seção <strong class="text-[#d8b4fe]">"🔗 Estrutura de URLs dos Posts"</strong> (destaque roxo)
+                        </li>
+                        <li>
+                            Selecione <strong class="text-[#86efac]">"✨ Sem /blog (URLs Limpas)"</strong>
+                        </li>
+                        <li>
+                            Clique em <strong class="text-[#e5e5e5]">"💾 Salvar Configurações"</strong>
+                        </li>
+                    </ol>
+                </div>
+
+                <div class="mt-4 p-3 rounded-lg" style="background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.25);">
+                    <div class="flex items-start gap-2">
+                        <span class="text-base mt-0.5">⚠️</span>
+                        <div>
+                            <p class="text-sm font-medium text-[#fcd34d] mb-1">Importante:</p>
+                            <p class="text-xs text-[#a3a3a3] leading-relaxed">
+                                Configure antes de publicar posts. Se já tem posts publicados, considere usar redirects 301 para evitar quebrar links existentes.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                    <h4 class="font-semibold text-[#e5e5e5] mb-2 flex items-center gap-1">
+                        📁 Com /blog
+                        <span class="text-xs bg-[rgba(99,102,241,0.15)] text-[#c7d2fe] px-1.5 py-0.5 rounded">Tradicional</span>
+                    </h4>
+                    <p class="text-sm text-[#a3a3a3] mb-3">Posts organizados em seção específica</p>
+                    <div class="space-y-1 text-xs font-mono">
+                        <div class="text-[#c7d2fe]">exemplo.com<span class="text-[#6366f1]">/blog</span>/post</div>
+                        <div class="text-[#c7d2fe]">exemplo.com<span class="text-[#6366f1]">/blog</span>/2025/03/post</div>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-lg" style="background: rgba(34,197,94,0.05); border: 1px solid rgba(34,197,94,0.2);">
+                    <h4 class="font-semibold text-[#e5e5e5] mb-2 flex items-center gap-1">
+                        ✨ Sem /blog
+                        <span class="text-xs bg-[rgba(34,197,94,0.2)] text-[#86efac] px-1.5 py-0.5 rounded">Limpa</span>
+                    </h4>
+                    <p class="text-sm text-[#a3a3a3] mb-3">URLs diretas e amigáveis ao SEO</p>
+                    <div class="space-y-1 text-xs font-mono">
+                        <div class="text-[#86efac]">exemplo.com/post</div>
+                        <div class="text-[#86efac]">exemplo.com/2025/03/post</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 5: Solução de problemas -->
+        <section id="problemas" class="admin-card p-6 mb-8">
+            <h2 class="text-xl font-bold text-[#e5e5e5] mb-4">🔧 Solução de problemas</h2>
+
+            <!-- Problemas de Login e Acesso -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-[#e5e5e5] mb-4 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">🔐 Login e Acesso</h3>
+                
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">❌ Esqueci a senha</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-2">
+                            Na Vercel, edite a variável <strong class="text-[#e5e5e5]">ADMIN_SECRET</strong> com uma nova senha e salve. Use <code class="px-1.5 py-0.5 rounded bg-[rgba(255,255,255,0.1)] text-xs">admin@admin.com</code> + a nova senha.
+                        </p>
+                        <p class="text-xs text-[#737373]">💡 Aguarde ~1 minuto para o redeploy após alterar a variável.</p>
+                    </div>
+
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">❌ Painel não aceita login</h4>
+                        <ul class="text-sm text-[#a3a3a3] list-disc list-inside space-y-1">
+                            <li>Se ainda não trocou: <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">admin@admin.com</code> + valor de <strong>ADMIN_SECRET</strong></li>
+                            <li>Se o template veio com conta: <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">admin@admin.com</code> + <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">admin123</code></li>
+                            <li>Troque em <a href="/admin/authors" class="text-indigo-400 hover:underline">Autores</a> → Editar administrador</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- URLs do Blog -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-[#e5e5e5] mb-4 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">🔗 URLs do Blog</h3>
+                
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg" style="background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.25);">
+                        <h4 class="font-semibold text-[#c4b5fd] mb-2">✨ Como remover "/blog" da URL (URLs limpas)</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-3">
+                            Por padrão, posts ficam em <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">exemplo.com/blog/nome-post</code>. 
+                            Para URLs mais limpas como <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">exemplo.com/nome-post</code>:
+                        </p>
+                        <ol class="text-sm text-[#a3a3a3] list-decimal list-inside space-y-1 mb-3">
+                            <li>Vá em <a href="/admin/configuracoes/seo" class="text-indigo-400 hover:underline">Configurações → SEO</a></li>
+                            <li>Na seção "🔗 Estrutura de URLs dos Posts" (destacada em roxo)</li>
+                            <li>Marque "✨ Sem /blog (URLs Limpas)"</li>
+                            <li>Clique em "💾 Salvar Configurações"</li>
+                        </ol>
+                        <div class="bg-[rgba(251,191,36,0.08)] border border-[rgba(251,191,36,0.25)] rounded p-3 mt-3">
+                            <p class="text-sm text-[#fbbf24] font-medium mb-1">⚠️ Atenção:</p>
+                            <p class="text-xs text-[#a3a3a3]">Configure antes de criar posts ou use redirects para não quebrar links existentes.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">📅 Estruturas de data nas URLs</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-2">Você pode incluir data nas URLs para melhor organização:</p>
+                        <ul class="text-sm text-[#a3a3a3] list-disc list-inside space-y-1">
+                            <li><strong class="text-[#e5e5e5]">Apenas nome:</strong> <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">/nome-do-post</code></li>
+                            <li><strong class="text-[#e5e5e5]">Ano/mês:</strong> <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">/2025/03/nome-do-post</code></li>
+                            <li><strong class="text-[#e5e5e5]">Data completa:</strong> <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">/2025/03/17/nome-do-post</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problemas de Atualizações -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-[#e5e5e5] mb-4 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">🔄 Problemas com Atualizações</h3>
+                
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg" style="background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.25);">
+                        <h4 class="font-semibold text-[#fca5a5] mb-2">❌ Botão "Aplicar agora" não funciona</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-3"><strong class="text-[#e5e5e5]">Causa mais comum:</strong> Permissões do GitHub Actions não configuradas</p>
+                        <div class="bg-[rgba(255,255,255,0.05)] p-3 rounded border-l-4" style="border-left-color: #6366f1;">
+                            <p class="text-sm font-semibold text-[#c7d2fe] mb-2">✅ Solução:</p>
+                            <ol class="text-sm text-[#a3a3a3] list-decimal list-inside space-y-1">
+                                <li>Acesse seu repositório no GitHub</li>
+                                <li><strong class="text-[#e5e5e5]">Settings</strong> → <strong class="text-[#e5e5e5]">Actions</strong> → <strong class="text-[#e5e5e5]">General</strong></li>
+                                <li>Marque <strong class="text-[#86efac]">"Read and write permissions"</strong></li>
+                                <li>Marque <strong class="text-[#86efac]">"Allow GitHub Actions to create and approve pull requests"</strong></li>
+                                <li>Clique em <strong class="text-[#86efac]">Save</strong></li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">⚠️ Workflow cria atualização mas não aplica</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-2"><strong>Sintoma:</strong> Vê deploy na Vercel, mas versão não muda no painel</p>
+                        <p class="text-sm text-[#a3a3a3] mb-3"><strong>Causa:</strong> Auto-merge falhou por falta de permissões</p>
+                        <div class="bg-[rgba(255,255,255,0.05)] p-3 rounded border-l-4" style="border-left-color: #fbbf24;">
+                            <p class="text-sm font-semibold text-[#fcd34d] mb-2">💡 Soluções:</p>
+                            <ul class="text-sm text-[#a3a3a3] list-disc list-inside space-y-1">
+                                <li>Verifique se existe Pull Request aberto no GitHub → faça merge manual</li>
+                                <li>Configure permissões (solução acima)</li>
+                                <li>Execute workflow manualmente: <strong>Actions</strong> → <strong>"🔄 Atualizar Template CNX"</strong> → <strong>Run workflow</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">❌ Erro 404 ao ativar atualizações</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-3"><strong>Causa:</strong> Bug do GitHub API com paths <code class="text-xs bg-[rgba(255,255,255,0.1)] px-1 py-0.5 rounded">.github/</code></p>
+                        <div class="bg-[rgba(255,255,255,0.05)] p-3 rounded border-l-4" style="border-left-color: #6366f1;">
+                            <p class="text-sm font-semibold text-[#c7d2fe] mb-2">🔧 Solução Manual:</p>
+                            <ol class="text-sm text-[#a3a3a3] list-decimal list-inside space-y-1">
+                                <li>Vá em <a href="/admin/configuracoes/atualizacoes" class="text-indigo-400 hover:underline">Configurações → Atualizações</a></li>
+                                <li>Tente ativar → aparecerá instruções de criação manual</li>
+                                <li>Clique no link para GitHub → cole o conteúdo → Commit</li>
+                                <li>Configure permissões → tente ativar novamente</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">❌ Erro "variáveis não configuradas"</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-3">Faltam variáveis de ambiente na Vercel</p>
+                        <div class="bg-[rgba(255,255,255,0.05)] p-3 rounded border-l-4" style="border-left-color: #10b981;">
+                            <p class="text-sm font-semibold text-[#86efac] mb-2">📋 Configurar na Vercel:</p>
+                            <ul class="text-sm text-[#a3a3a3] list-disc list-inside space-y-1">
+                                <li><strong>GITHUB_TOKEN:</strong> <a href="https://github.com/settings/tokens/new?description=CNX+CMS&scopes=repo" target="_blank" class="text-indigo-400 hover:underline">Gere aqui</a> com escopo "repo"</li>
+                                <li><strong>GITHUB_OWNER:</strong> Seu usuário do GitHub</li>
+                                <li><strong>GITHUB_REPO:</strong> Nome do repositório</li>
+                                <li><strong>ADMIN_SECRET:</strong> Sua senha de admin</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Problemas Gerais -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-[#e5e5e5] mb-4 pb-2" style="border-bottom: 1px solid rgba(255,255,255,0.1);">⚙️ Problemas Gerais</h3>
+                
+                <div class="space-y-4">
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">❌ Site abre em branco ou erro 500</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-2">
+                            Veja os logs na Vercel: <strong>Projeto → Deployments → último deploy</strong>. Geralmente é variável de ambiente ausente ou incorreta.
+                        </p>
+                        <p class="text-xs text-[#737373]">💡 Verifique se todas as variáveis obrigatórias estão configuradas.</p>
+                    </div>
+
+                    <div class="p-4 rounded-lg" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);">
+                        <h4 class="font-semibold text-[#e5e5e5] mb-2">❌ Erro ao salvar posts/páginas</h4>
+                        <p class="text-sm text-[#a3a3a3] mb-2">
+                            Verifique se <strong class="text-[#e5e5e5]">GITHUB_TOKEN</strong>, <strong class="text-[#e5e5e5]">GITHUB_OWNER</strong> e <strong class="text-[#e5e5e5]">GITHUB_REPO</strong> estão corretos nas variáveis de ambiente da Vercel.
+                        </p>
+                        <p class="text-xs text-[#737373]">💡 O token deve ter permissões "repo" e estar válido.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagnóstico Automático -->
+            <div class="p-4 rounded-lg mb-6" style="background: rgba(99,102,241,0.08); border: 1px solid rgba(99,102,241,0.25);">
+                <h4 class="font-semibold text-[#c7d2fe] mb-2">🔍 Diagnóstico Automático</h4>
+                <p class="text-sm text-[#a3a3a3] mb-3">
+                    Use o diagnóstico automático para identificar problemas rapidamente:
+                </p>
+                <a href="/admin/configuracoes/atualizacoes" 
+                   class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                   style="background: rgba(99,102,241,0.15); color: #c7d2fe; border: 1px solid rgba(99,102,241,0.3);">
+                    🔍 Ir para Diagnóstico
+                </a>
+            </div>
+
+            <!-- Links de Suporte -->
+            <div class="pt-4" style="border-top: 1px solid rgba(255,255,255,0.1);">
+                <p class="text-sm text-[#737373] mb-2">
+                    <strong class="text-[#e5e5e5]">Ainda com problemas?</strong>
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <a href="https://8linksapp-maker.github.io/cnx" target="_blank" rel="noopener" 
+                       class="text-indigo-400 hover:underline text-sm">📚 FAQ Completo</a>
+                    <a href="/admin/configuracoes/atualizacoes" 
+                       class="text-indigo-400 hover:underline text-sm">🔧 Diagnóstico Automático</a>
+                    <span class="text-[#737373] text-sm">💬 Suporte: Entre em contato</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</AdminLayout>

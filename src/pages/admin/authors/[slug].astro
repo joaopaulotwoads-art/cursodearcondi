@@ -1,0 +1,43 @@
+---
+/**
+ * admin/authors/[slug].astro
+ * 
+ * Página de edição de um autor específico.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import AuthorEditor from '../../../components/admin/AuthorEditor.tsx';
+import { readAuthor } from '../../../utils/author-utils';
+
+const { slug } = Astro.params;
+const isNew = slug === 'new';
+
+let author = undefined;
+if (!isNew && slug) {
+    const authorFile = await readAuthor(slug);
+    if (authorFile) {
+        // Nunca expor o hash para o client
+        const { adminPasswordHash: _, ...safeData } = authorFile.data as any;
+        author = safeData;
+    }
+}
+
+const currentUserRole = Astro.locals.user?.adminRole;
+---
+
+<AdminLayout title={isNew ? 'Novo Autor - Admin' : `Editar Autor - ${author?.name || slug}`}>
+    <div id="author-editor-wrapper" class="min-h-[400px]">
+        <AuthorEditor 
+            client:only="react"
+            author={author}
+            currentUserRole={currentUserRole}
+        />
+    </div>
+    
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar autores.</p>
+            <p class="text-[#737373] text-sm">Por favor, habilite JavaScript no seu navegador.</p>
+        </div>
+    </noscript>
+</AdminLayout>

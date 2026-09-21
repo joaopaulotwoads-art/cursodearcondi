@@ -1,0 +1,34 @@
+---
+/**
+ * admin/pages/home.astro
+ *
+ * Edição da Home (singleton). Usa HomeEditor com schema classic.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import HomeEditor from '../../../components/admin/HomeEditor.tsx';
+import { readSingleton } from '../../../utils/singleton-utils';
+
+const initialData = await readSingleton('home', 'classic');
+---
+
+<AdminLayout title="Página Inicial - CNX Agency Admin">
+    <div id="home-editor-wrapper" class="min-h-[400px]">
+        {initialData !== null ? (
+            <HomeEditor
+                client:only="react"
+                initialData={initialData}
+            />
+        ) : (
+            <div class="p-8 text-center">
+                <p class="text-[#a3a3a3] mb-4">Carregando dados da página inicial...</p>
+                <p class="text-[#737373] text-sm">Se esta mensagem persistir, verifique se o arquivo home.yaml existe em src/content/singletons/classic/.</p>
+            </div>
+        )}
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar páginas.</p>
+        </div>
+    </noscript>
+</AdminLayout>

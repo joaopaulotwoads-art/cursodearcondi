@@ -1,0 +1,32 @@
+---
+/**
+ * admin/pages/menu.astro
+ *
+ * Página de edição do Menu (singleton). Logo e itens de navegação.
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import MenuEditor from '../../../components/admin/MenuEditor.tsx';
+import { readSingleton } from '../../../utils/singleton-utils';
+
+// Obter tema ativo
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const activeThemeId = settings?.data?.activeTheme || 'classic';
+
+const initialData = await readSingleton('menu', activeThemeId);
+---
+
+<AdminLayout title="Menu - CNX Agency Admin">
+    <div id="menu-editor-wrapper" class="min-h-[400px]">
+        <MenuEditor
+            client:load
+            initialData={initialData ?? undefined}
+        />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar páginas.</p>
+        </div>
+    </noscript>
+</AdminLayout>

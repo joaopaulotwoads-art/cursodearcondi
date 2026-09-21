@@ -1,0 +1,29 @@
+---
+/**
+ * admin/pages/local-home.astro
+ *
+ * Página admin para editar o conteúdo da home do Modo Local.
+ * Carrega dados do singleton 'local/home.yaml' e lista os serviços disponíveis.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import LocalHomeEditor from '../../../components/admin/LocalHomeEditor';
+import { readSingleton } from '../../../utils/singleton-utils';
+import { listServices } from '../../../utils/service-utils';
+
+const localData      = await readSingleton('home', 'local') || {};
+const servicesAll    = await listServices();
+const availableServices = servicesAll.map(s => ({
+    title: s.data.title,
+    slug: s.data.slug,
+    icon: s.data.icon,
+}));
+---
+
+<AdminLayout title="Home Local - CNX Agency Admin">
+    <LocalHomeEditor
+        initialData={localData}
+        availableServices={availableServices}
+        client:only="react"
+    />
+</AdminLayout>

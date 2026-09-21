@@ -116,11 +116,11 @@ export async function writeLocation(slug: string, data: LocationData): Promise<b
         const filename = `${slug}.yaml`;
 
         if (isGitHubConfigured()) {
-            return (await githubWriteFile(
+            return githubWriteFile(
                 `${LOCATIONS_GH}/${filename}`,
                 yamlContent,
                 `content: save location "${slug}"`,
-            )).ok;
+            );
         }
 
         await fs.mkdir(LOCATIONS_DIR, { recursive: true });
@@ -257,7 +257,7 @@ export async function writeLocationTemplate(data: LocationTemplateData): Promise
         });
 
         if (isGitHubConfigured()) {
-            return (await githubWriteFile(TEMPLATE_GH, yamlContent, 'content: update location page template')).ok;
+            return githubWriteFile(TEMPLATE_GH, yamlContent, 'content: update location page template');
         }
 
         const dir = path.dirname(TEMPLATE_PATH);

@@ -1,0 +1,519 @@
+---
+/**
+ * admin/posts/index.astro
+ * 
+ * Página de listagem de todos os posts do blog.
+ * Exibe tabela com posts, filtros, busca e ações (editar, deletar, duplicar).
+ * Design moderno integrado ao painel admin.
+ */
+
+import { getCollection, getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getPostUrl, type BlogPermalinkStructure } from '../../../utils/blog-permalink';
+
+const posts = await getCollection('posts');
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
+const blogUrlPrefix = (settings?.data?.blogUrlPrefix as import('../../../utils/blog-permalink').BlogUrlPrefix) || 'blog';
+const authors = await getCollection('authors');
+const categories = await getCollection('categories');
+
+// Ordenar por data (mais recentes primeiro)
+const sortedPosts = [...posts].sort((a, b) => {
+    const dateA = a.data.publishedDate ? new Date(a.data.publishedDate).getTime() : 0;
+    const dateB = b.data.publishedDate ? new Date(b.data.publishedDate).getTime() : 0;
+    return dateB - dateA;
+});
+
+function formatDate(dateString: string | undefined) {
+    if (!dateString) return 'Rascunho';
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('pt-BR', { 
+            day: '2-digit', 
+            month: 'short',
+            year: 'numeric'
+        });
+    } catch {
+        return 'Data inválida';
+    }
+}
+
+function getAuthorName(authorSlug: string | undefined) {
+    if (!authorSlug) return 'Sem autor';
+    const author = authors.find(a => a.id === authorSlug);
+    return author?.data.name || authorSlug;
+}
+
+function getCategoryName(categorySlug: string | undefined) {
+    if (!categorySlug) return 'Sem categoria';
+    const category = categories.find(c => c.id === categorySlug);
+    return category?.data.name || categorySlug;
+}
+---
+
+<AdminLayout title="Posts - CNX Agency Admin">
+    <!-- Page Header -->
+    <div class="mb-8 flex items-center justify-between">
+        <div>
+            <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-1">
+                Posts
+            </h1>
+            <p class="text-[#a3a3a3] text-sm">
+                Gerencie todos os posts do seu blog
+            </p>
+        </div>
+        <div class="flex gap-2">
+            <a 
+                href="/admin/configuracoes/seo"
+                class="admin-btn admin-btn-ghost flex items-center gap-2 text-xs"
+                title="Configure como as URLs dos posts são exibidas"
+            >
+                <span>🔗</span>
+                URLs
+            </a>
+            <a 
+                href="/admin/posts/ai"
+                class="admin-btn admin-btn-primary flex items-center gap-2"
+            >
+                <span>✨</span>
+                Posts com IA
+            </a>
+            <a 
+                href="/admin/posts/new"
+                class="admin-btn admin-btn-secondary flex items-center gap-2"
+            >
+                <span>➕</span>
+                Novo Post
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <div class="text-2xl font-heading font-black text-white">{posts.length}</div>
+            <div class="text-sm text-slate-400">Total de Posts</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <div class="text-2xl font-heading font-black text-green-400">
+                {posts.filter(p => p.data.publishedDate).length}
+            </div>
+            <div class="text-sm text-slate-400">Publicados</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <div class="text-2xl font-heading font-black text-yellow-400">
+                {posts.filter(p => !p.data.publishedDate).length}
+            </div>
+            <div class="text-sm text-slate-400">Rascunhos</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+            <div class="text-2xl font-heading font-black text-primary">
+                {authors.length}
+            </div>
+            <div class="text-sm text-slate-400">Autores</div>
+        </div>
+    </div>
+
+    <!-- Busca e Filtros -->
+    {sortedPosts.length > 0 && (
+        <div class="flex flex-wrap gap-3 mb-4">
+            <input
+                type="search"
+                id="posts-search"
+                placeholder="Buscar por título ou slug..."
+                class="admin-input flex-1 min-w-[200px]"
+                style="max-width: 320px;"
+            />
+            <select id="posts-filter-status" class="admin-input" style="width: auto;">
+                <option value="">Todos os status</option>
+                <option value="published">Publicados</option>
+                <option value="draft">Rascunhos</option>
+            </select>
+            <select id="posts-filter-author" class="admin-input" style="width: auto;">
+                <option value="">Todos os autores</option>
+                {authors.map((a) => (
+                    <option value={a.id}>{a.data.name}</option>
+                ))}
+            </select>
+            <select id="posts-filter-category" class="admin-input" style="width: auto;">
+                <option value="">Todas as categorias</option>
+                {categories.map((c) => (
+                    <option value={c.id}>{c.data.name}</option>
+                ))}
+            </select>
+            <span id="posts-filter-count" class="text-xs text-[#737373] self-center"></span>
+        </div>
+    )}
+
+    <!-- Posts Table -->
+    <div class="admin-card overflow-hidden">
+        {sortedPosts.length > 0 ? (
+            <div class="overflow-x-auto">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Autor</th>
+                            <th>Categoria</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th class="text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sortedPosts.map((post) => {
+                            const isPublished = !!post.data.publishedDate;
+                            return (
+                                <tr
+                                    class="post-row"
+                                    data-title={(post.data.title || '').toLowerCase()}
+                                    data-slug={(post.data.slug || '').toLowerCase()}
+                                    data-author={post.data.author || ''}
+                                    data-category={post.data.category || ''}
+                                    data-status={isPublished ? 'published' : 'draft'}
+                                >
+                                    <td>
+                                        <div class="font-semibold text-[#e5e5e5] mb-1">{post.data.title}</div>
+                                        <div class="text-xs text-[#737373] font-mono">/{post.data.slug}</div>
+                                    </td>
+                                    <td class="text-sm text-[#a3a3a3]">
+                                        {getAuthorName(post.data.author)}
+                                    </td>
+                                    <td>
+                                        {post.data.category ? (
+                                            <span class="admin-badge admin-badge-neutral">
+                                                {getCategoryName(post.data.category)}
+                                            </span>
+                                        ) : (
+                                            <span class="text-[#737373] text-xs">—</span>
+                                        )}
+                                    </td>
+                                    <td class="text-sm text-[#a3a3a3]">
+                                        {formatDate(post.data.publishedDate)}
+                                    </td>
+                                    <td>
+                                        <span class="admin-badge admin-badge-neutral">
+                                            {isPublished ? 'Publicado' : 'Rascunho'}
+                                        </span>
+                                    </td>
+                                    <td class="text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <a 
+                                                href={`/admin/posts/${post.data.slug}`}
+                                                class="admin-btn admin-btn-ghost text-sm"
+                                            >
+                                                Editar
+                                            </a>
+                                            <button
+                                                type="button"
+                                                data-slug={post.data.slug}
+                                                data-title={post.data.title}
+                                                class="admin-btn admin-btn-secondary text-sm duplicate-post-btn"
+                                                title="Duplicar como rascunho"
+                                            >
+                                                📋 Duplicar
+                                            </button>
+                                            <a 
+                                                href={getPostUrl({ ...post, data: { ...post.data, slug: post.data.slug || post.id } }, blogPermalinkStructure, blogUrlPrefix)}
+                                                target="_blank"
+                                                class="admin-btn admin-btn-secondary text-sm"
+                                            >
+                                                Ver
+                                            </a>
+                                            <button
+                                                type="button"
+                                                data-slug={post.data.slug}
+                                                data-title={post.data.title}
+                                                class="admin-btn admin-btn-danger text-sm delete-post-btn"
+                                            >
+                                                🗑️ Deletar
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+        ) : (
+            <div class="p-12 text-center">
+                <p class="text-[#a3a3a3] mb-4">Nenhum post encontrado</p>
+                <a 
+                    href="/admin/posts/new"
+                    class="admin-btn admin-btn-primary inline-block"
+                >
+                    Criar Primeiro Post
+                </a>
+            </div>
+        )}
+    </div>
+    </div>
+
+    <!-- Modal de confirmação de deleção -->
+    <div id="delete-modal-backdrop" class="admin-modal-backdrop" style="display: none;">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <div class="admin-modal-icon">
+                    <span>✖</span>
+                </div>
+                <div>
+                    <div class="admin-modal-title">Excluir post</div>
+                </div>
+            </div>
+            <div class="admin-modal-body">
+                <p id="delete-modal-message">
+                    Tem certeza que deseja excluir este post?
+                </p>
+                <small>
+                    Esta ação é permanente e não poderá ser desfeita. O conteúdo será removido
+                    do blog e do CMS.
+                </small>
+            </div>
+            <div class="admin-modal-footer">
+                <button 
+                    type="button" 
+                    class="admin-modal-btn admin-modal-btn-cancel" 
+                    id="delete-modal-cancel"
+                >
+                    Cancelar
+                </button>
+                <button 
+                    type="button" 
+                    class="admin-modal-btn admin-modal-btn-danger" 
+                    id="delete-modal-confirm"
+                >
+                    Excluir definitivamente
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast de feedback -->
+    <div id="admin-toast" class="admin-toast admin-toast--error" style="display: none;">
+        <div class="admin-toast-icon">
+            <span id="admin-toast-icon">❌</span>
+        </div>
+        <div class="admin-toast-content">
+            <strong id="admin-toast-title">Erro ao excluir post</strong>
+            <span id="admin-toast-message">Ocorreu um erro inesperado.</span>
+        </div>
+        <button 
+            type="button" 
+            class="admin-toast-close" 
+            aria-label="Fechar notificação"
+        >
+            ×
+        </button>
+    </div>
+</AdminLayout>
+
+<script is:inline>
+    (function() {
+        const backdrop = document.getElementById('delete-modal-backdrop');
+        const confirmBtn = document.getElementById('delete-modal-confirm');
+        const cancelBtn = document.getElementById('delete-modal-cancel');
+        const messageEl = document.getElementById('delete-modal-message');
+        const toastEl = document.getElementById('admin-toast');
+        const toastMessageEl = document.getElementById('admin-toast-message');
+        const toastTitleEl = document.getElementById('admin-toast-title');
+        const toastIconEl = document.getElementById('admin-toast-icon');
+        const toastClose = toastEl ? toastEl.querySelector('.admin-toast-close') : null;
+
+        let currentSlug = null;
+        let currentTitle = null;
+
+        function openModal(slug, title) {
+            currentSlug = slug;
+            currentTitle = title;
+            if (messageEl) {
+                messageEl.textContent = `Tem certeza que deseja excluir o post \"${title}\"?`;
+            }
+            if (backdrop) {
+                backdrop.style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            currentSlug = null;
+            currentTitle = null;
+            if (backdrop) {
+                backdrop.style.display = 'none';
+            }
+        }
+
+        function showToast(message, type) {
+            if (!toastEl || !toastMessageEl) return;
+            var isSuccess = type === 'success';
+            toastEl.className = 'admin-toast ' + (isSuccess ? 'admin-toast--success' : 'admin-toast--error');
+            if (toastIconEl) toastIconEl.textContent = isSuccess ? '✅' : '❌';
+            if (toastTitleEl) toastTitleEl.textContent = isSuccess ? 'Post excluído!' : 'Erro ao excluir post';
+            toastMessageEl.textContent = message;
+            toastEl.style.display = 'flex';
+            setTimeout(() => {
+                toastEl.style.display = 'none';
+            }, isSuccess ? 8000 : 5000);
+        }
+
+        async function handleDeletePost() {
+            if (!currentSlug || !currentTitle) {
+                showToast('Dados do post não encontrados. Tente recarregar a página.', 'error');
+                return;
+            }
+
+            if (confirmBtn) {
+                confirmBtn.disabled = true;
+                confirmBtn.textContent = 'Excluindo...';
+            }
+
+            try {
+                const response = await fetch(`/api/admin/posts/${currentSlug}`, {
+                    method: 'DELETE',
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const row = document.querySelector(`button[data-slug=\"${currentSlug}\"]`)?.closest('tr');
+                    if (row) {
+                        row.style.opacity = '0.4';
+                        row.style.transition = 'opacity 0.3s';
+                        setTimeout(() => {
+                            if (row.parentElement) row.parentElement.removeChild(row);
+                        }, 300);
+                    }
+                    closeModal();
+                    showToast('O arquivo foi removido do GitHub. A Vercel está reconstruindo o site — o post desaparecerá do blog em 1 a 2 minutos.', 'success');
+                } else {
+                    showToast(result.error || 'Erro desconhecido ao deletar post.', 'error');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao deletar post:', error);
+                showToast('Erro ao deletar post. Verifique o console para mais detalhes.', 'error');
+            } finally {
+                if (confirmBtn) {
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = 'Excluir definitivamente';
+                }
+            }
+        }
+
+        async function handleDuplicatePost(slug, button) {
+            if (!slug) return;
+            if (button) {
+                button.disabled = true;
+                button.textContent = 'Duplicando...';
+            }
+            try {
+                const res = await fetch('/api/admin/posts/duplicate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ slug }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Post duplicado como rascunho. Redirecionando...', 'success');
+                    setTimeout(function() { window.location.href = '/admin/posts/' + data.slug; }, 800);
+                } else {
+                    showToast(data.error || 'Erro ao duplicar post', 'error');
+                    if (button) {
+                        button.disabled = false;
+                        button.textContent = '📋 Duplicar';
+                    }
+                }
+            } catch (e) {
+                console.error('\x1b[31m✗ [X] Erro ao duplicar post:\x1b[0m', e);
+                showToast('Erro de rede ao duplicar post', 'error');
+                if (button) {
+                    button.disabled = false;
+                    button.textContent = '📋 Duplicar';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteButtons = document.querySelectorAll('.delete-post-btn');
+            const duplicateButtons = document.querySelectorAll('.duplicate-post-btn');
+
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const slug = this.getAttribute('data-slug');
+                    const title = this.getAttribute('data-title');
+
+                    if (slug && title) {
+                        openModal(slug, title);
+                    } else {
+                        console.error('\x1b[31m✗ [X] Erro: slug ou title não encontrado\x1b[0m');
+                        showToast('Não foi possível identificar o post selecionado.', 'error');
+                    }
+                });
+            });
+
+            duplicateButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const slug = this.getAttribute('data-slug');
+                    if (slug) handleDuplicatePost(slug, this);
+                });
+            });
+
+            function applyPostsFilter() {
+                var search = (document.getElementById('posts-search')?.value || '').toLowerCase().trim();
+                var status = document.getElementById('posts-filter-status')?.value || '';
+                var author = document.getElementById('posts-filter-author')?.value || '';
+                var category = document.getElementById('posts-filter-category')?.value || '';
+                var rows = document.querySelectorAll('.post-row');
+                var visible = 0;
+                rows.forEach(function(row) {
+                    var title = row.getAttribute('data-title') || '';
+                    var slug = row.getAttribute('data-slug') || '';
+                    var rowAuthor = row.getAttribute('data-author') || '';
+                    var rowCategory = row.getAttribute('data-category') || '';
+                    var rowStatus = row.getAttribute('data-status') || '';
+                    var matchSearch = !search || title.includes(search) || slug.includes(search);
+                    var matchStatus = !status || rowStatus === status;
+                    var matchAuthor = !author || rowAuthor === author;
+                    var matchCategory = !category || rowCategory === category;
+                    var show = matchSearch && matchStatus && matchAuthor && matchCategory;
+                    row.style.display = show ? '' : 'none';
+                    if (show) visible++;
+                });
+                var countEl = document.getElementById('posts-filter-count');
+                if (countEl) countEl.textContent = visible + ' de ' + rows.length + ' posts';
+            }
+
+            var searchEl = document.getElementById('posts-search');
+            var statusEl = document.getElementById('posts-filter-status');
+            var authorEl = document.getElementById('posts-filter-author');
+            var categoryEl = document.getElementById('posts-filter-category');
+            if (searchEl) searchEl.addEventListener('input', applyPostsFilter);
+            if (searchEl) searchEl.addEventListener('keyup', applyPostsFilter);
+            if (statusEl) statusEl.addEventListener('change', applyPostsFilter);
+            if (authorEl) authorEl.addEventListener('change', applyPostsFilter);
+            if (categoryEl) categoryEl.addEventListener('change', applyPostsFilter);
+            applyPostsFilter();
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', closeModal);
+            }
+
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', handleDeletePost);
+            }
+
+            if (toastClose && toastEl) {
+                toastClose.addEventListener('click', () => {
+                    toastEl.style.display = 'none';
+                });
+            }
+
+            if (backdrop) {
+                backdrop.addEventListener('click', (event) => {
+                    if (event.target === backdrop) {
+                        closeModal();
+                    }
+                });
+            }
+        });
+    })();
+</script>

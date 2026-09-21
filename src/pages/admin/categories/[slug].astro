@@ -1,0 +1,38 @@
+---
+/**
+ * admin/categories/[slug].astro
+ * 
+ * Página de edição de uma categoria específica.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import CategoryEditor from '../../../components/admin/CategoryEditor.tsx';
+import { readCategory } from '../../../utils/category-utils';
+
+const { slug } = Astro.params;
+const isNew = slug === 'new';
+
+let category = undefined;
+if (!isNew && slug) {
+    const categoryFile = await readCategory(slug);
+    if (categoryFile) {
+        category = categoryFile.data;
+    }
+}
+---
+
+<AdminLayout title={isNew ? 'Nova Categoria - CNX Agency Admin' : `Editar Categoria - ${category?.name || slug}`}>
+    <div id="category-editor-wrapper" class="min-h-[400px]">
+        <CategoryEditor 
+            client:only="react"
+            category={category}
+        />
+    </div>
+    
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar categorias.</p>
+            <p class="text-[#737373] text-sm">Por favor, habilite JavaScript no seu navegador.</p>
+        </div>
+    </noscript>
+</AdminLayout>

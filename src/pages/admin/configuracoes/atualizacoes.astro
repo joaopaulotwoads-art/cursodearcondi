@@ -1,0 +1,135 @@
+---
+/**
+ * admin/configuracoes/atualizacoes.astro
+ *
+ * Página dedicada às Atualizações do template CNX.
+ * Agora com sistema avançado de validações, diagnóstico automático
+ * e wizard de configuração passo-a-passo.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import SettingsAtualizacoesV2 from '../../../components/admin/SettingsAtualizacoesV2';
+import UpdateSetupWizard from '../../../components/admin/UpdateSetupWizard';
+
+// Verificar se deve mostrar o wizard (pode ser via query string)
+const url = new URL(Astro.request.url);
+const showWizard = url.searchParams.get('wizard') === 'true';
+---
+
+<AdminLayout title="Atualizações — CNX Agency Admin">
+    <div class="max-w-4xl">
+        <div class="mb-6">
+            <a href="/admin/configuracoes" class="text-sm text-[#737373] hover:text-indigo-400 transition-colors inline-flex items-center gap-1 mb-4">
+                ← Voltar para Configurações
+            </a>
+            <div class="flex justify-between items-start mb-4">
+                <div>
+                    <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-2">Sistema de Atualizações</h1>
+                    <p class="text-[#a3a3a3] text-sm">Configure para receber melhorias do template automaticamente.</p>
+                </div>
+                <div class="flex gap-2">
+                    {!showWizard && (
+                        <a href="/admin/configuracoes/atualizacoes?wizard=true" 
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                           style="background: rgba(168,85,247,0.15); color: #d8b4fe; border: 1px solid rgba(168,85,247,0.3);">
+                            🧙‍♂️ Assistente
+                        </a>
+                    )}
+                    {showWizard && (
+                        <a href="/admin/configuracoes/atualizacoes" 
+                           class="px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                           style="background: rgba(99,102,241,0.15); color: #c7d2fe; border: 1px solid rgba(99,102,241,0.3);">
+                            ⚙️ Modo Avançado
+                        </a>
+                    )}
+                </div>
+            </div>
+        </div>
+
+        {showWizard ? (
+            <!-- Modo Wizard: Assistente passo-a-passo -->
+            <div class="admin-card p-6">
+                <UpdateSetupWizard client:load />
+            </div>
+        ) : (
+            <!-- Modo Avançado: Interface completa com diagnósticos -->
+            <div class="admin-card p-6">
+                <SettingsAtualizacoesV2 client:load />
+            </div>
+        )}
+
+        <!-- Dicas e Links Úteis -->
+        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="admin-card p-4">
+                <h3 class="font-semibold text-[#e5e5e5] mb-2 flex items-center gap-2">
+                    📚 Central de Ajuda
+                </h3>
+                <p class="text-sm text-[#a3a3a3] mb-3">
+                    Guia completo com solução de problemas específicos de atualizações.
+                </p>
+                <a href="/admin/ajuda#problemas" 
+                   class="text-indigo-400 hover:underline text-sm font-medium">
+                    Ver troubleshooting →
+                </a>
+            </div>
+
+            <div class="admin-card p-4">
+                <h3 class="font-semibold text-[#e5e5e5] mb-2 flex items-center gap-2">
+                    🔧 GitHub Settings
+                </h3>
+                <p class="text-sm text-[#a3a3a3] mb-3">
+                    Configure permissões diretamente no seu repositório.
+                </p>
+                <a href="https://github.com/settings/tokens" 
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="text-indigo-400 hover:underline text-sm font-medium">
+                    Gerenciar tokens →
+                </a>
+            </div>
+        </div>
+
+        <!-- Status Global das Atualizações -->
+        <div id="global-status" class="mt-6">
+            <script is:inline>
+                // Script para mostrar banner global de status se necessário
+                async function checkGlobalStatus() {
+                    try {
+                        const res = await fetch('/api/admin/update-system-check');
+                        if (res.ok) {
+                            const data = await res.json();
+                            const status = data.checks;
+                            
+                            // Se há problemas críticos, mostrar alerta
+                            if (!status.hasGitHubToken || !status.hasRepoVars || !status.workflowExists) {
+                                const banner = document.createElement('div');
+                                banner.className = 'mt-4 p-4 rounded-lg';
+                                banner.style.background = 'rgba(239,68,68,0.08)';
+                                banner.style.border = '1px solid rgba(239,68,68,0.25)';
+                                banner.innerHTML = `
+                                    <div class="flex items-center gap-3">
+                                        <div style="font-size: 1.5rem;">⚠️</div>
+                                        <div class="flex-1">
+                                            <h4 style="color: #fca5a5; font-weight: 600; margin-bottom: 0.25rem;">
+                                                Sistema de atualizações requer configuração
+                                            </h4>
+                                            <p style="color: #94a3b8; font-size: 0.85rem; margin: 0;">
+                                                Use o Assistente acima para configurar passo-a-passo ou veja a Central de Ajuda.
+                                            </p>
+                                        </div>
+                                    </div>
+                                `;
+                                document.getElementById('global-status').appendChild(banner);
+                            }
+                        }
+                    } catch (error) {
+                        console.log('Status check failed:', error);
+                    }
+                }
+                
+                // Executar verificação após carregamento
+                document.addEventListener('DOMContentLoaded', checkGlobalStatus);
+            </script>
+        </div>
+    </div>
+</AdminLayout>

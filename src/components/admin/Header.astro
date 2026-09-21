@@ -1,0 +1,294 @@
+---
+/**
+ * Header.astro
+ *
+ * Barra de topo do painel admin (estilo WordPress) + header principal.
+ * Inclui: toggle Modo do Site (Blog | Local), toggle dark/light, ações rápidas.
+ * O modo Local ativa indicador visual nas bordas (definido em admin.css).
+ */
+
+interface Props {
+    user?: { slug: string; name: string; adminRole: 'admin' | 'editor' } | undefined;
+    siteMode?: 'blog' | 'local';
+    supportsBlogAndLocal?: boolean;
+}
+
+const { user, siteMode = 'blog', supportsBlogAndLocal = true } = Astro.props;
+const isLocal = siteMode === 'local';
+const firstName = user?.name?.split(' ')[0] ?? '';
+const initials  = user?.name
+    ? user.name.split(' ').slice(0, 2).map((w: string) => w[0].toUpperCase()).join('')
+    : '?';
+const isAdmin = user?.adminRole === 'admin';
+---
+
+<!-- ══ Barra WP-style ═══════════════════════════════════════════════════ -->
+<div
+    class="h-8 flex items-center justify-between px-4 flex-shrink-0"
+    style="background: var(--admin-bar-bg); border-bottom: 1px solid var(--admin-bar-border);"
+>
+    <!-- Esquerda -->
+    <div class="flex items-center gap-0.5">
+        <a href="/admin"
+           class="flex items-center gap-1.5 px-2 py-1 rounded text-xs font-semibold transition-all"
+           style="color: var(--admin-bar-text);"
+           onmouseover="this.style.color='var(--admin-bar-text-hover)';this.style.background='var(--admin-bar-hover-bg)'"
+           onmouseout="this.style.color='var(--admin-bar-text)';this.style.background='transparent'">
+            <span class="text-[10px] font-black px-1.5 py-0.5 rounded" style="background: rgba(255,255,255,0.1);">CNX</span>
+            <span class="hidden sm:inline">Admin</span>
+        </a>
+
+        <span class="mx-1" style="color: rgba(255,255,255,0.1);">|</span>
+
+        <a href="/" target="_blank" rel="noopener"
+           class="flex items-center gap-1 px-2 py-1 rounded text-xs transition-all"
+           style="color: var(--admin-bar-text);"
+           onmouseover="this.style.color='var(--admin-bar-text-hover)';this.style.background='var(--admin-bar-hover-bg)'"
+           onmouseout="this.style.color='var(--admin-bar-text)';this.style.background='transparent'">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="hidden sm:inline">Ver site</span>
+        </a>
+
+        {supportsBlogAndLocal ? (
+          <>
+            <span class="mx-1 hidden sm:inline" style="color: rgba(255,255,255,0.1);">|</span>
+            <!-- Toggle Modo do Site (apenas tema Classic) -->
+            <div id="site-mode-toggle" class="flex items-center gap-0.5 p-0.5 rounded-lg" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);" data-current-mode={siteMode}>
+                <button
+                    id="mode-blog-btn"
+                    type="button"
+                    data-mode="blog"
+                    class="site-mode-btn px-2.5 py-1 rounded text-[11px] font-semibold transition-all"
+                    title="Modo Blog / Agência"
+                >
+                    📝 Blog
+                </button>
+                <button
+                    id="mode-local-btn"
+                    type="button"
+                    data-mode="local"
+                    class="site-mode-btn px-2.5 py-1 rounded text-[11px] font-semibold transition-all"
+                    title="Modo Local (Rank and Rent)"
+                >
+                    📍 Local
+                </button>
+            </div>
+            <a href="/admin/modo" class="ml-1 px-1.5 py-1 rounded text-[10px] transition-all" style="color: rgba(255,255,255,0.5);" title="Ver detalhes do modo">?</a>
+          </>
+        ) : null}
+    </div>
+
+    <!-- Modal de confirmação ao trocar modo -->
+    <dialog id="mode-confirm-dialog" style="background: var(--admin-surface); border: 1px solid var(--admin-border); border-radius: 12px; padding: 0; max-width: 420px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);">
+        <div style="padding: 20px;">
+            <p id="mode-confirm-msg" style="color: var(--admin-text); font-size: 14px; line-height: 1.5; margin: 0 0 20px 0;"></p>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button id="mode-confirm-cancel" type="button" style="padding: 8px 16px; border-radius: 8px; border: 1px solid var(--admin-border); background: transparent; color: var(--admin-text); cursor: pointer; font-size: 13px;">Cancelar</button>
+                <button id="mode-confirm-ok" type="button" style="padding: 8px 16px; border-radius: 8px; border: none; background: var(--primary); color: white; cursor: pointer; font-size: 13px; font-weight: 600;">Confirmar</button>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Direita: usuário + toggle tema + sair -->
+    <div class="flex items-center gap-1">
+        {user ? (
+            <>
+                <div class="flex items-center gap-2 px-2 py-1">
+                    <!-- Avatar -->
+                    <div class={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-bold flex-shrink-0
+                        ${isAdmin ? 'bg-violet-500/30 text-violet-300 ring-1 ring-violet-500/40'
+                                  : 'bg-sky-500/30 text-sky-300 ring-1 ring-sky-500/40'}`}>
+                        {initials}
+                    </div>
+                    <!-- Nome -->
+                    <span class="text-xs hidden sm:inline" style="color: var(--admin-bar-text);">
+                        Olá, <strong style="color: var(--admin-bar-text-hover);" class="font-semibold">{firstName}</strong>
+                    </span>
+                    <!-- Badge de role -->
+                    <span class={`text-[9px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded hidden md:inline
+                        ${isAdmin ? 'text-violet-400 bg-violet-500/10 ring-1 ring-violet-500/20'
+                                  : 'text-sky-400 bg-sky-500/10 ring-1 ring-sky-500/20'}`}>
+                        {isAdmin ? 'Admin' : 'Editor'}
+                    </span>
+                </div>
+
+                <span class="text-sm mx-1" style="color: rgba(255,255,255,0.1);">|</span>
+
+                <!-- Sair -->
+                <a href="/api/admin/auth/logout"
+                   class="flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium transition-all"
+                   style="color: var(--admin-bar-text);"
+                   onmouseover="this.style.color='#f87171';this.style.background='rgba(239,68,68,0.1)'"
+                   onmouseout="this.style.color='var(--admin-bar-text)';this.style.background='transparent'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Sair</span>
+                </a>
+            </>
+        ) : (
+            <a href="/admin/login"
+               class="px-2 py-1 rounded text-xs transition-all"
+               style="color: var(--admin-bar-text);">
+                Entrar
+            </a>
+        )}
+    </div>
+</div>
+
+<!-- ══ Header principal ════════════════════════════════════════════════ -->
+<header
+    class="h-12 flex items-center justify-between px-4 md:px-6 flex-shrink-0"
+    style="background: var(--admin-surface); border-bottom: 1px solid var(--admin-border);"
+>
+    <div class="flex items-center gap-3 flex-1 min-w-0">
+        <!-- Busca -->
+        <div
+            class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg max-w-xs flex-1"
+            style="background: var(--admin-search-bg); border: 1px solid var(--admin-border);"
+        >
+            <span class="text-xs" style="color: var(--admin-text-subtle);">🔍</span>
+            <input
+                type="text"
+                placeholder="Buscar..."
+                disabled
+                class="bg-transparent border-0 outline-0 flex-1 text-xs cursor-not-allowed"
+                style="color: var(--admin-input-text);"
+            />
+        </div>
+    </div>
+
+    <div class="flex items-center gap-2">
+        <!-- Badge de versão do template -->
+        <div id="version-badge" class="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px]" style="background: var(--admin-surface-hover); border: 1px solid var(--admin-border);">
+            <span id="version-badge-icon">⏳</span>
+            <span id="version-badge-text" style="color: var(--admin-text-subtle);">Verificando...</span>
+        </div>
+        <!-- Botão toggle dark/light -->
+        <button
+            id="theme-toggle"
+            title="Alternar tema"
+            aria-label="Alternar entre modo claro e escuro"
+            class="w-8 h-8 flex items-center justify-center rounded-lg transition-all text-sm"
+            style="background: var(--admin-surface-hover); border: 1px solid var(--admin-border); color: var(--admin-text-muted);"
+        >
+            <span id="theme-icon">🌙</span>
+        </button>
+
+        <!-- CTA principal — único, conforme o modo -->
+        {isLocal ? (
+            <a href="/admin/services/new" class="admin-btn admin-btn-primary text-sm">+ Nova Keyword</a>
+        ) : (
+            <a href="/admin/posts/new" class="admin-btn admin-btn-primary text-sm">+ Novo Post</a>
+        )}
+    </div>
+</header>
+
+<script is:inline>
+(function () {
+    function applyThemeIcon() {
+        var icon = document.getElementById('theme-icon');
+        if (!icon) return;
+        var isLight = document.documentElement.classList.contains('light');
+        icon.textContent = isLight ? '☀️' : '🌙';
+    }
+
+    function toggleTheme() {
+        var html = document.documentElement;
+        var isCurrentlyLight = html.classList.contains('light');
+        html.classList.remove('dark', 'light');
+        var next = isCurrentlyLight ? 'dark' : 'light';
+        html.classList.add(next);
+        try { localStorage.setItem('cnx-theme', next); } catch (e) {}
+        applyThemeIcon();
+    }
+
+    /* ── Site Mode Toggle ──────────────────────────────────────────── */
+    function initSiteModeToggle() {
+        var wrap  = document.getElementById('site-mode-toggle');
+        var blogBtn = document.getElementById('mode-blog-btn');
+        var localBtn = document.getElementById('mode-local-btn');
+        if (!wrap || !blogBtn || !localBtn) return;
+
+        var current = wrap.getAttribute('data-current-mode') || 'blog';
+
+        function setActive(mode) {
+            var active = mode === 'local' ? localBtn : blogBtn;
+            var inact = mode === 'local' ? blogBtn : localBtn;
+            active.style.background = 'rgba(16,185,129,0.25)';
+            active.style.color = '#34d399';
+            active.style.border = '1px solid rgba(16,185,129,0.4)';
+            inact.style.background = 'transparent';
+            inact.style.color = 'var(--admin-bar-text)';
+            inact.style.border = '1px solid transparent';
+        }
+
+        setActive(current);
+
+        var dialog = document.getElementById('mode-confirm-dialog');
+        var msgEl = document.getElementById('mode-confirm-msg');
+        var cancelBtn = document.getElementById('mode-confirm-cancel');
+        var okBtn = document.getElementById('mode-confirm-ok');
+        var pendingMode = null;
+
+        function doSwitchMode(mode) {
+            blogBtn.disabled = true;
+            localBtn.disabled = true;
+            fetch('/api/admin/site-settings', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ siteMode: mode }),
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.success) {
+                    setTimeout(function () { window.location.reload(); }, 150);
+                } else {
+                    blogBtn.disabled = false;
+                    localBtn.disabled = false;
+                }
+            })
+            .catch(function () { blogBtn.disabled = false; localBtn.disabled = false; });
+        }
+
+        function switchMode(mode) {
+            if (mode === current) return;
+            var msg = mode === 'local'
+                ? 'Tem certeza que deseja mudar para o Modo Local? O layout e a estrutura do site serão alterados.'
+                : 'Tem certeza que deseja mudar para o Modo Blog? O layout e a estrutura do site serão alterados.';
+            pendingMode = mode;
+            if (msgEl) msgEl.textContent = msg;
+            if (dialog) {
+                dialog.showModal();
+            } else {
+                if (window.confirm(msg)) doSwitchMode(mode);
+            }
+        }
+
+        if (okBtn) okBtn.addEventListener('click', function () {
+            if (dialog) dialog.close();
+            if (pendingMode) {
+                doSwitchMode(pendingMode);
+                pendingMode = null;
+            }
+        });
+        if (cancelBtn) cancelBtn.addEventListener('click', function () {
+            if (dialog) dialog.close();
+            pendingMode = null;
+        });
+        if (dialog) dialog.addEventListener('cancel', function () { pendingMode = null; });
+
+        blogBtn.addEventListener('click', function () { switchMode('blog'); });
+        localBtn.addEventListener('click', function () { switchMode('local'); });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        applyThemeIcon();
+        var btn = document.getElementById('theme-toggle');
+        if (btn) btn.addEventListener('click', toggleTheme);
+        initSiteModeToggle();
+    });
+})();
+</script>

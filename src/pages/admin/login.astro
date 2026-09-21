@@ -1,0 +1,103 @@
+---
+import { verifySession, SESSION_COOKIE } from '../../utils/auth-utils';
+import { listAuthors } from '../../utils/author-utils';
+import '../../styles/global.css';
+import '../../styles/admin.css';
+import '@fontsource/inter';
+import '@fontsource/outfit';
+
+// Se já está logado, redirecionar
+const token = Astro.cookies.get(SESSION_COOKIE)?.value;
+if (token) {
+    const user = verifySession(token);
+    if (user) return Astro.redirect('/admin');
+}
+
+// Se nenhum admin existe, ir para setup
+const authors = await listAuthors();
+const hasAdmin = authors.some(a => a.data.adminRole === 'admin' && a.data.adminPasswordHash);
+if (!hasAdmin) return Astro.redirect('/admin/setup');
+
+const error = Astro.url.searchParams.get('error');
+const errorMessages: Record<string, string> = {
+    invalid: 'E-mail ou senha incorretos.',
+    inactive: 'Esta conta não tem acesso ao painel.',
+};
+---
+
+<!doctype html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login — Admin</title>
+    <style>
+        body { background: #0a0a0a; }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-[#e5e5e5] font-sans antialiased min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-sm">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <div class="inline-flex w-14 h-14 rounded-2xl bg-[#111] border border-[rgba(255,255,255,0.1)] items-center justify-center text-2xl font-bold mb-4">
+                CNX
+            </div>
+            <h1 class="text-2xl font-heading font-bold text-white">Entrar no Painel</h1>
+            <p class="text-sm text-[#737373] mt-1">Digite suas credenciais para continuar</p>
+        </div>
+
+        <!-- Error -->
+        {error && errorMessages[error] && (
+            <div class="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm text-center">
+                {errorMessages[error]}
+            </div>
+        )}
+
+        <!-- Form -->
+        <form method="POST" action="/api/admin/auth/login" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium text-[#a3a3a3] mb-1.5">E-mail</label>
+                <input
+                    type="email"
+                    name="email"
+                    required
+                    autofocus
+                    placeholder="seu@email.com"
+                    class="admin-input w-full"
+                />
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-[#a3a3a3] mb-1.5">Senha</label>
+                <input
+                    type="password"
+                    name="password"
+                    required
+                    placeholder="••••••••"
+                    class="admin-input w-full"
+                />
+            </div>
+            <button
+                type="submit"
+                class="admin-btn admin-btn-primary w-full py-3 text-base mt-2"
+            >
+                Entrar
+            </button>
+        </form>
+
+        <div class="mt-6 p-4 rounded-xl bg-purple-500/5 border border-purple-500/20 text-sm text-[#a3a3a3]">
+            <p class="font-medium text-indigo-400 mb-1">Novo no CNX?</p>
+            <p>Ative as atualizações automáticas em <a href="/admin/ajuda#primeiros-passos" class="text-indigo-400 hover:underline">Ajuda → Primeiros passos</a>. Isso é obrigatório para que o botão &quot;Aplicar agora&quot; funcione.</p>
+        </div>
+
+        <div class="mt-6 p-3 rounded-lg bg-white/[0.03] border border-white/[0.07] text-center">
+            <p class="text-xs text-[#525252] leading-relaxed">
+                <strong class="text-[#737373]">Conta padrão:</strong><br/>
+                E-mail: <strong class="text-[#a3a3a3]">admin@admin.com</strong><br/>
+                Senha: <strong class="text-[#a3a3a3]">admin123</strong><br/>
+                <span class="text-[#525252] mt-1 block">Altere a senha após o primeiro acesso em Autores → Editar.</span>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

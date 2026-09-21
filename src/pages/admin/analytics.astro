@@ -1,0 +1,17 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import AnalyticsPage from '../../components/admin/AnalyticsPage';
+---
+
+<AdminLayout title="Analytics - Admin">
+    <div class="mb-8">
+        <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-1">
+            Analytics
+        </h1>
+        <p class="text-[#a3a3a3] text-sm">
+            Visitas, sessões e páginas mais acessadas — dados do Google Analytics 4
+        </p>
+    </div>
+
+    <AnalyticsPage client:load />
+</AdminLayout>

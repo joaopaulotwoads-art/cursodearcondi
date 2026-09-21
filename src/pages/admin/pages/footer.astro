@@ -1,0 +1,32 @@
+---
+/**
+ * admin/pages/footer.astro
+ * 
+ * Página de edição do Rodapé (singleton).
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import FooterEditor from '../../../components/admin/FooterEditor.tsx';
+import { readSingleton } from '../../../utils/singleton-utils';
+
+// Obter tema ativo
+const settings = await getEntry('siteSettings', 'settings');
+const activeThemeId = settings?.data?.activeTheme || 'classic';
+
+const initialData = await readSingleton('footer', activeThemeId);
+---
+
+<AdminLayout title="Rodapé - CNX Agency Admin">
+    <div id="footer-editor-wrapper" class="min-h-[400px]">
+        <FooterEditor 
+            client:only="react"
+            initialData={initialData}
+        />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar páginas.</p>
+        </div>
+    </noscript>
+</AdminLayout>

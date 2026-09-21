@@ -1,0 +1,21 @@
+---
+/**
+ * admin/gerar-paginas/index.astro
+ *
+ * Página administrativa do Gerador de Páginas Locais (rank and rent SEO programático).
+ * Wizard de 3 passos: Keywords → Bairros → Confirmar.
+ * Gera em massa as páginas /[bairro]/[servico] ativando os pares nicho+bairro.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import GerarPaginas from '../../../components/admin/GerarPaginas';
+import { verifySession, SESSION_COOKIE } from '../../../utils/auth-utils';
+
+const token = Astro.cookies.get(SESSION_COOKIE)?.value;
+const sessionUser = token ? verifySession(token) : null;
+if (!sessionUser) return Astro.redirect('/admin/login');
+---
+
+<AdminLayout title="Page Generator - CNX Admin">
+    <GerarPaginas client:only="react" />
+</AdminLayout>

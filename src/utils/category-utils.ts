@@ -80,11 +80,11 @@ export async function writeCategory(slug: string, data: CategoryData): Promise<b
         const filename = slugToFilename(slug);
 
         if (isGitHubConfigured()) {
-            return (await githubWriteFile(
+            return githubWriteFile(
                 `src/content/categories/${filename}`,
                 yamlContent,
                 `content: save category "${slug}"`,
-            )).ok;
+            );
         }
 
         const filePath = path.join(CATEGORIES_DIR, filename);

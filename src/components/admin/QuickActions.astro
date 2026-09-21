@@ -1,0 +1,51 @@
+---
+/**
+ * QuickActions.astro
+ * 
+ * Widget de ações rápidas para o dashboard.
+ * Fornece acesso direto às ações mais comuns do CMS.
+ * Design com botões destacados e ícones visuais.
+ */
+
+const actions = [
+    {
+        label: 'Criar Novo Post',
+        icon: '✍️',
+        href: '/admin/posts/new',
+    },
+    {
+        label: 'Adicionar Autor',
+        icon: '👤',
+        href: '/keystatic/collection/authors/new',
+    },
+    {
+        label: 'Nova Categoria',
+        icon: '🏷️',
+        href: '/keystatic/collection/categories/new',
+    },
+    {
+        label: 'Gerenciar Temas',
+        icon: '🎨',
+        href: '/admin/themes',
+    },
+];
+---
+
+<div class="admin-card p-6">
+    <h2 class="text-lg font-heading font-bold text-[#e5e5e5] mb-6 flex items-center gap-2">
+        <span>⚡</span>
+        Ações Rápidas
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+        {actions.map((action) => (
+            <a 
+                href={action.href}
+                class="admin-btn admin-btn-secondary flex items-center gap-2"
+            >
+                <span class="text-lg">{action.icon}</span>
+                <span>{action.label}</span>
+            </a>
+        ))}
+    </div>
+</div>

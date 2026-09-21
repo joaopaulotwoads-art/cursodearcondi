@@ -1,0 +1,23 @@
+---
+/**
+ * admin/services/[slug].astro
+ *
+ * Página de edição de um serviço existente no painel administrativo.
+ * Carrega o serviço pelo slug e passa os dados para o ServiceEditor.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ServiceEditor from '../../../components/admin/ServiceEditor';
+import { readService } from '../../../utils/service-utils';
+
+const { slug } = Astro.params;
+const serviceFile = await readService(slug as string);
+
+if (!serviceFile) {
+    return Astro.redirect('/admin/gerar-paginas?tab=keywords');
+}
+---
+
+<AdminLayout title={`Editar Serviço — ${serviceFile.data.title}`}>
+    <ServiceEditor service={serviceFile.data} client:only="react" />
+</AdminLayout>

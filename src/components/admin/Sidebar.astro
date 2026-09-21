@@ -1,0 +1,176 @@
+---
+/**
+ * Sidebar.astro
+ *
+ * Barra lateral de navegação do painel admin.
+ * Usa variáveis CSS do sistema dark/light para todas as cores.
+ * Exibe seção Modo Local (Keywords, Bairros, etc.) quando siteMode === 'local'.
+ */
+
+import { getEntry } from 'astro:content';
+import { getEffectiveSiteMode } from '../../utils/admin-site-mode';
+
+interface Props {
+    user?: { slug: string; name: string; adminRole: 'admin' | 'editor' } | undefined;
+}
+
+const { user } = Astro.props;
+const p       = Astro.url.pathname;
+const isAdmin = user?.adminRole === 'admin';
+
+const settings  = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode  = getEffectiveSiteMode(Astro.cookies, settings);
+const isLocal   = siteMode === 'local';
+
+const active = (href: string) =>
+    href === '/admin'
+        ? p === '/admin'
+        : p === href || p.startsWith(href + '/');
+
+const isConfigPath = (href: string) =>
+    p === href || p.startsWith(href + '/');
+const configExpanded =
+    isConfigPath('/admin/configuracoes') ||
+    isConfigPath('/admin/pixels') ||
+    isConfigPath('/admin/import');
+const isConfigAtualizacoes = p === '/admin/configuracoes/atualizacoes';
+
+// Itens principais (flat)
+const mainItems = [
+    { label: 'Dashboard',       icon: '📊', href: '/admin'              },
+    { label: 'Posts',           icon: '📝', href: '/admin/posts'         },
+    { label: 'Autores',         icon: '👤', href: '/admin/authors'       },
+    { label: 'Categorias',      icon: '🏷️', href: '/admin/categories'    },
+    ...(isLocal ? [
+        { label: 'Page Generator',  icon: '🚀', href: '/admin/gerar-paginas' },
+    ] : []),
+    { label: 'Mídia',           icon: '📷', href: '/admin/media'         },
+    { label: 'Páginas',         icon: '📄', href: '/admin/pages'          },
+    { label: 'Leads',           icon: '📋', href: '/admin/leads'          },
+    ...(isAdmin ? [
+        { label: 'Analytics',       icon: '📈', href: '/admin/analytics'    },
+    ] : []),
+];
+---
+
+<aside
+    id="tour-sidebar"
+    class="w-64 flex flex-col"
+    style="background: var(--admin-surface); border-right: 1px solid var(--admin-border);"
+>
+    <!-- Logo/Brand -->
+    <div class="p-6" style="border-bottom: 1px solid var(--admin-border);">
+        <a href="/" class="flex items-center gap-3 group">
+            <div
+                class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-lg transition-colors"
+                style="background: var(--admin-logo-bg); border: 1px solid var(--admin-border); color: var(--admin-text);"
+            >
+                CNX
+            </div>
+            <div>
+                <h1 class="font-heading font-bold text-base leading-tight" style="color: var(--admin-text);">CNX Agency</h1>
+                <p class="text-[10px] uppercase tracking-wider" style="color: var(--admin-text-subtle);">Admin</p>
+            </div>
+        </a>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="tour-nav" class="flex-1 p-3 space-y-1 overflow-y-auto">
+        {mainItems.map((item) => {
+            const tourId =
+                item.href === '/admin/posts'    ? 'tour-posts-link'   :
+                item.href === '/admin/authors'  ? 'tour-authors-link' :
+                item.href === '/admin/pages'    ? 'tour-pages-link'   : undefined;
+            return (
+                <a
+                    href={item.href}
+                    id={tourId}
+                    class={`admin-sidebar-item ${active(item.href) ? 'active' : ''}`}
+                >
+                    <span class="text-lg">{item.icon}</span>
+                    <span class="font-medium text-sm flex-1">{item.label}</span>
+                </a>
+            );
+        })}
+
+        <!-- Configurações (expandível: IA/SEO, Pixels, Importar WordPress) -->
+        <details class="config-group mt-1" open={configExpanded}>
+            <summary class="admin-sidebar-item cursor-pointer list-none flex items-center gap-3 px-3 py-2 rounded-lg" style={{ color: 'var(--admin-text)' }}>
+                <span class="text-lg">⚙️</span>
+                <span class="font-medium text-sm flex-1">Configurações</span>
+                <span class="config-chevron text-xs opacity-60">›</span>
+            </summary>
+            <div class="ml-4 mt-1 space-y-1 border-l-2 pl-3" style={{ borderColor: 'var(--admin-border)' }}>
+                <a
+                    href="/admin/configuracoes"
+                    class={`admin-sidebar-item block py-1.5 ${active('/admin/configuracoes') && !active('/admin/configuracoes/changelog') && !isConfigAtualizacoes ? 'active' : ''}`}
+                >
+                    <span class="text-sm">🤖</span>
+                    <span class="font-medium text-sm flex-1">IA & SEO</span>
+                </a>
+                <a
+                    href="/admin/configuracoes/atualizacoes"
+                    class={`admin-sidebar-item block py-1.5 ${isConfigAtualizacoes ? 'active' : ''}`}
+                >
+                    <span class="text-sm">🔄</span>
+                    <span class="font-medium text-sm flex-1">Atualizações</span>
+                </a>
+                <a
+                    href="/admin/configuracoes/changelog"
+                    class={`admin-sidebar-item block py-1.5 ${active('/admin/configuracoes/changelog') ? 'active' : ''}`}
+                >
+                    <span class="text-sm">📋</span>
+                    <span class="font-medium text-sm flex-1">Changelog</span>
+                </a>
+                {isAdmin ? (
+                    <>
+                        <a
+                            href="/admin/pixels"
+                            class={`admin-sidebar-item block py-1.5 ${active('/admin/pixels') ? 'active' : ''}`}
+                        >
+                            <span class="text-sm">📡</span>
+                            <span class="font-medium text-sm flex-1">Pixels</span>
+                        </a>
+                        <a
+                            href="/admin/import/wordpress"
+                            class={`admin-sidebar-item block py-1.5 ${active('/admin/import') ? 'active' : ''}`}
+                        >
+                            <span class="text-sm">📥</span>
+                            <span class="font-medium text-sm flex-1">Importar WordPress</span>
+                        </a>
+                    </>
+                ) : null}
+            </div>
+        </details>
+
+        {isLocal ? (
+            <a
+                href="/admin/templates"
+                class={`admin-sidebar-item mt-1 ${active('/admin/templates') ? 'active' : ''}`}
+            >
+                <span class="text-lg">🎨</span>
+                <span class="font-medium text-sm flex-1">Template</span>
+            </a>
+        ) : null}
+    </nav>
+
+    <!-- Footer -->
+    <div class="p-3 space-y-1" style="border-top: 1px solid var(--admin-border);">
+        <a
+            href="/admin/ajuda"
+            class={`admin-sidebar-item ${active('/admin/ajuda') ? 'active' : ''}`}
+        >
+            <span>❓</span>
+            <span class="text-sm">Ajuda</span>
+        </a>
+        <a
+            id="tour-view-site"
+            href="/"
+            target="_blank"
+            class="admin-sidebar-item"
+        >
+            <span>👁️</span>
+            <span class="text-sm">Ver Site</span>
+        </a>
+    </div>
+</aside>

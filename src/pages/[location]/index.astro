@@ -5,26 +5,14 @@
  * Página do bairro/cidade — lista os serviços disponíveis naquela localidade.
  * Corrige o bug do breadcrumb: ao clicar no bairro, em vez de 404, exibe esta página.
  * URL: /{bairro-slug} — ex: /copacabana
- *
- * Em modo blog, um único segmento na raiz (ex.: post na raiz) não pode ser tratado aqui:
- * reescrevemos para /cnx-blog-resolve/... (ver resolveBlogRootSegment).
  */
 
-import { getEntry } from 'astro:content';
 import LocalLayout from '../../layouts/LocalLayout.astro';
 import { readLocation } from '../../utils/location-utils';
 import { listServices } from '../../utils/service-utils';
 import { readSingleton } from '../../utils/singleton-utils';
 
 const { location: locationSlug } = Astro.params;
-
-const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const siteMode = (settings?.data?.siteMode || 'blog') as string;
-
-if (siteMode !== 'local') {
-  return Astro.rewrite(new URL(`/cnx-blog-resolve/${locationSlug}/`, Astro.url));
-}
-
 const locationFile = await readLocation(locationSlug as string);
 
 if (!locationFile) {

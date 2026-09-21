@@ -1,0 +1,69 @@
+---
+/**
+ * admin/pages/about.astro
+ *
+ * Página de edição do Sobre (singleton).
+ * No Modo Local, edita local/about.yaml. No Modo Blog, edita classic/about.yaml.
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import AboutEditor from '../../../components/admin/AboutEditor.tsx';
+import { readSingleton } from '../../../utils/singleton-utils';
+import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
+const isLocal = siteMode === 'local';
+
+const themeId = isLocal ? 'local' : 'classic';
+let initialData = await readSingleton('about', themeId);
+
+if (isLocal && !initialData) {
+    const localHome = await readSingleton('home', 'local') || {};
+    initialData = {
+        heroTitle: localHome.aboutTitle || 'Quem Somos',
+        heroSubtitle: localHome.aboutSubtitle || '',
+        aboutImage: localHome.aboutImage || null,
+        aboutText: localHome.aboutText || '',
+        aboutStats: localHome.aboutStats || [],
+        missionTitle: 'Nossa Missão',
+        missionDescription: localHome.aboutText || '',
+        visionTitle: 'Nossa Visão',
+        visionDescription: 'Ser referência em atendimento na nossa região.',
+        values: localHome.aboutValues || [
+            { icon: '⭐', title: 'Qualidade', description: 'Serviços executados com excelência.' },
+            { icon: '⏱️', title: 'Pontualidade', description: 'Compromisso com prazos.' },
+            { icon: '💬', title: 'Transparência', description: 'Orçamento claro e sem surpresas.' },
+            { icon: '🛡️', title: 'Garantia', description: 'Trabalho com garantia.' },
+        ],
+        valuesTitle: 'Nossos Valores',
+        differentialsTitle: 'Por que nos escolher?',
+        differentials: localHome.aboutDifferentials || [
+            'Profissionais qualificados e certificados',
+            'Orçamento sem compromisso',
+            'Atendimento rápido na sua região',
+            'Materiais de qualidade',
+            'Garantia em todos os serviços',
+        ],
+        ctaTitle: localHome.ctaTitle || 'Precisa de ajuda agora?',
+        ctaDescription: localHome.ctaText || '',
+        ctaButtonText: localHome.ctaButtonText || 'Chamar no WhatsApp',
+    };
+}
+---
+
+<AdminLayout title="Sobre Nós - CNX Agency Admin">
+    <div id="about-editor-wrapper" class="min-h-[400px]">
+        <AboutEditor
+            client:only="react"
+            initialData={initialData}
+            themeId={themeId}
+        />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar páginas.</p>
+        </div>
+    </noscript>
+</AdminLayout>

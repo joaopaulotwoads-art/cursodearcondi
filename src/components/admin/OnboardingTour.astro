@@ -1,0 +1,518 @@
+---
+/**
+ * OnboardingTour.astro
+ *
+ * Componente de onboarding para novos usuários do painel admin.
+ * Inclui dois elementos:
+ *
+ * 1. CHECKLIST — Card com 5 tarefas iniciais que guia o usuário pelos
+ *    primeiros passos. Detecta automaticamente posts e categorias criados.
+ *    Persiste progresso no localStorage. Desaparece quando tudo é concluído.
+ *
+ * 2. TOUR INTERATIVO — Tour passo-a-passo usando Driver.js que destaca
+ *    elementos do painel com popovers explicativos. Pode ser iniciado pelo
+ *    checklist ou pelo botão flutuante "?" sempre visível.
+ *
+ * Props:
+ *   postCount      — número de posts (auto-marca tarefa de criar post)
+ *   categoryCount  — número de categorias (auto-marca tarefa de categoria)
+ *   isDefaultAccount — true se ainda usa admin@admin.com (mostra aviso senha)
+ */
+
+interface Props {
+    postCount: number;
+    categoryCount: number;
+    isDefaultAccount: boolean;
+}
+
+const { postCount, categoryCount, isDefaultAccount } = Astro.props;
+---
+
+<!-- ── Checklist de primeiros passos ─────────────────────────────── -->
+<div id="onboarding-checklist" class="mb-6" style="display:none;">
+    <div class="admin-card overflow-hidden" style="border-color: rgba(168,85,247,0.25); background: linear-gradient(135deg, rgba(168,85,247,0.04) 0%, transparent 60%);">
+
+        <!-- Header -->
+        <div style="padding: 1rem 1.25rem; border-bottom: 1px solid var(--admin-border); display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.625rem;">
+                <span style="font-size: 1.1rem;">🚀</span>
+                <div>
+                    <div style="font-size: 0.875rem; font-weight: 700; color: var(--admin-text);">Primeiros Passos</div>
+                    <div style="font-size: 0.72rem; color: var(--admin-text-muted);">Complete as tarefas abaixo para configurar seu site</div>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <!-- Progress -->
+                <span id="checklist-count" style="font-size: 0.72rem; color: var(--admin-text-subtle); white-space: nowrap;"></span>
+                <!-- Tour button -->
+                <button
+                    id="start-tour-btn"
+                    style="font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px; background: rgba(168,85,247,0.15); border: 1px solid rgba(168,85,247,0.3); color: #c084fc; cursor: pointer; white-space: nowrap; transition: all 0.15s;"
+                >
+                    ▶ Tour rápido
+                </button>
+                <!-- Dismiss -->
+                <button
+                    id="dismiss-checklist-btn"
+                    title="Fechar guia"
+                    style="font-size: 0.9rem; width: 26px; height: 26px; border-radius: 6px; background: transparent; border: 1px solid var(--admin-border); color: var(--admin-text-subtle); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s;"
+                >
+                    ✕
+                </button>
+            </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div style="height: 3px; background: var(--admin-border);">
+            <div id="checklist-bar" style="height: 100%; background: linear-gradient(90deg, #a855f7, #ec4899); transition: width 0.4s ease; width: 0%;"></div>
+        </div>
+
+        <!-- Tasks -->
+        <div style="padding: 0.875rem 1.25rem; display: flex; flex-direction: column; gap: 0.375rem;" id="checklist-tasks">
+
+            <label class="checklist-item checklist-item-workflow" data-key="workflow" data-href="/admin/ajuda#primeiros-passos">
+                <input type="checkbox" class="checklist-cb" />
+                <span class="checklist-icon">🔄</span>
+                <div class="checklist-text">
+                    <span class="checklist-label">Ativar atualizações automáticas do template</span>
+                    <span class="checklist-desc">Permite receber melhorias futuras com 1 clique no painel (obrigatório)</span>
+                </div>
+                <a href="/admin/ajuda#primeiros-passos" class="checklist-action checklist-action-workflow" tabindex="-1">Ativar →</a>
+            </label>
+
+            <label class="checklist-item" data-key="password" data-href="/admin/authors">
+                <input type="checkbox" class="checklist-cb" />
+                <span class="checklist-icon">🔑</span>
+                <div class="checklist-text">
+                    <span class="checklist-label">Alterar email e senha padrão</span>
+                    <span class="checklist-desc">Troque as credenciais padrão por suas próprias</span>
+                </div>
+                <a href="/admin/authors" class="checklist-action" tabindex="-1">Ir →</a>
+            </label>
+
+            <label class="checklist-item" data-key="post" data-href="/admin/posts/new">
+                <input type="checkbox" class="checklist-cb" />
+                <span class="checklist-icon">📝</span>
+                <div class="checklist-text">
+                    <span class="checklist-label">Criar seu primeiro post</span>
+                    <span class="checklist-desc">Publique um artigo no blog</span>
+                </div>
+                <a href="/admin/posts/new" class="checklist-action" tabindex="-1">Criar →</a>
+            </label>
+
+            <label class="checklist-item" data-key="category" data-href="/admin/categories">
+                <input type="checkbox" class="checklist-cb" />
+                <span class="checklist-icon">🏷️</span>
+                <div class="checklist-text">
+                    <span class="checklist-label">Adicionar uma categoria</span>
+                    <span class="checklist-desc">Organize seus posts por categoria</span>
+                </div>
+                <a href="/admin/categories" class="checklist-action" tabindex="-1">Criar →</a>
+            </label>
+
+            <label class="checklist-item" data-key="pages" data-href="/admin/pages">
+                <input type="checkbox" class="checklist-cb" />
+                <span class="checklist-icon">⚙️</span>
+                <div class="checklist-text">
+                    <span class="checklist-label">Configurar nome e logo do site</span>
+                    <span class="checklist-desc">Personalize a identidade visual</span>
+                </div>
+                <a href="/admin/pages" class="checklist-action" tabindex="-1">Configurar →</a>
+            </label>
+
+            <label class="checklist-item" data-key="viewsite" data-href="/" data-external="true">
+                <input type="checkbox" class="checklist-cb" />
+                <span class="checklist-icon">👁️</span>
+                <div class="checklist-text">
+                    <span class="checklist-label">Visitar o site publicado</span>
+                    <span class="checklist-desc">Veja como o seu site aparece para os visitantes</span>
+                </div>
+                <a href="/" target="_blank" class="checklist-action" tabindex="-1">Ver →</a>
+            </label>
+
+        </div>
+
+        <!-- Footer -->
+        <div id="checklist-footer-done" style="display:none; padding: 0.875rem 1.25rem; border-top: 1px solid rgba(74,222,128,0.15); background: rgba(74,222,128,0.04); display: none;">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1rem;">🎉</span>
+                    <span style="font-size: 0.8rem; font-weight: 600; color: #4ade80;">Configuração inicial concluída!</span>
+                </div>
+                <button id="dismiss-done-btn" style="font-size: 0.72rem; color: var(--admin-text-subtle); background: none; border: none; cursor: pointer; text-decoration: underline;">
+                    Fechar este guia
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ── Botão flutuante de tour ────────────────────────────────────── -->
+<button
+    id="floating-tour-btn"
+    title="Iniciar tour do painel"
+    style="position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9000; width: 42px; height: 42px; border-radius: 999px; background: rgba(168,85,247,0.2); border: 1px solid rgba(168,85,247,0.4); color: #c084fc; font-size: 1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(168,85,247,0.2); transition: all 0.2s; font-family: sans-serif;"
+>
+    ?
+</button>
+
+<!-- ── Estilos ────────────────────────────────────────────────────── -->
+<style>
+    .checklist-item {
+        display: flex;
+        align-items: center;
+        gap: 0.625rem;
+        padding: 0.625rem 0.75rem;
+        border-radius: 8px;
+        border: 1px solid var(--admin-border);
+        background: var(--admin-surface);
+        cursor: pointer;
+        transition: all 0.15s;
+        user-select: none;
+    }
+    .checklist-item:hover {
+        border-color: rgba(255,255,255,0.12);
+        background: var(--admin-surface-hover);
+    }
+    .checklist-item.done {
+        opacity: 0.55;
+        border-color: rgba(74,222,128,0.2);
+        background: rgba(74,222,128,0.04);
+    }
+    .checklist-item.done .checklist-label {
+        text-decoration: line-through;
+        color: var(--admin-text-muted);
+    }
+    .checklist-cb {
+        width: 16px;
+        height: 16px;
+        border-radius: 4px;
+        flex-shrink: 0;
+        accent-color: #a855f7;
+        cursor: pointer;
+    }
+    .checklist-icon { font-size: 1rem; flex-shrink: 0; }
+    .checklist-text { flex: 1; min-width: 0; }
+    .checklist-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--admin-text);
+        line-height: 1.3;
+    }
+    .checklist-desc {
+        display: block;
+        font-size: 0.7rem;
+        color: var(--admin-text-subtle);
+        margin-top: 1px;
+    }
+    .checklist-action {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--admin-accent);
+        text-decoration: none;
+        padding: 3px 8px;
+        border-radius: 5px;
+        border: 1px solid rgba(59,130,246,0.2);
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: all 0.15s;
+    }
+    .checklist-action:hover {
+        background: rgba(59,130,246,0.1);
+    }
+    .checklist-item.done .checklist-action {
+        display: none;
+    }
+
+    /* Override driver.js para identidade visual CNX */
+    .driver-popover {
+        background: #1a1a1a !important;
+        border: 1px solid rgba(168,85,247,0.3) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(168,85,247,0.1) !important;
+        color: #e5e5e5 !important;
+        max-width: 320px !important;
+    }
+    .driver-popover-title {
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        color: #fff !important;
+        font-family: 'Outfit', sans-serif !important;
+    }
+    .driver-popover-description {
+        font-size: 0.8rem !important;
+        color: #a3a3a3 !important;
+        line-height: 1.6 !important;
+    }
+    .driver-popover-progress-text {
+        font-size: 0.7rem !important;
+        color: #525252 !important;
+    }
+    .driver-popover-footer button {
+        font-size: 0.75rem !important;
+        border-radius: 7px !important;
+        padding: 6px 14px !important;
+        font-weight: 600 !important;
+    }
+    .driver-popover-next-btn {
+        background: rgba(168,85,247,0.2) !important;
+        border: 1px solid rgba(168,85,247,0.4) !important;
+        color: #c084fc !important;
+    }
+    .driver-popover-next-btn:hover {
+        background: rgba(168,85,247,0.35) !important;
+    }
+    .driver-popover-prev-btn {
+        background: transparent !important;
+        border: 1px solid rgba(255,255,255,0.1) !important;
+        color: #737373 !important;
+    }
+    .driver-popover-close-btn {
+        color: #525252 !important;
+    }
+    .driver-overlay {
+        background: rgba(0,0,0,0.75) !important;
+    }
+    #floating-tour-btn:hover {
+        background: rgba(168,85,247,0.35) !important;
+        transform: scale(1.08);
+        box-shadow: 0 6px 28px rgba(168,85,247,0.35) !important;
+    }
+</style>
+
+<!-- ── Script: Checklist + Tour ───────────────────────────────────── -->
+<script>
+    import { driver } from 'driver.js';
+    import 'driver.js/dist/driver.css';
+
+    // ── Dados do servidor (passados via elemento tour-server-data) ───
+    const serverData            = document.getElementById('tour-server-data');
+    const SERVER_POST_COUNT     = parseInt(serverData?.dataset.postCount     || '0');
+    const SERVER_CATEGORY_COUNT = parseInt(serverData?.dataset.categoryCount || '0');
+    const IS_DEFAULT_ACCOUNT    = serverData?.dataset.isDefaultAccount === 'true';
+
+    // ── Chaves do localStorage ───────────────────────────────────────
+    const KEY_PREFIX    = 'cnx_check_';
+    const KEY_DISMISSED = 'cnx_checklist_dismissed';
+    const KEY_TOUR_DONE = 'cnx_tour_shown';
+
+    // ── Checklist items ──────────────────────────────────────────────
+    function getChecked(key: string): boolean {
+        if (key === 'post')     return SERVER_POST_COUNT > 0;
+        if (key === 'category') return SERVER_CATEGORY_COUNT > 0;
+        return localStorage.getItem(KEY_PREFIX + key) === '1';
+    }
+    function setChecked(key: string, val: boolean) {
+        localStorage.setItem(KEY_PREFIX + key, val ? '1' : '0');
+    }
+
+    // ── Inicializa o checklist ───────────────────────────────────────
+    function initChecklist() {
+        const dismissed = localStorage.getItem(KEY_DISMISSED);
+        const wrapper   = document.getElementById('onboarding-checklist');
+        if (!wrapper) return;
+
+        // Atualiza link do workflow para GitHub Actions se disponível
+        const actionsUrl = serverData?.dataset.actionsUrl;
+        const workflowItem = wrapper.querySelector<HTMLElement>('.checklist-item-workflow');
+        if (workflowItem && actionsUrl) {
+            workflowItem.dataset.href = actionsUrl;
+            workflowItem.dataset.external = 'true';
+            const link = workflowItem.querySelector<HTMLAnchorElement>('.checklist-action-workflow');
+            if (link) { link.href = actionsUrl; link.target = '_blank'; link.rel = 'noopener noreferrer'; }
+        }
+
+        const items = wrapper.querySelectorAll<HTMLElement>('.checklist-item');
+        let doneCount = 0;
+
+        items.forEach(item => {
+            const key = item.dataset.key!;
+            const cb  = item.querySelector<HTMLInputElement>('.checklist-cb')!;
+            const checked = getChecked(key);
+            cb.checked = checked;
+            if (checked) { item.classList.add('done'); doneCount++; }
+
+            // Clique no checkbox
+            cb.addEventListener('change', () => {
+                setChecked(key, cb.checked);
+                item.classList.toggle('done', cb.checked);
+                updateProgress();
+            });
+
+            // Clique no link externo "Ver site" → marca como feito
+            if (item.dataset.external === 'true') {
+                item.querySelector('a')?.addEventListener('click', () => {
+                    setChecked(key, true);
+                    cb.checked = true;
+                    item.classList.add('done');
+                    setTimeout(updateProgress, 100);
+                });
+            }
+        });
+
+        updateProgress();
+
+        // Mostra o checklist se não foi dispensado e não está 100% feito há 3 dias
+        if (!dismissed) {
+            wrapper.style.display = 'block';
+        }
+
+        // Botão dispensar
+        document.getElementById('dismiss-checklist-btn')?.addEventListener('click', () => {
+            localStorage.setItem(KEY_DISMISSED, '1');
+            wrapper.style.display = 'none';
+        });
+        document.getElementById('dismiss-done-btn')?.addEventListener('click', () => {
+            localStorage.setItem(KEY_DISMISSED, '1');
+            wrapper.style.display = 'none';
+        });
+
+        // Botão tour dentro do checklist
+        document.getElementById('start-tour-btn')?.addEventListener('click', startTour);
+    }
+
+    function updateProgress() {
+        const wrapper = document.getElementById('onboarding-checklist');
+        if (!wrapper) return;
+        const items     = wrapper.querySelectorAll<HTMLElement>('.checklist-item');
+        const doneItems = wrapper.querySelectorAll<HTMLElement>('.checklist-item.done');
+        const total     = items.length;
+        const done      = doneItems.length;
+        const pct       = Math.round((done / total) * 100);
+
+        const bar     = document.getElementById('checklist-bar');
+        const count   = document.getElementById('checklist-count');
+        const footer  = document.getElementById('checklist-footer-done');
+
+        if (bar)   bar.style.width   = pct + '%';
+        if (count) count.textContent = done + '/' + total + ' concluídos';
+
+        if (done === total && footer) {
+            footer.style.display = 'flex';
+        }
+    }
+
+    // ── Tour interativo ──────────────────────────────────────────────
+    function startTour() {
+        const driverObj = driver({
+            showProgress: true,
+            progressText: 'Passo {{current}} de {{total}}',
+            nextBtnText: 'Próximo →',
+            prevBtnText: '← Anterior',
+            doneBtnText: '✓ Concluir',
+            allowClose: true,
+            overlayOpacity: 0.75,
+            stagePadding: 8,
+            stageRadius: 10,
+            onDestroyed: () => {
+                localStorage.setItem(KEY_TOUR_DONE, '1');
+            },
+            steps: [
+                {
+                    popover: {
+                        title: '👋 Bem-vindo ao CNX CMS!',
+                        description: 'Vou te mostrar os principais recursos do painel em menos de 2 minutos. Use os botões abaixo para navegar ou feche para pular.',
+                        side: 'over',
+                        align: 'center',
+                    },
+                },
+                {
+                    element: '#tour-stats',
+                    popover: {
+                        title: '📊 Seus números',
+                        description: 'Aqui você acompanha em tempo real: total de posts, quantos estão publicados, rascunhos e autores cadastrados.',
+                        side: 'bottom',
+                        align: 'start',
+                    },
+                },
+                {
+                    element: '#tour-quick-actions',
+                    popover: {
+                        title: '⚡ Ações Rápidas',
+                        description: 'O botão <strong>"+ Novo Post"</strong> é o que você vai usar com mais frequência. Dá pra criar um post com 1 clique direto daqui.',
+                        side: 'left',
+                        align: 'start',
+                    },
+                },
+                {
+                    element: '#tour-sidebar',
+                    popover: {
+                        title: '🗂️ Menu de navegação',
+                        description: 'O menu lateral dá acesso a todas as seções: Posts, Autores, Categorias, Páginas, Analytics e muito mais.',
+                        side: 'right',
+                        align: 'start',
+                    },
+                },
+                {
+                    element: '#tour-posts-link',
+                    popover: {
+                        title: '📝 Posts',
+                        description: 'Aqui você cria, edita e publica artigos do blog. Todo post salvo aparece no site em ~1 minuto.',
+                        side: 'right',
+                        align: 'center',
+                    },
+                },
+                {
+                    element: '#tour-authors-link',
+                    popover: {
+                        title: '👤 Autores',
+                        description: 'Gerencie os autores do site e seus acessos ao painel. <strong>Importante:</strong> é aqui que você troca o email e a senha padrão.',
+                        side: 'right',
+                        align: 'center',
+                    },
+                },
+                {
+                    element: '#tour-pages-link',
+                    popover: {
+                        title: '⚙️ Páginas',
+                        description: 'Configure o nome do site, logo, página inicial, menu, rodapé e muito mais.',
+                        side: 'right',
+                        align: 'center',
+                    },
+                },
+                {
+                    element: '#tour-view-site',
+                    popover: {
+                        title: '👁️ Ver o site publicado',
+                        description: 'Clique aqui para ver como o seu site aparece para os visitantes. Abre em uma nova aba.',
+                        side: 'top',
+                        align: 'start',
+                    },
+                },
+                {
+                    element: '#tour-checklist',
+                    popover: {
+                        title: '🚀 Seu guia de primeiros passos',
+                        description: 'Este checklist mostra o que ainda falta configurar. Complete cada tarefa para ter o site funcionando 100%. Você pode fechá-lo quando quiser.',
+                        side: 'bottom',
+                        align: 'start',
+                    },
+                },
+                {
+                    popover: {
+                        title: '🎉 Pronto!',
+                        description: 'Você já conhece os principais recursos do CNX CMS. Qualquer dúvida, clique no <strong>"?"</strong> no canto inferior direito para repetir o tour.<br/><br/>Bom trabalho! 🚀',
+                        side: 'over',
+                        align: 'center',
+                    },
+                },
+            ],
+        });
+
+        driverObj.drive();
+    }
+
+    // ── Botão flutuante "?" ──────────────────────────────────────────
+    document.getElementById('floating-tour-btn')?.addEventListener('click', startTour);
+
+    // ── Auto-iniciar tour na 1ª visita ───────────────────────────────
+    if (!localStorage.getItem(KEY_TOUR_DONE)) {
+        // Pequeno delay para a página carregar
+        setTimeout(startTour, 800);
+    }
+
+    // ── Inicializa ───────────────────────────────────────────────────
+    initChecklist();
+</script>

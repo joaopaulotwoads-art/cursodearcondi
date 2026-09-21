@@ -1,0 +1,36 @@
+---
+/**
+ * admin/nichos/index.astro
+ *
+ * Página administrativa dos Nichos do Modo Local (rank and rent).
+ * Exibe NichosManager com lista de nichos, cards de stats,
+ * Matriz de Dominação por nicho e integração com Serviços.
+ */
+
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import NichosManager from '../../../components/admin/NichosManager';
+import { listLocations } from '../../../utils/location-utils';
+import { verifySession, SESSION_COOKIE } from '../../../utils/auth-utils';
+
+const token = Astro.cookies.get(SESSION_COOKIE)?.value;
+const sessionUser = token ? verifySession(token) : null;
+if (!sessionUser) return Astro.redirect('/admin/login');
+
+const locFiles = await listLocations();
+const locations = locFiles.map(l => ({
+    name:     l.data.name,
+    slug:     l.data.slug,
+    state:    l.data.state,
+    city:     l.data.city,
+    citySlug: l.data.citySlug,
+    type:     l.data.type,
+    active:   l.data.active !== false,
+}));
+---
+
+<AdminLayout title="Nichos - CNX Agency Admin">
+    <NichosManager
+        initialLocations={locations}
+        client:only="react"
+    />
+</AdminLayout>

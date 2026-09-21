@@ -1,96 +1,64 @@
 import { defineMiddleware } from 'astro:middleware';
-import {
-    readSiteSettings,
-    canonicalPathname,
-    shouldRedirectAddTrailingSlash,
-    shouldRedirectAddTrailingSlashApi,
-} from './utils/read-site-settings';
+import { verifySession, SESSION_COOKIE } from './utils/auth-utils';
+
+const ADMIN_ONLY_PATHS = [
+    '/admin/pixels',
+    '/admin/analytics',
+    '/admin/import',
+    '/api/admin/singletons/pixels',
+    '/api/admin/analytics',
+    '/api/admin/import',
+];
 
 export const onRequest = defineMiddleware(async (context, next) => {
-    const { pathname, searchParams, hostname, href } = context.url;
+    const { pathname } = context.url;
 
-    // 301: www → apex (sem www), alinhado ao domínio principal na Vercel e às meta tags canônicas
-    if (hostname.startsWith('www.')) {
-        const h = hostname.toLowerCase();
-        if (h !== 'www.localhost' && !h.endsWith('.local')) {
-            const dest = new URL(href);
-            dest.hostname = hostname.slice(4);
-            return context.redirect(dest.toString(), 301);
-        }
-    }
+    // Só intercepta rotas do admin
+    const isAdminUI  = pathname.startsWith('/admin');
+    const isAdminAPI = pathname.startsWith('/api/admin');
+    if (!isAdminUI && !isAdminAPI) return next();
 
-    // 308: /api/rota → /api/rota/ (Astro trailingSlash: 'always'). Preserva método em fetch com body.
-    if (shouldRedirectAddTrailingSlashApi(pathname)) {
-        const u = new URL(context.url.href);
-        u.pathname = canonicalPathname(pathname);
-        return context.redirect(u.toString(), 308);
-    }
-
-    // 301: /blog/ferramentas-tecnico-ar-condicionado(/) → /ferramentas-para-ar-condicionado/
-    // Slug renomeado (ver astro.config.mjs). Precisa vir antes da regra genérica
-    // /blog/slug → /slug abaixo, que ainda reescreveria para o slug antigo e cairia em 404.
+    // Rotas públicas — nunca precisam de login
     if (
-        pathname === '/blog/ferramentas-tecnico-ar-condicionado' ||
-        pathname === '/blog/ferramentas-tecnico-ar-condicionado/'
+        pathname === '/admin/login' ||
+        pathname === '/admin/setup' ||
+        pathname.startsWith('/admin/login/') ||
+        pathname.startsWith('/admin/setup/') ||
+        pathname.startsWith('/api/admin/auth/')   // login, logout, setup
     ) {
-        const u = new URL(context.url.href);
-        u.pathname = canonicalPathname('/ferramentas-para-ar-condicionado');
-        return context.redirect(u.toString(), 301);
+        return next();
     }
 
-    // Modo blog: /servicos → home em um passo (antes de forçar barra em /servicos/)
-    if (pathname === '/servicos' || pathname.startsWith('/servicos/')) {
-        try {
-            const settings = await readSiteSettings();
-            if ((settings.siteMode || 'blog') !== 'local') {
-                return context.redirect('/', 301);
-            }
-        } catch {
-            /* continua */
-        }
+    // Verificar cookie de sessão
+    const token = context.cookies.get(SESSION_COOKIE)?.value ?? '';
+    const user  = token ? verifySession(token) : null;
+
+    if (!user) {
+        // Limpar cookie inválido
+        if (token) context.cookies.delete(SESSION_COOKIE, { path: '/' });
+        return isAdminAPI
+            ? new Response(JSON.stringify({ success: false, error: 'Não autorizado' }), {
+                status: 401, headers: { 'Content-Type': 'application/json' },
+              })
+            : context.redirect('/admin/login');
     }
 
-    // 301: /rota → /rota/ (páginas). Canonical e sitemap com barra final.
-    // Alguns clientes fazem HEAD antes de GET, entao tratamos os dois.
-    const method = context.request.method;
-    if ((method === 'GET' || method === 'HEAD') && shouldRedirectAddTrailingSlash(pathname)) {
-        const u = new URL(context.url.href);
-        u.pathname = canonicalPathname(pathname);
-        return context.redirect(u.toString(), 301);
+    // Controle por role (usando o role gravado na sessão)
+    const isAdminOnly = ADMIN_ONLY_PATHS.some(p => pathname.startsWith(p));
+    if (isAdminOnly && user.adminRole !== 'admin') {
+        return isAdminAPI
+            ? new Response(JSON.stringify({ success: false, error: 'Permissão insuficiente' }), {
+                status: 403, headers: { 'Content-Type': 'application/json' },
+              })
+            : context.redirect('/admin?error=permission');
     }
 
-    // 301: /blog?categoria=slug → /slug/ (URLs antigas da listagem por categoria na raiz)
-    const isBlogIndex = pathname === '/blog' || pathname === '/blog/';
-    if (isBlogIndex && searchParams.has('categoria')) {
-        try {
-            const settings = await readSiteSettings();
-            if (settings.blogUrlPrefix === 'root') {
-                const slug = (searchParams.get('categoria') || '').trim();
-                if (slug && !slug.includes('/')) {
-                    const u = new URL(context.url.href);
-                    u.pathname = canonicalPathname(`/${encodeURIComponent(slug)}`);
-                    return context.redirect(u.toString(), 301);
-                }
-            }
-        } catch {
-            /* continua */
-        }
-    }
-
-    // 301: /blog/slug/... → /slug/... (links antigos e Google) quando posts estão na raiz
-    if (pathname.startsWith('/blog/') && pathname.length > '/blog/'.length) {
-        try {
-            const settings = await readSiteSettings();
-            if (settings.blogUrlPrefix === 'root') {
-                const target = pathname.replace(/^\/blog/, '') || '/';
-                const u = new URL(context.url.href);
-                u.pathname = canonicalPathname(target);
-                return context.redirect(u.toString(), 301);
-            }
-        } catch {
-            /* continua */
-        }
-    }
+    // Expor usuário para as páginas/componentes
+    context.locals.user = {
+        slug:      user.slug,
+        name:      user.name,
+        adminRole: user.adminRole,
+    };
 
     return next();
 });

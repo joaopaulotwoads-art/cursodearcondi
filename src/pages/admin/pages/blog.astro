@@ -1,0 +1,34 @@
+---
+/**
+ * admin/pages/blog.astro
+ *
+ * Página de edição dos textos da listagem de posts (/blog).
+ * No Modo Local: edita local/blog.yaml. No Modo Blog: edita classic/blog.yaml.
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import BlogPageEditor from '../../../components/admin/BlogPageEditor.tsx';
+import { readSingleton } from '../../../utils/singleton-utils';
+import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
+const themeId = siteMode === 'local' ? 'local' : 'classic';
+const initialData = await readSingleton('blog', themeId) || await readSingleton('blog', 'classic');
+---
+
+<AdminLayout title="Página de Blog - Admin">
+    <div id="blog-editor-wrapper" class="min-h-[400px]">
+        <BlogPageEditor
+            client:only="react"
+            initialData={initialData}
+            themeId={themeId}
+        />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3]">JavaScript é necessário para editar páginas.</p>
+        </div>
+    </noscript>
+</AdminLayout>

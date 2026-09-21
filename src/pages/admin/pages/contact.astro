@@ -1,0 +1,47 @@
+---
+/**
+ * admin/pages/contact.astro
+ *
+ * Página de edição do Contato (singleton).
+ * No Modo Local, edita local/contact.yaml. No Modo Blog, edita classic/contact.yaml.
+ */
+
+import { getEntry } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import ContactEditor from '../../../components/admin/ContactEditor.tsx';
+import { readSingleton } from '../../../utils/singleton-utils';
+import { getEffectiveSiteMode } from '../../../utils/admin-site-mode';
+
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteMode = getEffectiveSiteMode(Astro.cookies, settings);
+const isLocal = siteMode === 'local';
+
+const themeId = isLocal ? 'local' : 'classic';
+let initialData = await readSingleton('contact', themeId);
+
+if (isLocal && !initialData) {
+    const localHome = await readSingleton('home', 'local') || {};
+    initialData = {
+        heroTitle: 'Entre em Contato',
+        heroSubtitle: localHome.ctaText || 'Estamos prontos para atender. Entre em contato pelo WhatsApp, telefone ou e-mail.',
+        email: localHome.companyEmail || '',
+        phone: localHome.companyPhone || localHome.companyWhatsapp || '',
+        address: [localHome.companyAddress, localHome.companyCity, localHome.companyState, localHome.companyCEP].filter(Boolean).join(' - '),
+    };
+}
+---
+
+<AdminLayout title="Contato - CNX Agency Admin">
+    <div id="contact-editor-wrapper" class="min-h-[400px]">
+        <ContactEditor
+            client:only="react"
+            initialData={initialData}
+            themeId={themeId}
+        />
+    </div>
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar páginas.</p>
+        </div>
+    </noscript>
+</AdminLayout>

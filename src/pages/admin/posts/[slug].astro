@@ -1,0 +1,62 @@
+---
+/**
+ * admin/posts/[slug].astro
+ * 
+ * Página de edição de um post específico.
+ * Suporta criação de novos posts (quando slug = 'new') e edição de posts existentes.
+ * Integra componente React PostEditor com todas as funcionalidades.
+ */
+
+import { getCollection } from 'astro:content';
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import PostEditor from '../../../components/admin/PostEditor.tsx';
+import { readPost } from '../../../utils/post-utils';
+
+const { slug } = Astro.params;
+const isNew = slug === 'new';
+
+// Buscar dados
+const authors = await getCollection('authors');
+const categories = await getCollection('categories');
+
+let post = null;
+if (!isNew && slug) {
+    const postFile = await readPost(slug);
+    if (postFile) {
+        post = {
+            title: postFile.data.title,
+            slug: postFile.data.slug,
+            author: postFile.data.author,
+            category: postFile.data.category,
+            publishedDate: postFile.data.publishedDate,
+            thumbnail: postFile.data.thumbnail,
+            metaTitle: postFile.data.metaTitle,
+            metaDescription: postFile.data.metaDescription,
+            metaImage: postFile.data.metaImage,
+            content: postFile.content,
+        };
+    }
+}
+
+// Preparar dados para o componente
+const authorsList = authors.map(a => ({ id: a.id, name: a.data.name }));
+const categoriesList = categories.map(c => ({ id: c.id, name: c.data.name }));
+---
+
+<AdminLayout title={isNew ? 'Novo Post - CNX Agency Admin' : `Editar Post - ${post?.title || slug}`}>
+    <div id="post-editor-wrapper" class="min-h-[400px]">
+        <PostEditor 
+            client:only="react"
+            post={post || undefined}
+            authors={authorsList}
+            categories={categoriesList}
+        />
+    </div>
+    
+    <noscript>
+        <div class="p-8 text-center">
+            <p class="text-[#a3a3a3] mb-4">JavaScript é necessário para editar posts.</p>
+            <p class="text-[#737373] text-sm">Por favor, habilite JavaScript no seu navegador.</p>
+        </div>
+    </noscript>
+</AdminLayout>

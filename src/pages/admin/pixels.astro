@@ -1,0 +1,22 @@
+---
+/**
+ * admin/pixels.astro - Configuração de GA e Meta Pixel
+ *
+ * Salva pixels no singleton classic.
+ */
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import PixelEditor from '../../components/admin/PixelEditor';
+---
+
+<AdminLayout title="Pixels de Rastreamento - Admin">
+    <div class="mb-8">
+        <h1 class="text-3xl font-heading font-bold text-[#e5e5e5] mb-1">
+            Pixels de Rastreamento
+        </h1>
+        <p class="text-[#a3a3a3] text-sm">
+            Configure Google Analytics e Meta Pixel para monitorar visitas e campanhas
+        </p>
+    </div>
+
+    <PixelEditor client:load themeId="classic" />
+</AdminLayout>
