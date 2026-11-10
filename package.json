@@ -1,7 +1,8 @@
 {
   "name": "cursodearcondicionado",
+  "private": true,
   "type": "module",
-  "version": "1.0.21",
+  "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

@@ -19,21 +19,17 @@ const posts = defineCollection({
         category: z.string().optional(),
         tags: z.array(z.string()).optional(),
         thumbnail: z.string().optional(),
-        /** Imagem principal do post (hero/OG); alias semntico de thumbnail quando usado sozinho. */
+        /** Imagem principal do post (hero/OG); alias semântico de thumbnail quando usado sozinho. */
         image: z.string().optional(),
         imageAlt: z.string().optional(),
         metaTitle: z.string().optional(),
         metaDescription: z.string().optional(),
         metaImage: z.string().optional(),
-        /** `html` = corpo guardado como HTML (ex.: import Ghost); render com set:html. */
-        contentFormat: z.enum(['markdown', 'html']).optional(),
         /**
-         * JSON-LD do post: auto = detecta cards Curso de Ar Condicionadoe (ItemList) ou BlogPosting;
+         * JSON-LD do post: auto = detecta cards de produto (ItemList) ou BlogPosting;
          * blogPosting = artigo informativo; articleItemList = ranking/review; none = desliga.
          */
         seoSchema: z.enum(['auto', 'blogPosting', 'articleItemList', 'none']).optional(),
-        /** Layout editorial: reviewRoundup = artigo tipo ranking (fundo rosado, CTAs amarelos, blocos de review). */
-        articleLayout: z.enum(['default', 'reviewRoundup']).optional(),
         /** Perguntas frequentes (corpo do artigo + FAQPage no JSON-LD). */
         faq: z
             .array(

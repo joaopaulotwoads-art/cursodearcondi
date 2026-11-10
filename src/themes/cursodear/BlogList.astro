@@ -1,6 +1,5 @@
 ---
 import { postUrl } from '../../utils/post-url';
-import { resolvecursodearMediaUrl } from '../../utils/media-url';
 
 interface Props {
   posts: any[];
@@ -27,7 +26,7 @@ const { posts, categoryName } = Astro.props;
     <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
       {posts.map((post) => {
         const url = postUrl(post);
-        const thumb = resolvecursodearMediaUrl(post.data.thumbnail || post.data.metaImage);
+        const thumb = post.data.thumbnail || post.data.metaImage;
         const date = post.data.publishedDate || post.data.date;
         const categoryLabel = post.data.category || 'Geral';
         return (

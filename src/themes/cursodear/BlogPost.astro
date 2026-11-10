@@ -3,7 +3,6 @@ import type { CollectionEntry } from 'astro:content';
 import AffiliateDisclosure from '../../components/cursodear/AffiliateDisclosure.astro';
 import PostArticleToc from '../../components/cursodear/PostArticleToc.astro';
 import { postUrl } from '../../utils/post-url';
-import { resolvecursodearMediaUrl } from '../../utils/media-url';
 import { buildMarkdownToc, POST_TOC_MIN_ITEMS, type PostTocItem } from '../../utils/post-markdown-toc';
 import '../../styles/post-article-toc.css';
 
@@ -18,7 +17,7 @@ interface Props {
 
 const { post, author, reviewer, Content, relatedPosts = [] } = Astro.props;
 const date = post.data.publishedDate;
-const heroImage = resolvecursodearMediaUrl(post.data.thumbnail || post.data.image);
+const heroImage = post.data.thumbnail || post.data.image;
 
 const parsedToc = buildMarkdownToc(post.body || '');
 const articleTocItems: PostTocItem[] = parsedToc.length >= POST_TOC_MIN_ITEMS ? parsedToc : [];
@@ -58,7 +57,7 @@ const showArticleToc = articleTocItems.length > 0;
         <>
           {author.data.avatar ? (
             <img
-              src={resolvecursodearMediaUrl(author.data.avatar)}
+              src={author.data.avatar}
               alt=""
               width="48"
               height="48"
@@ -137,7 +136,7 @@ const showArticleToc = articleTocItems.length > 0;
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-[5.5rem_1fr] sm:gap-x-6 sm:gap-y-4">
           {author.data.avatar ? (
             <img
-              src={resolvecursodearMediaUrl(author.data.avatar)}
+              src={author.data.avatar}
               alt={author.data.name}
               width="96"
               height="96"
@@ -191,7 +190,7 @@ const showArticleToc = articleTocItems.length > 0;
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {relatedPosts.map((rp) => {
           const url = postUrl(rp);
-          const thumb = resolvecursodearMediaUrl(rp.data.thumbnail || rp.data.metaImage);
+          const thumb = rp.data.thumbnail || rp.data.metaImage;
           const rDate = rp.data.publishedDate;
           return (
             <a
