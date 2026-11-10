@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
-    /** Classes de tipografia (@tailwindcss/typography) usadas no corpo dos posts. */
+    /** Tipografia do editor: classes usadas nos node views do TipTap */
     safelist: ['not-prose', 'prose'],
     theme: {
         extend: {

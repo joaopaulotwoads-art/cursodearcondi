@@ -1,0 +1,139 @@
+---
+/**
+ * ServicePage.astro — Tema Local
+ *
+ * Template para páginas individuais de serviço (/servicos/[slug]).
+ * Estrutura: Hero → Benefícios → Descrição → CTA WhatsApp
+ * Inclui schema Service + LocalBusiness JSON-LD para SEO local.
+ */
+
+import LocalLayout from '../../layouts/LocalLayout.astro';
+import { readSingleton } from '../../utils/singleton-utils';
+
+interface Props {
+    service: any;
+}
+
+const { service } = Astro.props;
+
+const localData = await readSingleton('home', 'local');
+const company   = localData?.companyName      || 'Minha Empresa';
+const whatsapp  = localData?.companyWhatsapp  || '';
+const waMsg     = encodeURIComponent(`Olá! Vim pelo site e gostaria de um orçamento para: ${service.title}`);
+const waUrl     = whatsapp ? `https://wa.me/55${whatsapp.replace(/\D/g,'')}?text=${waMsg}` : '#';
+const phone     = localData?.companyPhone || '';
+const benefits: string[] = service.benefits || [];
+---
+
+<LocalLayout
+    title={service.metaTitle || service.title}
+    description={service.metaDescription || service.shortDescription || ''}
+    schemaService={service.title}
+>
+
+    <!-- ── Hero da Página de Serviço ─────────────────────────────── -->
+    <section style="background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); padding: 5rem 1.5rem 4rem; text-align: center;">
+        <div class="container mx-auto max-w-3xl">
+            {service.icon && (
+                <div style="font-size: 3rem; margin-bottom: 1rem;">{service.icon}</div>
+            )}
+            <h1 style="font-size: clamp(1.75rem, 4vw, 2.75rem); font-weight: 900; color: #fff; margin-bottom: 1rem; font-family: 'Outfit', sans-serif; line-height: 1.2;">
+                {service.heroTitle || service.title}
+            </h1>
+            {(service.heroSubtitle || service.shortDescription) && (
+                <p style="font-size: 1.1rem; color: #94a3b8; max-width: 560px; margin: 0 auto 2rem; line-height: 1.7;">
+                    {service.heroSubtitle || service.shortDescription}
+                </p>
+            )}
+            {whatsapp && (
+                <a
+                    href={waUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 1rem 2rem; border-radius: 999px; background: #25d366; color: #fff; font-weight: 700; font-size: 1rem; text-decoration: none; box-shadow: 0 4px 24px rgba(37,211,102,0.35);"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    Solicitar Orçamento
+                </a>
+            )}
+        </div>
+    </section>
+
+    <!-- ── Benefícios ─────────────────────────────────────────────── -->
+    {benefits.length > 0 && (
+        <section style="padding: 4rem 1.5rem; background: #f8fafc;">
+            <div class="container mx-auto max-w-3xl">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 1.5rem; font-family: 'Outfit', sans-serif; text-align: center;">
+                    Por que nos escolher?
+                </h2>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem;">
+                    {benefits.map((benefit: string) => (
+                        <div style="display: flex; align-items: flex-start; gap: 0.75rem; padding: 1rem 1.25rem; border-radius: 10px; background: #fff; border: 1px solid #e2e8f0;">
+                            <span style="color: #16a34a; font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem;">✓</span>
+                            <span style="font-size: 0.875rem; color: #334155; font-weight: 500; line-height: 1.5;">{benefit}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <!-- ── Descrição ─────────────────────────────────────────────── -->
+    {service.description && (
+        <section style="padding: 4rem 1.5rem; background: #fff;">
+            <div class="container mx-auto max-w-2xl">
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">
+                    Sobre o serviço
+                </h2>
+                <p style="color: #475569; line-height: 1.9; font-size: 0.95rem; white-space: pre-line;">
+                    {service.description}
+                </p>
+            </div>
+        </section>
+    )}
+
+    <!-- ── CTA Final ─────────────────────────────────────────────── -->
+    <section style="padding: 4rem 1.5rem; background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%); text-align: center;">
+        <div class="container mx-auto max-w-xl">
+            <h2 style="font-size: 1.75rem; font-weight: 800; color: #fff; margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif;">
+                Solicite um orçamento gratuito
+            </h2>
+            <p style="color: #93c5fd; margin-bottom: 2rem; font-size: 1rem;">
+                Atendimento rápido e sem compromisso. Resposta em minutos!
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                {whatsapp && (
+                    <a
+                        href={waUrl}
+                        target="_blank"
+                        style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 1rem 2rem; border-radius: 999px; background: #25d366; color: #fff; font-weight: 700; font-size: 1rem; text-decoration: none;"
+                    >
+                        💬 WhatsApp
+                    </a>
+                )}
+                {phone && (
+                    <a
+                        href={`tel:+55${phone.replace(/\D/g,'')}`}
+                        style="display: inline-flex; align-items: center; gap: 0.625rem; padding: 1rem 2rem; border-radius: 999px; border: 2px solid rgba(255,255,255,0.3); color: #fff; font-weight: 700; font-size: 1rem; text-decoration: none;"
+                    >
+                        📞 Ligar agora
+                    </a>
+                )}
+            </div>
+        </div>
+    </section>
+
+    <!-- Navegação: breadcrumb simples -->
+    <nav style="padding: 1rem 1.5rem; background: #f8fafc; border-top: 1px solid #e2e8f0; font-size: 0.8rem; color: #64748b;">
+        <div class="container mx-auto">
+            <a href="/" style="color: var(--primary,#2563eb); text-decoration: none;">Início</a>
+            <span style="margin: 0 0.5rem;">›</span>
+            <a href="/servicos" style="color: var(--primary,#2563eb); text-decoration: none;">Serviços</a>
+            <span style="margin: 0 0.5rem;">›</span>
+            <span>{service.title}</span>
+        </div>
+    </nav>
+
+</LocalLayout>

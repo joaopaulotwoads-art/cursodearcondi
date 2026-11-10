@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Terno
+id: aluguel-terno
+name: Aluguel de Terno
+description: "Site pronto para locadoras de ternos e vestimentas formais"
+icon: "👔"
+color: "#1e293b"
+
+niche:
+  name: Aluguel de Terno
+  slug: aluguel-terno
+  icon: "👔"
+  description: "Locação de ternos, smokings e roupas para eventos formais"
+  color: "#1e293b"
+  active: true
+
+homeCopy:
+  heroBadge: "👔 Terno para Alugar"
+  heroTitle: "Aluguel de Terno"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Ternos e smokings para formaturas, casamentos e eventos. Ajuste perfeito, entregamos e recolhemos."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver coleção"
+  heroWhatsappMessage: "Olá! Preciso alugar um terno. Vocês atendem aqui?"
+  servicesTitle: "Roupas para Locação"
+  servicesSubtitle: "Elegância para seu evento"
+  aboutTitle: "Especialistas em Aluguel de Terno"
+  aboutSubtitle: "Estilo e praticidade"
+  aboutText: "Locamos ternos, smokings, fraques e acessórios para formaturas, casamentos e eventos corporativos. Peças de qualidade, ajuste personalizado e entrega na sua casa."
+  aboutStats:
+    - number: "20+"
+      label: Anos no mercado
+    - number: "5000+"
+      label: Clientes vestidos
+    - number: "100%"
+      label: Lavanderia profissional
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Ternos e vestimentas formais para seu evento."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece ternos e smokings para locação. Atuamos em {cidade} e região. Agende sua prova!"
+  benefits:
+    - "Prova em {cidade}"
+    - "Ajuste personalizado"
+    - "Entrega e retirada"
+    - "Lavanderia incluída"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - elegância para seu evento. Ligue!"
+
+services:
+  - title: "Aluguel de Terno"
+    slug: aluguel-de-terno
+    shortDescription: "Ternos para formaturas e eventos formais"
+    icon: "👔"
+    niche: aluguel-terno
+  - title: "Aluguel de Smoking"
+    slug: aluguel-de-smoking
+    shortDescription: "Smokings para casamentos e eventos noturnos"
+    icon: "🎩"
+    niche: aluguel-terno
+  - title: "Aluguel de Fraque"
+    slug: aluguel-de-fraque
+    shortDescription: "Fraques e casacas para eventos elegantes"
+    icon: "🤵"
+    niche: aluguel-terno
+  - title: "Aluguel de Gravata"
+    slug: aluguel-de-gravata
+    shortDescription: "Gravatas e acessórios para ternos"
+    icon: "🎀"
+    niche: aluguel-terno
+  - title: "Aluguel de Sapato Social"
+    slug: aluguel-sapato-social
+    shortDescription: "Sapatos sociais para eventos formais"
+    icon: "👞"
+    niche: aluguel-terno
+  - title: "Aluguel de Paletó"
+    slug: aluguel-de-paleto
+    shortDescription: "Paletós para cerimônias"
+    icon: "🧥"
+    niche: aluguel-terno
+  - title: "Aluguel de Terno para Formatura"
+    slug: aluguel-terno-formatura
+    shortDescription: "Ternos específicos para formaturas"
+    icon: "🎓"
+    niche: aluguel-terno

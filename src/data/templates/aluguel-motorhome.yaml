@@ -1,0 +1,79 @@
+# Template de nicho: Aluguel de Motorhome
+id: aluguel-motorhome
+name: Aluguel de Motorhome
+description: "Site pronto para locadoras de motorhome e trailers"
+icon: "🚐"
+color: "#0ea5e9"
+
+niche:
+  name: Aluguel de Motorhome
+  slug: aluguel-motorhome
+  icon: "🚐"
+  description: "Locação de motorhomes, trailers e veículos para viagens em família"
+  color: "#0ea5e9"
+  active: true
+
+homeCopy:
+  heroBadge: "Locação de Motorhome"
+  heroTitle: "Aluguel de Motorhome"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Viagens em família com conforto total. Motorhomes completos com entrega e retirada. Reserve agora!"
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver opções"
+  heroWhatsappMessage: "Olá! Gostaria de alugar um motorhome. Vocês atendem aqui?"
+  servicesTitle: "Nossos Motorhomes"
+  servicesSubtitle: "Veículos equipados para sua viagem"
+  aboutTitle: "Especialistas em Aluguel de Motorhome"
+  aboutSubtitle: "Conforto nas suas férias"
+  aboutText: "Oferecemos motorhomes completos para aluguel com ar condicionado, fogão, geladeira e banheiro. Ideal para viagens em família ou grupos. Entrega e retirada conforme combinado. Documentação em dia."
+  aboutStats:
+    - number: "10+"
+      label: Anos no mercado
+    - number: "500+"
+      label: Clientes satisfeitos
+    - number: "24h"
+      label: Suporte durante a viagem
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Motorhomes completos para sua viagem. Reserve agora!"
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece aluguel de motorhomes com toda estrutura. Atuamos em {cidade} e região. Entre em contato para orçamento e disponibilidade."
+  benefits:
+    - "Entrega em {cidade} e região"
+    - "Orçamento gratuito"
+    - "Documentação regularizada"
+    - "Suporte durante a locação"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} entrega na sua casa. Reserve seu motorhome!"
+
+services:
+  - title: "Aluguel de Motorhome"
+    slug: aluguel-de-motorhome
+    shortDescription: "Motorhomes equipados para viagens com toda família"
+    icon: "🚐"
+    niche: aluguel-motorhome
+  - title: "Aluguel de Motorhome Pequeno"
+    slug: aluguel-motorhome-pequeno
+    shortDescription: "Motorhome compacto para casal ou pequena família"
+    icon: "🚗"
+    niche: aluguel-motorhome
+  - title: "Aluguel de Motorhome Grande"
+    slug: aluguel-motorhome-grande
+    shortDescription: "Motorhome amplo para famílias maiores"
+    icon: "🚌"
+    niche: aluguel-motorhome
+  - title: "Aluguel de Trailer"
+    slug: aluguel-de-trailer
+    shortDescription: "Trailers para acoplamento no carro"
+    icon: "🚋"
+    niche: aluguel-motorhome
+  - title: "Aluguel de Motorhome Luxo"
+    slug: aluguel-motorhome-luxo
+    shortDescription: "Motorhomes premium com toda estrutura"
+    icon: "🌟"
+    niche: aluguel-motorhome
+  - title: "Aluguel de Motorhome para Casal"
+    slug: aluguel-motorhome-casal
+    shortDescription: "Motorhome compacto para viagens a dois"
+    icon: "💑"
+    niche: aluguel-motorhome

@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Roupas
+id: aluguel-roupas
+name: Aluguel de Roupas
+description: "Site pronto para locadoras de roupas e fantasias"
+icon: "👗"
+color: "#db2777"
+
+niche:
+  name: Aluguel de Roupas
+  slug: aluguel-roupas
+  icon: "👗"
+  description: "Locação de roupas, fantasias e vestimentas para eventos"
+  color: "#db2777"
+  active: true
+
+homeCopy:
+  heroBadge: "Roupas para Alugar"
+  heroTitle: "Aluguel de Roupas"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Roupas, fantasias e vestimentas para festas, eventos e produções. Tamanhos variados. Lavanderia profissional. Entrega e retirada."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver acervo"
+  heroWhatsappMessage: "Olá! Preciso alugar roupas para um evento. Vocês têm esse modelo?"
+  servicesTitle: "Nosso Acervo"
+  servicesSubtitle: "Roupas para toda ocasião"
+  aboutTitle: "Especialistas em Aluguel de Roupas"
+  aboutSubtitle: "Estilo para seu evento"
+  aboutText: "Locamos roupas sociais, fantasias, vestidos e trajes para festas, formaturas, teatro e produções. Acervo variado, lavanderia profissional e ajuste quando necessário."
+  aboutStats:
+    - number: "15+"
+      label: Anos no mercado
+    - number: "5000+"
+      label: Clientes vestidos
+    - number: "100%"
+      label: Lavanderia profissional
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Roupas e fantasias para eventos."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece roupas e fantasias para locação. Atuamos em {cidade} e região. Agende sua visita ao acervo!"
+  benefits:
+    - "Acervo em {cidade}"
+    - "Orçamento gratuito"
+    - "Lavanderia incluída"
+    - "Ajuste personalizado"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - estilo para seu evento. Ligue!"
+
+services:
+  - title: "Aluguel de Roupas"
+    slug: aluguel-de-roupas
+    shortDescription: "Roupas e fantasias para eventos"
+    icon: "👗"
+    niche: aluguel-roupas
+  - title: "Aluguel de Fantasia"
+    slug: aluguel-de-fantasia
+    shortDescription: "Fantasias para festas temáticas"
+    icon: "🎭"
+    niche: aluguel-roupas
+  - title: "Aluguel de Vestido"
+    slug: aluguel-de-vestido
+    shortDescription: "Vestidos para festas e formaturas"
+    icon: "👗"
+    niche: aluguel-roupas
+  - title: "Aluguel de Terno Completo"
+    slug: aluguel-terno-completo
+    shortDescription: "Terno com gravata e acessórios"
+    icon: "👔"
+    niche: aluguel-roupas
+  - title: "Aluguel de Vestido de Festa"
+    slug: aluguel-vestido-festa
+    shortDescription: "Vestidos longos e curtos para festas"
+    icon: "👗"
+    niche: aluguel-roupas
+  - title: "Aluguel de Roupa Infantil"
+    slug: aluguel-roupa-infantil
+    shortDescription: "Fantasias e roupas para crianças"
+    icon: "👶"
+    niche: aluguel-roupas
+  - title: "Aluguel de Acessórios"
+    slug: aluguel-de-acessorios
+    shortDescription: "Gravatas, laços, cintos e sapatos"
+    icon: "👔"
+    niche: aluguel-roupas

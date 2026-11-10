@@ -1,0 +1,440 @@
+---
+/**
+ * Sobre.astro — Tema Local (Modo Local / Rank and Rent)
+ *
+ * Página "Quem Somos" completa para sites de negócio local.
+ * Identidade visual: hero azul, seções alternadas #f8fafc/#fff, cards brancos,
+ * CTA WhatsApp #25d366.
+ *
+ * Estrutura: Hero → Nossa História (imagem+texto+stats) → Missão/Visão →
+ * Por que nos escolher → Valores → Equipe → CTA WhatsApp
+ */
+
+import LocalLayout from '../../layouts/LocalLayout.astro';
+import { getSiteContactInfo } from '../../utils/site-contact';
+import { getPrincipalLocationSlug } from '../../utils/location-utils';
+
+interface Props {
+    data: Record<string, unknown>;
+    siteName?: string;
+}
+
+const { data, siteName = 'Site' } = Astro.props;
+
+const heroTitle          = data?.heroTitle          || 'Quem Somos';
+const heroSubtitle       = data?.heroSubtitle       || '';
+const heroBackground     = data?.heroBackground    as string | undefined;
+const aboutImage         = data?.aboutImage         as string | null | undefined;
+const aboutText          = data?.aboutText         as string | undefined;
+const aboutStats         = (data?.aboutStats as any[]) || [];
+const missionTitle       = data?.missionTitle      || 'Nossa Missão';
+const missionDescription = data?.missionDescription || '';
+const visionTitle        = data?.visionTitle       || 'Nossa Visão';
+const visionDescription  = data?.visionDescription || '';
+const valuesTitle        = data?.valuesTitle       || 'Nossos Valores';
+const values             = (data?.values as any[]) || [];
+const differentialsTitle = data?.differentialsTitle as string | undefined;
+const differentials      = (data?.differentials as string[]) || [];
+const teamTitle          = data?.teamTitle         || 'Nossa Equipe';
+const teamMembers        = (data?.teamMembers as any[]) || [];
+const ctaTitle           = data?.ctaTitle as string | undefined;
+const ctaDescription      = data?.ctaDescription as string | undefined;
+const ctaButtonText      = data?.ctaButtonText as string | undefined;
+
+const contact  = await getSiteContactInfo();
+const whatsapp = contact.whatsapp;
+const waMsg    = encodeURIComponent('Olá! Vim pelo site e gostaria de mais informações.');
+const waUrl    = whatsapp ? `https://wa.me/55${whatsapp}?text=${waMsg}` : '#';
+
+const heroStyle = heroBackground
+    ? `background: linear-gradient(135deg, rgba(15,23,42,0.92) 0%, rgba(30,58,95,0.88) 50%, rgba(30,64,175,0.85) 100%), url(${heroBackground}) center/cover no-repeat; padding: 5rem 1.5rem 4rem; text-align: center;`
+    : 'background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1e40af 100%); padding: 5rem 1.5rem 4rem; text-align: center;';
+
+const principalSlug = await getPrincipalLocationSlug();
+const serviceBase = principalSlug ? `/${principalSlug}` : '/servicos';
+---
+
+<LocalLayout
+    title={`${heroTitle} - ${siteName}`}
+    description={heroSubtitle || aboutText || `Conheça a ${siteName}. Profissionais especializados com qualidade e confiança.`}
+>
+
+    <!-- HERO -->
+    <section style={heroStyle}>
+        <div class="container mx-auto max-w-4xl">
+            <div class="sobre-hero-badge">Sobre Nós</div>
+            <h1 class="sobre-hero-title">{heroTitle}</h1>
+            {heroSubtitle && (
+                <p class="sobre-hero-subtitle">{heroSubtitle}</p>
+            )}
+        </div>
+    </section>
+
+    <!-- NOSSA HISTÓRIA — Imagem + Texto + Stats -->
+    <section class="sobre-section sobre-section-alt">
+        <div class="container mx-auto">
+            <div class="sobre-historia-grid">
+                <div class="sobre-historia-image">
+                    {aboutImage ? (
+                        <img src={aboutImage} alt={heroTitle} loading="lazy" />
+                    ) : (
+                        <div class="sobre-historia-placeholder">🏢</div>
+                    )}
+                </div>
+                <div class="sobre-historia-content">
+                    <h2 class="sobre-section-title">{heroTitle}</h2>
+                    {aboutText && (
+                        <p class="sobre-historia-text">{aboutText}</p>
+                    )}
+                    {aboutStats.length > 0 && (
+                        <div class="sobre-stats-grid">
+                            {aboutStats.map((stat: any) => (
+                                <div class="sobre-stat-card">
+                                    <span class="sobre-stat-number">{stat.number}</span>
+                                    <span class="sobre-stat-label">{stat.label}</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    {serviceBase && (
+                        <a href={serviceBase} class="sobre-cta-link">
+                            Ver nossos serviços →
+                        </a>
+                    )}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MISSÃO E VISÃO -->
+    <section class="sobre-section">
+        <div class="container mx-auto">
+            <div class="sobre-missao-visao-grid">
+                <div class="sobre-card sobre-card-missao">
+                    <div class="sobre-card-icon">🎯</div>
+                    <h3 class="sobre-card-title">{missionTitle}</h3>
+                    <p class="sobre-card-text">
+                        {missionDescription || 'Profissionais especializados com qualidade e confiança em cada serviço.'}
+                    </p>
+                </div>
+                <div class="sobre-card sobre-card-visao">
+                    <div class="sobre-card-icon">🔮</div>
+                    <h3 class="sobre-card-title">{visionTitle}</h3>
+                    <p class="sobre-card-text">
+                        {visionDescription || 'Ser referência em atendimento na nossa região, com foco em qualidade e satisfação do cliente.'}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- POR QUE NOS ESCOLHER -->
+    {differentials.length > 0 && (
+        <section class="sobre-section sobre-section-alt">
+            <div class="container mx-auto">
+                <h2 class="sobre-section-title-centered">{differentialsTitle || 'Por que nos escolher?'}</h2>
+                <div class="sobre-differentials-grid">
+                    {differentials.map((item: string) => (
+                        <div class="sobre-differential-item">
+                            <span class="sobre-differential-check">✓</span>
+                            <span>{item}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <!-- VALORES -->
+    {values.length > 0 && (
+        <section class="sobre-section">
+            <div class="container mx-auto">
+                <h2 class="sobre-section-title-centered">{valuesTitle}</h2>
+                <div class="sobre-values-grid">
+                    {values.map((value: any) => (
+                        <div class="sobre-value-card">
+                            <div class="sobre-value-icon">{value.icon || '💎'}</div>
+                            <h3 class="sobre-value-title">{value.title}</h3>
+                            <p class="sobre-value-desc">{value.description}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <!-- EQUIPE -->
+    {teamMembers.length > 0 && (
+        <section class="sobre-section sobre-section-alt">
+            <div class="container mx-auto">
+                <h2 class="sobre-section-title-centered">{teamTitle}</h2>
+                <div class="sobre-team-grid">
+                    {teamMembers.map((member: any) => (
+                        <div class="sobre-team-card">
+                            {member.photo ? (
+                                <img src={member.photo} alt={member.name} class="sobre-team-photo" loading="lazy" />
+                            ) : (
+                                <div class="sobre-team-avatar">{member.name?.charAt(0) || '?'}</div>
+                            )}
+                            <div class="sobre-team-info">
+                                <h3 class="sobre-team-name">{member.name}</h3>
+                                <p class="sobre-team-role">{member.role}</p>
+                                <p class="sobre-team-bio">{member.bio}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
+    )}
+
+    <!-- CTA WHATSAPP -->
+    {(ctaTitle || waUrl !== '#') && (
+        <section class="sobre-cta-section">
+            <div class="container mx-auto">
+                <h2 class="sobre-cta-title">{ctaTitle || 'Precisa de ajuda agora?'}</h2>
+                {ctaDescription && (
+                    <p class="sobre-cta-desc">{ctaDescription}</p>
+                )}
+                {waUrl !== '#' && (
+                    <a href={waUrl} target="_blank" rel="noopener noreferrer" class="sobre-cta-whatsapp">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        {ctaButtonText || 'Chamar no WhatsApp'}
+                    </a>
+                )}
+            </div>
+        </section>
+    )}
+
+</LocalLayout>
+
+<style>
+    .sobre-hero-badge {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        padding: 0.5rem 1.25rem; border-radius: 999px;
+        background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.4);
+        margin-bottom: 1.5rem;
+        font-size: 0.85rem; font-weight: 600; color: #93c5fd;
+    }
+    .sobre-hero-title {
+        font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #fff;
+        line-height: 1.2; margin-bottom: 1.25rem;
+        font-family: 'Outfit', sans-serif;
+    }
+    .sobre-hero-subtitle {
+        font-size: clamp(1rem, 2.5vw, 1.2rem); color: #94a3b8;
+        max-width: 600px; margin: 0 auto 2rem; line-height: 1.7;
+    }
+
+    .sobre-section { padding: 4rem 1.5rem; background: #fff; }
+    .sobre-section-alt { background: #f8fafc; }
+
+    .sobre-section-title {
+        font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: #0f172a;
+        margin-bottom: 1rem; font-family: 'Outfit', sans-serif;
+    }
+    .sobre-section-title-centered {
+        font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; color: #0f172a;
+        text-align: center; margin-bottom: 2rem; font-family: 'Outfit', sans-serif;
+    }
+
+    .sobre-historia-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    .sobre-historia-image {
+        border-radius: 16px; overflow: hidden; aspect-ratio: 4/3;
+        background: #e2e8f0;
+    }
+    .sobre-historia-image img {
+        width: 100%; height: 100%; object-fit: cover;
+    }
+    .sobre-historia-placeholder {
+        width: 100%; height: 100%; display: flex;
+        align-items: center; justify-content: center;
+        font-size: 4rem; background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    }
+    .sobre-historia-text {
+        color: #475569; line-height: 1.8; margin-bottom: 1.5rem; font-size: 0.95rem;
+    }
+    .sobre-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .sobre-stat-card {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+    }
+    .sobre-stat-number {
+        display: block;
+        font-size: 1.5rem; font-weight: 900; color: var(--primary, #2563eb);
+        font-family: 'Outfit', sans-serif;
+    }
+    .sobre-stat-label {
+        font-size: 0.7rem; color: #64748b; margin-top: 0.25rem;
+        font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .sobre-cta-link {
+        display: inline-flex; align-items: center; gap: 0.5rem;
+        font-weight: 600; color: var(--primary, #2563eb); text-decoration: none;
+        transition: opacity 0.2s;
+    }
+    .sobre-cta-link:hover { opacity: 0.8; text-decoration: underline; }
+
+    .sobre-missao-visao-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        max-width: 950px;
+        margin: 0 auto;
+    }
+    .sobre-card {
+        padding: 2rem;
+        border-radius: 16px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
+    }
+    .sobre-card:hover {
+        border-color: var(--primary, #2563eb);
+        box-shadow: 0 8px 30px rgba(37,99,235,0.1);
+        transform: translateY(-2px);
+    }
+    .sobre-card-icon {
+        width: 56px; height: 56px; border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.75rem; margin-bottom: 1.25rem;
+    }
+    .sobre-card-missao .sobre-card-icon { background: #dbeafe; }
+    .sobre-card-visao .sobre-card-icon { background: #dcfce7; }
+    .sobre-card-title {
+        font-size: 1.25rem; font-weight: 800; color: #0f172a;
+        margin-bottom: 1rem; font-family: 'Outfit', sans-serif;
+    }
+    .sobre-card-text {
+        color: #475569; line-height: 1.8; font-size: 0.95rem;
+    }
+
+    .sobre-differentials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    .sobre-differential-item {
+        display: flex; align-items: center; gap: 1rem;
+        padding: 1rem 1.25rem;
+        border-radius: 12px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        font-weight: 500; color: #334155;
+    }
+    .sobre-differential-check {
+        width: 28px; height: 28px; border-radius: 50%;
+        background: #dcfce7; color: #16a34a;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.9rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    .sobre-values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.5rem;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+    .sobre-value-card {
+        padding: 2rem;
+        border-radius: 14px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s;
+    }
+    .sobre-value-card:hover {
+        border-color: var(--primary, #2563eb);
+        box-shadow: 0 6px 24px rgba(37,99,235,0.12);
+    }
+    .sobre-value-icon {
+        width: 48px; height: 48px; border-radius: 10px;
+        background: #dbeafe;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.25rem; margin-bottom: 1rem;
+    }
+    .sobre-value-title {
+        font-size: 1.1rem; font-weight: 700; color: #0f172a;
+        margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif;
+    }
+    .sobre-value-desc { font-size: 0.9rem; color: #64748b; line-height: 1.6; }
+
+    .sobre-team-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 1.5rem;
+        max-width: 950px;
+        margin: 0 auto;
+    }
+    .sobre-team-card {
+        display: flex; gap: 1.25rem; align-items: flex-start;
+        padding: 1.5rem;
+        border-radius: 14px;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+    }
+    .sobre-team-photo {
+        width: 72px; height: 72px; border-radius: 12px;
+        object-fit: cover; flex-shrink: 0;
+    }
+    .sobre-team-avatar {
+        width: 72px; height: 72px; border-radius: 12px;
+        background: #dbeafe;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.5rem; font-weight: 700; color: var(--primary, #2563eb);
+        flex-shrink: 0;
+    }
+    .sobre-team-name { font-size: 1.1rem; font-weight: 700; color: #0f172a; margin-bottom: 0.25rem; }
+    .sobre-team-role { font-size: 0.8rem; color: var(--primary, #2563eb); font-weight: 600; margin-bottom: 0.5rem; }
+    .sobre-team-bio { font-size: 0.9rem; color: #64748b; line-height: 1.6; }
+
+    .sobre-cta-section {
+        padding: 4rem 1.5rem;
+        background: linear-gradient(135deg, #1e3a5f 0%, #1e40af 100%);
+        text-align: center;
+    }
+    .sobre-cta-title {
+        font-size: clamp(1.5rem, 4vw, 2rem); font-weight: 800; color: #fff;
+        margin-bottom: 0.75rem; font-family: 'Outfit', sans-serif;
+    }
+    .sobre-cta-desc {
+        font-size: 1rem; color: #93c5fd; margin-bottom: 1.5rem; line-height: 1.6;
+    }
+    .sobre-cta-whatsapp {
+        display: inline-flex; align-items: center; gap: 0.75rem;
+        padding: 1rem 2rem;
+        border-radius: 999px;
+        background: #25d366;
+        color: #fff; font-weight: 700; font-size: 1rem;
+        text-decoration: none;
+        box-shadow: 0 6px 30px rgba(37,211,102,0.4);
+        transition: opacity 0.2s;
+    }
+    .sobre-cta-whatsapp:hover { opacity: 0.9; }
+
+    @media (max-width: 768px) {
+        .sobre-historia-grid,
+        .sobre-missao-visao-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>

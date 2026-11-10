@@ -1,0 +1,97 @@
+---
+/**
+ * pages/[location]/[service].astro
+ *
+ * Rota dinâmica SSR para páginas geradas pelo SEO Programático.
+ * URL: /[bairro-slug]/[servico-slug]
+ * Exemplo: /moema/encanador-sp
+ *
+ * Fluxo:
+ *   1. Extrai params: location (slug do bairro) e service (slug do serviço)
+ *   2. Busca dados de localidade, serviço e nicho em paralelo
+ *   3. Se qualquer um não existir ou estiver inativo → retorna 404
+ *   4. Aplica substituição de variáveis em todo o conteúdo
+ *   5. Renderiza LocationServicePage com os dados resolvidos
+ */
+
+import { readLocation, readLocationTemplate, applyTemplateVars } from '../../utils/location-utils';
+import { readService } from '../../utils/service-utils';
+import { readNicho } from '../../utils/niche-utils';
+import { readSingleton } from '../../utils/singleton-utils';
+import { getSiteContactInfo } from '../../utils/site-contact';
+import LocationServicePage from '../../themes/local/LocationServicePage.astro';
+
+const { location: locationSlug, service: serviceSlug } = Astro.params;
+
+// Busca dados em paralelo
+const [locationFile, serviceFile] = await Promise.all([
+    readLocation(locationSlug as string),
+    readService(serviceSlug as string),
+]);
+
+// 404 se não encontrado ou inativo
+if (!locationFile || !serviceFile) {
+    return Astro.redirect('/404', 404);
+}
+
+const location = locationFile.data;
+const service  = serviceFile.data;
+
+if (service.active === false) {
+    return Astro.redirect('/404', 404);
+}
+if (!location.active && location.type !== 'cidade') {
+    return Astro.redirect('/404', 404);
+}
+
+// Carrega template, dados da empresa, contato e nicho em paralelo
+const [template, homeData, contact, nicheFile] = await Promise.all([
+    readLocationTemplate(),
+    readSingleton('home', 'local'),
+    getSiteContactInfo(),
+    service.niche ? readNicho(service.niche) : Promise.resolve(null),
+]);
+
+const nicheColor = nicheFile?.data?.color || '#2563eb';
+
+const vars: Record<string, string> = {
+    cidade:   location.name,
+    estado:   location.state,
+    bairro:   location.name,
+    servico:  service.title,
+    empresa:  homeData?.companyName  || 'Nossa Empresa',
+    telefone: contact.phone || contact.whatsapp || '',
+};
+
+// ── Campos do template global (fallback quando não há conteúdo gerado)
+const resolvedTitle       = applyTemplateVars(service.heroTitle   || template.heroTitle       || service.title, vars);
+const resolvedSubtitle    = applyTemplateVars(service.heroSubtitle || template.heroSubtitle   || '', vars);
+const resolvedMetaTitle   = applyTemplateVars(service.metaTitle   || template.metaTitle       || service.title, vars);
+const resolvedMetaDesc    = applyTemplateVars(service.metaDescription || template.metaDescription || '', vars);
+
+// Benefícios: prioriza os do serviço, fallback no template global
+const rawBenefits = (service.benefits && service.benefits.length > 0)
+    ? service.benefits
+    : (template.benefits || []);
+const resolvedBenefits = rawBenefits.map((b: string) => applyTemplateVars(b, vars));
+
+// ── Conteúdo gerado por IA (modo outline)
+const resolvedGeneratedContent = service.generatedContent
+    ? applyTemplateVars(service.generatedContent, vars)
+    : applyTemplateVars(template.pageContent || '', vars);
+
+const hasGeneratedContent = !!service.generatedContent;
+---
+
+<LocationServicePage
+    resolvedTitle={resolvedTitle}
+    resolvedSubtitle={resolvedSubtitle}
+    resolvedContent={resolvedGeneratedContent}
+    resolvedBenefits={resolvedBenefits}
+    resolvedMetaTitle={resolvedMetaTitle}
+    resolvedMetaDescription={resolvedMetaDesc}
+    hasGeneratedContent={hasGeneratedContent}
+    nicheColor={nicheColor}
+    service={service}
+    location={location}
+/>

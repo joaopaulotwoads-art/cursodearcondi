@@ -1,0 +1,16 @@
+siteName: Curso de Ar Condicionado
+activeTheme: cursodear
+colorScheme: light
+siteMode: blog
+aiProvider: openai
+canonicalUrl: https://cursodearcondicionado.com.br
+companyPhone: ""
+companyWhatsapp: "14996973456"
+generateSitemap: true
+generateRobots: true
+robotsDisallow:
+  - /admin
+  - /api
+blogPermalinkStructure: postname
+blogUrlPrefix: root
+autoUpdateEnabled: false

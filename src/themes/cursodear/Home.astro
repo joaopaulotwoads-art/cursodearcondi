@@ -1,0 +1,494 @@
+---
+/**
+ * Home principal — conteudo principal; layout (head/header/footer) vem da pagina.
+ */
+import { getCollection } from 'astro:content';
+import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+import { resolvecursodearMediaUrl } from '../../utils/media-url';
+interface Props {
+  homeData: Record<string, any>;
+  latestPosts: any[];
+  blogPermalinkStructure: BlogPermalinkStructure;
+  blogUrlPrefix: BlogUrlPrefix;
+}
+
+const {
+  homeData: h,
+  latestPosts,
+  blogPermalinkStructure,
+  blogUrlPrefix,
+} = Astro.props;
+
+const categories = await getCollection('categories');
+const categoryLabel = (slug: string | undefined) => {
+  if (!slug) return '';
+  const c = categories.find((x) => x.data.slug === slug);
+  return c?.data.name || slug;
+};
+
+const heroBg = h.heroBgImage || '/images/cursodear/hero-home.png';
+const categoryCards = Array.isArray(h.categoryCards) ? h.categoryCards : [];
+const homeHighlights = Array.isArray(h.homeHighlights) ? h.homeHighlights.filter(Boolean) : [];
+const aboutText = String(h.aboutText || '').trim();
+const showAbout = aboutText.length > 0;
+const aboutTitle = String(h.aboutTitle || 'Sobre nós').trim() || 'Sobre nós';
+const aboutImg = String(h.aboutImage || '').trim();
+/** Foto institucional quando o CMS não define URL (evita coluna vazia). */
+const ABOUT_DEFAULT_IMAGE =
+  'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=960&q=80';
+const aboutImgSrc = aboutImg || ABOUT_DEFAULT_IMAGE;
+const aboutParagraphs = aboutText
+  .split(/\n\n+/)
+  .map((p) => p.trim())
+  .filter(Boolean);
+
+const PLACEHOLDER_THUMB = '/images/cursodear/post-placeholder.svg';
+
+function formatPostDate(iso: string | undefined) {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleDateString('pt-BR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  } catch {
+    return '';
+  }
+}
+
+const showLatestPosts = h.showLatestPostsOnHome !== 'nao';
+const showNewsletter = h.showNewsletterOnHome !== 'nao';
+const categoriesSub = String(h.categoriesSectionSubtitle || '').trim();
+const categoriesSubDefault =
+  'Três frentes que guiam o conteúdo do blog: escolha por tema ou explore os artigos mais recentes abaixo.';
+const landingOfferShow =
+  String(h.landingOfferTitle || '').trim() ||
+  String(h.landingPriceLine || '').trim() ||
+  String(h.landingOfferCtaHref || '').trim();
+const landingIncluded = Array.isArray(h.landingIncludedItems) ? h.landingIncludedItems : [];
+const landingMods = Array.isArray(h.landingModules) ? h.landingModules : [];
+const landingFaq = Array.isArray(h.landingFaq) ? h.landingFaq : [];
+const landingCloseShow =
+  String(h.landingClosingTitle || '').trim() ||
+  String(h.landingClosingText || '').trim() ||
+  String(h.landingClosingCtaHref || '').trim();
+---
+<article class="cursodear-home">
+  <section
+    class="relative min-h-[72vh] flex flex-col items-center justify-center bg-cover bg-center pt-20 pb-0 md:pt-28"
+    style={`background-image: url('${heroBg}');`}
+    aria-labelledby="hero-title"
+  >
+    <div
+      class="absolute inset-0 pointer-events-none"
+      aria-hidden="true"
+      style="background: linear-gradient(180deg, rgba(0,0,0,0.58) 0%, rgba(0,0,0,0.38) 42%, rgba(255,246,246,0.97) 100%);"
+    />
+    <div class="relative z-[1] max-w-4xl mx-auto px-4 text-center pb-16 md:pb-20">
+      {h.heroKicker && (
+        <p class="text-xs sm:text-sm font-semibold tracking-[0.2em] text-white/95 uppercase mb-4">{h.heroKicker}</p>
+      )}
+      <h1
+        id="hero-title"
+        class="text-[1.75rem] font-extrabold tracking-tight text-white leading-[1.15] mb-5 max-w-3xl mx-auto drop-shadow-md sm:text-4xl md:text-5xl lg:text-[3.25rem]"
+      >
+        {h.heroTitle || 'Seu título'}
+      </h1>
+      {h.heroSubtitle && (
+        <p class="text-base md:text-xl text-white/92 max-w-2xl mx-auto mb-10 leading-relaxed drop-shadow-sm">
+          {h.heroSubtitle}
+        </p>
+      )}
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+        <a
+          href={h.heroCtaPrimaryHref || '/blog'}
+          class="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-full bg-[var(--color-accent)] text-white font-semibold hover:brightness-105 transition-all shadow-lg shadow-black/20"
+        >
+          {h.heroCtaPrimaryText || 'Ver artigos'}
+        </a>
+        <a
+          href={h.heroCtaSecondaryHref || '/sobre'}
+          class="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-full border-2 border-white/90 text-white font-semibold hover:bg-white/15 transition-colors backdrop-blur-[2px]"
+        >
+          {h.heroCtaSecondaryText || 'Quem somos'}
+        </a>
+      </div>
+    </div>
+    <div class="relative z-[1] w-full mt-auto" aria-hidden="true">
+      <svg
+        class="block w-full h-[48px] sm:h-[64px] text-[var(--color-bg)]"
+        viewBox="0 0 1440 64"
+        preserveAspectRatio="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill="currentColor"
+          d="M0,32 C240,64 480,0 720,32 C960,64 1200,0 1440,32 L1440,64 L0,64 Z"
+        />
+      </svg>
+    </div>
+  </section>
+
+  {homeHighlights.length > 0 && (
+    <div class="relative z-[2] -mt-4 px-4 sm:px-6 max-w-5xl mx-auto mb-12">
+      <ul
+        class="flex flex-col sm:flex-row flex-wrap items-stretch justify-center gap-3 sm:gap-4 text-sm text-[var(--color-heading)]"
+      >
+        {homeHighlights.map((line: string) => (
+          <li
+            class="flex-1 min-w-[200px] flex items-center gap-2.5 rounded-2xl bg-white/90 px-4 py-3 shadow-md shadow-stone-900/5 ring-1 ring-stone-900/[0.06] backdrop-blur-sm"
+          >
+            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)]/15 text-[var(--color-accent)]" aria-hidden="true">✓</span>
+            <span class="font-medium leading-snug">{line}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+
+  {landingOfferShow && (
+    <section
+      id="oferta"
+      class="relative z-[2] -mt-2 px-4 sm:px-6 max-w-3xl mx-auto mb-14 md:mb-16 scroll-mt-24"
+      aria-labelledby="landing-offer-title"
+    >
+      <div class="rounded-3xl border-2 border-[var(--color-accent)]/35 bg-white p-8 md:p-10 shadow-xl shadow-stone-900/10 ring-1 ring-stone-900/[0.04]">
+        {h.landingOfferBadge && (
+          <p class="text-center text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-accent)] mb-3">
+            {h.landingOfferBadge}
+          </p>
+        )}
+        <h2
+          id="landing-offer-title"
+          class="text-center text-2xl md:text-3xl font-extrabold tracking-tight text-[var(--color-heading)] mb-3"
+        >
+          {h.landingOfferTitle || 'Invista no seu futuro profissional'}
+        </h2>
+        {h.landingOfferSubtitle && (
+          <p class="text-center text-[var(--color-muted)] text-[15px] md:text-base leading-relaxed mb-6 max-w-xl mx-auto">
+            {h.landingOfferSubtitle}
+          </p>
+        )}
+        {h.landingPriceLine && (
+          <p class="text-center text-xl md:text-2xl font-bold text-[var(--color-heading)] mb-2">{h.landingPriceLine}</p>
+        )}
+        {h.landingOfferNote && (
+          <p class="text-center text-sm text-[var(--color-muted)] mb-8 max-w-lg mx-auto leading-relaxed">{h.landingOfferNote}</p>
+        )}
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+          <a
+            href={String(h.landingOfferCtaHref || '/contato').trim() || '/contato'}
+            class="inline-flex items-center justify-center min-h-[52px] px-10 py-3 rounded-full bg-[var(--color-accent)] text-white text-base font-bold hover:brightness-105 transition-all shadow-lg shadow-[var(--color-accent)]/25"
+          >
+            {h.landingOfferCtaText || 'Quero me inscrever'}
+          </a>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {landingIncluded.length > 0 && (
+    <section class="max-w-6xl mx-auto px-4 sm:px-6 mb-16 md:mb-20" aria-labelledby="included-title">
+      <h2
+        id="included-title"
+        class="text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-heading)] text-center mb-10"
+      >
+        {h.landingIncludedTitle || 'O que está incluso'}
+      </h2>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+        {landingIncluded.map((item: { icon?: string; title?: string; text?: string }) => (
+          <li class="rounded-2xl border border-[var(--color-border)] bg-white p-6 shadow-sm ring-1 ring-stone-900/[0.03]">
+            <div class="flex items-start gap-3">
+              <span class="text-2xl shrink-0" aria-hidden="true">{item.icon || '✓'}</span>
+              <div>
+                <h3 class="font-bold text-lg text-[var(--color-heading)]">{item.title}</h3>
+                {item.text && <p class="text-sm text-[var(--color-muted)] mt-2 leading-relaxed">{item.text}</p>}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <div class="max-w-6xl mx-auto px-4 sm:px-6">
+    {categoryCards.length > 0 && (
+      <section class="mb-16 md:mb-20" aria-labelledby="categorias-title">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <h2 id="categorias-title" class="text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-heading)]">
+            {h.categoriesSectionTitle || 'O que você encontra aqui'}
+          </h2>
+          <p class="mt-2 text-[var(--color-muted)] text-[15px] leading-relaxed">
+            {categoriesSub || categoriesSubDefault}
+          </p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-5 md:gap-6">
+          {categoryCards.map((c: any) => (
+            <a
+              href={c.href || '/blog'}
+              class="group cursodear-home-cat-card block p-6 md:p-7 rounded-2xl border border-[var(--color-border)] bg-white shadow-sm hover:shadow-lg hover:-translate-y-0.5 hover:border-[var(--color-accent)]/40 transition-all duration-300"
+            >
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[var(--color-accent)]/25 to-[var(--color-accent)]/5 mb-5 flex items-center justify-center text-[var(--color-heading)] text-3xl ring-1 ring-[var(--color-accent)]/10">
+                {c.icon || '✨'}
+              </div>
+              <h3 class="font-bold text-lg text-[var(--color-heading)] group-hover:text-[var(--color-link)] transition-colors">
+                {c.title}
+              </h3>
+              {c.description && <p class="text-sm text-[var(--color-muted)] mt-2 leading-relaxed">{c.description}</p>}
+              <span class="inline-flex items-center gap-1 mt-4 text-sm font-semibold text-[var(--color-accent)] opacity-90 group-hover:opacity-100">
+                Ver artigos <span aria-hidden="true">→</span>
+              </span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {landingMods.length > 0 && (
+      <section class="mb-16 md:mb-20" aria-labelledby="modules-title">
+        <h2
+          id="modules-title"
+          class="text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-heading)] text-center mb-10"
+        >
+          {h.landingModulesTitle || 'Programa do curso'}
+        </h2>
+        <ol class="space-y-4 max-w-3xl mx-auto">
+          {landingMods.map((mod: { title?: string; text?: string }, i: number) => (
+            <li class="flex gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)]/80 p-5 md:p-6">
+              <span
+                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent)] text-white text-sm font-bold"
+                aria-hidden="true"
+              >
+                {i + 1}
+              </span>
+              <div>
+                <h3 class="font-bold text-lg text-[var(--color-heading)]">{mod.title}</h3>
+                {mod.text && <p class="text-sm text-[var(--color-muted)] mt-2 leading-relaxed whitespace-pre-line">{mod.text}</p>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {landingFaq.length > 0 && (
+      <section class="mb-16 md:mb-20 max-w-3xl mx-auto" aria-labelledby="faq-title">
+        <h2 id="faq-title" class="text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-heading)] text-center mb-8">
+          {h.landingFaqTitle || 'Dúvidas frequentes'}
+        </h2>
+        <div class="space-y-3">
+          {landingFaq.map((faq: { q?: string; a?: string }, i: number) => (
+            <details
+              class="group rounded-2xl border border-[var(--color-border)] bg-white px-5 py-4 open:shadow-md transition-shadow"
+              open={i === 0}
+            >
+              <summary class="cursor-pointer list-none font-semibold text-[var(--color-heading)] flex justify-between gap-2 items-center">
+                <span>{faq.q}</span>
+                <span class="text-[var(--color-accent)] text-xl leading-none group-open:rotate-45 transition-transform" aria-hidden="true">
+                  +
+                </span>
+              </summary>
+              <p class="mt-3 text-sm text-[var(--color-muted)] leading-relaxed whitespace-pre-line border-t border-[var(--color-border)] pt-3">
+                {faq.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {showLatestPosts && (
+    <section class="mb-16 md:mb-20" aria-labelledby="posts-title">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 md:mb-10">
+        <div class="max-w-2xl">
+          <h2 id="posts-title" class="text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-heading)]">
+            {h.latestPostsTitle || 'Últimos artigos'}
+          </h2>
+          {(h.latestPostsSubtitle || '').trim() && (
+            <p class="mt-2 text-[var(--color-muted)] text-[15px] md:text-base leading-relaxed">
+              {String(h.latestPostsSubtitle).trim()}
+            </p>
+          )}
+        </div>
+      </div>
+      {latestPosts.length === 0 ? (
+        <p class="text-sm text-[var(--color-muted)]">{h.emptyLatestText || 'Nenhum artigo publicado ainda.'}</p>
+      ) : (
+        <>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-7">
+            {latestPosts.map((post) => {
+              const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
+              const thumb = resolvecursodearMediaUrl(post.data.thumbnail || post.data.metaImage);
+              const dateStr = formatPostDate(post.data.publishedDate);
+              const catStr = categoryLabel(post.data.category);
+              return (
+                <a
+                  href={url}
+                  class="group cursodear-home-post-card flex flex-col rounded-2xl border border-[var(--color-border)] bg-white overflow-hidden shadow-sm hover:shadow-xl hover:border-[var(--color-link)]/35 transition-all duration-300"
+                >
+                  <div class="relative aspect-[4/3] overflow-hidden bg-[var(--color-surface)]">
+                    {thumb ? (
+                      <img
+                        src={thumb}
+                        alt=""
+                        class="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                        loading="lazy"
+                        decoding="async"
+                        onerror={`this.onerror=null;this.src='${PLACEHOLDER_THUMB}'`}
+                      />
+                    ) : (
+                      <img
+                        src={PLACEHOLDER_THUMB}
+                        alt=""
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    )}
+                    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" aria-hidden="true" />
+                  </div>
+                  <div class="p-4 md:p-5 flex flex-col flex-1">
+                    <div class="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--color-muted)] mb-2">
+                      {dateStr && (
+                        <time datetime={post.data.publishedDate}>{dateStr}</time>
+                      )}
+                      {dateStr && catStr && <span aria-hidden="true">·</span>}
+                      {catStr && (
+                        <span class="font-medium text-[var(--color-accent)]">{catStr}</span>
+                      )}
+                    </div>
+                    <h3 class="font-bold text-[var(--color-heading)] text-[1.05rem] md:text-lg leading-snug group-hover:text-[var(--color-link)] transition-colors line-clamp-3">
+                      {post.data.title}
+                    </h3>
+                    {post.data.metaDescription && (
+                      <p class="text-sm text-[var(--color-muted)] mt-2 line-clamp-2 leading-relaxed flex-1">
+                        {post.data.metaDescription}
+                      </p>
+                    )}
+                    <span class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-link)]">
+                      Ler artigo <span aria-hidden="true">→</span>
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+          <p class="mt-10 text-center">
+            <a
+              href="/blog"
+              class="inline-flex items-center justify-center min-h-[48px] px-8 py-3 rounded-full bg-[var(--color-accent)] text-white text-sm font-semibold hover:brightness-105 shadow-md transition-all"
+            >
+              {h.latestPostsCtaText || 'Ver todos os artigos'}
+            </a>
+          </p>
+        </>
+      )}
+    </section>
+    )}
+  </div>
+
+  {showAbout && (
+    <section
+      class="max-w-6xl mx-auto px-4 sm:px-6 mb-16 md:mb-20 scroll-mt-24"
+      aria-labelledby="about-section-title"
+    >
+      <div class="rounded-3xl border border-[var(--color-border)] bg-gradient-to-br from-white to-[var(--color-surface)] p-8 sm:p-10 lg:p-12 shadow-lg shadow-stone-900/[0.06] ring-1 ring-[var(--color-accent)]/15">
+        <div class="grid grid-cols-1 lg:grid-cols-2 lg:gap-12 xl:gap-14 items-center gap-10">
+          <div class="order-1 min-w-0 space-y-5">
+            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">Sobre o projeto</p>
+            <h2
+              id="about-section-title"
+              class="text-2xl font-bold tracking-tight text-[var(--color-heading)] md:text-3xl"
+            >
+              {aboutTitle}
+            </h2>
+            {aboutParagraphs.map((para) => (
+              <p class="text-[var(--color-text)] text-[17px] leading-relaxed">{para}</p>
+            ))}
+            {(h.aboutCtaText || h.aboutCtaHref) && (
+              <div class="pt-2">
+                <a
+                  href={String(h.aboutCtaHref || '/sobre').trim() || '/sobre'}
+                  class="inline-flex min-h-[44px] items-center justify-center rounded-full border-2 border-[var(--color-accent)] px-6 py-2.5 text-sm font-semibold text-[var(--color-accent)] hover:bg-[var(--color-accent)] hover:text-white transition-colors"
+                >
+                  {h.aboutCtaText || 'Conheça mais'}
+                </a>
+              </div>
+            )}
+          </div>
+          <figure class="order-2 w-full max-w-md mx-auto lg:max-w-none lg:mx-0">
+            <div class="aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-surface)] shadow-xl ring-1 ring-stone-900/10">
+              <img
+                src={aboutImgSrc}
+                alt={aboutTitle}
+                class="h-full w-full object-cover object-center"
+                loading="lazy"
+                decoding="async"
+                width="640"
+                height="800"
+              />
+            </div>
+          </figure>
+        </div>
+      </div>
+    </section>
+  )}
+
+  {landingCloseShow && (
+    <section
+      class="max-w-6xl mx-auto px-4 sm:px-6 mb-16 md:mb-20"
+      aria-labelledby="closing-cta-title"
+    >
+      <div class="rounded-3xl bg-[var(--color-heading)] px-8 py-12 md:px-14 md:py-14 text-center shadow-xl shadow-stone-900/20">
+        <h2 id="closing-cta-title" class="text-2xl md:text-3xl font-bold tracking-tight text-white mb-3">
+          {h.landingClosingTitle || 'Vamos começar?'}
+        </h2>
+        {h.landingClosingText && (
+          <p class="text-white/85 text-[15px] md:text-base max-w-xl mx-auto leading-relaxed mb-8">{h.landingClosingText}</p>
+        )}
+        <a
+          href={String(
+            h.landingClosingCtaHref || h.landingOfferCtaHref || '#oferta',
+          ).trim()}
+          class="inline-flex items-center justify-center min-h-[52px] px-10 py-3 rounded-full bg-[var(--color-accent)] text-white text-base font-bold hover:brightness-110 transition-all"
+        >
+          {h.landingClosingCtaText || h.landingOfferCtaText || 'Quero me inscrever'}
+        </a>
+      </div>
+    </section>
+  )}
+
+  {showNewsletter && (
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 pb-16 md:pb-20">
+    <section
+      class="rounded-3xl border border-[var(--color-border)] bg-gradient-to-br from-[#fffefb] via-white to-[var(--color-nude)] p-8 md:p-10 text-center shadow-lg shadow-stone-900/[0.05] ring-1 ring-[var(--color-accent)]/20"
+      aria-labelledby="newsletter-title"
+    >
+      <h2 id="newsletter-title" class="text-2xl md:text-3xl font-bold tracking-tight text-[var(--color-heading)] mb-2">
+        {h.newsletterTitle || 'Newsletter'}
+      </h2>
+      <p class="text-sm md:text-[15px] text-[var(--color-muted)] mb-6 max-w-lg mx-auto leading-relaxed">
+        {h.newsletterDescription || ''}
+      </p>
+      <form class="flex flex-col sm:flex-row gap-3 justify-center max-w-md mx-auto" action="#" method="post" aria-label="Newsletter">
+        <label for="newsletter-email" class="sr-only">E-mail</label>
+        <input
+          id="newsletter-email"
+          type="email"
+          name="email"
+          placeholder={h.newsletterPlaceholder || 'seu@email.com'}
+          class="flex-1 min-h-[48px] px-4 rounded-xl border border-[var(--color-border)] bg-white text-[var(--color-text)] shadow-inner focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]/40"
+          required
+        />
+        <button
+          type="submit"
+          class="min-h-[48px] px-6 py-2.5 rounded-xl bg-[var(--color-accent)] text-white text-sm font-semibold hover:brightness-105 shadow-md transition-all"
+        >
+          {h.newsletterButtonText || 'Inscrever'}
+        </button>
+      </form>
+    </section>
+  </div>
+  )}
+</article>

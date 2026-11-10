@@ -1,0 +1,81 @@
+# Template de nicho: Cama Hospitalar / Locação de Equipamentos Médicos
+# Usado pelo sistema de templates do Modo Local para aplicar copy e serviços iniciais.
+
+id: cama-hospitalar
+name: Cama Hospitalar
+description: "Site pronto para locadoras de equipamentos médicos e hospitalares"
+icon: "🛏️"
+color: "#10b981"
+
+niche:
+  name: Locação de Equipamentos Médicos
+  slug: locacao-equipamentos-medicos
+  icon: "🛏️"
+  description: "Aluguel de camas hospitalares, cadeiras de rodas e equipamentos de reabilitação"
+  color: "#10b981"
+  active: true
+
+homeCopy:
+  heroBadge: "🛏️ Locação rápida e segura"
+  heroTitle: "Aluguel de Equipamentos Médicos"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Camas hospitalares, cadeiras de rodas e mais. Entrega e retirada na sua casa. Atendimento humanizado."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver equipamentos"
+  heroWhatsappMessage: "Olá! Preciso alugar equipamentos médicos. Vocês atendem aqui?"
+  servicesTitle: "Equipamentos para Aluguel"
+  servicesSubtitle: "Soluções para reabilitação e cuidados em casa"
+  aboutTitle: "Referência em Locação de Equipamentos"
+  aboutSubtitle: "Atendimento humanizado"
+  aboutText: "Oferecemos aluguel de camas hospitalares, cadeiras de rodas, cadeiras higiênicas e equipamentos de reabilitação. Entrega e retirada na sua residência. Equipamentos higienizados e em perfeito estado de uso."
+  aboutStats:
+    - number: "15+"
+      label: Anos no mercado
+    - number: "1000+"
+      label: Clientes atendidos
+    - number: "24h"
+      label: Atendimento emergencial
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Entrega na sua casa. Equipamentos de qualidade."
+  pageContent: "Procurando {servico} em {cidade}? Oferecemos aluguel de equipamentos médicos com entrega e retirada na sua residência. Atuamos em toda a região de {cidade} - {estado}. Entre em contato para orçamento gratuito."
+  benefits:
+    - "Entrega e retirada em {cidade}"
+    - "Orçamento gratuito"
+    - "Equipamentos higienizados"
+    - "Suporte durante o período de locação"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} entrega na sua casa. Ligue agora!"
+
+services:
+  - title: "Aluguel de Cama Hospitalar"
+    slug: aluguel-de-cama-hospitalar
+    shortDescription: "Camas hospitalares motorizadas e manuais para uso residencial"
+    icon: "🛏️"
+    niche: locacao-equipamentos-medicos
+  - title: "Aluguel de Cadeira de Rodas"
+    slug: aluguel-de-cadeira-de-rodas
+    shortDescription: "Cadeiras de rodas standard e premium para locação"
+    icon: "♿"
+    niche: locacao-equipamentos-medicos
+  - title: "Aluguel de Cadeira Higiênica"
+    slug: aluguel-de-cadeira-higienica
+    shortDescription: "Cadeiras higiênicas para banho e higiene"
+    icon: "🪑"
+    niche: locacao-equipamentos-medicos
+  - title: "Aluguel de Muleta"
+    slug: aluguel-de-muleta
+    shortDescription: "Muletas axilares e canadenses"
+    icon: "🩼"
+    niche: locacao-equipamentos-medicos
+  - title: "Aluguel de Andador"
+    slug: aluguel-de-andador
+    shortDescription: "Andadores com e sem rodas para reabilitação"
+    icon: "🚶"
+    niche: locacao-equipamentos-medicos
+  - title: "Aluguel de Gerador"
+    slug: aluguel-de-gerador
+    shortDescription: "Geradores de energia para eventos e emergências"
+    icon: "🔌"
+    niche: locacao-equipamentos-medicos

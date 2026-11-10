@@ -1,0 +1,183 @@
+---
+import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
+import { resolvecursodearMediaUrl } from '../../utils/media-url';
+
+interface Certification {
+  title: string;
+  detail?: string;
+}
+
+interface Project {
+  title: string;
+  description: string;
+}
+
+interface Props {
+  author: {
+    id: string;
+    data: {
+      name: string;
+      role?: string;
+      bio?: string;
+      avatar?: string;
+      expertise?: string[];
+      certifications?: Certification[];
+      projects?: Project[];
+    };
+  };
+  posts: any[];
+  blogPermalinkStructure: BlogPermalinkStructure;
+  blogUrlPrefix: BlogUrlPrefix;
+  categories: { id: string; data: { name: string; slug: string } }[];
+}
+
+const { author, posts, blogPermalinkStructure, blogUrlPrefix, categories } = Astro.props;
+const a = author.data;
+const avatarUrl = a.avatar ? resolvecursodearMediaUrl(a.avatar) : null;
+
+function categoryLabel(slug: string | undefined) {
+  if (!slug) return '';
+  const c = categories.find((x) => x.id === slug || x.data.slug === slug);
+  return c?.data?.name || slug;
+}
+---
+
+<article class="max-w-5xl mx-auto px-4 sm:px-6 py-10 sm:py-14">
+  <nav class="text-sm text-[var(--color-muted)] mb-6" aria-label="Navegação">
+    <a href="/" class="text-[var(--color-muted)] hover:text-[var(--color-link)] no-underline">Início</a>
+    <span class="mx-1.5 opacity-60" aria-hidden="true">›</span>
+    <a href="/sobre/" class="text-[var(--color-muted)] hover:text-[var(--color-link)] no-underline">Sobre</a>
+    <span class="mx-1.5 opacity-60" aria-hidden="true">›</span>
+    <span class="text-[var(--color-dark)] font-medium">{a.name}</span>
+  </nav>
+
+  <header class="mb-10 md:mb-12">
+    <div class="flex flex-col md:flex-row gap-8 md:gap-10 items-start">
+      {avatarUrl ? (
+        <img
+          src={avatarUrl}
+          alt={`Foto de ${a.name}, ${a.role || 'consultor de climatização'}`}
+          width="280"
+          height="280"
+          class="w-40 h-40 md:w-52 md:h-52 rounded-2xl object-cover shrink-0 ring-2 ring-gray-200 border border-[var(--color-border)] shadow-sm"
+          loading="eager"
+          fetchpriority="high"
+        />
+      ) : (
+        <div
+          class="w-40 h-40 md:w-52 md:h-52 rounded-2xl shrink-0 flex items-center justify-center text-3xl font-semibold text-[var(--color-heading)] bg-[var(--color-surface)] border border-[var(--color-border)]"
+          aria-hidden="true"
+        >
+          {String(a.name || '?').trim().charAt(0).toUpperCase()}
+        </div>
+      )}
+      <div class="min-w-0 flex-1">
+        <p class="text-xs font-semibold uppercase tracking-wider text-orange-600 mb-2">Curadoria técnica do portal</p>
+        <h1 class="text-3xl font-extrabold tracking-tight text-[var(--color-heading)] md:text-4xl">{a.name}</h1>
+        {a.role && <p class="mt-2 text-lg font-medium text-[var(--color-heading)]">{a.role}</p>}
+        {a.bio && (
+          <p class="mt-5 text-[var(--color-text)] text-[18px] leading-[1.7] max-w-3xl">{a.bio}</p>
+        )}
+      </div>
+    </div>
+  </header>
+
+  {a.expertise && a.expertise.length > 0 && (
+    <section class="mb-10 md:mb-12" aria-labelledby="expertise-heading">
+      <h2 id="expertise-heading" class="text-2xl font-bold text-[var(--color-heading)] mb-4">
+        Áreas de especialidade
+      </h2>
+      <ul class="grid sm:grid-cols-2 gap-3">
+        {a.expertise.map((item) => (
+          <li class="flex items-start gap-2.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-[var(--color-text)]">
+            <span class="text-orange-500 mt-0.5 shrink-0" aria-hidden="true">✓</span>
+            <span>{item}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {a.certifications && a.certifications.length > 0 && (
+    <section class="mb-10 md:mb-12" aria-labelledby="certs-heading">
+      <h2 id="certs-heading" class="text-2xl font-bold text-[var(--color-heading)] mb-4">
+        Formação e certificações
+      </h2>
+      <ul class="space-y-4">
+        {a.certifications.map((cert) => (
+          <li class="rounded-xl border border-[var(--color-border)] bg-white p-5 md:p-6">
+            <h3 class="font-semibold text-[var(--color-heading)] text-lg">{cert.title}</h3>
+            {cert.detail && <p class="mt-2 text-[var(--color-muted)] leading-relaxed">{cert.detail}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {a.projects && a.projects.length > 0 && (
+    <section class="mb-10 md:mb-12" aria-labelledby="projects-heading">
+      <h2 id="projects-heading" class="text-2xl font-bold text-[var(--color-heading)] mb-4">
+        Projetos e atuação técnica
+      </h2>
+      <ul class="grid md:grid-cols-2 gap-5">
+        {a.projects.map((project) => (
+          <li class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 md:p-6 h-full">
+            <h3 class="font-semibold text-[var(--color-heading)]">{project.title}</h3>
+            <p class="mt-2 text-[var(--color-muted)] leading-relaxed">{project.description}</p>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <section aria-labelledby="author-posts-heading" class="pt-8 border-t border-[var(--color-border)]">
+    <h2 id="author-posts-heading" class="text-2xl font-bold tracking-tight text-[var(--color-heading)] mb-6">
+      Artigos revisados por {a.name}
+      {posts.length > 0 && <span class="text-[var(--color-muted)] font-normal text-base">({posts.length})</span>}
+    </h2>
+
+    {posts.length === 0 ? (
+      <p class="text-[var(--color-muted)]">Nenhum artigo publicado ainda.</p>
+    ) : (
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {posts.map((post) => {
+          const url = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
+          const thumb = resolvecursodearMediaUrl(post.data.thumbnail || post.data.metaImage);
+          const date = post.data.publishedDate;
+          const cat = categoryLabel(post.data.category);
+          return (
+            <a
+              href={url}
+              class="group block rounded-lg border border-[var(--color-border)] overflow-hidden hover:border-[var(--color-link)] transition-colors bg-white"
+            >
+              {thumb ? (
+                <div class="aspect-[4/3] overflow-hidden bg-[var(--color-surface)]">
+                  <img src={thumb} alt="" class="w-full h-full object-cover" loading="lazy" decoding="async" />
+                </div>
+              ) : (
+                <div class="aspect-[4/3] bg-[var(--color-surface)] flex items-center justify-center text-[var(--color-muted)] text-sm">
+                  Sem capa
+                </div>
+              )}
+              <div class="p-4">
+                {cat && (
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-muted)] block mb-1">
+                    {cat}
+                  </span>
+                )}
+                {date && (
+                  <time class="text-xs text-[var(--color-muted)]" datetime={date}>
+                    {new Date(date).toLocaleDateString('pt-BR')}
+                  </time>
+                )}
+                <h3 class="mt-1 font-semibold text-[var(--color-heading)] group-hover:text-[var(--color-link)] leading-snug">
+                  {post.data.title}
+                </h3>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    )}
+  </section>
+</article>

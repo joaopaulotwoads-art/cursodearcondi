@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Cama Hospitalar
+id: aluguel-cama-hospitalar
+name: Aluguel de Cama Hospitalar
+description: "Site pronto para locadoras especializadas em camas hospitalares"
+icon: "🛏️"
+color: "#10b981"
+
+niche:
+  name: Aluguel de Cama Hospitalar
+  slug: aluguel-cama-hospitalar
+  icon: "🛏️"
+  description: "Locação de camas hospitalares para uso residencial e reabilitação"
+  color: "#10b981"
+  active: true
+
+homeCopy:
+  heroBadge: "Cama Hospitalar para Alugar"
+  heroTitle: "Aluguel de Cama Hospitalar"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Camas hospitalares motorizadas e manuais. Entrega e retirada na sua casa. Equipamentos higienizados. Atendimento humanizado."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver equipamentos"
+  heroWhatsappMessage: "Olá! Preciso alugar uma cama hospitalar. Vocês entregam em casa?"
+  servicesTitle: "Equipamentos para Locação"
+  servicesSubtitle: "Cuidados em casa"
+  aboutTitle: "Especialistas em Cama Hospitalar"
+  aboutSubtitle: "Conforto e segurança"
+  aboutText: "Locamos camas hospitalares motorizadas e manuais para uso residencial. Entrega e retirada na sua residência. Equipamentos higienizados e em perfeito estado. Suporte durante o período de locação."
+  aboutStats:
+    - number: "15+"
+      label: Anos no mercado
+    - number: "1000+"
+      label: Clientes atendidos
+    - number: "24h"
+      label: Atendimento emergencial
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Entrega na sua casa."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece camas hospitalares para locação. Entrega e retirada na residência. Atuamos em {cidade} e região."
+  benefits:
+    - "Entrega em {cidade}"
+    - "Orçamento gratuito"
+    - "Equipamentos higienizados"
+    - "Suporte durante locação"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} entrega na sua casa. Ligue!"
+
+services:
+  - title: "Aluguel de Cama Hospitalar"
+    slug: aluguel-de-cama-hospitalar
+    shortDescription: "Camas hospitalares motorizadas e manuais"
+    icon: "🛏️"
+    niche: aluguel-cama-hospitalar
+  - title: "Aluguel de Cama Hospitalar Motorizada"
+    slug: aluguel-cama-hospitalar-motorizada
+    shortDescription: "Cama com acionamento elétrico"
+    icon: "🛏️"
+    niche: aluguel-cama-hospitalar
+  - title: "Aluguel de Cama Hospitalar Manual"
+    slug: aluguel-cama-hospitalar-manual
+    shortDescription: "Cama hospitalar com manivela"
+    icon: "🛏️"
+    niche: aluguel-cama-hospitalar
+  - title: "Aluguel de Cadeira de Rodas"
+    slug: aluguel-cadeira-rodas
+    shortDescription: "Cadeiras de rodas para locação"
+    icon: "♿"
+    niche: aluguel-cama-hospitalar
+  - title: "Aluguel de Cadeira Higiênica"
+    slug: aluguel-cadeira-higienica
+    shortDescription: "Cadeiras higiênicas para banho"
+    icon: "🪑"
+    niche: aluguel-cama-hospitalar
+  - title: "Aluguel de Andador"
+    slug: aluguel-de-andador
+    shortDescription: "Andadores para reabilitação"
+    icon: "🚶"
+    niche: aluguel-cama-hospitalar
+  - title: "Aluguel de Muleta"
+    slug: aluguel-de-muleta
+    shortDescription: "Muletas axilares e canadenses"
+    icon: "🩼"
+    niche: aluguel-cama-hospitalar

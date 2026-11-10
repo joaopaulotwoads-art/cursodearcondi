@@ -1,0 +1,59 @@
+---
+/**
+ * Footer.astro – Rodapé do site (tema 8links-test2)
+ * Lê dados dos singletons 'footer' e 'contact' do CNX.
+ */
+import { readSingleton } from '../../../utils/singleton-utils';
+
+const { activeThemeId } = Astro.props;
+const footerData = await readSingleton('footer', activeThemeId);
+const contactData = await readSingleton('contact', activeThemeId);
+
+const siteName = footerData?.siteName || '8links';
+const description = footerData?.description || 'Através de análise crítica e inquietude criativa, transformamos complexidades em experiências digitais memoráveis.';
+const footerNav = (footerData?.links || []).map((l: { href?: string; url?: string; label?: string }) => ({
+  href: l.href || l.url || '#',
+  label: l.label || '',
+}));
+const phone = (contactData?.phone as string) || '';
+const email = (contactData?.email as string) || '';
+const copyright = footerData?.copyright || `© ${new Date().getFullYear()} ${siteName}. Todos os direitos reservados.`;
+---
+
+<footer class="bg-[#131212] text-white/90">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <div>
+        <a href="/" class="text-2xl font-bold text-[#D9F45F] block mb-4">{siteName}</a>
+        <p class="text-sm text-white/70 mb-6 max-w-xs">
+          {description}
+        </p>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-4">Links Rápidos</h3>
+        <ul class="space-y-2">
+          {footerNav.length > 0 ? footerNav.map((item) => (
+            <li>
+              <a href={item.href} class="text-white/70 hover:text-[#D9F45F] transition-colors min-h-[44px] flex items-center">
+                {item.label}
+              </a>
+            </li>
+          )) : (
+            <li><a href="/" class="text-white/70 hover:text-[#D9F45F]">Início</a></li>
+          )}
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-bold text-white mb-4">Contato</h3>
+        <ul class="space-y-3">
+          {phone && <li><a href={`tel:${phone.replace(/\s/g, '')}`} class="text-white/70 hover:text-[#D9F45F] min-h-[44px] flex items-center">{phone}</a></li>}
+          {email && <li><a href={`mailto:${email}`} class="text-white/70 hover:text-[#D9F45F] min-h-[44px] flex items-center">{email}</a></li>}
+          {!phone && !email && <li class="text-white/60 text-sm">Configure o singleton contact.</li>}
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 pt-8 border-t border-white/10">
+      <p class="text-sm text-white/60">{copyright}</p>
+    </div>
+  </div>
+</footer>

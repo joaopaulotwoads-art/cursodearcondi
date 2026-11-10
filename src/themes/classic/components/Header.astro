@@ -1,0 +1,107 @@
+---
+/**
+ * Header.astro (Classic Theme)
+ *
+ * Componente de cabeçalho do tema Classic.
+ * Lê os itens do menu e as configurações de logo do singleton 'menu'.
+ * Suporta logo como texto personalizado ou imagem enviada pelo admin.
+ */
+
+import { readSingleton } from '../../../utils/singleton-utils';
+
+const { activeThemeId } = Astro.props;
+
+const menuData   = await readSingleton('menu', activeThemeId);
+const menuItems  = menuData?.items  || [];
+const logoType   = menuData?.logoType  || 'text';
+const logoText   = menuData?.logoText  || 'CNX.AGENCY';
+const logoImage  = menuData?.logoImage || '';
+
+if (!menuData || !menuItems || menuItems.length === 0) {
+    console.warn('⚠️ Menu não encontrado ou vazio. Verifique src/content/singletons/classic/menu.yaml');
+}
+---
+
+<header class="sticky top-0 z-50 backdrop-blur-md" style="background: var(--blog-nav-bg); border-bottom: 1px solid var(--blog-nav-border);">
+    <nav class="container mx-auto px-6 h-20 flex items-center justify-between">
+        <a href="/" class="hover:opacity-80 transition-opacity flex items-center">
+            {logoType === 'image' && logoImage ? (
+                <img
+                    src={logoImage}
+                    alt={logoText || 'Logo'}
+                    class="h-10 w-auto object-contain"
+                    loading="eager"
+                />
+            ) : (
+                <span class="text-2xl font-heading font-black tracking-tighter hover:text-primary transition-colors" style="color: var(--blog-text);">
+                    {logoText}
+                </span>
+            )}
+        </a>
+        <div class="hidden md:flex gap-10 text-sm font-bold uppercase tracking-widest items-center" style="color: var(--blog-text);">
+            {menuItems.length > 0 ? (
+                menuItems.map((item: any) => (
+                    <a 
+                        href={item.href || '#'} 
+                        target={item.target || '_self'}
+                        class="hover:text-primary transition-colors"
+                    >
+                        {item.icon && <span class="mr-1">{item.icon}</span>}
+                        {item.label || 'Sem Label'}
+                    </a>
+                ))
+            ) : (
+                <span class="text-xs" style="color: var(--blog-text-subtle);">Menu não configurado</span>
+            )}
+        </div>
+        
+        {/* Mobile Menu Button */}
+        <button 
+            class="md:hidden p-2 hover:text-primary transition-colors"
+            style="color: var(--blog-text);"
+            id="mobile-menu-button"
+            aria-label="Toggle menu"
+        >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+        
+        {/* Mobile Menu */}
+        <div 
+            id="mobile-menu" 
+            class="hidden md:hidden absolute top-full left-0 right-0 p-6"
+            style="background: var(--blog-mob-bg); border-top: 1px solid var(--blog-mob-border);"
+        >
+            <div class="flex flex-col gap-4">
+                {menuItems.length > 0 ? (
+                    menuItems.map((item: any) => (
+                        <a 
+                            href={item.href || '#'} 
+                            target={item.target || '_self'}
+                            class="hover:text-primary transition-colors py-2"
+                            style="color: var(--blog-text);"
+                        >
+                            {item.icon && <span class="mr-2">{item.icon}</span>}
+                            {item.label || 'Sem Label'}
+                        </a>
+                    ))
+                ) : (
+                    <span class="text-xs" style="color: var(--blog-text-subtle);">Menu não configurado</span>
+                )}
+            </div>
+        </div>
+    </nav>
+</header>
+
+<script>
+    // Mobile menu toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+</script>

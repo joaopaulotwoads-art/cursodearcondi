@@ -1,5 +1,4 @@
 import type { CollectionEntry } from 'astro:content';
-import { newestFirst } from './post-url';
 
 function postKey(p: CollectionEntry<'posts'>): string {
   return p.data.slug || p.id;
@@ -23,6 +22,9 @@ export function pickRelatedPosts(
       : [];
   const pool = sameCat.length > 0 ? sameCat : others;
   return pool
-    .sort(newestFirst)
+    .sort(
+      (a, b) =>
+        new Date(b.data.publishedDate!).getTime() - new Date(a.data.publishedDate!).getTime(),
+    )
     .slice(0, limit);
 }

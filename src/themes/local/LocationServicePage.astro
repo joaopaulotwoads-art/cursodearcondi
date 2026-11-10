@@ -1,0 +1,682 @@
+---
+/**
+ * LocationServicePage.astro — Tema Local
+ *
+ * Template para páginas de SEO programático (/{bairro}/{servico}).
+ *
+ * Layout:
+ *   1. Hero            — H1, subtítulo, badges de benefícios, CTAs WhatsApp/telefone
+ *   2. Conteúdo 2 cols — Coluna principal (Markdown gerado) + Sidebar (contato + formulário)
+ *   3. FAQ             — Acordeão com schema FAQPage JSON-LD (quando detectado no conteúdo)
+ *   4. CTA final       — Seção em gradiente com WhatsApp + telefone
+ *   5. CTA mobile      — Barra fixa no bottom (somente mobile)
+ *   6. Breadcrumb      — Schema BreadcrumbList JSON-LD
+ *
+ * Modos de renderização:
+ *   MODO IA       — service.generatedContent preenchido → Markdown parseado via `marked`
+ *   MODO LEGADO   — fallback para keywords sem conteúdo gerado → texto plano em parágrafos
+ *
+ * Dados de contato lidos de src/content/singletons/local/home.yaml.
+ * Accent color injetado via CSS custom property (--page-accent).
+ */
+
+import LocalLayout from '../../layouts/LocalLayout.astro';
+import { readSingleton } from '../../utils/singleton-utils';
+import { getSiteContactInfo, formatPhone } from '../../utils/site-contact';
+import { marked } from 'marked';
+
+interface OutlineItem { level: 'h1' | 'h2' | 'h3' | 'h4'; text: string; }
+
+interface Props {
+    resolvedTitle:          string;
+    resolvedSubtitle:       string;
+    resolvedContent:        string;
+    resolvedBenefits:       string[];
+    resolvedMetaTitle:      string;
+    resolvedMetaDescription:string;
+    hasGeneratedContent?:   boolean;
+    nicheColor?:            string;
+    service:                any;
+    location:               any;
+}
+
+const {
+    resolvedTitle,
+    resolvedSubtitle,
+    resolvedContent,
+    resolvedBenefits,
+    resolvedMetaTitle,
+    resolvedMetaDescription,
+    hasGeneratedContent = false,
+    nicheColor          = '#2563eb',
+    service,
+    location,
+} = Astro.props;
+
+const localData = await readSingleton('home', 'local');
+const contact   = await getSiteContactInfo();
+const company   = localData?.companyName     || 'Minha Empresa';
+const whatsapp  = contact.whatsapp;
+const phone     = contact.phone;
+const email     = localData?.companyEmail    || '';
+const address   = localData?.companyAddress  || '';
+const hours     = localData?.businessHours   || 'Seg–Sex: 08h–18h · Sáb: 08h–13h';
+
+const waMsg = encodeURIComponent(
+    `Olá! Vim pelo site e gostaria de um orçamento para: ${service.title} em ${location.name}`,
+);
+const waUrl     = whatsapp ? `https://wa.me/55${whatsapp}?text=${waMsg}` : '#';
+const phoneHref = phone    ? `tel:+55${phone}` : '#';
+const phoneFmt  = phone    ? formatPhone(phone) : '';
+
+// ── FAQ extractor + remover FAQ do corpo principal ─────────────────────────────
+
+interface FaqItem { q: string; a: string; }
+
+/** Remove a seção FAQ do markdown (será exibida só na área dedicada) */
+function removeFaqFromContent(markdown: string): string {
+    const lines = markdown.split('\n');
+    const out: string[] = [];
+    let inFaq = false;
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (/^#{1,2}\s.*(faq|perguntas\s+frequentes|dúvidas)/i.test(trimmed)) {
+            inFaq = true;
+            continue;
+        }
+        if (!inFaq) {
+            out.push(line);
+            continue;
+        }
+        // Sai da FAQ ao encontrar outro H1/H2 que não seja FAQ
+        if (/^#{1,2}\s/.test(trimmed) && !/faq|perguntas|dúvidas/i.test(trimmed)) {
+            inFaq = false;
+            out.push(line);
+        }
+    }
+    return out.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+function extractFAQ(markdown: string): FaqItem[] {
+    const lines   = markdown.split('\n');
+    const items: FaqItem[] = [];
+    let inFaq     = false;
+    let currentQ  = '';
+    let currentA: string[] = [];
+
+    for (const line of lines) {
+        const trimmed = line.trim();
+        if (/^#{1,2}\s.*(faq|perguntas\s+frequentes|dúvidas)/i.test(trimmed)) { inFaq = true; continue; }
+        if (!inFaq) continue;
+        if (/^#{1,2}\s/.test(trimmed) && !/faq|perguntas|dúvidas/i.test(trimmed)) {
+            if (currentQ && currentA.length) items.push({ q: currentQ, a: currentA.join(' ').trim() });
+            inFaq = false;
+            continue;
+        }
+        if (/^#{3,4}\s+.+/.test(trimmed)) {
+            if (currentQ && currentA.length) items.push({ q: currentQ, a: currentA.join(' ').trim() });
+            currentQ = trimmed.replace(/^#{3,4}\s+/, '').replace(/\*\*/g, '');
+            currentA = [];
+            continue;
+        }
+        if (currentQ && trimmed && !trimmed.startsWith('#')) {
+            currentA.push(trimmed.replace(/\*\*/g, '').replace(/\*/g, ''));
+        }
+    }
+    if (currentQ && currentA.length) items.push({ q: currentQ, a: currentA.join(' ').trim() });
+    return items.slice(0, 10);
+}
+
+// ── Parsing de conteúdo ───────────────────────────────────────────────────────
+
+marked.setOptions({ gfm: true, breaks: true });
+
+/** Normaliza markdown: line endings, remove indent YAML e preserva blocos. */
+function normalizeMarkdown(text: string): string {
+    let t = text
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .trim();
+    const lines = t.split('\n');
+    if (lines.length === 0) return '';
+    const indents = lines.filter(l => l.trim()).map(l => l.match(/^\s*/)?.[0]?.length ?? 0);
+    const minIndent = indents.length ? Math.min(...indents) : 0;
+    if (minIndent > 0) {
+        t = lines.map(l => l.slice(Math.min(minIndent, l.length))).join('\n');
+    }
+    return t.replace(/\n{3,}/g, '\n\n').trim();
+}
+
+/** Remove code fences que a IA às vezes envolve o markdown (```markdown ... ```) */
+function stripMarkdownFence(text: string): string {
+    let t = text.trim();
+    if (t.startsWith('```')) {
+        t = t.replace(/^```(?:markdown|md)?\s*\n?/, '').replace(/\n?```\s*$/, '');
+    }
+    return t.trim();
+}
+
+let contentHtml         = '';
+let faqItems: FaqItem[] = [];
+
+if (hasGeneratedContent && resolvedContent) {
+    const unfenced       = stripMarkdownFence(resolvedContent);
+    const cleanContent   = normalizeMarkdown(unfenced);
+    faqItems             = extractFAQ(cleanContent);
+    const contentNoFaq   = removeFaqFromContent(cleanContent);
+    contentHtml          = String(await Promise.resolve(marked.parse(contentNoFaq)));
+} else if (resolvedContent) {
+    contentHtml = resolvedContent
+        .split(/\n\n+/)
+        .filter(Boolean)
+        .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+        .join('');
+}
+
+// ── Schemas JSON-LD ───────────────────────────────────────────────────────────
+
+const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Início',      item: '/' },
+        { '@type': 'ListItem', position: 2, name: location.name, item: `/${location.slug}` },
+        { '@type': 'ListItem', position: 3, name: service.title, item: `/${location.slug}/${service.slug}` },
+    ],
+};
+
+const faqSchema = faqItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map(item => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+} : null;
+
+function hexToRgb(hex: string): string {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r} ${g} ${b}`;
+}
+const accentRgb = hexToRgb(nicheColor.startsWith('#') ? nicheColor : '#2563eb');
+---
+
+<LocalLayout
+    title={resolvedMetaTitle}
+    description={resolvedMetaDescription}
+    schemaService={service.title}
+    extraSchemas={[breadcrumbSchema, ...(faqSchema ? [faqSchema] : [])]}
+>
+
+    <style define:vars={{ accentColor: nicheColor, accentRgb }}>
+        :root {
+            --page-accent:     var(--accentColor);
+            --page-accent-rgb: var(--accentRgb);
+        }
+
+        /* ── Hero (sempre fundo escuro para contraste) ─── */
+        .lsp-hero {
+            background: linear-gradient(155deg, #0c1222 0%, #0f172a 35%, #1e293b 100%);
+            padding: 4rem 1.5rem 3.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .lsp-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 0%, rgb(var(--page-accent-rgb) / 0.2) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .lsp-hero-inner { max-width: 56rem; margin: 0 auto; position: relative; }
+        .lsp-hero-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 1rem;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.25);
+            margin-bottom: 1.25rem;
+        }
+        .lsp-hero-badge span { font-size: 0.82rem; font-weight: 600; color: #f1f5f9; }
+        .lsp-hero-content { display: flex; align-items: flex-start; gap: 2rem; flex-wrap: wrap; }
+        .lsp-hero-text { flex: 1; min-width: 280px; }
+        .lsp-hero-icon { font-size: 2.5rem; margin-bottom: 0.5rem; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4)); }
+        .lsp-hero-title { font-size: clamp(1.65rem, 4vw, 2.6rem); font-weight: 900; color: #fff; margin-bottom: 0.85rem; font-family: 'Outfit', sans-serif; line-height: 1.2; letter-spacing: -0.03em; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .lsp-hero-subtitle { font-size: 1.02rem; color: #e2e8f0; max-width: 540px; margin-bottom: 1.5rem; line-height: 1.75; }
+        .lsp-hero-benefits { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.75rem; }
+        .lsp-hero-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.9rem; border-radius: 999px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); font-size: 0.82rem; color: #f1f5f9; font-weight: 500; }
+        .lsp-hero-chip-check { color: #86efac; }
+        .lsp-hero-ctas { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+        .lsp-cta-whatsapp { display: inline-flex; align-items: center; gap: 0.6rem; padding: 0.95rem 1.6rem; border-radius: 999px; background: #25d366; color: #fff; font-weight: 700; font-size: 0.95rem; text-decoration: none; box-shadow: 0 4px 24px rgba(37,211,102,0.4); transition: transform 0.15s, box-shadow 0.15s; }
+        .lsp-cta-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(37,211,102,0.5); }
+        .lsp-cta-phone { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.95rem 1.6rem; border-radius: 999px; border: 2px solid rgba(255,255,255,0.4); color: #fff; font-weight: 600; font-size: 0.95rem; text-decoration: none; transition: background 0.15s, border-color 0.15s; }
+        .lsp-cta-phone:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.5); }
+
+        /* ── Conteúdo gerado (contraste alto em fundo claro) ─── */
+        .lsp-content h1 { font-size: 2rem; font-weight: 900; margin: 0 0 1.25rem; padding-top: 0; display: block; color: #0f172a; font-family: 'Outfit', sans-serif; }
+        .lsp-content h1:not(:first-child) { margin-top: 2.5rem; }
+        .lsp-content h2 { font-size: 1.4rem; font-weight: 800; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #cbd5e1; display: block; color: #0f172a; font-family: 'Outfit', sans-serif; }
+        .lsp-content h3 { font-size: 1.1rem; font-weight: 700; margin: 1.75rem 0 0.75rem; display: block; color: #1e293b; }
+        .lsp-content h4 { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 0.5rem; display: block; color: #334155; }
+        .lsp-content p  { color: #334155; line-height: 1.9; margin: 0 0 1.25rem; font-size: 0.95rem; display: block; }
+        .lsp-content ul, .lsp-content ol { margin: 0 0 1.25rem 1.5rem; padding-left: 1.25rem; color: #334155; line-height: 1.8; display: block; }
+        .lsp-content ul { list-style: disc; }
+        .lsp-content ol { list-style: decimal; }
+        .lsp-content li { margin-bottom: 0.3rem; font-size: 0.95rem; }
+        .lsp-content strong { color: #0f172a; font-weight: 700; }
+        .lsp-content em    { font-style: italic; color: #475569; }
+        .lsp-content a     { color: var(--page-accent); text-decoration: underline; font-weight: 600; }
+        .lsp-content blockquote { border-left: 4px solid var(--page-accent); padding: 0.75rem 1.25rem; margin: 1.5rem 0; background: rgb(var(--page-accent-rgb) / 0.06); border-radius: 0 8px 8px 0; }
+        .lsp-content blockquote p { color: #334155; margin: 0; font-style: italic; }
+        .lsp-content table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.9rem; }
+        .lsp-content th { background: #f1f5f9; padding: 0.65rem 0.85rem; text-align: left; font-weight: 700; color: #1e293b; border: 1px solid #e2e8f0; }
+        .lsp-content td { padding: 0.6rem 0.85rem; border: 1px solid #e2e8f0; color: #334155; }
+        .lsp-content tr:nth-child(even) td { background: #f8fafc; }
+        .lsp-content code { font-family: monospace; background: #f1f5f9; padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.875em; color: #0f172a; word-break: break-all; }
+        .lsp-content pre  { background: #0f172a; padding: 1rem; border-radius: 8px; overflow-x: auto; margin: 1.5rem 0; max-width: 100%; }
+        .lsp-content pre code { background: none; color: #e2e8f0; padding: 0; }
+        /* Evita overflow: quebra de palavras longas e URLs */
+        .lsp-content { overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; max-width: 100%; overflow-x: hidden; white-space: normal; }
+        .lsp-content p, .lsp-content li, .lsp-content td, .lsp-content th { overflow-wrap: break-word; word-break: break-word; white-space: normal; }
+
+        /* ── FAQ acordeão ───────────── */
+        .faq-item details summary { cursor: pointer; list-style: none; }
+        .faq-item details summary::-webkit-details-marker { display: none; }
+        .faq-item details[open] .faq-arrow { transform: rotate(180deg); }
+
+        /* ── Sidebar form ───────────── */
+        .sidebar-input {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            background: #fff;
+            color: #0f172a;
+            font-size: 0.9rem;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.15s;
+            outline: none;
+        }
+        .sidebar-input:focus { border-color: var(--page-accent); }
+        .sidebar-input::placeholder { color: #64748b; }
+
+        /* ── Sidebar cards ───────────── */
+        .lsp-sidebar-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.08); border: 1px solid #cbd5e1; }
+        /* Header com cor sólida garantida para contraste (evita branco sobre branco) */
+        .lsp-sidebar-card-header { background: #1d4ed8; padding: 1.25rem 1.25rem 1rem; }
+        .lsp-sidebar-card-label { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.2rem; }
+        .lsp-sidebar-card-title { font-size: 1.05rem; font-weight: 800; color: #fff; font-family: 'Outfit', sans-serif; line-height: 1.3; }
+        .lsp-sidebar-card-desc { font-size: 0.78rem; color: rgba(255,255,255,0.95); margin-top: 0.3rem; }
+
+        /* ── Sidebar contato e selos ─── */
+        .lsp-contact-card { background: #fff; border-radius: 16px; padding: 1.25rem; box-shadow: 0 1px 4px rgba(0,0,0,0.06); border: 1px solid #cbd5e1; }
+        .lsp-contact-title { font-size: 0.825rem; font-weight: 700; color: #0f172a; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.06em; }
+        .lsp-contact-list { display: flex; flex-direction: column; gap: 0.75rem; }
+        .lsp-contact-item { display: flex; align-items: flex-start; gap: 0.7rem; }
+        .lsp-contact-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+        .lsp-contact-label { font-size: 0.75rem; font-weight: 600; color: #475569; margin-bottom: 0.1rem; }
+        .lsp-contact-value { font-size: 0.85rem; color: #1e293b; }
+        .lsp-contact-link { font-size: 0.85rem; color: var(--page-accent); text-decoration: none; font-weight: 600; }
+        .lsp-contact-link:hover { text-decoration: underline; }
+        .lsp-contact-wa { color: #15803d; }
+        .lsp-selos { background: #fff; border-radius: 16px; padding: 1rem 1.25rem; border: 1px solid #cbd5e1; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+        .lsp-selo { font-size: 0.72rem; color: #334155; font-weight: 500; padding: 0.3rem 0.65rem; background: #f1f5f9; border-radius: 999px; border: 1px solid #cbd5e1; }
+
+        /* ── Mobile CTA bar ──────────── */
+        .lsp-mobile-cta { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; display: flex; background: #0f172a; border-top: 1px solid rgba(255,255,255,0.1); padding: 0.75rem 1rem; padding-bottom: max(0.75rem, env(safe-area-inset-bottom)); gap: 0.5rem; }
+        .lsp-mobile-cta-wa { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1rem; border-radius: 12px; background: #25d366; color: #fff; font-weight: 700; font-size: 0.875rem; text-decoration: none; }
+        .lsp-mobile-cta-phone { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.85rem 1rem; border-radius: 12px; background: rgba(255,255,255,0.1); color: #f1f5f9; font-weight: 700; font-size: 0.875rem; text-decoration: none; border: 1px solid rgba(255,255,255,0.15); }
+        @media (min-width: 768px) { .mobile-cta-bar { display: none !important; } }
+        @media (max-width: 767px) {
+            .lsp-body { padding-bottom: 5.5rem; }
+        }
+
+        /* ── Body / Conteúdo + Sidebar (texto legível) ─── */
+        .lsp-body { padding: 3rem 1.5rem 4rem; background: #f1f5f9; }
+        .lsp-body-inner { max-width: 1100px; margin: 0 auto; }
+        .lsp-grid { display: flex; gap: 2.5rem; align-items: flex-start; }
+        .lsp-main { flex: 1; min-width: 0; }
+        .lsp-content-card { background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid #cbd5e1; overflow: hidden; }
+        .lsp-content-empty { background: #fff; border-radius: 16px; padding: 2.5rem; text-align: center; border: 1px solid #cbd5e1; }
+        .lsp-content-empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+        .lsp-content-empty-title { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; font-family: 'Outfit', sans-serif; }
+        .lsp-content-empty-text { color: #475569; font-size: 0.9rem; }
+        .lsp-faq-card { margin-top: 2rem; background: #fff; border-radius: 16px; padding: 2rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); border: 1px solid #cbd5e1; }
+        .lsp-faq-title { font-size: 1.3rem; font-weight: 800; color: #0f172a; margin-bottom: 0.35rem; font-family: 'Outfit', sans-serif; }
+        .lsp-faq-desc { color: #475569; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .lsp-faq-list { display: flex; flex-direction: column; gap: 0.5rem; }
+        .lsp-faq-item { border-radius: 12px; border: 1px solid #cbd5e1; overflow: hidden; background: #f8fafc; }
+        .lsp-faq-summary { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.2rem; cursor: pointer; font-weight: 700; color: #0f172a; font-size: 0.92rem; gap: 1rem; list-style: none; transition: background 0.15s; }
+        .lsp-faq-summary:hover { background: #f1f5f9; }
+        .lsp-faq-arrow { flex-shrink: 0; color: #64748b; font-size: 0.8rem; transition: transform 0.2s; }
+        .lsp-faq-answer { padding: 0 1.2rem 1.1rem; color: #334155; font-size: 0.875rem; line-height: 1.8; border-top: 1px solid #e2e8f0; background: #fff; }
+
+        /* ── CTA Final (contraste alto) ───────────────── */
+        .lsp-cta-section { padding: 4rem 1.5rem; background: linear-gradient(145deg, #0c1222 0%, #0f172a 50%, #1e293b 100%); text-align: center; }
+        .lsp-cta-inner { max-width: 32rem; margin: 0 auto; }
+        .lsp-cta-icon { font-size: 2.25rem; margin-bottom: 0.75rem; }
+        .lsp-cta-heading { font-size: 1.75rem; font-weight: 900; color: #fff; margin-bottom: 0.6rem; font-family: 'Outfit', sans-serif; line-height: 1.25; }
+        .lsp-cta-desc { color: #e2e8f0; margin-bottom: 2rem; font-size: 0.95rem; max-width: 400px; margin-left: auto; margin-right: auto; line-height: 1.6; }
+        .lsp-cta-buttons { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; align-items: center; }
+        .lsp-cta-btn-wa { display: inline-flex; align-items: center; gap: 0.6rem; padding: 1rem 2rem; border-radius: 999px; background: #25d366; color: #fff; font-weight: 800; font-size: 1rem; text-decoration: none; box-shadow: 0 4px 24px rgba(37,211,102,0.45); transition: transform 0.15s, box-shadow 0.15s; }
+        .lsp-cta-btn-wa:hover { transform: translateY(-2px); box-shadow: 0 6px 28px rgba(37,211,102,0.55); }
+        .lsp-cta-btn-phone { display: inline-flex; align-items: center; gap: 0.6rem; padding: 1rem 2rem; border-radius: 999px; border: 2px solid rgba(255,255,255,0.5); color: #fff; font-weight: 700; font-size: 1rem; text-decoration: none; transition: background 0.15s, border-color 0.15s; }
+        .lsp-cta-btn-phone:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.7); }
+
+        /* ── Breadcrumb (acima do hero) ───────── */
+        .lsp-breadcrumb { padding: 0.85rem 1.5rem; background: #fff; border-bottom: 1px solid #e2e8f0; font-size: 0.82rem; color: #334155; }
+        .lsp-breadcrumb-link { color: var(--page-accent); text-decoration: none; font-weight: 600; }
+        .lsp-breadcrumb-link:hover { text-decoration: underline; }
+        .lsp-breadcrumb-sep { margin: 0 0.4rem; color: #94a3b8; }
+        .lsp-breadcrumb-current { color: #334155; font-weight: 500; }
+
+        /* ── Layout responsivo ──────── */
+        @media (max-width: 900px) {
+            .lsp-grid { flex-direction: column !important; }
+            .lsp-sidebar { width: 100% !important; }
+        }
+    </style>
+
+    <!-- ── Breadcrumb (acima do hero) ───────────────────────────────────────── -->
+    <nav class="lsp-breadcrumb">
+        <div class="container mx-auto">
+            <a href="/" class="lsp-breadcrumb-link">Início</a>
+            <span class="lsp-breadcrumb-sep">›</span>
+            <a href={`/${location.slug}`} class="lsp-breadcrumb-link">{location.name}</a>
+            <span class="lsp-breadcrumb-sep">›</span>
+            <span class="lsp-breadcrumb-current">{service.title}</span>
+        </div>
+    </nav>
+
+    <!-- ── 1. HERO ─────────────────────────────────────────────────────────── -->
+    <section class="lsp-hero" style={`--hero-accent: var(--page-accent); --hero-accent-rgb: var(--page-accent-rgb);`}>
+        <div class="container mx-auto lsp-hero-inner">
+
+            <!-- Badge localização -->
+            <div class="lsp-hero-badge">
+                <span>📍 {location.name}{location.city && location.city !== location.name ? ` · ${location.city}` : ''} — {location.state}</span>
+            </div>
+
+            <div class="lsp-hero-content">
+                <div class="lsp-hero-text">
+                    {service.icon && (
+                        <div class="lsp-hero-icon">{service.icon}</div>
+                    )}
+                    <h1 class="lsp-hero-title">{resolvedTitle}</h1>
+                    {resolvedSubtitle && (
+                        <p class="lsp-hero-subtitle">{resolvedSubtitle}</p>
+                    )}
+
+                    <!-- Benefícios em chips -->
+                    {resolvedBenefits.length > 0 && (
+                        <div class="lsp-hero-benefits">
+                            {resolvedBenefits.map((benefit: string) => (
+                                <span class="lsp-hero-chip"><span class="lsp-hero-chip-check">✓</span> {benefit}</span>
+                            ))}
+                        </div>
+                    )}
+
+                    <!-- CTAs -->
+                    <div class="lsp-hero-ctas">
+                        {whatsapp && (
+                            <a href={waUrl} target="_blank" rel="noopener noreferrer" class="lsp-cta-whatsapp">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                Pedir Orçamento
+                            </a>
+                        )}
+                        {phone && (
+                            <a href={phoneHref} class="lsp-cta-phone">📞 {phoneFmt}</a>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 2. CONTEÚDO + SIDEBAR ────────────────────────────────────────────── -->
+    <section class="lsp-body">
+        <div class="container mx-auto lsp-body-inner">
+            <div class="lsp-grid">
+
+                <!-- Coluna principal -->
+                <main class="lsp-main">
+                    {contentHtml ? (
+                        <div class="lsp-content-card">
+                            {hasGeneratedContent ? (
+                                <article class="lsp-content prose prose-slate max-w-none prose-headings:font-heading prose-p:mb-4 prose-headings:mb-3 prose-headings:mt-6 first:prose-headings:mt-0 prose-ul:my-4 prose-li:my-0.5" set:html={contentHtml} />
+                            ) : (
+                                <>
+                                    <h2 style="font-size: 1.4rem; font-weight: 800; color: #0f172a; margin-bottom: 1.25rem; font-family: 'Outfit', sans-serif;">
+                                        {service.title} em {location.name}
+                                    </h2>
+                                    <div class="lsp-content prose prose-slate max-w-none prose-p:mb-4 prose-headings:mb-3 prose-headings:mt-6" set:html={contentHtml} />
+                                </>
+                            )}
+                        </div>
+                    ) : (
+                        <div class="lsp-content-empty">
+                            <div class="lsp-content-empty-icon">{service.icon || '🔧'}</div>
+                            <h2 class="lsp-content-empty-title">{service.title} em {location.name}</h2>
+                            <p class="lsp-content-empty-text">Entre em contato para saber mais sobre nossos serviços nesta região.</p>
+                        </div>
+                    )}
+
+                    <!-- FAQ (dentro da coluna principal) -->
+                    {faqItems.length > 0 && (
+                        <div class="lsp-faq-card">
+                            <h2 class="lsp-faq-title">Perguntas Frequentes</h2>
+                            <p class="lsp-faq-desc">Dúvidas sobre {service.title} em {location.name}</p>
+                            <div class="lsp-faq-list">
+                                {faqItems.map((item) => (
+                                    <div class="faq-item lsp-faq-item">
+                                        <details>
+                                            <summary class="lsp-faq-summary">
+                                                <span>{item.q}</span>
+                                                <span class="faq-arrow lsp-faq-arrow">▼</span>
+                                            </summary>
+                                            <div class="lsp-faq-answer">{item.a}</div>
+                                        </details>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </main>
+
+                <!-- Sidebar -->
+                <aside class="lsp-sidebar" style="width: 320px; flex-shrink: 0; display: flex; flex-direction: column; gap: 1.25rem; position: sticky; top: 1.5rem;">
+
+                    <!-- Card: Solicitar Orçamento -->
+                    <div class="lsp-sidebar-card">
+                        <!-- Header do card -->
+                        <div class="lsp-sidebar-card-header">
+                            <p class="lsp-sidebar-card-label">Orçamento Gratuito</p>
+                            <h3 class="lsp-sidebar-card-title">{service.title} em {location.name}</h3>
+                            <p class="lsp-sidebar-card-desc">Resposta em minutos · Sem compromisso</p>
+                        </div>
+
+                        <!-- Formulário rápido -->
+                        <div style="padding: 1.25rem;" id="sidebar-form">
+                            <div style="display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1rem;">
+                                <input
+                                    id="sf-name"
+                                    type="text"
+                                    placeholder="Seu nome"
+                                    class="sidebar-input"
+                                />
+                                <input
+                                    id="sf-phone"
+                                    type="tel"
+                                    placeholder="Seu telefone / WhatsApp"
+                                    class="sidebar-input"
+                                />
+                                <textarea
+                                    id="sf-msg"
+                                    placeholder={`Descreva o que você precisa de ${service.title}...`}
+                                    rows="3"
+                                    class="sidebar-input"
+                                    style="resize: vertical;"
+                                ></textarea>
+                            </div>
+
+                            {whatsapp && (
+                                <button
+                                    id="sf-btn-wa"
+                                    onclick="submitSidebarForm()"
+                                    style="width: 100%; padding: 0.85rem 1rem; border-radius: 10px; background: #25d366; color: #fff; font-weight: 700; font-size: 0.9rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.5rem; transition: opacity 0.15s;"
+                                >
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                                    Enviar pelo WhatsApp
+                                </button>
+                            )}
+
+                            {phone && (
+                                <a href={phoneHref} style="width: 100%; padding: 0.75rem 1rem; border-radius: 10px; border: 1.5px solid #e2e8f0; color: #334155; font-weight: 600; font-size: 0.875rem; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-sizing: border-box;">
+                                    📞 Ligar Agora: {phoneFmt}
+                                </a>
+                            )}
+                        </div>
+                    </div>
+
+                    <!-- Card: Informações de Contato -->
+                    <div class="lsp-contact-card">
+                        <h4 class="lsp-contact-title">{company}</h4>
+                        <div class="lsp-contact-list">
+                            {hours && (
+                                <div class="lsp-contact-item">
+                                    <span class="lsp-contact-icon">🕐</span>
+                                    <div>
+                                        <p class="lsp-contact-label">Horário de Atendimento</p>
+                                        <p class="lsp-contact-value">{hours}</p>
+                                    </div>
+                                </div>
+                            )}
+                            {address && (
+                                <div class="lsp-contact-item">
+                                    <span class="lsp-contact-icon">📍</span>
+                                    <div>
+                                        <p class="lsp-contact-label">Endereço</p>
+                                        <p class="lsp-contact-value">{address}</p>
+                                    </div>
+                                </div>
+                            )}
+                            {email && (
+                                <div class="lsp-contact-item">
+                                    <span class="lsp-contact-icon">✉️</span>
+                                    <div>
+                                        <p class="lsp-contact-label">E-mail</p>
+                                        <a href={`mailto:${email}`} class="lsp-contact-link">{email}</a>
+                                    </div>
+                                </div>
+                            )}
+                            {whatsapp && (
+                                <div class="lsp-contact-item">
+                                    <span class="lsp-contact-icon">💬</span>
+                                    <div>
+                                        <p class="lsp-contact-label">WhatsApp</p>
+                                        <a href={waUrl} target="_blank" class="lsp-contact-link lsp-contact-wa">{whatsapp}</a>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <!-- Selos de confiança -->
+                    <div class="lsp-selos">
+                        {['✅ Orçamento gratuito', '⚡ Resposta rápida', '🔒 Sem spam', '⭐ Atendimento local'].map((selo: string) => (
+                            <span class="lsp-selo">{selo}</span>
+                        ))}
+                    </div>
+
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 3. CTA FINAL ──────────────────────────────────────────────────────── -->
+    <section class="lsp-cta-section">
+        <div class="lsp-cta-inner">
+            <div class="lsp-cta-icon">{service.icon || '📞'}</div>
+            <h2 class="lsp-cta-heading">Orçamento gratuito em {location.name}</h2>
+            <p class="lsp-cta-desc">Atendemos rápido. Resposta em minutos, sem compromisso.</p>
+            <div class="lsp-cta-buttons">
+                {whatsapp && (
+                    <a href={waUrl} target="_blank" class="lsp-cta-btn-wa">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                        Falar no WhatsApp
+                    </a>
+                )}
+                {phone && (
+                    <a href={phoneHref} class="lsp-cta-btn-phone">📞 {phoneFmt}</a>
+                )}
+            </div>
+        </div>
+    </section>
+
+    <!-- ── 4. CTA MOBILE FLUTUANTE ───────────────────────────────────────────── -->
+    {(whatsapp || phone) && (
+        <div class="mobile-cta-bar lsp-mobile-cta">
+            {whatsapp && (
+                <a href={waUrl} target="_blank" rel="noopener noreferrer" class="lsp-mobile-cta-wa">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    WhatsApp
+                </a>
+            )}
+            {phone && (
+                <a href={phoneHref} class="lsp-mobile-cta-phone">📞 Ligar</a>
+            )}
+        </div>
+    )}
+
+</LocalLayout>
+
+<script define:vars={{
+    waBase: whatsapp ? `https://wa.me/55${whatsapp.replace(/\D/g, '')}` : '',
+    serviceSlug: service?.slug || '',
+    serviceTitle: service?.title || '',
+    locationName: location?.name || '',
+}}>
+    async function submitSidebarForm() {
+        const name  = (document.getElementById('sf-name')?.value ?? '').toString().trim();
+        const phone = (document.getElementById('sf-phone')?.value ?? '').toString().trim();
+        const msg   = (document.getElementById('sf-msg')?.value ?? '').toString().trim();
+
+        const parts = [];
+        if (name)  parts.push('Nome: ' + name);
+        if (phone) parts.push('Telefone: ' + phone);
+        if (msg)   parts.push('Mensagem: ' + msg);
+
+        const baseText = document.getElementById('sf-btn-wa')?.closest('#sidebar-form')
+            ?.querySelector('textarea')?.placeholder || 'Gostaria de um orçamento';
+
+        const text = parts.length > 0
+            ? `Olá! Tenho interesse em um orçamento.\n${parts.join('\n')}`
+            : baseText;
+
+        if (name && (phone || msg)) {
+            try {
+                await fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name,
+                        phone: phone || undefined,
+                        email: undefined,
+                        message: msg || 'Interesse via sidebar',
+                        source: 'servico-sidebar',
+                        extra: { serviceSlug, serviceTitle, locationName },
+                    }),
+                });
+            } catch (_) { /* ignora erro de lead, segue para WhatsApp */ }
+        }
+
+        if (waBase) {
+            window.open(`${waBase}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+    }
+</script>

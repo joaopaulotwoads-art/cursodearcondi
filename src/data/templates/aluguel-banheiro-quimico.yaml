@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Banheiro Químico
+id: aluguel-banheiro-quimico
+name: Aluguel de Banheiro Químico
+description: "Site pronto para locadoras de banheiros químicos"
+icon: "🚻"
+color: "#16a34a"
+
+niche:
+  name: Aluguel de Banheiro Químico
+  slug: aluguel-banheiro-quimico
+  icon: "🚻"
+  description: "Locação de banheiros químicos para obras e eventos"
+  color: "#16a34a"
+  active: true
+
+homeCopy:
+  heroBadge: "Banheiro Químico"
+  heroTitle: "Aluguel de Banheiro Químico"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Banheiros químicos para obras, eventos e festas. Higienização inclusa. Diária, semanal ou mensal. Entrega no local."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver modelos"
+  heroWhatsappMessage: "Olá! Preciso alugar banheiro químico para minha obra/evento. Vocês atendem aqui?"
+  servicesTitle: "Banheiros para Locação"
+  servicesSubtitle: "Higiene onde você precisa"
+  aboutTitle: "Especialistas em Banheiro Químico"
+  aboutSubtitle: "Obras e eventos"
+  aboutText: "Locamos banheiros químicos para obras, eventos, festas e construções. Higienização periódica inclusa no pacote. Diversos modelos. Entrega e retirada no local."
+  aboutStats:
+    - number: "15+"
+      label: Anos no mercado
+    - number: "2000+"
+      label: Obras e eventos
+    - number: "24h"
+      label: Entrega rápida
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Para obras e eventos."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece banheiros químicos para locação. Higienização inclusa. Atuamos em {cidade} e região. Peça orçamento!"
+  benefits:
+    - "Entrega em {cidade}"
+    - "Orçamento gratuito"
+    - "Higienização inclusa"
+    - "Diária ou mensal"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - higiene na sua obra. Ligue!"
+
+services:
+  - title: "Aluguel de Banheiro Químico"
+    slug: aluguel-de-banheiro-quimico
+    shortDescription: "Banheiros químicos para obras e eventos"
+    icon: "🚻"
+    niche: aluguel-banheiro-quimico
+  - title: "Aluguel de Banheiro Químico para Obra"
+    slug: aluguel-banheiro-quimico-obra
+    shortDescription: "Modelo padrão para canteiros"
+    icon: "🏗️"
+    niche: aluguel-banheiro-quimico
+  - title: "Aluguel de Banheiro Químico para Evento"
+    slug: aluguel-banheiro-quimico-evento
+    shortDescription: "Modelos premium para festas"
+    icon: "🎉"
+    niche: aluguel-banheiro-quimico
+  - title: "Aluguel de Banheiro Químico com Lavatório"
+    slug: aluguel-banheiro-quimico-lavatorio
+    shortDescription: "Banheiro com pia para higiene"
+    icon: "🚰"
+    niche: aluguel-banheiro-quimico
+  - title: "Aluguel de Banheiro Químico Luxo"
+    slug: aluguel-banheiro-quimico-luxo
+    shortDescription: "Banheiros premium para casamentos"
+    icon: "✨"
+    niche: aluguel-banheiro-quimico
+  - title: "Higienização de Banheiro Químico"
+    slug: higienizacao-banheiro-quimico
+    shortDescription: "Limpeza periódica durante a locação"
+    icon: "🧹"
+    niche: aluguel-banheiro-quimico
+  - title: "Aluguel de Banheiro Químico Duplo"
+    slug: aluguel-banheiro-quimico-duplo
+    shortDescription: "Unidade dupla para grandes eventos"
+    icon: "🚻"
+    niche: aluguel-banheiro-quimico

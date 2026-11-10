@@ -1,0 +1,84 @@
+# Template de nicho: Aluguel de Carretinha
+id: aluguel-carretinha
+name: Aluguel de Carretinha
+description: "Site pronto para locadoras de carretinhas e reboques"
+icon: "🚗"
+color: "#4f46e5"
+
+niche:
+  name: Aluguel de Carretinha
+  slug: aluguel-carretinha
+  icon: "🚗"
+  description: "Locação de carretinhas, reboques e trailers para transporte"
+  color: "#4f46e5"
+  active: true
+
+homeCopy:
+  heroBadge: "Carretinha para Alugar"
+  heroTitle: "Aluguel de Carretinha"
+  heroTitleHighlight: "em São Paulo"
+  heroSubtitle: "Carretinhas e reboques para transporte de motos, carros e cargas. Diária, semanal ou mensal. Documentação em dia."
+  heroCtaText: "Falar no WhatsApp"
+  heroCtaSecondaryText: "Ver modelos"
+  heroWhatsappMessage: "Olá! Preciso alugar uma carretinha. Vocês atendem aqui?"
+  servicesTitle: "Nossas Carretinhas"
+  servicesSubtitle: "Transporte quando você precisa"
+  aboutTitle: "Referência em Aluguel de Carretinha"
+  aboutSubtitle: "Transporte seguro"
+  aboutText: "Locamos carretinhas e reboques para transporte de motos, carros, quadriciclos e cargas. Diversos modelos disponíveis. Documentação regularizada. Atendemos toda a região."
+  aboutStats:
+    - number: "12+"
+      label: Anos de experiência
+    - number: "3000+"
+      label: Locações realizadas
+    - number: "24h"
+      label: Reservas online
+
+locationTemplateCopy:
+  heroTitle: "{servico} em {cidade} - {estado}"
+  heroSubtitle: "Aluguel de {servico} em {cidade} e região. Carretinhas e reboques."
+  pageContent: "Procurando {servico} em {cidade}? A {empresa} oferece carretinhas para locação. Transporte de motos, carros e cargas. Atuamos em {cidade} e região."
+  benefits:
+    - "Retirada em {cidade}"
+    - "Orçamento gratuito"
+    - "Documentação em dia"
+    - "Diária ou mensal"
+  metaTitle: "{servico} em {cidade} | {empresa}"
+  metaDescription: "Aluguel de {servico} em {cidade}. A {empresa} - transporte quando precisa. Ligue!"
+
+services:
+  - title: "Aluguel de Carretinha"
+    slug: aluguel-de-carretinha
+    shortDescription: "Carretinhas para transporte de motos e carros"
+    icon: "🚗"
+    niche: aluguel-carretinha
+  - title: "Aluguel de Carretinha para Moto"
+    slug: aluguel-carretinha-moto
+    shortDescription: "Reboque específico para motocicletas"
+    icon: "🏍️"
+    niche: aluguel-carretinha
+  - title: "Aluguel de Reboque"
+    slug: aluguel-de-reboque
+    shortDescription: "Reboques para diversas finalidades"
+    icon: "🚚"
+    niche: aluguel-carretinha
+  - title: "Aluguel de Carretinha Utilitária"
+    slug: aluguel-carretinha-utilitaria
+    shortDescription: "Carretinha para transporte de carga leve"
+    icon: "📦"
+    niche: aluguel-carretinha
+  - title: "Aluguel de Reboque para Jet Ski"
+    slug: aluguel-reboque-jetski
+    shortDescription: "Reboque específico para jet ski e lanchas"
+    icon: "⛵"
+    niche: aluguel-carretinha
+  - title: "Aluguel de Carretinha para Bicicleta"
+    slug: aluguel-carretinha-bicicleta
+    shortDescription: "Porta-bike e reboques para ciclistas"
+    icon: "🚴"
+    niche: aluguel-carretinha
+  - title: "Aluguel de Reboque Coberto"
+    slug: aluguel-reboque-coberto
+    shortDescription: "Reboque fechado para carga protegida"
+    icon: "🚚"
+    niche: aluguel-carretinha

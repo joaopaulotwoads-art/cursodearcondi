@@ -1,0 +1,17 @@
+heroTitle: Sobre o cursodearcondicionado.com.br
+heroSubtitle: Conteúdo educativo sobre instalação e manutenção de ar condicionado, alinhado ao que o público busca ao pesquisar curso e carreira em HVAC no Brasil.
+heroImage: ""
+heroImagePlaceholder: ""
+body: |-
+  O **cursodearcondicionado.com.br** é um projeto editorial focado em **ar condicionado split**: instalação, manutenção, diagnóstico e segurança. A ideia é aproximar o leitor do vocabulário e dos procedimentos que encontra em cursos profissionalizantes, marketplaces e escolas técnicas — mas em formato de site e blog, fácil de navegar e de ranquear no Google.
+
+  Nossos textos são informativos e devem ser complementados por prática supervisionada, normas vigentes e exigências da sua região. Sempre que houver risco elétrico ou manuseio de refrigerante, recomendamos capacitação formal e respeito à legislação.
+
+  Se você representa uma escola ou infoproduto, este template permite escalar artigos por keyword (como *curso de ar condicionado*, *instalação split*, *manutenção preventiva*) e direcionar o leitor para sua página de vendas ou WhatsApp.
+teamMembers:
+  - name: Equipe editorial
+    role: Curso de Ar Condicionado
+    bio: Produz conteúdo técnico em linguagem acessível. Edite esta seção no painel em Páginas → Sobre.
+    photo: /images/cursodear/post-placeholder.svg
+ctaLinkText: Contato
+ctaLinkHref: /contato

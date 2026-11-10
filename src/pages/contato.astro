@@ -1,10 +1,23 @@
 ---
+import { getEntry } from 'astro:content';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
+import { readSingleton } from '../utils/singleton-utils';
+import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
+import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
 const pageTitle = 'Fale Conosco | Suporte ao Aluno';
 const pageDescription = 'Entre em contato com nossa equipe de suporte. WhatsApp (14) 98803-4123 ou e-mail. Respondemos em até 24 horas úteis.';
 
+const settings = await getEntry('siteSettings', 'settings').catch(() => null);
+const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
+const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
+const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
+const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
+const beNav = beMenu ? navFromMenu(beMenu) : [];
+const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
+const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
+const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 
 const contactSchemaJsonLd = {
   '@context': 'https://schema.org',
@@ -23,6 +36,12 @@ const contactSchemaJsonLd = {
 <BaseLayoutcursodear
   title={pageTitle}
   description={pageDescription}
+  siteName={siteNameForLayout}
+  logoSrc={logoForLayout}
+  siteUrl={siteUrl}
+  nav={beNav}
+  footerNav={beFootNav}
+  contentThemeId="cursodear"
   extraJsonLd={contactSchemaJsonLd}
   canonicalOverride="https://cursodearcondicionado.com.br/contato/"
 >

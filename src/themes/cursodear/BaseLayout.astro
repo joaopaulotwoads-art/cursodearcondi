@@ -1,14 +1,15 @@
 ---
 import Header from './Header.astro';
 import Footer from './Footer.astro';
-import { SITE, NAV, FOOTER_NAV } from '../../data/site';
-/** Open Sans (só o subconjunto latin) — corpo e títulos, alinhada a Tailwind `font-sans` / `font-heading` */
-import '@fontsource/open-sans/latin-400.css';
-import '@fontsource/open-sans/latin-500.css';
-import '@fontsource/open-sans/latin-600.css';
-import '@fontsource/open-sans/latin-700.css';
-import '@fontsource/open-sans/latin-800.css';
+import type { NavItem } from './types';
+/** Open Sans — corpo e títulos (tipografia editorial legível, alinhada a Tailwind `font-sans` / `font-heading`) */
+import '@fontsource/open-sans/400.css';
+import '@fontsource/open-sans/500.css';
+import '@fontsource/open-sans/600.css';
+import '@fontsource/open-sans/700.css';
+import '@fontsource/open-sans/800.css';
 import './global.css';
+import { ensureApexSiteOrigin } from '../../utils/read-site-settings';
 import {
   buildcursodearDefaultSiteJsonLd,
   buildOrganizationJsonLd,
@@ -26,8 +27,14 @@ interface Props {
   description?: string;
   canonical?: string;
   keywords?: string;
-  /** Esconde o menu do topo (landing pages: home, /automotivo/, /area-do-aluno/). */
-  hideNav?: boolean;
+  siteName: string;
+  /** Caminho público do logo (ex.: /cursodear-logo.png) quando definido no singleton Menu. */
+  logoSrc?: string;
+  siteUrl: string;
+  nav: NavItem[];
+  footerNav: NavItem[];
+  /** Singletons do rodapé (ex.: cursodear) */
+  contentThemeId?: string;
   ogType?: 'website' | 'article';
   ogImageAbs?: string;
   articlePublishedTime?: string;
@@ -45,7 +52,12 @@ const {
   description,
   canonical,
   keywords,
-  hideNav = false,
+  siteName,
+  logoSrc,
+  siteUrl,
+  nav,
+  footerNav,
+  contentThemeId = 'cursodear',
   ogType = 'website',
   ogImageAbs,
   articlePublishedTime,
@@ -60,21 +72,21 @@ const {
 const fullTitle = title;
 const fullDescription = description || '';
 const metaKeywords = keywords || '';
-const siteOrigin = SITE.url;
+const siteOrigin = ensureApexSiteOrigin(siteUrl);
 const path = Astro.url.pathname;
 const canonicalPath = path.endsWith('/') ? path : `${path}/`;
 const canonicalPageUrl =
   canonical || canonicalOverride || `https://cursodearcondicionado.com.br${canonicalPath}`;
 const ogTitle = truncateOgTitle(fullTitle);
-const resolvedOgImage = resolveOgImageAbs(siteOrigin, ogImageAbs);
+const resolvedOgImage = resolveOgImageAbs(siteOrigin || siteUrl, ogImageAbs);
 const organizationJsonLd = buildOrganizationJsonLd({
-  siteUrl: siteOrigin,
+  siteUrl: siteOrigin || siteUrl,
   name: SEO_ORGANIZATION_NAME,
 });
 const baseJsonLd =
   extraJsonLd ??
   buildcursodearDefaultSiteJsonLd({
-    siteUrl: siteOrigin,
+    siteUrl: siteOrigin || siteUrl,
     siteName: SEO_ORGANIZATION_NAME,
     description: fullDescription || undefined,
   });
@@ -85,6 +97,9 @@ const jsonLdGraph = mergeJsonLdWithOrganization(baseJsonLd, organizationJsonLd);
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {ogType === 'article' && (
+    <link rel="preconnect" href="https://m.media-amazon.com" crossorigin />
+  )}
   <FaviconLinks />
   <meta name="theme-color" content="#faf7f5" />
   <!-- Google tag (gtag.js) -->
@@ -176,8 +191,8 @@ const jsonLdGraph = mergeJsonLdWithOrganization(baseJsonLd, organizationJsonLd);
   </style>
 </head>
 <body class="cursodear-scope min-w-0 overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
-  <Header siteName={SITE.name} logoSrc={SITE.logo} nav={hideNav ? [] : NAV} />
+  <Header siteName={siteName} logoSrc={logoSrc} nav={nav} />
   <main class="min-w-0"><slot /></main>
-  {showFooter && <Footer siteName={SITE.name} logoSrc={SITE.logo} footerNav={FOOTER_NAV} />}
+  {showFooter && <Footer siteName={siteName} logoSrc={logoSrc} footerNav={footerNav} contentThemeId={contentThemeId} />}
 </body>
 </html>

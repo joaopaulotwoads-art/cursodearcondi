@@ -2,7 +2,7 @@
  * JSON-LD para posts: @graph com #website, #organization, #author, ImageObject, SearchAction, BreadcrumbList.
  */
 
-import { canonicalPathname, schemaPageUrl } from './url';
+import { canonicalPathname, schemaPageUrl } from './read-site-settings';
 import {
     SEO_ORGANIZATION_NAME,
     DEFAULT_ORG_LOGO_PATH,
