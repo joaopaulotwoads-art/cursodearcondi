@@ -12,7 +12,7 @@
   },
   // URL de teste: cursodearcondicionado.<subdominio>.workers.dev
   "workers_dev": true
-  // Domínio próprio: só descomentar na troca de DNS (passo a passo em CLAUDE.md).
+  // Domínio próprio: só descomentar no passo 5 de MIGRACAO-CLOUDFLARE.md.
   // ,"routes": [
   //   { "pattern": "cursodearcondicionado.com.br", "custom_domain": true },
   //   { "pattern": "www.cursodearcondicionado.com.br", "custom_domain": true }
