@@ -11,10 +11,10 @@
     "not_found_handling": "404-page"
   },
   // URL de teste: cursodearcondicionado.<subdominio>.workers.dev
-  "workers_dev": true
-  // Domínio próprio: só descomentar no passo 5 de MIGRACAO-CLOUDFLARE.md.
-  // ,"routes": [
-  //   { "pattern": "cursodearcondicionado.com.br", "custom_domain": true },
-  //   { "pattern": "www.cursodearcondicionado.com.br", "custom_domain": true }
-  // ]
+  "workers_dev": true,
+  // Domínio próprio: o custom_domain cria os registros DNS e o certificado na zona da Cloudflare.
+  "routes": [
+    { "pattern": "cursodearcondicionado.com.br", "custom_domain": true },
+    { "pattern": "www.cursodearcondicionado.com.br", "custom_domain": true }
+  ]
 }

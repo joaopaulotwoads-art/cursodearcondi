@@ -1,0 +1,2 @@
+# Arquivos que nunca devem ir para o Worker (ex.: rascunhos .md deixados em public/)
+*.md

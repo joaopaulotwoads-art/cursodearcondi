@@ -1,12 +1,13 @@
 # Troca de hospedagem: Vercel -> Cloudflare Workers
 
-Estado em 10/11/2026:
+Estado em 10/11/2026 (noite):
 
-- Produção ainda na Vercel (branch `main`).
-- Worker `cursodearcondicionado` publicado em https://cursodearcondicionado.joaopaulotwoads.workers.dev a partir da branch `cloudflare`, validado contra `seo-baseline.json` (36 páginas idênticas; redirects agora 301).
-- DNS do domínio está na Vercel (`ns1/ns2.vercel-dns.com`). A zona ainda não está ativa na Cloudflare.
+- Nameservers trocados no Registro.br para `ali.ns.cloudflare.com` e `brian.ns.cloudflare.com`; o Registro.br delega em cerca de 2 h (até lá o domínio fica nos servidores temporários `a/b.auto.dns.br`, sem registro A: site fora do ar nesse intervalo).
+- A Vercel já não serve o domínio (`DEPLOYMENT_NOT_FOUND`).
+- Worker `cursodearcondicionado` publicado com custom domain em `cursodearcondicionado.com.br` e `www` (registros `AAAA 100::` proxied criados pelo deploy). Volta ao ar quando a zona ativar.
+- Pendências na zona: TXT do Google, Email Routing (remover `v=spf1 -all` e o MX nulo) e as duas Redirect Rules.
 
-## Registros DNS de hoje (Vercel)
+## Registros DNS antes da troca (Vercel)
 
 | Nome | Tipo | Valor | Na importação |
 |---|---|---|---|
