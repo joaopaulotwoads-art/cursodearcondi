@@ -43,6 +43,8 @@ interface Props {
   canonicalOverride?: string;
   robots?: string;
   showFooter?: boolean;
+  /** Tag `tipo_pagina` enviada ao Clarity. Sem valor explícito, posts (ogType article) contam como blog. */
+  tipoPagina?: 'home' | 'blog' | 'curso';
 }
 
 const {
@@ -64,6 +66,7 @@ const {
   canonicalOverride,
   robots = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
   showFooter = true,
+  tipoPagina = ogType === 'article' ? 'blog' : undefined,
 } = Astro.props;
 /** Título do documento: o que cada página passa em `title` (sem sufixo automático | marca). */
 const fullTitle = title;
@@ -101,12 +104,62 @@ const jsonLdGraph = mergeJsonLdWithOrganization(baseJsonLd, organizationJsonLd);
   <meta name="theme-color" content="#faf7f5" />
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPD65NHEQ7"></script>
-  <script>
+  <!-- is:inline mantém gtag() global, usado pelo rastreamento de cliques abaixo -->
+  <script is:inline>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'G-MPD65NHEQ7');
+    // ?debug_mode=true faz os eventos aparecerem no DebugView do GA4.
+    gtag('config', 'G-MPD65NHEQ7', /[?&]debug_mode=true\b/.test(location.search) ? { debug_mode: true } : {});
+  </script>
+  <!-- Microsoft Clarity: só em produção -->
+  <script is:inline define:vars={{ tipoPagina }}>
+    if (location.hostname === 'cursodearcondicionado.com.br') {
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "zbhwrgxpff");
+      if (tipoPagina) window.clarity('set', 'tipo_pagina', tipoPagina);
+    }
+  </script>
+  <!-- Cliques em Hotmart e WhatsApp → mesmo evento no GA4 e no Clarity -->
+  <script is:inline>
+    (function () {
+      function track(name, params, upgrade) {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', name, Object.assign({ transport_type: 'beacon' }, params));
+        }
+        if (typeof window.clarity === 'function') {
+          window.clarity('event', name);
+          if (upgrade) window.clarity('upgrade', upgrade);
+        }
+      }
+      function posicao(el) {
+        var marked = el.closest('[data-posicao]');
+        if (marked) return marked.getAttribute('data-posicao');
+        var doc = document.documentElement;
+        var y = el.getBoundingClientRect().top + window.scrollY;
+        var ratio = doc.scrollHeight > 0 ? y / doc.scrollHeight : 0;
+        return ratio < 1 / 3 ? 'topo' : ratio < 2 / 3 ? 'meio' : 'fim';
+      }
+      document.addEventListener('click', function (e) {
+        var a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!a) return;
+        var host;
+        try { host = new URL(a.href, location.href).hostname; } catch (_) { return; }
+        if (host === 'go.hotmart.com' || host === 'pay.hotmart.com') {
+          track('hotmart_click', {
+            page_path: location.pathname,
+            link_text: (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 100),
+            posicao: posicao(a),
+          }, 'hotmart');
+        } else if (host === 'wa.me' || host === 'api.whatsapp.com') {
+          track('whatsapp_click', { page_path: location.pathname });
+        }
+      }, true);
+    })();
   </script>
   <title>{fullTitle}</title>
   <meta name="description" content={fullDescription} />

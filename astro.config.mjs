@@ -4,6 +4,7 @@ import vercel from '@astrojs/vercel';
 import react from '@astrojs/react';
 import tailwind from '@astrojs/tailwind';
 import markdoc from '@astrojs/markdoc';
+import { rehypeHotmartSrc } from './src/utils/hotmart-src.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,6 +16,10 @@ export default defineConfig({
     /** CSS inline no HTML → menos pedidos bloqueantes no caminho crítico (Lighthouse / LCP). */
     build: {
         inlineStylesheets: 'always',
+    },
+    /** Links go.hotmart.com dos posts ganham src=blog-<slug> no build (rastreio de venda por página). */
+    markdown: {
+        rehypePlugins: [rehypeHotmartSrc],
     },
     integrations: [
         react({

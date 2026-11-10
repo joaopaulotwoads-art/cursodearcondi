@@ -1,6 +1,7 @@
 ---
 import { getCollection, getEntry } from 'astro:content';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
+import { withHotmartSrc } from '../utils/hotmart-src';
 import { readSingleton } from '../utils/singleton-utils';
 import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
 import { resolvePublicSiteUrl } from '../utils/read-site-settings';
@@ -11,7 +12,7 @@ import { SEO_ORGANIZATION_NAME, ORG_SAME_AS, absoluteUrl, DEFAULT_ORG_LOGO_PATH 
 const pageTitle = 'Curso de Instalador de Ar Condicionado Online | +11.900 Formados';
 const pageDescription = 'Curso completo para se tornar instalador e técnico de ar condicionado. +11.900 alunos, 160 aulas, 30h, certificado e acesso vitalício. Garantia de 15 dias.';
 const pageKeywords = 'curso de instalador de ar condicionado, instalador de ar condicionado, curso de ar condicionado, curso de instalação de ar condicionado, curso de manutenção de ar condicionado, curso split, curso inverter, técnico de ar condicionado, técnico em refrigeração, curso de refrigeração, curso de climatização, instalação split, manutenção preventiva ar condicionado, recarga de gás r410a, curso ar condicionado online';
-const hotmartUrl = 'https://go.hotmart.com/R103468777C?ap=7d17';
+const hotmartUrl = withHotmartSrc('https://go.hotmart.com/R103468777C?ap=7d17', 'home');
 
 const settings = await getEntry('siteSettings', 'settings').catch(() => null);
 const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
@@ -187,6 +188,7 @@ const extraJsonLd = {
 ---
 
 <BaseLayoutcursodear
+  tipoPagina="home"
   title={pageTitle}
   description={pageDescription}
   keywords={pageKeywords}
@@ -236,6 +238,7 @@ const extraJsonLd = {
           <a
             href={hotmartUrl}
             target="_blank"
+            data-posicao="topo"
             class="inline-flex items-center justify-center min-h-[52px] px-8 py-3 rounded-xl bg-orange-500 text-white text-base font-black hover:bg-orange-400 transition"
           >
             Inscrever-se agora
@@ -770,6 +773,7 @@ const extraJsonLd = {
           <a
             href={hotmartUrl}
             target="_blank"
+            data-posicao="meio"
             class="block w-full rounded-xl bg-green-500 py-4 text-center text-lg font-black uppercase tracking-wide text-white transition hover:bg-green-600"
           >
             Quero me inscrever agora
@@ -968,6 +972,7 @@ const extraJsonLd = {
         <a
           href={hotmartUrl}
           target="_blank"
+          data-posicao="fim"
           class="w-full md:w-auto bg-orange-500 hover:bg-orange-400 text-white font-black py-5 px-12 rounded-2xl text-base md:text-xl uppercase tracking-wide transition transform hover:scale-105 shadow-lg shadow-orange-500/30"
         >
           QUERO ME INSCREVER AGORA

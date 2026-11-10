@@ -122,6 +122,7 @@ const relatedPosts = usecursodear ? pickRelatedPosts(post, allPosts, 3) : [];
 
 {usecursodear ? (
 <BaseLayoutcursodear
+    tipoPagina="blog"
     title={documentTitle}
     description={post.data.metaDescription || ''}
     siteName={(beMenu as any)?.logoText || siteName}

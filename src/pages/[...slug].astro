@@ -119,6 +119,7 @@ const {
   props.kind === 'post' && post ? (
     usecursodear ? (
       <BaseLayoutcursodear
+        tipoPagina="blog"
         title={documentTitle}
         description={post.data.metaDescription || ''}
         siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}
@@ -161,6 +162,7 @@ const {
   props.kind === 'category' && category ? (
     usecursodear ? (
       <BaseLayoutcursodear
+        tipoPagina="blog"
         title={category.data.name}
         description={pageDesc}
         siteName={(beMenu as { logoText?: string } | null)?.logoText || siteName}

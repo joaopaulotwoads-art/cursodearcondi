@@ -4,6 +4,7 @@ import AffiliateDisclosure from '../../components/cursodear/AffiliateDisclosure.
 import PostArticleToc from '../../components/cursodear/PostArticleToc.astro';
 import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
 import { resolvecursodearMediaUrl, rewritecursodearContentImagesInHtml } from '../../utils/media-url';
+import { blogHotmartSrc, rewriteHotmartLinksInHtml } from '../../utils/hotmart-src';
 import { demoteBodyH1ToH2, replaceProductBoxTitleH2WithDiv } from '../../utils/post-html-sanitize';
 import { splitReviewRoundupBodyParagraphs } from '../../utils/review-paragraph-split';
 import { buildMarkdownToc, POST_TOC_MIN_ITEMS, type PostTocItem } from '../../utils/post-markdown-toc';
@@ -45,6 +46,7 @@ const htmlBody = htmlContent
   ? (() => {
       let html = demoteBodyH1ToH2(rewritecursodearContentImagesInHtml(htmlContent));
       html = replaceProductBoxTitleH2WithDiv(html);
+      html = rewriteHotmartLinksInHtml(html, blogHotmartSrc(post.data.slug || post.id));
       if (isReviewRoundup) html = splitReviewRoundupBodyParagraphs(html);
       return html;
     })()
