@@ -1,12 +1,8 @@
 ---
-import { getCollection, getEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
 import { withHotmartSrc } from '../utils/hotmart-src';
-import { readSingleton } from '../utils/singleton-utils';
-import { footerNavFromSingleton, logoSrcFromMenu } from '../utils/theme-nav';
-import { resolvePublicSiteUrl } from '../utils/read-site-settings';
-import { getPostUrl } from '../utils/blog-permalink';
-import type { BlogPermalinkStructure, BlogUrlPrefix } from '../utils/blog-permalink';
+import { postUrl as getPostUrl, newestFirst } from '../utils/post-url';
 import { SEO_ORGANIZATION_NAME, ORG_SAME_AS, absoluteUrl, DEFAULT_ORG_LOGO_PATH } from '../utils/seo-meta';
 
 const pageTitle = 'Curso de Instalador de Ar Condicionado Online | +11.900 Formados';
@@ -14,16 +10,8 @@ const pageDescription = 'Curso completo para se tornar instalador e técnico de 
 const pageKeywords = 'curso de instalador de ar condicionado, instalador de ar condicionado, curso de ar condicionado, curso de instalação de ar condicionado, curso de manutenção de ar condicionado, curso split, curso inverter, técnico de ar condicionado, técnico em refrigeração, curso de refrigeração, curso de climatização, instalação split, manutenção preventiva ar condicionado, recarga de gás r410a, curso ar condicionado online';
 const hotmartUrl = withHotmartSrc('https://go.hotmart.com/R103468777C?ap=7d17', 'home');
 
-const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
-const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 const canonicalHomeUrl = 'https://cursodearcondicionado.com.br/';
 
-const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
-const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
-const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 
 const aprenderItems = [
   'Instalação completa de ar-split residencial e comercial',
@@ -111,16 +99,9 @@ const testimonialPrints = [
   },
 ];
 
-const blogPermalinkStructure = (settings?.data?.blogPermalinkStructure as BlogPermalinkStructure) || 'postname';
-const blogUrlPrefix = (settings?.data?.blogUrlPrefix as BlogUrlPrefix) || 'root';
-
 const recentBlogPosts = (await getCollection('posts'))
   .filter((post) => post.data.publishedDate || post.data.date)
-  .sort((a, b) => {
-    const da = new Date((a.data.publishedDate || a.data.date) as string).getTime();
-    const db = new Date((b.data.publishedDate || b.data.date) as string).getTime();
-    return db - da;
-  })
+  .sort(newestFirst)
   .slice(0, 5);
 
 const courseSchemaJsonLd = {
@@ -192,12 +173,7 @@ const extraJsonLd = {
   title={pageTitle}
   description={pageDescription}
   keywords={pageKeywords}
-  siteName={siteNameForLayout}
-  logoSrc={logoForLayout}
-  siteUrl={siteUrl}
-  nav={[]}
-  footerNav={beFootNav}
-  contentThemeId="cursodear"
+  hideNav
   canonicalOverride={canonicalHomeUrl}
   extraJsonLd={extraJsonLd}
 >
@@ -798,7 +774,7 @@ const extraJsonLd = {
         </header>
         <ul class="mx-auto mt-10 max-w-3xl divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white shadow-[0_18px_45px_-36px_rgba(15,23,42,0.65)]">
           {recentBlogPosts.map((post) => {
-            const postUrl = getPostUrl(post, blogPermalinkStructure, blogUrlPrefix);
+            const postUrl = getPostUrl(post);
             const description =
               (post.data.metaDescription as string | undefined)?.trim() ||
               (post.data.description as string | undefined)?.trim() ||

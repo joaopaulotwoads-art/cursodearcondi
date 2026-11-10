@@ -1,7 +1,7 @@
 ---
 import Header from './Header.astro';
 import Footer from './Footer.astro';
-import type { NavItem } from './types';
+import { SITE, NAV, FOOTER_NAV } from '../../data/site';
 /** Open Sans — corpo e títulos (tipografia editorial legível, alinhada a Tailwind `font-sans` / `font-heading`) */
 import '@fontsource/open-sans/400.css';
 import '@fontsource/open-sans/500.css';
@@ -9,7 +9,6 @@ import '@fontsource/open-sans/600.css';
 import '@fontsource/open-sans/700.css';
 import '@fontsource/open-sans/800.css';
 import './global.css';
-import { ensureApexSiteOrigin } from '../../utils/read-site-settings';
 import {
   buildcursodearDefaultSiteJsonLd,
   buildOrganizationJsonLd,
@@ -27,14 +26,8 @@ interface Props {
   description?: string;
   canonical?: string;
   keywords?: string;
-  siteName: string;
-  /** Caminho público do logo (ex.: /cursodear-logo.png) quando definido no singleton Menu. */
-  logoSrc?: string;
-  siteUrl: string;
-  nav: NavItem[];
-  footerNav: NavItem[];
-  /** Singletons do rodapé (ex.: cursodear) */
-  contentThemeId?: string;
+  /** Esconde o menu do topo (landing pages: home, /automotivo/, /area-do-aluno/). */
+  hideNav?: boolean;
   ogType?: 'website' | 'article';
   ogImageAbs?: string;
   articlePublishedTime?: string;
@@ -52,12 +45,7 @@ const {
   description,
   canonical,
   keywords,
-  siteName,
-  logoSrc,
-  siteUrl,
-  nav,
-  footerNav,
-  contentThemeId = 'cursodear',
+  hideNav = false,
   ogType = 'website',
   ogImageAbs,
   articlePublishedTime,
@@ -72,21 +60,21 @@ const {
 const fullTitle = title;
 const fullDescription = description || '';
 const metaKeywords = keywords || '';
-const siteOrigin = ensureApexSiteOrigin(siteUrl);
+const siteOrigin = SITE.url;
 const path = Astro.url.pathname;
 const canonicalPath = path.endsWith('/') ? path : `${path}/`;
 const canonicalPageUrl =
   canonical || canonicalOverride || `https://cursodearcondicionado.com.br${canonicalPath}`;
 const ogTitle = truncateOgTitle(fullTitle);
-const resolvedOgImage = resolveOgImageAbs(siteOrigin || siteUrl, ogImageAbs);
+const resolvedOgImage = resolveOgImageAbs(siteOrigin, ogImageAbs);
 const organizationJsonLd = buildOrganizationJsonLd({
-  siteUrl: siteOrigin || siteUrl,
+  siteUrl: siteOrigin,
   name: SEO_ORGANIZATION_NAME,
 });
 const baseJsonLd =
   extraJsonLd ??
   buildcursodearDefaultSiteJsonLd({
-    siteUrl: siteOrigin || siteUrl,
+    siteUrl: siteOrigin,
     siteName: SEO_ORGANIZATION_NAME,
     description: fullDescription || undefined,
   });
@@ -191,8 +179,8 @@ const jsonLdGraph = mergeJsonLdWithOrganization(baseJsonLd, organizationJsonLd);
   </style>
 </head>
 <body class="cursodear-scope min-w-0 overflow-x-hidden bg-[var(--color-bg)] text-[var(--color-text)] antialiased">
-  <Header siteName={siteName} logoSrc={logoSrc} nav={nav} />
+  <Header siteName={SITE.name} logoSrc={SITE.logo} nav={hideNav ? [] : NAV} />
   <main class="min-w-0"><slot /></main>
-  {showFooter && <Footer siteName={siteName} logoSrc={logoSrc} footerNav={footerNav} contentThemeId={contentThemeId} />}
+  {showFooter && <Footer siteName={SITE.name} logoSrc={SITE.logo} footerNav={FOOTER_NAV} />}
 </body>
 </html>

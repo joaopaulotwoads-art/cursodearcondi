@@ -2,106 +2,30 @@
 import type { CollectionEntry } from 'astro:content';
 import AffiliateDisclosure from '../../components/cursodear/AffiliateDisclosure.astro';
 import PostArticleToc from '../../components/cursodear/PostArticleToc.astro';
-import { getPostUrl, type BlogPermalinkStructure, type BlogUrlPrefix } from '../../utils/blog-permalink';
-import { resolvecursodearMediaUrl, rewritecursodearContentImagesInHtml } from '../../utils/media-url';
-import { blogHotmartSrc, rewriteHotmartLinksInHtml } from '../../utils/hotmart-src';
-import { demoteBodyH1ToH2, replaceProductBoxTitleH2WithDiv } from '../../utils/post-html-sanitize';
-import { splitReviewRoundupBodyParagraphs } from '../../utils/review-paragraph-split';
+import { postUrl } from '../../utils/post-url';
+import { resolvecursodearMediaUrl } from '../../utils/media-url';
 import { buildMarkdownToc, POST_TOC_MIN_ITEMS, type PostTocItem } from '../../utils/post-markdown-toc';
-import { readPost } from '../../utils/post-utils';
-import { injectH2IdsAndBuildToc, splitHtmlAfterReviewHeroPicks } from '../../utils/review-article-toc';
-import { injectMissingProsConsCtas } from '../../utils/review-pros-cons-cta';
-import { ensureRoundupTableHead, upgradeRoundupItemsHtml } from '../../utils/review-roundup-rows';
 import '../../styles/post-article-toc.css';
 
 interface Props {
-  post: any;
+  post: CollectionEntry<'posts'>;
   author: any;
   /** Especialista responsável pela revisão técnica do conteúdo (E-E-A-T). */
   reviewer?: { name: string; jobTitle?: string; url?: string; avatar?: string };
-  Content?: any;
-  /** Corpo HTML (import Ghost / contentFormat: html); ignora Content. */
-  htmlContent?: string | null;
+  Content: any;
   relatedPosts?: CollectionEntry<'posts'>[];
-  blogPermalinkStructure?: BlogPermalinkStructure;
-  blogUrlPrefix?: BlogUrlPrefix;
 }
 
-const {
-  post,
-  author,
-  reviewer,
-  Content,
-  htmlContent,
-  relatedPosts: relatedPostsProp,
-  blogPermalinkStructure = 'postname',
-  blogUrlPrefix = 'blog',
-} = Astro.props;
-const relatedPosts = relatedPostsProp ?? [];
+const { post, author, reviewer, Content, relatedPosts = [] } = Astro.props;
 const date = post.data.publishedDate;
-const layoutVariant = post.data.articleLayout ?? 'default';
-const isReviewRoundup = layoutVariant === 'reviewRoundup';
 const heroImage = resolvecursodearMediaUrl(post.data.thumbnail || post.data.image);
-const htmlBody = htmlContent
-  ? (() => {
-      let html = demoteBodyH1ToH2(rewritecursodearContentImagesInHtml(htmlContent));
-      html = replaceProductBoxTitleH2WithDiv(html);
-      html = rewriteHotmartLinksInHtml(html, blogHotmartSrc(post.data.slug || post.id));
-      if (isReviewRoundup) html = splitReviewRoundupBodyParagraphs(html);
-      return html;
-    })()
-  : null;
 
-let postHtmlBody = htmlBody;
-let reviewTocItems: { id: string; text: string }[] = [];
-let reviewBodySplit: { head: string; tail: string } | null = null;
-if (htmlBody && htmlBody.includes('cnx-aff-roundup')) {
-  let h = upgradeRoundupItemsHtml(htmlBody);
-  h = ensureRoundupTableHead(h);
-  postHtmlBody = h;
-}
-if (isReviewRoundup && postHtmlBody) {
-  const tocResult = injectH2IdsAndBuildToc(postHtmlBody);
-  postHtmlBody = injectMissingProsConsCtas(tocResult.html);
-  reviewTocItems = tocResult.toc;
-  reviewBodySplit = splitHtmlAfterReviewHeroPicks(postHtmlBody);
-} else if (postHtmlBody) {
-  const tocResult = injectH2IdsAndBuildToc(postHtmlBody);
-  postHtmlBody = tocResult.html;
-  reviewTocItems = tocResult.toc;
-}
-
-const postSlug = post.data.slug || post.id;
-let markdownTocItems: PostTocItem[] = [];
-if (!htmlContent && Content) {
-  const postFile = await readPost(postSlug);
-  if (postFile?.content) {
-    const parsed = buildMarkdownToc(postFile.content);
-    markdownTocItems = parsed.length >= POST_TOC_MIN_ITEMS ? parsed : [];
-  }
-}
-
-const articleTocItems: PostTocItem[] = markdownTocItems.length
-  ? markdownTocItems
-  : reviewTocItems.map((item) => ({ ...item, level: 2 as const }));
-const showArticleToc = articleTocItems.length >= POST_TOC_MIN_ITEMS;
-
-/**
- * Cartão de produto, prós/contras e títulos de review usam CSS em article-review-roundup.css
- * sob o ancestral `.article-review-roundup`. Antes só existia em posts com layout "reviewRoundup",
- * por isso o mesmo HTML no layout default parecia "versão antiga" (só o ranking parecia certo).
- */
-const applyRoundupArticleScope =
-  isReviewRoundup || (!!postHtmlBody && /\bcnx-aff-/.test(postHtmlBody));
+const parsedToc = buildMarkdownToc(post.body || '');
+const articleTocItems: PostTocItem[] = parsedToc.length >= POST_TOC_MIN_ITEMS ? parsedToc : [];
+const showArticleToc = articleTocItems.length > 0;
 ---
-<article
-  class:list={[
-    'mx-auto py-10 sm:py-12',
-    applyRoundupArticleScope ? 'px-4 sm:px-5 max-w-4xl article-review-roundup' : 'px-4 sm:px-5',
-    !applyRoundupArticleScope && (htmlContent ? 'max-w-3xl' : 'max-w-2xl'),
-  ]}
->
-  <header class:list={[isReviewRoundup ? 'mb-5 md:mb-6' : 'mb-8 md:mb-10']}>
+<article class="mx-auto py-10 sm:py-12 px-4 sm:px-5 max-w-2xl">
+  <header class="mb-8 md:mb-10">
     <nav class="text-sm text-[var(--color-muted)] mb-3 md:mb-3.5 leading-snug" aria-label="Navegação do artigo">
       <a href="/" class="text-[var(--color-muted)] hover:text-[var(--color-link)] no-underline transition-colors">Início</a>
       <span class="mx-1.5 opacity-60 select-none" aria-hidden="true">›</span>
@@ -115,12 +39,7 @@ const applyRoundupArticleScope =
   </header>
   <AffiliateDisclosure />
   {heroImage && (
-    <div
-      class:list={[
-        'post-hero-image-wrap flex items-center justify-center',
-        isReviewRoundup ? 'mb-5 md:mb-6' : 'mb-8',
-      ]}
-    >
+    <div class="post-hero-image-wrap flex items-center justify-center mb-8">
       <img
         src={heroImage}
         alt={post.data.imageAlt || post.data.title}
@@ -134,12 +53,7 @@ const applyRoundupArticleScope =
     </div>
   )}
   {(author || date) && (
-    <div
-      class:list={[
-        'flex items-start gap-3 sm:gap-3.5',
-        isReviewRoundup ? 'mb-6 md:mb-7 pb-6 md:pb-7 border-b border-orange-200/70' : 'mb-8 md:mb-10',
-      ]}
-    >
+    <div class="flex items-start gap-3 sm:gap-3.5 mb-8 md:mb-10">
       {author ? (
         <>
           {author.data.avatar ? (
@@ -167,7 +81,7 @@ const applyRoundupArticleScope =
             <div class="font-bold text-[var(--color-heading)] text-base sm:text-[1.0625rem] leading-snug">{author.data.name}</div>
             {date && (
               <time class="mt-1 block text-sm text-[var(--color-muted)]" datetime={date}>
-                {new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                {new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' })}
               </time>
             )}
             {reviewer && (
@@ -184,52 +98,29 @@ const applyRoundupArticleScope =
       ) : (
         date && (
           <time class="text-sm text-[var(--color-muted)]" datetime={date}>
-            {new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+            {new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' })}
           </time>
         )
       )}
     </div>
   )}
-  <div
-    class:list={[
-      'post-content max-w-none text-[var(--color-dark)]',
-      !htmlContent &&
-        'prose prose-neutral prose-lg max-w-none prose-p:text-[18px] prose-p:leading-[1.6] prose-p:mb-[1.25em] prose-p:text-[var(--color-dark)] prose-headings:[font-family:var(--font-heading)] prose-headings:font-bold prose-headings:text-[var(--color-heading)] prose-h1:text-3xl prose-h1:tracking-tight prose-h2:text-2xl prose-h2:tracking-tight prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:tracking-tight prose-h3:mt-6 prose-h3:mb-3 prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-3 prose-h5:text-base prose-h5:font-semibold prose-h5:mt-6 prose-h5:mb-3 prose-h6:text-[0.8125rem] prose-h6:uppercase prose-h6:tracking-wide prose-h6:font-semibold prose-h6:text-[#64748b] prose-h6:mt-6 prose-h6:mb-3 prose-li:my-2 prose-a:font-medium prose-a:text-[var(--color-link)] prose-a:underline hover:prose-a:text-[var(--color-link-hover)] prose-img:my-8 prose-img:w-full prose-img:max-w-full prose-img:rounded-2xl prose-img:border prose-img:border-[var(--color-border)]',
-    ]}
-  >
-    {postHtmlBody ? (
-      isReviewRoundup && reviewBodySplit ? (
+  <div class="post-content max-w-none text-[var(--color-dark)] prose prose-neutral prose-lg max-w-none prose-p:text-[18px] prose-p:leading-[1.6] prose-p:mb-[1.25em] prose-p:text-[var(--color-dark)] prose-headings:[font-family:var(--font-heading)] prose-headings:font-bold prose-headings:text-[var(--color-heading)] prose-h1:text-3xl prose-h1:tracking-tight prose-h2:text-2xl prose-h2:tracking-tight prose-h2:mt-6 prose-h2:mb-3 prose-h3:text-xl prose-h3:tracking-tight prose-h3:mt-6 prose-h3:mb-3 prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-3 prose-h5:text-base prose-h5:font-semibold prose-h5:mt-6 prose-h5:mb-3 prose-h6:text-[0.8125rem] prose-h6:uppercase prose-h6:tracking-wide prose-h6:font-semibold prose-h6:text-[#64748b] prose-h6:mt-6 prose-h6:mb-3 prose-li:my-2 prose-a:font-medium prose-a:text-[var(--color-link)] prose-a:underline hover:prose-a:text-[var(--color-link-hover)] prose-img:my-8 prose-img:w-full prose-img:max-w-full prose-img:rounded-2xl prose-img:border prose-img:border-[var(--color-border)]">
+    <div class="post-content-with-toc" data-post-toc>
+      {showArticleToc && (
         <>
-          {reviewBodySplit.head ? <div class="cursodear-post-html post-content" set:html={reviewBodySplit.head} /> : null}
-          {showArticleToc && <PostArticleToc items={articleTocItems} />}
-          <div class="cursodear-post-html post-content" set:html={reviewBodySplit.tail} />
+          <script
+            type="application/json"
+            id="post-toc-data"
+            set:html={JSON.stringify(articleTocItems)}
+          />
+          <PostArticleToc items={articleTocItems} />
         </>
-      ) : (
-        <>
-          {showArticleToc && <PostArticleToc items={articleTocItems} />}
-          <div class="cursodear-post-html post-content" set:html={postHtmlBody} />
-        </>
-      )
-    ) : (
-      Content && (
-        <div class="post-content-with-toc" data-post-toc>
-          {showArticleToc && (
-            <>
-              <script
-                type="application/json"
-                id="post-toc-data"
-                set:html={JSON.stringify(articleTocItems)}
-              />
-              <PostArticleToc items={articleTocItems} />
-            </>
-          )}
-          <Content />
-        </div>
-      )
-    )}
+      )}
+      <Content />
+    </div>
   </div>
 
-  {markdownTocItems.length > 0 && (
+  {showArticleToc && (
     <script is:inline>
       {`function applyPostMarkdownToc(){var dataEl=document.getElementById("post-toc-data");var root=document.querySelector("[data-post-toc]");if(!dataEl||!root)return;var items=[];try{items=JSON.parse(dataEl.textContent||"[]")}catch(e){return}var headings=root.querySelectorAll("h2,h3");items.forEach(function(item,idx){var h=headings[idx];if(h)h.id=item.id});var tocPanel=root.querySelector(".post-article-toc");var firstH2=root.querySelector("h2");if(tocPanel&&firstH2)firstH2.before(tocPanel)}applyPostMarkdownToc();document.addEventListener("astro:page-load",applyPostMarkdownToc);`}
     </script>
@@ -290,13 +181,7 @@ const applyRoundupArticleScope =
   )}
 
   {relatedPosts.length > 0 && (
-    <section
-      class:list={[
-        'mt-12 pt-10 border-t',
-        isReviewRoundup ? 'border-orange-200/80' : 'border-[var(--color-border)]',
-      ]}
-      aria-labelledby="related-posts-heading"
-    >
+    <section class="mt-12 pt-10 border-t border-[var(--color-border)]" aria-labelledby="related-posts-heading">
       <h2
         id="related-posts-heading"
         class="text-xl font-extrabold tracking-tight text-[var(--color-heading)] [font-family:var(--font-heading)]"
@@ -305,7 +190,7 @@ const applyRoundupArticleScope =
       </h2>
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
         {relatedPosts.map((rp) => {
-          const url = getPostUrl(rp, blogPermalinkStructure, blogUrlPrefix);
+          const url = postUrl(rp);
           const thumb = resolvecursodearMediaUrl(rp.data.thumbnail || rp.data.metaImage);
           const rDate = rp.data.publishedDate;
           return (
@@ -331,7 +216,7 @@ const applyRoundupArticleScope =
               <div class="p-4">
                 {rDate && (
                   <time class="text-xs text-[var(--color-muted)]" datetime={rDate}>
-                    {new Date(rDate).toLocaleDateString('pt-BR')}
+                    {new Date(rDate).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}
                   </time>
                 )}
                 <h3 class="mt-1 text-base font-semibold text-[var(--color-heading)] group-hover:text-[var(--color-link)] leading-snug">

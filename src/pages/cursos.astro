@@ -1,25 +1,13 @@
 ---
-import { getEntry } from 'astro:content';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
-import { readSingleton } from '../utils/singleton-utils';
-import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
-import { resolvePublicSiteUrl } from '../utils/read-site-settings';
+import { SITE } from '../data/site';
 import { buildcursodearDefaultSiteJsonLd } from '../utils/post-json-ld';
 
 const pageTitle = 'Cursos Técnicos de Refrigeração e Climatização';
 const pageDescription =
   'Formações profissionalizantes em refrigeração, climatização e manutenção de eletrodomésticos. Certificado reconhecido, acesso vitalício.';
 
-const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
-const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
-const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
-const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
-const beNav = beMenu ? navFromMenu(beMenu) : [];
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
-const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 
 const cursos = [
   {
@@ -156,8 +144,8 @@ const offerCatalogJsonLd = {
 };
 
 const baseSiteJsonLd = buildcursodearDefaultSiteJsonLd({
-  siteUrl,
-  siteName: siteNameForLayout,
+  siteUrl: SITE.url,
+  siteName: SITE.name,
   description: pageDescription,
 });
 const cursosJsonLd = {
@@ -177,12 +165,6 @@ const beneficios = [
   tipoPagina="curso"
   title={pageTitle}
   description={pageDescription}
-  siteName={siteNameForLayout}
-  logoSrc={logoForLayout}
-  siteUrl={siteUrl}
-  nav={beNav}
-  footerNav={beFootNav}
-  contentThemeId="cursodear"
   canonicalOverride="https://cursodearcondicionado.com.br/cursos/"
   extraJsonLd={cursosJsonLd}
 >

@@ -1,24 +1,11 @@
 ---
-import { getEntry } from 'astro:content';
 import BaseLayoutcursodear from '../themes/cursodear/BaseLayout.astro';
-import { readSingleton } from '../utils/singleton-utils';
-import { footerNavFromSingleton, logoSrcFromMenu, navFromMenu } from '../utils/theme-nav';
-import { resolvePublicSiteUrl } from '../utils/read-site-settings';
 
 const pageTitle = 'Quem Somos | Curso de Ar Condicionado';
 const pageDescription =
   'Site independente sobre a profissão de instalador de ar condicionado: mercado, carreira e o curso que recomendamos.';
 
-const settings = await getEntry('siteSettings', 'settings').catch(() => null);
-const siteName = settings?.data?.siteName || 'Curso de Ar Condicionado';
-const siteUrl = resolvePublicSiteUrl(settings?.data?.canonicalUrl as string | undefined, Astro.url.origin);
 
-const beMenu = (await readSingleton('menu', 'cursodear')) as Record<string, unknown> | null;
-const beFoot = (await readSingleton('footer', 'cursodear')) as Record<string, unknown> | null;
-const beNav = beMenu ? navFromMenu(beMenu) : [];
-const beFootNav = beFoot ? footerNavFromSingleton(beFoot) : [];
-const logoForLayout = logoSrcFromMenu(beMenu) || '/images/cursodear/logo.png';
-const siteNameForLayout = String((beMenu?.logoText as string | undefined)?.trim() || siteName);
 
 const aboutSchemaJsonLd = {
   '@type': 'AboutPage',
@@ -50,12 +37,6 @@ const aboutSchemaJsonLd = {
 <BaseLayoutcursodear
   title={pageTitle}
   description={pageDescription}
-  siteName={siteNameForLayout}
-  logoSrc={logoForLayout}
-  siteUrl={siteUrl}
-  nav={beNav}
-  footerNav={beFootNav}
-  contentThemeId="cursodear"
   extraJsonLd={aboutSchemaJsonLd}
   canonicalOverride="https://cursodearcondicionado.com.br/sobre/"
 >

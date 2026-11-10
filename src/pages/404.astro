@@ -1,14 +1,5 @@
 ---
-import { canonicalPathname, shouldRedirectAddTrailingSlash } from '../utils/read-site-settings';
-
-const { pathname, href } = Astro.url;
-
-// Se faltar a barra final, redireciona para a versao canonical com "/"
-if (shouldRedirectAddTrailingSlash(pathname)) {
-  const u = new URL(href);
-  u.pathname = canonicalPathname(pathname);
-  return Astro.redirect(u.toString(), 301);
-}
+/** Página 404 (a Vercel serve dist/404.html para qualquer URL inexistente). */
 ---
 <!doctype html>
 <html lang="pt-BR">
@@ -24,4 +15,3 @@ if (shouldRedirectAddTrailingSlash(pathname)) {
     <a href="/" style="color: #2563eb; text-decoration: none;">Voltar para a home</a>
   </body>
 </html>
-

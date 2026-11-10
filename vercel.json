@@ -11,6 +11,43 @@
       "source": "/nossos-cursos/",
       "destination": "/cursos/",
       "permanent": true
+    },
+    {
+      "source": "/blog/ferramentas-tecnico-ar-condicionado/",
+      "destination": "/ferramentas-para-ar-condicionado/",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/",
+      "has": [
+        {
+          "type": "query",
+          "key": "categoria",
+          "value": "(?<categoria>[a-z0-9-]+)"
+        }
+      ],
+      "destination": "/:categoria/",
+      "statusCode": 301
+    },
+    {
+      "source": "/blog/:slug/",
+      "destination": "/:slug/",
+      "statusCode": 301
+    },
+    {
+      "source": "/servicos/",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/servicos/:path*",
+      "destination": "/",
+      "statusCode": 301
+    },
+    {
+      "source": "/authors/equipe-curso-de-ar-condicionado/",
+      "destination": "/sobre/",
+      "statusCode": 301
     }
   ],
   "headers": [
