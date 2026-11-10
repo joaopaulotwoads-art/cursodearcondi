@@ -1,6 +1,6 @@
 {
   "source": "https://cursodearcondicionado.com.br",
-  "takenAt": "2026-11-10T16:09:36.937Z",
+  "takenAt": "2026-11-10T21:03:44.063Z",
   "sitemap": [
     "/",
     "/ar-condicionado-fazendo-barulho-causas/",
@@ -709,86 +709,12 @@
       ]
     },
     "/authors/administrador/": {
-      "status": 200,
-      "inSitemap": false,
-      "title": "Administrador",
-      "description": "Equipe editorial do cursodearcondicionado.com.br. Edite perfil e senha no painel em Autores.",
-      "canonical": "https://cursodearcondicionado.com.br/authors/administrador/",
-      "robots": "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
-      "h1": [],
-      "h2": [],
-      "ogImage": "https://cursodearcondicionado.com.br/images/hero-bg.webp",
-      "jsonLd": [
-        {
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "Organization",
-              "@id": "https://cursodearcondicionado.com.br/#organization",
-              "name": "Curso de Ar Condicionado",
-              "url": "https://cursodearcondicionado.com.br/",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://cursodearcondicionado.com.br/images/cursodear/logo.png"
-              },
-              "telephone": "+55-14-98803-4123",
-              "email": "contato@cursodearcondicionado.com.br",
-              "address": {
-                "@type": "PostalAddress",
-                "streetAddress": "Av. Rodrigues Alves, 96",
-                "addressLocality": "Bauru",
-                "addressRegion": "SP",
-                "addressCountry": "BR",
-                "postalCode": "17040-000"
-              },
-              "geo": {
-                "@type": "GeoCoordinates",
-                "latitude": -22.313512279677077,
-                "longitude": -49.03531582470722
-              },
-              "hasMap": "https://maps.app.goo.gl/bAPz55ZAM24twfTo9",
-              "sameAs": [
-                "https://instagram.com/cursodearcondicionado/",
-                "https://youtube.com/@cursodearcondicionado/",
-                "https://facebook.com/cursodearcondicionado/"
-              ]
-            },
-            {
-              "@type": "WebSite",
-              "@id": "https://cursodearcondicionado.com.br/#website",
-              "name": "Curso de Ar Condicionado",
-              "url": "https://cursodearcondicionado.com.br/",
-              "description": "Equipe editorial do cursodearcondicionado.com.br. Edite perfil e senha no painel em Autores.",
-              "inLanguage": "pt-BR",
-              "publisher": {
-                "@id": "https://cursodearcondicionado.com.br/#organization"
-              },
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                  "@type": "EntryPoint",
-                  "urlTemplate": "https://cursodearcondicionado.com.br/blog/?q={search_term_string}"
-                },
-                "query-input": "required name=search_term_string"
-              }
-            }
-          ]
-        }
-      ],
-      "hotmart": []
+      "status": 404,
+      "location": null
     },
     "/authors/equipe-curso-de-ar-condicionado/": {
-      "status": 200,
-      "inSitemap": false,
-      "title": "Redirecting to: /sobre/",
-      "description": null,
-      "canonical": "/sobre/",
-      "robots": "noindex",
-      "h1": [],
-      "h2": [],
-      "ogImage": null,
-      "jsonLd": [],
-      "hotmart": []
+      "status": 301,
+      "location": "/sobre/"
     },
     "/automotivo/": {
       "status": 200,
@@ -2340,7 +2266,7 @@
         "Conclusão",
         "Posts relacionados"
       ],
-      "ogImage": "https://cursodearcondicionado.com.br/images/blog/como-se-tornar-instalador-ar-condicionado.webp",
+      "ogImage": "https://cursodearcondicionado.com.br/images/blog/manifold-ar-condicionado-ferramentas.webp",
       "jsonLd": [
         {
           "@context": "https://schema.org",
@@ -2397,7 +2323,7 @@
             {
               "@type": "ImageObject",
               "@id": "https://cursodearcondicionado.com.br/como-se-tornar-instalador-de-ar-condicionado#primaryimage",
-              "url": "https://cursodearcondicionado.com.br/images/blog/como-se-tornar-instalador-ar-condicionado.webp",
+              "url": "https://cursodearcondicionado.com.br/images/blog/manifold-ar-condicionado-ferramentas.webp",
               "width": 1200,
               "height": 630,
               "caption": "Como se Tornar Instalador de Ar Condicionado em 2026"
@@ -3579,12 +3505,12 @@
     "/politica-de-cookies/": {
       "status": 200,
       "inSitemap": false,
-      "title": "Poltica de Cookies",
+      "title": "Política de Cookies",
       "description": "Saiba como utilizamos cookies para melhorar sua experincia de navegao.",
       "canonical": "https://cursodearcondicionado.com.br/politica-de-cookies/",
       "robots": "noindex, follow",
       "h1": [
-        "Poltica de Cookies"
+        "Política de Cookies"
       ],
       "h2": [
         "1. O que so Cookies?",
@@ -3631,7 +3557,7 @@
             {
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "Poltica de Cookies",
+              "name": "Política de Cookies",
               "url": "https://cursodearcondicionado.com.br/politica-de-cookies/",
               "publisher": {
                 "@type": "Organization",
@@ -4219,21 +4145,8 @@
       ]
     },
     "/setup/": {
-      "status": 200,
-      "inSitemap": false,
-      "title": "CNX CMS — Crie seu site em 5 minutos",
-      "description": "Guia simples para colocar seu site no ar com CNX CMS. Deploy grátis na Vercel em poucos cliques.",
-      "canonical": null,
-      "robots": null,
-      "h1": [
-        "CNX CMS"
-      ],
-      "h2": [
-        "Crie seu site profissional em poucos cliques"
-      ],
-      "ogImage": null,
-      "jsonLd": [],
-      "hotmart": []
+      "status": 404,
+      "location": null
     },
     "/sobre/": {
       "status": 200,
@@ -4473,14 +4386,14 @@
         "Termos de Uso"
       ],
       "h2": [
-        "1. Aceitao dos Termos",
+        "1. Aceitação dos Termos",
         "2. Sobre a Empresa",
-        "3. Servios Oferecidos",
+        "3. Serviços Oferecidos",
         "4. Cadastro e Acesso",
         "5. Pagamento e Reembolso",
         "6. Propriedade Intelectual",
-        "7. Limitao de Responsabilidade",
-        "8. Alteraes nos Termos",
+        "7. Limitação de Responsabilidade",
+        "8. Alterações nos Termos",
         "9. Contato"
       ],
       "ogImage": "https://cursodearcondicionado.com.br/images/hero-bg.webp",
