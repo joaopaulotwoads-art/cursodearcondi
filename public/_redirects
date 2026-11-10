@@ -1,0 +1,16 @@
+# Redirects permanentes (Cloudflare Workers static assets). Primeira regra que casar vence.
+# Os 301 "sem barra -> com barra" de cada página são gerados no build (scripts/build-redirects.mjs).
+
+/nossos-cursos /cursos/ 301
+/nossos-cursos/ /cursos/ 301
+
+/blog/ferramentas-tecnico-ar-condicionado /ferramentas-para-ar-condicionado/ 301
+/blog/ferramentas-tecnico-ar-condicionado/ /ferramentas-para-ar-condicionado/ 301
+/blog/:slug /:slug/ 301
+/blog/:slug/ /:slug/ 301
+
+/servicos / 301
+/servicos/* / 301
+
+/authors/equipe-curso-de-ar-condicionado /sobre/ 301
+/authors/equipe-curso-de-ar-condicionado/ /sobre/ 301

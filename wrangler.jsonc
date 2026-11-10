@@ -1,0 +1,20 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cursodearcondicionado",
+  "compatibility_date": "2026-11-01",
+  // Só arquivos estáticos (dist/): sem código de Worker e sem adapter.
+  "assets": {
+    "directory": "./dist",
+    // Canonical do site é com barra final (/sobre/). Os 301 explícitos ficam em dist/_redirects.
+    "html_handling": "force-trailing-slash",
+    // URL inexistente: serve dist/404.html com status 404.
+    "not_found_handling": "404-page"
+  },
+  // URL de teste: cursodearcondicionado.<subdominio>.workers.dev
+  "workers_dev": true
+  // Domínio próprio: só descomentar na troca de DNS (passo a passo em CLAUDE.md).
+  // ,"routes": [
+  //   { "pattern": "cursodearcondicionado.com.br", "custom_domain": true },
+  //   { "pattern": "www.cursodearcondicionado.com.br", "custom_domain": true }
+  // ]
+}

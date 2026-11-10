@@ -18,8 +18,8 @@ pnpm-debug.log*
 .env.local
 .env.production
 
-# Vercel
-.vercel/
+# Cloudflare (wrangler dev)
+.wrangler/
 
 # macOS-specific files
 .DS_Store

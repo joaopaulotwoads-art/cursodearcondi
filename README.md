@@ -1,38 +1,39 @@
 # cursodearcondicionado.com.br
 
-Site estático em [Astro](https://astro.build), publicado na Vercel.
+Site estático em [Astro](https://astro.build), hospedado em Cloudflare Workers (static assets).
 
 ## Rodar localmente
 
-Requer [Bun](https://bun.sh).
+Requer [Bun](https://bun.sh) (ou npm) e Node 20+.
 
 ```sh
 bun install
-bun run dev        # http://localhost:4321
+npm run dev          # http://localhost:4321 (dev do Astro)
+npm run preview:cf   # build + wrangler dev: igual à produção, com _redirects, _headers e 404
 ```
 
 ## Build
 
 ```sh
-bun run build      # gera dist/
-bun run preview    # serve dist/ localmente
+npm run build        # gera dist/ (inclui dist/_redirects com os 301 de barra final)
 ```
 
 ## Publicar
 
-A Vercel publica sozinha a cada push:
+```sh
+npm run deploy       # build + wrangler deploy
+```
 
-- push em `main` → produção (cursodearcondicionado.com.br)
-- push em outra branch → preview com URL própria
+**O deploy vai direto para produção**: não há preview nem aprovação. Rode `npm run preview:cf` e a comparação de SEO antes. Push no GitHub não publica nada.
 
-Redirects e headers ficam em `vercel.json`.
+Redirects ficam em `public/_redirects`, headers em `public/_headers`, configuração do Worker em `wrangler.jsonc`.
 
 ## Conferir SEO antes de publicar
 
 ```sh
-bun run build
-bun run seo:snapshot dist seo-atual.json
-bun run seo:snapshot --compare seo-baseline.json seo-atual.json
+npm run build
+npm run seo:snapshot dist seo-atual.json
+npm run seo:snapshot -- --compare seo-baseline.json seo-atual.json
 ```
 
 Mais detalhes da estrutura em `CLAUDE.md`.

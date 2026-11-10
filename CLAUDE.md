@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Site estático em Astro (`output: 'static'`) do cursodearcondicionado.com.br. Não há CMS, painel, API nem banco: todo conteúdo é arquivo no repositório.
+Site estático em Astro (`output: 'static'`) do cursodearcondicionado.com.br, hospedado em **Cloudflare Workers (static assets)**, sem adapter e sem código de servidor. Não há CMS, painel, API nem banco: todo conteúdo é arquivo no repositório.
 
 ## Estrutura
 
@@ -11,8 +11,9 @@ Site estático em Astro (`output: 'static'`) do cursodearcondicionado.com.br. N�
 - `src/data/site.ts`: nome, URL canônica, logo, menu do topo e do rodapé.
 - `src/themes/cursodear/`: `BaseLayout` (head, SEO, GA4, Clarity, rastreio de cliques), `Header`, `Footer`, `BlogPost`, `BlogList`, CSS do tema.
 - `src/utils/`: `hotmart-src.ts` (src nos links Hotmart), `post-json-ld.ts` (schema), `seo-meta.ts` (OG padrão, revisor técnico), `post-url.ts`, `url.ts`.
-- `public/`: imagens, favicons, `robots.txt`, `llms.txt`, `sitemap.xsl`.
-- `vercel.json`: redirects (URLs antigas `/blog/<slug>/` etc.) e headers.
+- `public/`: imagens, favicons, `robots.txt`, `llms.txt`, `sitemap.xsl`, `_redirects` (301 de URLs antigas) e `_headers` (cache e segurança).
+- `scripts/build-redirects.mjs`: roda no `npm run build` e acrescenta em `dist/_redirects` um 301 `/pagina -> /pagina/` para cada página.
+- `wrangler.jsonc`: Worker `cursodearcondicionado` servindo `./dist` (`force-trailing-slash`, 404 com `dist/404.html`).
 
 ## Criar um post
 
@@ -42,8 +43,15 @@ Site estático em Astro (`output: 'static'`) do cursodearcondicionado.com.br. N�
 
 ## Publicar
 
+Hospedagem: Cloudflare Workers. **`npm run deploy` publica direto em produção** (não há preview automático nem deploy por push no GitHub).
+
 ```sh
-bun run build                     # precisa passar sem erro
-git push origin <branch>          # preview na Vercel
-git push origin main              # produção
+npm run preview:cf     # build + wrangler dev em http://localhost:8787: confira páginas, redirects 301 e 404
+npm run seo:snapshot dist seo-atual.json
+npm run seo:snapshot -- --compare seo-baseline.json seo-atual.json
+npm run deploy         # build + wrangler deploy (produção)
 ```
+
+- Redirect novo: adicione em `public/_redirects` (formato `/origem /destino 301`, a primeira regra que casar vence; não lê query string).
+- URLs sempre com barra final; os 301 sem barra são gerados no build, não escreva à mão.
+- `www` -> raiz é uma regra de redirect na zona da Cloudflare, não no projeto.

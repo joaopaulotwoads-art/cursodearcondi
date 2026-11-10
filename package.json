@@ -5,8 +5,9 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "build": "astro build && node scripts/build-redirects.mjs",
+    "preview:cf": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy",
     "astro": "astro",
     "seo:snapshot": "node scripts/seo-snapshot.mjs",
     "favicons": "node scripts/generate-cursodear-favicons.mjs",
@@ -20,6 +21,7 @@
     "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
-    "sharp": "^0.34.5"
+    "sharp": "^0.34.5",
+    "wrangler": "^4.160.0"
   }
 }
