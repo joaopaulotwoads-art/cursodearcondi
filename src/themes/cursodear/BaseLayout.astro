@@ -149,7 +149,7 @@ const jsonLdGraph = mergeJsonLdWithOrganization(baseJsonLd, organizationJsonLd);
         if (!a) return;
         var host;
         try { host = new URL(a.href, location.href).hostname; } catch (_) { return; }
-        if (host === 'go.hotmart.com' || host === 'pay.hotmart.com') {
+        if (host === 'go.hotmart.com' || host === 'pay.hotmart.com' || host === 'hotm.art') {
           track('hotmart_click', {
             page_path: location.pathname,
             link_text: (a.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 100),
