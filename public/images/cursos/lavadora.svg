@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" role="img" aria-label="Lavadora">
+  <rect width="600" height="340" fill="#1e293b"/>
+  <g fill="none" stroke="#f97316" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="215" y="55" width="170" height="210" rx="16"/>
+    <line x1="215" y1="100" x2="385" y2="100"/>
+    <circle cx="300" cy="182" r="54"/>
+    <circle cx="300" cy="182" r="30"/>
+  </g>
+  <g fill="#f97316">
+    <circle cx="245" cy="78" r="7"/>
+    <circle cx="270" cy="78" r="7"/>
+    <rect x="320" y="72" width="44" height="12" rx="6"/>
+  </g>
+  <text x="300" y="312" fill="#cbd5e1" font-family="Open Sans, Segoe UI, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Manutenção de Lavadora</text>
+</svg>

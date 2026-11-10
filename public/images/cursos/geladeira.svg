@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" role="img" aria-label="Geladeira">
+  <rect width="600" height="340" fill="#1e293b"/>
+  <g fill="none" stroke="#f97316" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="245" y="60" width="110" height="200" rx="14"/>
+    <line x1="245" y1="130" x2="355" y2="130"/>
+    <line x1="270" y1="85" x2="270" y2="110"/>
+    <line x1="270" y1="150" x2="270" y2="195"/>
+    <line x1="262" y1="260" x2="262" y2="276"/>
+    <line x1="338" y1="260" x2="338" y2="276"/>
+  </g>
+  <text x="300" y="312" fill="#cbd5e1" font-family="Open Sans, Segoe UI, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Manutenção de Geladeira</text>
+</svg>
