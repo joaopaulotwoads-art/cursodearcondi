@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" role="img" aria-label="Elétrica residencial">
+  <rect width="600" height="340" fill="#1e293b"/>
+  <g fill="none" stroke="#f97316" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="200" y="70" width="110" height="170" rx="14"/>
+    <circle cx="255" cy="125" r="16"/>
+    <circle cx="255" cy="185" r="16"/>
+    <polyline points="250,119 250,131"/>
+    <polyline points="260,119 260,131"/>
+    <polyline points="250,179 250,191"/>
+    <polyline points="260,179 260,191"/>
+  </g>
+  <polygon points="380,60 330,165 368,165 345,260 410,140 372,140 398,60" fill="#f97316"/>
+  <text x="300" y="312" fill="#cbd5e1" font-family="Open Sans, Segoe UI, sans-serif" font-size="20" font-weight="700" text-anchor="middle">Elétrica Residencial</text>
+</svg>

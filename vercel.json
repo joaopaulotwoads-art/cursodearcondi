@@ -40,7 +40,7 @@
       "statusCode": 301
     },
     {
-      "source": "/servicos/:path*",
+      "source": "/servicos/:path(.*)",
       "destination": "/",
       "statusCode": 301
     },
