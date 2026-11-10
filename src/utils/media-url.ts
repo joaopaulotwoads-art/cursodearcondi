@@ -4,7 +4,6 @@
  * - Caminhos /content/images/... passam a ser relativos ao site, servidos por public/content/images/...
  */
 
-import { shrinkAmazonImagesInHtml } from './amazon-image-url';
 
 export function alignThumbnailHost(url: string | undefined | null): string {
     if (!url || typeof url !== 'string') return '';
@@ -25,15 +24,4 @@ export function resolvecursodearMediaUrl(url: string | undefined | null): string
     const m = aligned.match(/^https:\/\/cursodear\.com\.br\/(content\/images\/.+)$/i);
     if (m) return '/' + m[1];
     return aligned;
-}
-
-/** Substitui URLs absolutas do Ghost no HTML do post por caminhos relativos /content/images/... */
-export function rewritecursodearContentImagesInHtml(html: string | null | undefined): string {
-    if (!html) return '';
-    let out = html.replace(
-        /https?:\/\/(?:www\.)?cursodear\.com\.br(\/content\/images\/[^"'<>\s]+)/gi,
-        '$1',
-    );
-    out = shrinkAmazonImagesInHtml(out);
-    return out;
 }
